@@ -1,0 +1,14 @@
+filepath         = ./structures
+filenames        = [1a2pAH]
+motifDescription =  Chain 
+                        chainID = 'tripep'
+                        chainType = 'Protein'
+
+                        Residue position = 1
+                        Residue position = 2 
+                        Residue position = 3
+
+measures         = 
+                   Property 1 resname str
+                   Property 2 resname str
+                   Property 3 resname str

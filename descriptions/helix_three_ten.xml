@@ -1,0 +1,51 @@
+<ProteinDescription name="310Helix">
+	<ChainDescription name="A">
+		<GroupDescription name="*" position="0">
+			<AtomDescription name="N"/>
+			<AtomDescription name="CA"/>
+			<AtomDescription name="C"/>
+			<AtomDescription name="O"/>
+			<AtomDescription name="H"/>
+		</GroupDescription>
+		<GroupDescription name="*" position="1">
+			<AtomDescription name="N"/>
+			<AtomDescription name="CA"/>
+			<AtomDescription name="C"/>
+			<AtomDescription name="O"/>
+			<AtomDescription name="H"/>
+		</GroupDescription>
+		<GroupDescription name="*" position="2">
+			<AtomDescription name="N"/>
+			<AtomDescription name="CA"/>
+			<AtomDescription name="C"/>
+			<AtomDescription name="O"/>
+			<AtomDescription name="H"/>
+		</GroupDescription>
+		<GroupDescription name="*" position="3">
+			<AtomDescription name="N"/>
+			<AtomDescription name="CA"/>
+			<AtomDescription name="C"/>
+			<AtomDescription name="O"/>
+			<AtomDescription name="H"/>
+		</GroupDescription>
+		<GroupDescription name="*" position="4">
+			<AtomDescription name="N"/>
+			<AtomDescription name="CA"/>
+			<AtomDescription name="C"/>
+			<AtomDescription name="O"/>
+			<AtomDescription name="H"/>
+		</GroupDescription>
+		<HBondCondition haMax="2.8" dhaMin="100.0" haaMin="90.0">
+			<Path position="3" atom="N"/>
+			<Path position="3" atom="H"/>
+			<Path position="0" atom="O"/>
+			<Path position="0" atom="C"/>
+		</HBondCondition>
+		<HBondCondition haMax="2.8" dhaMin="100.0" haaMin="90.0">
+			<Path position="4" atom="N"/>
+			<Path position="4" atom="H"/>
+			<Path position="1" atom="O"/>
+			<Path position="1" atom="C"/>
+		</HBondCondition>
+	</ChainDescription>
+</ProteinDescription>

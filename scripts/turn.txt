@@ -1,0 +1,17 @@
+filepath  = ~/phd/structures
+filenames = []
+motifDescription = Chain
+                   chainID = 'turn' 
+                   hydrogen-bond = (4.N 4.H 1.O 1.C) 2.5 120 90
+                   Residue position = 1
+                   Residue position = 2
+                   Residue position = 3
+                   Residue position = 4
+
+measures =  Torsion (1.C 2.N 2.CA 2.C)
+            Torsion (2.N 2.CA 2.C 3.N)
+
+            Torsion (2.C 3.N 3.CA 3.C)
+            Torsion (3.N 3.CA 3.C 4.N)
+
+            HBond   (4.N 4.H 1.O 1.C) 

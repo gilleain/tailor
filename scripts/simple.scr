@@ -1,0 +1,4 @@
+motifDescription = PREDEFINED 'RLnest'
+filepath         = ./data
+measures         = Distance (1.N 3.N)
+filenames        = [test.pdb]

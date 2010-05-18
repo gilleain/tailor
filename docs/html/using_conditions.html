@@ -1,0 +1,68 @@
+<html>
+
+	
+	<head>
+		<title>Tailor: Using Conditions</title>
+		<link rel="stylesheet" type="text/css" href="tailor.css">
+	</head>
+	
+	<body>
+	
+	<h1>Using Conditions</h1>
+	
+	<p>
+		A condition could also be called a constraint - it is a general way to 
+		make the description more specific. They are also closely related to measures
+		since a condition has to make a measurement in order to check if it is valid.
+	</p>
+	
+	<p>That is all quite abstract, so here is a concrete example:</p>
+	
+	<div class="code"><pre>
+    Description a = ...
+    Description b = ...
+    DistanceBoundCondition distance = 
+         new DistanceBoundCondition("dON", a, b, 3.0, 1.0);
+    chain.addCondition(distance); 
+	</pre></div>
+	
+	<p>
+		The two <tt>Description</tt> instances (a and b) at the beginning are just
+		descriptions of atoms in a motif. These are passed to the condition, along
+		with two geometric parameters : the center of the bound (3.0) and the range
+		(1.0). This condition therefore applies to certain atoms within 2-4&Aring;
+		of each other.
+	</p>
+	
+	<p>
+		It can be easier for some conditions to use the convenience methods in the
+		<tt>DescriptionFactory</tt> class. These will find the right atom descriptions
+		in the current description and will also add the resulting condition to the 
+		right part of the description.
+	</p>
+	
+	<p>
+		So, for example, to easily add a TorsionBound on phi and psi to a particular
+		residue:
+	</p>
+	
+	<div class="code"><pre>
+    DescriptionFactory factory = ...
+    factory.createPhiCondition(-90.0, 30.0, 2);
+    factory.createPsiCondition(  0.0, 30.0, 2);
+	</pre></div>
+	
+	<p>
+		Now, the description will only match fragments where the second residue has
+		a &gamma;<sub>R</sub> conformation. A complete list of the convenience
+		methods available is in the <a href="function_reference.html">
+		function_reference</a>.
+	</p>
+
+    <p>
+        <a href="http://sourceforge.net"><img src="http://sflogo.sourceforge.net/sflogo.php?group_id=147565&amp;type=5" width="210" height="62" border="0" alt="SourceForge.net Logo" /></a>
+    </p>
+	
+	</body>
+
+</html>

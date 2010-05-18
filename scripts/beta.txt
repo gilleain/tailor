@@ -1,0 +1,75 @@
+filepath         = ~/phd/structures
+filenames        = [1agjAH]
+motifDescription =  Chain 
+                        chainID = 'betabulge'
+
+                        torsion-bound = (2.C 3.N  3.CA 3.C) -80 +/- 60
+                        torsion-bound = (3.N 3.CA 3.C  4.N) -25 +/- 65
+
+                        torsion-bound = (3.C 4.N  4.CA 4.C) -80 +/- 60
+                        torsion-bound = (4.N 4.CA 4.C  5.N) -25 +/- 65
+
+                        torsion-bound = (4.C 5.N  5.CA 5.C)  80 +/- 60
+                        torsion-bound = (5.N 5.CA 5.C  6.N)  25 +/- 65
+
+                        torsion-bound = (2.C 2.CA 2.CB 2.CG) -80 +/- 60
+                        torsion-bound = (3.N 2.C  2.CA 2.CB) -25 +/- 65
+
+                        hydrogen-bond = (2.CG 2.OD1 6.H 6.N) 3.0 90.0 90.0
+                        hydrogen-bond = (2.C 2.O 5.H 5.N)    3.0 90.0 90.0
+
+                        distance-bound = (2.OD1 6.H) 3.0 +/- 3.0
+                        
+                        Residue position = 1
+                        Residue position = 2 
+                        Residue position = 3
+                        Residue position = 4
+                        Residue position = 5
+                        Residue position = 6 
+                        Residue position = 7
+
+measures         = 
+                   Distance (2.OD1 4.H)
+                   Distance (2.OD1 5.H)
+                   Distance (2.OD1 6.H)
+
+                   Distance (2.O 4.H)
+                   Distance (2.O 5.H)
+                   Distance (2.O 6.H)
+
+                   Torsion (4.H 4.N 5.N 5.H)
+                   Torsion (5.H 5.N 6.N 6.H)
+
+                   Torsion (1.N 2.C 2.O 4.H)
+                   Torsion (1.N 2.C 2.O 5.H)
+                   Torsion (1.N 2.C 2.O 6.H)
+
+                   Torsion (2.O 4.H 4.N 4.CA)
+                   Torsion (2.O 5.H 5.N 5.CA)
+                   Torsion (2.O 6.H 6.N 6.CA)
+		   
+                   Torsion (2.OD2 2.CG 2.OD1 4.H)
+                   Torsion (2.OD2 2.CG 2.OD1 5.H)
+                   Torsion (2.OD2 2.CG 2.OD1 6.H)
+
+                   Torsion (2.OD1 4.H 4.N 4.CA)
+                   Torsion (2.OD1 5.H 5.N 5.CA)
+                   Torsion (2.OD1 6.H 6.N 6.CA)
+                  
+                   Angle (4.N 5.N 6.N)
+
+                   Angle (2.CG 2.OD1 4.H)
+                   Angle (2.CG 2.OD1 5.H)
+                   Angle (2.CG 2.OD1 6.H)
+
+                   Angle (2.C 2.O 4.H)
+                   Angle (2.C 2.O 5.H)
+                   Angle (2.C 2.O 6.H)
+
+                   Angle (2.OD1 4.H 4.N)
+                   Angle (2.OD1 5.H 5.N)
+                   Angle (2.OD1 6.H 6.N)
+
+                   Angle (2.O 4.H 4.N)
+                   Angle (2.O 5.H 5.N)
+                   Angle (2.O 6.H 6.N)

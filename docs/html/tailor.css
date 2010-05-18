@@ -1,0 +1,10 @@
+DIV.code { 
+	background : lightgray;
+	border-style : solid;
+	border-width : 1px;
+	border-color : gray; 
+	color : blue; 
+	margin : 15px;
+	font-family : monospace;
+	}
+P.title { font-weight : bolder }

@@ -1,0 +1,13 @@
+README
+setup.py
+Tailor/Condition.py
+Tailor/Description.py
+Tailor/Exception.py
+Tailor/Feature.py
+Tailor/Geometry.py
+Tailor/Measure.py
+Tailor/Parse.py
+Tailor/Run.py
+Tailor/Script.py
+Tailor/__init__.py
+Tailor/pyparsing.py

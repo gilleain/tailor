@@ -1,0 +1,7 @@
+*.app
+*.jar
+classes
+build
+*.pyc
+.DS_Store
+*.zip

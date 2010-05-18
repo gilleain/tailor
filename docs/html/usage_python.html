@@ -1,0 +1,76 @@
+<html>
+    <head>
+        <title>Usage : Python</title>
+         <link rel="stylesheet" type="text/css" href="tailor.css">
+    </head>
+
+    <body>
+    	<p>
+    	This is a quick overview of how to use the python api.
+    	</p>
+    
+        <p class="title">Describe a Motif</p>
+        
+        <p>
+        The first step is to describe the motif to search for. The description is in two parts; the 
+        structure of the motif, and the conditions. The structure can be as simple as a chain of a 
+        few residues or could be multiple chains, each with more than one residue.
+        </p>
+        
+        <div class="code">
+        
+        from Tailor.Description import ChainDescription<br>
+        <br>
+        my_motif = ChainDescription({"chainID" : "my_motif"})<br>
+        my_motif.createResidues(3)<br>
+        </div>
+        
+        <p>
+        The conditions (also known as constraints) are what really makes the motif description. Each
+        condition is attached to part of the motif structure. 
+        </p>
+        
+        <div class="code">
+        my_motif.createPhiBoundCondition(2, -90, 30)<br>
+        my_motif.createPsiBoundCondition(2,  90, 30)<br>
+        </div>
+        
+        <p class="title">Define some Measurements</p>
+        
+        <p>
+        The point of tailor is to measure parts of structure; to do this a list of measures need to
+        be defined. Each measure produces a measurement, in the same order, to produce a list of
+        results.
+        </p>
+        
+        <div class="code">
+        from Tailor.Measure import DistanceMeasure<br>
+        <br>
+        firstN = my_motif.selectResidue(1).selectAtom("N")<br>
+        thirdO = my_motif.selectResidue(3).selectAtom("O")<br>
+        <br>
+        distanceNOMeasure = DistanceMeasure(firstN, thirdO)
+        </div>
+        
+        <p class="title">Run on a Data Source</p>
+        
+        <p>
+        A data source is a database or flat file directory of crystal structures. For example, a single
+        pdb file is a very simple data source. The same motif can be run on several different sources, or 
+        several motifs used on one or more sources.
+        </p>
+        
+        <div class="code">
+        import sys<br>
+        from Tailor.Run import Run, Pipe<br>
+        <br>
+        pipe = Pipe(my_motif, [distanceNOMeasure], sys.stdout)<br>
+        run = Run("/home/pdb_directory", [], [pipe])<br>
+        run.run()
+        </div>
+
+    <p>
+        <a href="http://sourceforge.net"><img src="http://sflogo.sourceforge.net/sflogo.php?group_id=147565&amp;type=5" width="210" height="62" border="0" alt="SourceForge.net Logo" /></a>
+    </p>
+    </body>
+</html>

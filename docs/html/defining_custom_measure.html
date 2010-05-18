@@ -1,0 +1,73 @@
+<html>
+
+	<head>
+		<title>Tailor: Simple Complete Example</title>
+		<link rel="stylesheet" type="text/css" href="tailor.css">
+	</head>
+	
+	<body>
+
+	<h1>Defining a custom measure</h1>
+	
+	<h2>The <tt>Measure</tt> base class</h2>
+	
+	<p>
+		The abstract class <tt>Measure</tt> defines one abstract method that any
+		derived class must implement:
+	</p>
+	
+	<p><div class="code">
+		public abstract Measurement measure(Structure structure) 
+		throws DescriptionException;</div>
+	</p>
+	
+	<p>
+		However, this is not especially helpful as a guide for implementing the method
+		itself. It might be more helpful to look at one of the basic classes provided
+		with Tailor : the <tt>DistanceMeasure</tt>.
+	</p>
+	
+	<h2>The <tt>DistanceMeasure</tt> class</h2>
+	
+	<p>
+		This class simply measures the distance between two atoms. This is actually
+		done in the <tt>measure</tt> method of the class, as seen below.
+	</p>
+	
+	<div class="code">
+	<pre>
+    public Measurement measure(Structure structure) 
+   	                                  throws DescriptionException {
+        Vector a = this.descriptionA.findStructureCenter(structure);
+        Vector b = this.descriptionB.findStructureCenter(structure);
+        
+        double distance = Geometry.distance(a, b);
+        return new Measurement(this.getName(), new Double(distance));
+    }
+    </pre>
+    </div>
+	
+	<p>
+		The class holds a pair of <tt>Description</tt> references - <tt>descriptionA
+		</tt> and <tt>descriptionB</tt> - that it uses to find points. These points
+		(actually, <tt>Vector</tt> objects) are passed to a standard distance method.
+		Finally, the result is wrapped in an instance of a <tt>Measurement</tt>.
+	</p>
+	
+	<h2>Parameters for the <tt>measure</tt> method</h2>
+	
+	<p>
+		The <tt>structure</tt> parameter passed to the <tt>measure</tt> method is a
+		fragment found by the search for the motif. Any descriptions used by the
+		measure must therefore be able to be found within such a fragment. If there
+		is some problem finding it, the method can throw a
+		<tt>DescriptionException</tt>.
+	</p>
+
+    <p>
+        <a href="http://sourceforge.net"><img src="http://sflogo.sourceforge.net/sflogo.php?group_id=147565&amp;type=5" width="210" height="62" border="0" alt="SourceForge.net Logo" /></a>
+    </p>
+	
+	</body>
+
+</html>

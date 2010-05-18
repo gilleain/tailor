@@ -1,0 +1,65 @@
+<html>
+
+	<h1>Overview</h1>
+	
+	<h2>Running a search</h2>
+	
+	<p>
+		Tailor allows the user to define a motif, and a list of measures. The
+		search and measurement are done simultaneously, and the result is a list
+		of protein parts and numbers (measurements). This process is shown
+		schematically below, along with a motif and some printed results from a run.
+	</p>
+	
+	<p align="center">
+		<img src="../img/overview.png" width="450" height = "300"/>
+	</p>
+	
+	<p>
+		The third essential input to the run is some data to search on. This is
+		usually going to be pdb files - either stored locally, or from a public
+		data bank. However, it could be data from generated models. 
+	</p>
+	
+	<h2>Defining a Motif</h2>
+	
+	<p>
+		A motif is a description with some conditions attached to it. The search
+		engine will find all structure fragments that match both the description
+		and the conditions. A graphical representation of a motif is shown below.
+	</p>
+	
+	<p align="center">
+		<img src="../img/motif.png" width="600" height="200"/>
+	</p>
+	
+	<p>
+		The conditions are the dashed lines and boxes above and below the central
+		row. Circled numbers represent residues, while the O/N boxes are peptide 
+		links. Dashed arcs represent hydrogen bonds and dashed boxes are torsions.
+	</p>
+	
+	<h2>Interpreting the results</h2>
+	
+	<p>
+		The basic results are a table or list, with a row for each structure 
+		fragment found. Each row has the identifier for the structure the fragment
+		came from, a simple indication of where it is in the structure, and the list
+		of measurements. The output - as seen in the java gui - is below.
+	</p>
+	
+	<p align="center">
+		<img src="../img/table_results.png"/>
+	</p>
+	
+	<p>
+		The results at the command line are just a table of tab-separated text,
+		which can easily be manipulated with text parsing tools like grep, or opened
+		in a spreadsheet for further analysis.
+	</p>
+
+    <p>
+        <a href="http://sourceforge.net"><img src="http://sflogo.sourceforge.net/sflogo.php?group_id=147565&amp;type=5" width="210" height="62" border="0" alt="SourceForge.net Logo" /></a>
+    </p>
+	
+</html>

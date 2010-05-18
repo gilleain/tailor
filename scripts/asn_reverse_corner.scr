@@ -1,0 +1,17 @@
+filepath         = ~/scratch/tmp
+filenames        = [1hgf.pdb]
+motifDescription = Chain 
+                        chainID = 'asn_reverse_corner'
+
+                        hydrogen-bond = (1.ND2 1.2HD2 5.O 5.C) 3.5 90 90
+
+                        Residue position = 1
+                        Residue position = 2 
+                        Residue position = 3 
+                        Residue position = 4 
+                        Residue position = 5 
+
+measures         = Torsion (1.O 2.N 2.CA 2.C)
+                   Torsion (2.N 2.CA 2.C 3.N)
+                   Torsion (2.O 3.N 3.CA 3.C)
+                   Torsion (3.N 3.CA 3.C 4.N)

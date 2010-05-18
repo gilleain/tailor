@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project basedir="." default="help" name="tailor">
+
+    <property name="python.dir" value="."/>
+    <property name="java.dir" value="."/>
+    <property name="site.dir" value="/Users/maclean/Sites"/>
+    <property name="Jmol.jar" value="/Users/maclean/development/otherpeoplesstuff/Jmol/build/Jmol.jar"/>
+
+	<target description="print out some helpful remarks" name="help">
+        <echo message="write some help documentation"/>
+    </target>
+    
+    <target description="distribution of the python version" name="sdist-py">
+        <exec dir="${python.dir}" executable="python">
+            <arg value="setup.py"/>
+            <arg value="sdist"/>
+            <arg value="--dist-dir"/>
+            <arg value="${basedir}/dist"/>
+            <arg value="--formats"/>
+            <arg value="zip"/>
+        </exec>
+        <move todir="${site.dir}">
+            <fileset dir="dist" includes="*.zip"/>
+        </move>
+    </target>
+	
+	<target description="make a mac application" name="dist-mac" depends="jar">
+	    <property name="appdir" value="tailor.app"/>
+		<property name="build_docs" value="docs/build_docs"/>
+	    <mkdir dir="${appdir}"/>
+	    <mkdir dir="${appdir}/Contents"/>
+	    <mkdir dir="${appdir}/Contents/MacOS"/>
+	    <mkdir dir="${appdir}/Contents/Resources"/>
+	    <mkdir dir="${appdir}/Contents/Resources/Java"/>
+		<copy 
+			file="/System/Library/Frameworks/JavaVM.framework/Versions/Current/Resources/MacOS/JavaApplicationStub" 
+			todir="${appdir}/Contents/MacOS"/>
+		<exec executable="chmod">
+			<arg value="755"/> 
+			<arg value="${appdir}/Contents/MacOS/JavaApplicationStub"/>
+		</exec>
+		<copy file="${build_docs}/Info.plist" todir="tailor.app/Contents"/>
+		<copy file="tailor.jar" todir="${appdir}/Contents/Resources/Java"/>
+		<copy file="${Jmol.jar}" todir="${appdir}/Contents/Resources/Java"/>
+		<exec executable="/Developer/Tools/SetFile">
+			<arg value="-a"/>
+			<arg value="B"/>
+			<arg value="${appdir}"/>
+		</exec>
+	</target>
+    
+    <target description="update the javadocs" name="javadocs">
+        <javadoc classpath="${java.dir}/classes" destdir="${java.dir}/docs" 
+            packagenames="tailor.*" private="true" sourcepath="${java.dir}/src"/>
+        <zip destfile="${site.dir}/javadoc.zip" basedir="${java.dir}/docs"/>
+    </target>
+    
+    <target description="publish the html files to the Sites folder" name="publish">
+        <copy todir="${site.dir}">
+            <fileset dir="${basedir}/html" includes="*.html"/>
+        </copy>
+    </target>
+
+    <target description="jar up the classes" name="jar">
+        <jar basedir="${java.dir}" destfile="tailor.jar">
+        	<manifest>
+        		<attribute name="Main-Class" value="tailor.app.RunFrame"/>
+        	</manifest>
+        	<include name="descriptions/*.xml"/>
+        	<fileset dir="classes"/>
+        </jar>
+        <copy file="tailor.jar" todir="${site.dir}"/>
+    </target>
+</project>

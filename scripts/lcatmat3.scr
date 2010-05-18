@@ -1,0 +1,27 @@
+filepath         = ~/phd/structures
+filenames        = []
+motifDescription =  Chain 
+                        chainID = 'catmat3'
+
+                        torsion-bound = (1.C 2.N  2.CA 2.C)   90 +/- 30
+                        torsion-bound = (2.N 2.CA 2.C  3.N)    0 +/- 30
+
+                        torsion-bound = (2.C 3.N  3.CA 3.C)   90 +/- 30
+                        torsion-bound = (3.N 3.CA 3.C  4.N) -150 +/- 30
+
+                        Residue position = 1
+                        Residue position = 2 
+                        Residue position = 3
+                        Residue position = 4 
+
+measures         = Torsion (1.C 2.N 2.CA 2.C)
+                   Torsion (2.N 2.CA 2.C 3.N)
+
+                   Torsion (2.C 3.N 3.CA 3.C)
+                   Torsion (3.N 3.CA 3.C 4.N)
+
+                   Property 1 resname str
+                   Property 2 resname str
+                   Property 3 resname str
+                   Property 4 resname str
+                   Property 1 position int

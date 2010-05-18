@@ -1,0 +1,47 @@
+<html>
+
+	
+	<head>
+		<title>Tailor: Function Reference</title>
+		<link rel="stylesheet" type="text/css" href="tailor.css">
+	</head>
+	
+	<body>
+		<h1>Function Reference</h1>
+		<p>
+			This is a list of some of the more useful publically accessible 
+			functions. A full list of classes and their methods is available <a 
+			href="api/index.html">here</a>.
+		</p>
+		
+		<h2>DescriptionFactory</h2>
+		
+		<ul>
+		<li>public void createHBondCondition(double maxDH, double minDHA, double min, int donorNumber, int acceptorNumber)</li>
+		<li>public void createPhiCondition(double midPoint, double range, int residueNumber)</li>
+		<li>public void createPsiCondition(double midPoint, double range, int residueNumber)</li>
+		<li>public TorsionMeasure createPhiMeasure(String name, int residueNumber)</li>
+		<li>public TorsionMeasure createPsiMeasure(String name, int residueNumber)</li>
+		</ul>
+		
+		<h2>Description</h2>
+		<ul>
+		<li>public void addCondition(Condition condition)</li>
+		<li>public Vector findStructureCenter(Structure structure)</li>
+		<li>public void addSubDescription(Description subDescription)</li>
+		</ul>
+		
+		<h2>ProteinDescription</h2>
+		<ul>
+		<li>public ProteinDescription getPath(String residueName, String atomName)</li>
+		<li>public ProteinDescription getPath(int residuePosition, String atomName)</li>
+		<li>public ProteinDescription getPath(String chainName, String residueName, String atomName)</li>
+		</ul>
+
+    <p>
+        <a href="http://sourceforge.net"><img src="http://sflogo.sourceforge.net/sflogo.php?group_id=147565&amp;type=5" width="210" height="62" border="0" alt="SourceForge.net Logo" /></a>
+    </p>
+		
+	</body>
+	
+</html>

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+    <dict>
+        <key>CFBundleName</key>
+        <string>Tailor</string>
+
+        <key>CFBundleIdentifier</key>
+        <string>tailor.app.App</string>
+
+        <key>CFBundleVersion</key>
+        <string>10.2</string>
+
+        <key>CFBundleExecutable</key>
+        <string>JavaApplicationStub</string>
+
+        <key>CFBundleDevelopmentRegion</key>
+        <string>English</string>
+
+        <key>CFBundlePackageType</key>
+        <string>APPL</string>
+
+        <key>Java</key>
+            <dict>
+            <key>MainClass</key>
+            <string>tailor.app.App</string>
+            <key>JVMVersion</key>
+            <string>1.4+</string>
+            <key>ClassPath</key>
+                <array>
+                <string>$JAVAROOT/tailor.jar</string>
+                <string>$JAVAROOT/Jmol.jar</string>
+                </array>
+            <key>Properties</key>
+            <dict>
+                <key>com.apple.mrj.application.apple.menu.about.name</key>
+                <string>Tailor</string>
+                <key>swing.defaultlaf</key>
+                <string>javax.swing.plaf.metal.MetalLookAndFeel</string>
+            </dict>
+        </dict>
+    </dict>
+</plist>

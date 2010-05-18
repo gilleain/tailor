@@ -1,0 +1,17 @@
+filepath         = ~/phd/structures
+filenames        = [1osa.pdb]
+motifDescription =  Chain 
+                        chainID = 'nest'
+                        torsion-bound = (1.C 2.N  2.CA 2.C) -90 +/- 10
+                        torsion-bound = (2.N 2.CA 2.C  3.N)   0 +/- 10
+                        torsion-bound = (2.C 3.N  3.CA 3.C)  90 +/- 10
+                        torsion-bound = (3.N 3.CA 3.C  4.N)   0 +/- 10
+
+                        hydrogen-bond = (4.N 4.H 2.OD1 2.CG) 2.5 120 90
+
+                        Residue position = 1
+                        Residue position = 2 resname = 'ASN'
+                        Residue position = 3
+                        Residue position = 4 
+
+measures         = Distance (2.N 4.N) Angle (1.N 2.N 3.N)

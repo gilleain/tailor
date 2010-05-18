@@ -1,0 +1,94 @@
+filepath         = ~/phd/structures
+filenames        = []
+motifDescription =  Chain 
+                        chainID = 'schellmannloop'
+                        torsion-bound = (2.C 3.N  3.CA 3.C) -80 +/- 60
+                        torsion-bound = (3.N 3.CA 3.C  4.N) -25 +/- 65
+                        torsion-bound = (3.C 4.N  4.CA 4.C) -80 +/- 60
+                        torsion-bound = (4.N 4.CA 4.C  5.N) -25 +/- 65
+                        torsion-bound = (4.C 5.N  5.CA 5.C) -80 +/- 60
+                        torsion-bound = (5.N 5.CA 5.C  6.N)  25 +/- 65
+                        torsion-bound = (5.C 6.N  6.CA 6.C) -80 +/- 60
+                        torsion-bound = (6.N 6.CA 6.C  7.N) -25 +/- 65
+                        torsion-bound = (6.C 7.N  7.CA 7.C)  80 +/- 60
+                        torsion-bound = (7.N 7.CA 7.C  8.N)  25 +/- 65
+                        
+                        Residue position = 1
+                        Residue position = 2 
+                        Residue position = 3
+                        Residue position = 4
+                        Residue position = 5
+                        Residue position = 6 
+                        Residue position = 7
+                        Residue position = 8
+                        Residue position = 9
+
+measures         = Distance (1.O 5.H)
+                   Distance (1.O 4.H)
+                   Distance (2.O 5.H)
+                   Distance (2.O 6.H)
+                   Distance (2.O 7.H)
+                   Distance (2.O 8.H)
+                   Distance (3.O 6.H)
+                   Distance (3.O 7.H)
+                   Distance (3.O 8.H)
+                   Distance (4.O 6.H)
+                   Distance (4.O 7.H)
+                   Distance (4.O 8.H)
+
+                   Torsion (6.H 6.N  7.N 7.H)
+                   Torsion (7.H 7.N  8.N 8.H)
+		   
+                   Torsion (1.N 2.C 2.O 5.H)
+                   Torsion (1.N 2.C 2.O 6.H)
+                   Torsion (2.N 3.C 3.O 6.H)
+                   Torsion (2.N 3.C 3.O 7.H)
+                   Torsion (2.N 3.C 3.O 8.H)
+                   Torsion (3.N 4.C 4.O 6.H)
+                   Torsion (3.N 4.C 4.O 7.H)
+                   Torsion (3.N 4.C 4.O 8.H)
+		   
+                   Torsion (1.O 5.H 5.N 5.CA)
+                   Torsion (1.O 4.H 4.N 4.CA)
+                   Torsion (2.O 5.H 5.N 5.CA)
+                   Torsion (2.O 6.H 6.N 6.CA)
+                   Torsion (3.O 6.H 6.N 6.CA)
+                   Torsion (3.O 7.H 7.N 7.CA)
+                   Torsion (3.O 8.H 8.N 8.CA)
+                   Torsion (4.O 6.H 6.N 6.CA)
+                   Torsion (4.O 7.H 7.N 7.CA)
+                   Torsion (4.O 8.H 8.N 8.CA)
+                   
+                   Torsion (5.C 6.N  6.CA 6.C)
+                   Torsion (6.N 6.CA 6.C  7.N)
+
+                   Torsion (6.C 7.N  7.CA 7.C)
+                   Torsion (7.N 7.CA 7.C  8.N)
+
+                   Torsion (7.C 8.N  8.CA 8.C)
+                   Torsion (8.N 8.CA 8.C  9.N)
+		   
+                   Angle (6.N 7.N 8.N)
+                  
+                   Angle (1.C 1.O 5.H)
+                   Angle (1.C 1.O 4.H)
+                   Angle (2.C 2.O 5.H)
+                   Angle (2.C 2.O 6.H)
+                   Angle (3.C 3.O 6.H)
+                   Angle (3.C 3.O 7.H)
+                   Angle (3.C 3.O 8.H)
+                   Angle (4.C 4.O 6.H)
+                   Angle (4.C 4.O 7.H)
+                   Angle (4.C 4.O 8.H)
+
+                   Angle (1.O 5.H 5.N)
+                   Angle (1.O 4.H 4.N)
+                   Angle (2.O 5.H 5.N)
+                   Angle (2.O 6.H 6.N)
+                   Angle (3.O 6.H 6.N)
+                   Angle (3.O 7.H 7.N)
+                   Angle (3.O 8.H 8.N)
+                   Angle (4.O 6.H 6.N)
+                   Angle (4.O 7.H 7.N)
+                   Angle (4.O 8.H 8.N)
+

@@ -1,0 +1,22 @@
+Now that Tailor has been unpacked there are several ways to use it:
+
+    1) From this directory, using the files in the Tailor directory below.
+    2) Install it using setup.py, as normal.
+    3) Simply copy the contents of the Tailor subdirectory to the site-package directory of your python installation.
+
+The are also a couple of different ways to interact with the code, as seen in the examples subdirectory:
+
+    1) As a library (see nestmeasure.py in the examples).
+    2) Using a script (see nestmeasure.scr in the scripts).
+
+To invoke the python program example (nestmeasure.py) run it like this from this directory:
+
+    python examples/nestmeasure.py <pdbfile_or_directory>
+
+where the item in <> is a path to a pdbfile (.pdb/.ent) or a directory of such files.
+
+To run the script example (nestmeasure.scr) invoke it like this from this directory:
+
+    python Tailor/Script.py scripts/nestmeasure.scr
+
+BUT FIRST! change the value of the filepath and filenames in the script to something that works on your system.
