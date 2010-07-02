@@ -71,14 +71,15 @@ public abstract class AbstractBaseEngine implements Engine {
     
     @Override
     public void run(Run run) {
-        // TODO Auto-generated method stub
-        
+        if (this.structureSource == null) {
+            this.structureSource = run.getStructureSource();
+        }
+        this.run(run.getDescription(), run.getMeasures());
     }
 
     @Override
     public void run(ProteinDescription description, ArrayList<Measure> measures) {
-        // TODO Auto-generated method stub
-        
+        this.run(description, measures, structureSource);
     }
 
     @Override

@@ -18,7 +18,7 @@ public class EngineFactory {
      * @param description
      * @return
      */
-    public Engine getEngine(Description description) {
+    public static Engine getEngine(Description description) {
         int chainCount = 0;
         if (description instanceof ProteinDescription) {
             ProteinDescription proteinDescription = 

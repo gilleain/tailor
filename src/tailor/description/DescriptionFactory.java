@@ -15,6 +15,12 @@ import tailor.measure.TorsionMeasure;
  *
  */
 public class DescriptionFactory {
+    
+    /**
+     * If true, each ResidueDescription will be created with an AtomDescription
+     * of 'H' (the backbone N-H)
+     */
+    private boolean addBackboneAmineHydrogens;
 	
 	private static String DEFAULT_CHAIN_NAME = "A";
 	
@@ -30,6 +36,10 @@ public class DescriptionFactory {
 	
 	public void setDescription(ProteinDescription root) {
 		this.root = root;
+	}
+	
+	public void setAddBackboneAmineHydrogens(boolean value) {
+	    this.addBackboneAmineHydrogens = value;
 	}
 	
 	public AtomDescription lookup(Description path) {
@@ -155,14 +165,17 @@ public class DescriptionFactory {
 	
 	private void addResidue(ChainDescription chain, GroupDescription residue) {
 		residue.addAtomDescription("N");
-		residue.addAtomDescription("H");
+		if (addBackboneAmineHydrogens) {
+		    residue.addAtomDescription("H");
+		}
 		residue.addAtomDescription("CA");
 		residue.addAtomDescription("C");
 		residue.addAtomDescription("O");
 		chain.addGroupDescription(residue);
 	}
 	
-	public void addAtomToResidue(String chainName, int residueNumber, String atomName) {
+	public void addAtomToResidue(
+	        String chainName, int residueNumber, String atomName) {
 		ChainDescription chain = this.root.getChainDescription(chainName);
 		if (chain != null) {
 			GroupDescription residue = chain.getGroupDescription(residueNumber);
@@ -176,8 +189,8 @@ public class DescriptionFactory {
 	 * @param acceptorNumber The residue number of the higher numbered end.
 	 * @param chainName The name of the chain to create the condition on.
 	 */
-	public void addHBondConditionToChain(HBondCondition partialCondition, int donorNumber, 
-										 int acceptorNumber, String chainName) {
+	public void addHBondConditionToChain(HBondCondition partialCondition, 
+	        int donorNumber, int acceptorNumber, String chainName) {
 		
 		ChainDescription chain = this.root.getChainDescription(chainName);
 		
@@ -194,7 +207,8 @@ public class DescriptionFactory {
 		chain.addCondition(partialCondition);
 	}
 	
-	public void addPhiConditionToChain(TorsionBoundCondition partialCondition, int residueNumber, String chainName) {
+	public void addPhiConditionToChain(TorsionBoundCondition partialCondition, 
+	        int residueNumber, String chainName) {
 		ChainDescription chain = this.root.getChainDescription(chainName);
 		
 		ChainDescription a = chain.getPath(residueNumber - 1, "C");

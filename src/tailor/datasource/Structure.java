@@ -90,6 +90,7 @@ public class Structure {
 	 * @return a Vector that is the center of this feature
 	 */
 	public Vector getCenter() {
+	    System.out.println("getting center for " + this);
 		if (this.children.size() > 0) {
 			Vector total = new Vector(0.0, 0.0, 0.0);
 			for (Structure subFeature : this.children) {

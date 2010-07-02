@@ -51,7 +51,7 @@ public class DistanceBoundCondition implements Condition {
 
 	    double d = Geometry.distance(a, b);
 //        System.err.println("distance " + d);
-	    boolean satisfied = this.center - this.range < d && this.center + this.range > d;
+	    boolean satisfied = (center - range < d) && (center + range > d);
 	    if (satisfied) {
 	        return true;
 	    } else {
