@@ -19,6 +19,10 @@ import tailor.description.ProteinDescription;
 import tailor.measure.Measure;
 import tailor.measure.Measurement;
 
+/**
+ * @author maclean
+ *
+ */
 public class BasicEngine implements Engine, Runnable {
 	
 	private ResultsPrinter printer;
@@ -105,7 +109,13 @@ public class BasicEngine implements Engine, Runnable {
 		}
 	}
 	
-	public ArrayList<Structure> scan(ProteinDescription description, Structure protein) {
+    public void run(ProteinDescription description,
+            ArrayList<Measure> measures, StructureSource source) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    public ArrayList<Structure> scan(ProteinDescription description, Structure protein) {
 		ArrayList<Structure> matches = new ArrayList<Structure>();
         for (ChainDescription chainDescription : description.getChainDescriptions()) {
             for (Structure chain : protein.getSubStructures()) {

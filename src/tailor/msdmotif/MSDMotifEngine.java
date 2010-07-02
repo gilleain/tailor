@@ -19,6 +19,7 @@ import javax.xml.parsers.SAXParserFactory;
 
 import org.xml.sax.SAXException;
 
+import tailor.datasource.StructureSource;
 import tailor.description.ProteinDescription;
 import tailor.engine.Engine;
 import tailor.engine.Run;
@@ -48,7 +49,14 @@ public class MSDMotifEngine implements Engine {
 		this.processResult(outfileName);
 	}
 
-	public void doQueryFromXmlString(String xmlString, String outputFilename) {
+	@Override
+    public void run(ProteinDescription description,
+            ArrayList<Measure> measures, StructureSource source) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    public void doQueryFromXmlString(String xmlString, String outputFilename) {
 		try {
 			HttpURLConnection connection = this.getConnection(err);
 	    	this.writeXmlStringToConnection(connection, err, xmlString);
