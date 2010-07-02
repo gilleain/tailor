@@ -8,3 +8,7 @@ build
 *.pyc
 .DS_Store
 *.zip
+/tailor.app
+/tailor_javasrc.zip
+/tailor_pysrc.zip
+/tailor.jar
