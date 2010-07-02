@@ -11,7 +11,7 @@ import tailor.description.ProteinDescription;
 public class SingleChain {
     
     @Test
-    public void simpleTest() {
+    public void simpleHBondTest() {
         String filename = "structures/2bop.pdb";
         
         DescriptionFactory factory = new DescriptionFactory();
@@ -34,5 +34,27 @@ public class SingleChain {
         Engine engine = EngineFactory.getEngine(description);
         engine.run(run);
     }
+    
+    @Test
+    public void geometricHBondTest() {
+        String filename = "structures/1a2p.pdb";
+        
+        DescriptionFactory factory = new DescriptionFactory();
+        factory.setAddBackboneAmineHydrogens(true);
+        factory.addResidues(5);
+        // i.O->(i+4).N
+        factory.createHBondCondition(3.5, 90, 90, 4, 0);
+        
+        Run run = new Run(filename);
+        run.addMeasure(factory.createPhiMeasure("psi2", 2));
+        run.addMeasure(factory.createPsiMeasure("phi2", 2));
+        
+        Description description = factory.getProduct(); 
+        run.addDescription((ProteinDescription)description);
+        
+        Engine engine = EngineFactory.getEngine(description);
+        engine.run(run);
+    }
+
 
 }

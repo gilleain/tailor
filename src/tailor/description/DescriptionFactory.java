@@ -82,31 +82,39 @@ public class DescriptionFactory {
 		if (!this.root.hasChain(DescriptionFactory.DEFAULT_CHAIN_NAME)) {
 			this.addChainToProtein();
 		}
-		this.addMultipleResiduesToChain(DescriptionFactory.DEFAULT_CHAIN_NAME, numberOfResidues);
+		this.addMultipleResiduesToChain(
+		        DescriptionFactory.DEFAULT_CHAIN_NAME, numberOfResidues);
 	}
 	
-	public void createHBondCondition(double maxDH, double minDHA, double min, int donorNumber, int acceptorNumber) {
-		this.addHBondCondition(new HBondCondition(maxDH, minDHA, min), donorNumber, acceptorNumber);
+	public void createHBondCondition(double maxDH, double minDHA, double minHAA,
+	        int donorNumber, int acceptorNumber) {
+		this.addHBondCondition(
+		        new HBondCondition(maxDH, minDHA, minHAA),
+		        donorNumber, acceptorNumber);
 	}
 	
-	public void addHBondCondition(HBondCondition partialCondition, int donorNumber, int acceptorNumber) {
+	public void addHBondCondition(HBondCondition partialCondition, 
+	        int donorNumber, int acceptorNumber) {
 		this.addHBondConditionToChain(partialCondition, donorNumber, 
 				acceptorNumber, DescriptionFactory.DEFAULT_CHAIN_NAME);
 	}
 	
 	public TorsionMeasure createPhiMeasure(String name, int residueNumber) {
-		return this.createPhiMeasure(name, residueNumber, DescriptionFactory.DEFAULT_CHAIN_NAME);
+		return this.createPhiMeasure(name, residueNumber,
+		        DescriptionFactory.DEFAULT_CHAIN_NAME);
 	}
 	
 	public TorsionMeasure createPsiMeasure(String name, int residueNumber) {
-		return this.createPsiMeasure(name, residueNumber, DescriptionFactory.DEFAULT_CHAIN_NAME);
+		return this.createPsiMeasure(name, residueNumber,
+		        DescriptionFactory.DEFAULT_CHAIN_NAME);
 	}
 	
 	public boolean canHydrogenBond(AtomDescription a, AtomDescription b) {
 		String aName = a.getName();
 		String bName = b.getName();
 		
-		return (aName.equals("O") && bName.equals("N")) || (aName.equals("N") && bName.equals("O"));
+		return (aName.equals("O") && bName.equals("N")) 
+		    || (aName.equals("N") && bName.equals("O"));
 	}
 	
 	public ChainDescription getChainDescription(String chainName) {

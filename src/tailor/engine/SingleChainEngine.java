@@ -12,7 +12,7 @@ import tailor.description.ProteinDescription;
 
 /**
  * Matches descriptions that only cover a single chain. If the structure has
- * multiple chains, each chain of the structure wil be compared to the 
+ * multiple chains, each chain of the structure will be compared to the 
  * description in turn.  
  * 
  * @author maclean
@@ -31,7 +31,9 @@ public class SingleChainEngine extends AbstractBaseEngine implements Engine {
             
             // sanity check
             if (chainDescriptions.size() == 1) {
-                ChainDescription chainDescription = chainDescriptions.get(0); 
+                ChainDescription chainDescription = chainDescriptions.get(0);
+                
+                // XXX assumes that the structure passed in is a protein!
                 for (Structure chain : structure.getSubStructures()) {
                     for (Structure chainMatch : scan(chainDescription, chain)) {
                         Structure motif = new Structure(Level.PROTEIN);

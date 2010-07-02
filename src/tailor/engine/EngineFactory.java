@@ -26,6 +26,8 @@ public class EngineFactory {
             chainCount = proteinDescription.getChainDescriptions().size();
             if (chainCount == 1) {
                 return new SingleChainEngine();
+            } else {
+                return new MultiChainEngine();
             }
         }
         return null;
