@@ -173,9 +173,11 @@ public class ChainDescription implements Description {
         for (GroupDescription groupDescription : this.groupDescriptions) {
             int position = 0;
             for (Structure group : chain.getSubStructures()) {
-                if (groupDescription.matches(group) && groupDescription.offsetMatches(position)) {
+                if (groupDescription.matches(group) 
+                        && groupDescription.offsetMatches(position)) {
 //                    System.err.println("group matches : " + group.getId());
-                    Vector groupCenter = groupDescription.findStructureCenter(group);
+                    Vector groupCenter = 
+                        groupDescription.findStructureCenter(group);
                     center.add(groupCenter);
                 }
                 position++;
@@ -191,8 +193,10 @@ public class ChainDescription implements Description {
         // TODO : what if multiple matches...
         for (GroupDescription groupDescription : this.groupDescriptions) {
             if (groupDescription.nameMatches(groupName)) {
-                GroupDescription group = (GroupDescription) groupDescription.shallowCopy();
-                AtomDescription atom = groupDescription.getAtomDescription(atomName);
+                GroupDescription group = 
+                    (GroupDescription) groupDescription.shallowCopy();
+                AtomDescription atom = 
+                    groupDescription.getAtomDescription(atomName);
                 group.addAtomDescription(atom);
                 root.addGroupDescription(group);
             }
@@ -207,7 +211,8 @@ public class ChainDescription implements Description {
         // TODO : what if multiple matches...
         for (GroupDescription groupDescription : this.groupDescriptions) {
             if (groupDescription.offsetMatches(groupPosition)) {
-                GroupDescription group = (GroupDescription) groupDescription.shallowCopy();
+                GroupDescription group = 
+                    (GroupDescription) groupDescription.shallowCopy();
                 AtomDescription atom = new AtomDescription(atomName);
                 group.addAtomDescription(atom);
                 root.addGroupDescription(group);

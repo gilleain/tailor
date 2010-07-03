@@ -52,16 +52,19 @@ public class DescriptionFactory {
 		if (level == Level.CHAIN) {
 			ChainDescription pathChain = (ChainDescription) path;
 			GroupDescription pathGroup = pathChain.getGroupDescriptions().get(0);
-			self = ((ProteinDescription) self).getChainDescription(pathChain.getName());
+			String name = pathChain.getName();
+			self = ((ProteinDescription) self).getChainDescription(name);
 			return this.lookup(pathGroup, self);
 		} else if (level == Level.RESIDUE) {
 			GroupDescription pathGroup = (GroupDescription) path;
 			AtomDescription pathAtom = pathGroup.getAtomDescriptions().get(0);
-			self = ((ChainDescription) self).getGroupDescription(pathGroup.getOffset());
+			int offset = pathGroup.getOffset();
+			self = ((ChainDescription) self).getGroupDescription(offset);
 			return this.lookup(pathAtom, self);
 		} else if (level == Level.ATOM) {
 			AtomDescription pathAtom = (AtomDescription) path;
-			return ((GroupDescription) self).getAtomDescription(pathAtom.getName());
+			String name = pathAtom.getName();
+			return ((GroupDescription) self).getAtomDescription(name);
 		} else {
 			return null;	// XXX error
 		}
@@ -232,14 +235,17 @@ public class DescriptionFactory {
 		chain.addCondition(partialCondition);
 	}
 	
-	public void createPhiCondition(double midPoint, double range, int residueNumber) {
-		TorsionBoundCondition partialCondition = new TorsionBoundCondition("phi", midPoint, range);
+	public void createPhiCondition(
+	        double midPoint, double range, int residueNumber) {
+		TorsionBoundCondition partialCondition = 
+		    new TorsionBoundCondition("phi", midPoint, range);
 		this.addPhiConditionToChain(partialCondition, 
 				residueNumber, DescriptionFactory.DEFAULT_CHAIN_NAME);
 	}
 	
-	public void addPsiConditionToChain(TorsionBoundCondition partialCondition, int residueNumber, String chainName) {
-		ChainDescription chain = this.root.getChainDescription(chainName);
+	public void addPsiConditionToChain(TorsionBoundCondition partialCondition, 
+	        int residueNumber, String chainName) {
+		ChainDescription chain = root.getChainDescription(chainName);
 		
 		ChainDescription a = chain.getPath(residueNumber, "N");
 		ChainDescription b = chain.getPath(residueNumber, "CA");
@@ -254,21 +260,26 @@ public class DescriptionFactory {
 		chain.addCondition(partialCondition);
 	}
 	
-	public void createPsiCondition(double midPoint, double range, int residueNumber) {
-		TorsionBoundCondition partialCondition = new TorsionBoundCondition("phi", midPoint, range);
+	public void createPsiCondition(
+	        double midPoint, double range, int residueNumber) {
+		TorsionBoundCondition partialCondition = 
+		    new TorsionBoundCondition("phi", midPoint, range);
 		this.addPsiConditionToChain(partialCondition, 
 				residueNumber, DescriptionFactory.DEFAULT_CHAIN_NAME);
 	}
 	
-	public TorsionMeasure createPhiMeasure(String name, int residueNumber, String chainName) {
-		return this.fillPhiMeasure(new TorsionMeasure(name), residueNumber, chainName);
+	public TorsionMeasure createPhiMeasure(
+	        String name, int residueNumber, String chainName) {
+		return this.fillPhiMeasure(
+		        new TorsionMeasure(name), residueNumber, chainName);
 	}
 	
-	public TorsionMeasure fillPhiMeasure(TorsionMeasure partialMeasure, int residueNumber, String chainName) {
-		ProteinDescription a = this.root.getPath(chainName, residueNumber - 1, "C");
-		ProteinDescription b = this.root.getPath(chainName, residueNumber, "N");
-		ProteinDescription d = this.root.getPath(chainName, residueNumber, "C");
-		ProteinDescription c = this.root.getPath(chainName, residueNumber, "CA");
+	public TorsionMeasure fillPhiMeasure(
+	       TorsionMeasure partialMeasure, int residueNumber, String chainName) {
+		ProteinDescription a = root.getPath(chainName, residueNumber - 1, "C");
+		ProteinDescription b = root.getPath(chainName, residueNumber, "N");
+		ProteinDescription d = root.getPath(chainName, residueNumber, "C");
+		ProteinDescription c = root.getPath(chainName, residueNumber, "CA");
 		
 		partialMeasure.setDescriptionA(a);
 		partialMeasure.setDescriptionB(b);
@@ -278,15 +289,18 @@ public class DescriptionFactory {
 		return partialMeasure;
 	}
 	
-	public TorsionMeasure createPsiMeasure(String name, int residueNumber, String chainName) {
-		return this.fillPsiMeasure(new TorsionMeasure(name), residueNumber, chainName);
+	public TorsionMeasure createPsiMeasure(
+	        String name, int residueNumber, String chainName) {
+		return fillPsiMeasure(
+		        new TorsionMeasure(name), residueNumber, chainName);
 	}
 	
-	public TorsionMeasure fillPsiMeasure(TorsionMeasure partialMeasure, int residueNumber, String chainName) {
-		ProteinDescription a = this.root.getPath(chainName, residueNumber, "N");
-		ProteinDescription b = this.root.getPath(chainName, residueNumber, "CA");
-		ProteinDescription c = this.root.getPath(chainName, residueNumber, "C");
-		ProteinDescription d = this.root.getPath(chainName, residueNumber + 1, "N");
+	public TorsionMeasure fillPsiMeasure(
+	       TorsionMeasure partialMeasure, int residueNumber, String chainName) {
+		ProteinDescription a = root.getPath(chainName, residueNumber, "N");
+		ProteinDescription b = root.getPath(chainName, residueNumber, "CA");
+		ProteinDescription c = root.getPath(chainName, residueNumber, "C");
+		ProteinDescription d = root.getPath(chainName, residueNumber + 1, "N");
 		
 		partialMeasure.setDescriptionA(a);
 		partialMeasure.setDescriptionB(b);
@@ -315,60 +329,6 @@ public class DescriptionFactory {
             }
         }
         return Level.UNKNOWN;
-    }
-    
-    /**
-     * This is testing code for the classes in this package.
-     * 
-     * @param args
-     */
-    public static void main(String[] args) {
-        String path = "/Users/maclean/development/tailorj/structures/1a2pAH";
-        String[] files = new String[0];
-        
-        DescriptionFactory factory = new DescriptionFactory("Motif");
-        factory.addChainToProtein("A");
-        
-        factory.addResidueToChain("A", 0, "GLY");
-        factory.addResidueToChain("A", 1, "LYS");
-        
-        factory.addAtomToResidue("A", 0, "N");
-        factory.addAtomToResidue("A", 1, "O");
-        
-        ProteinDescription description = factory.getProduct();
-        ProteinDescription a = description.getPath("A", "GLY", "N");
-        ProteinDescription b = description.getPath("A", "LYS", "O");
-        
-        System.err.println(a.toPathString());
-        System.err.println(b.toPathString());
-        
-        ChainDescription chain = description.getChainDescription("A");
-        ChainDescription c = chain.getPath("GLY", "N");
-        ChainDescription d = chain.getPath("LYS", "O");
-        
-        tailor.condition.DistanceBoundCondition bound = 
-            new tailor.condition.DistanceBoundCondition("NODistance", c, d, 4, 2);
-        chain.addGroupCondition(bound);
-        
-        tailor.measure.DistanceMeasure measure = new tailor.measure.DistanceMeasure(a, b);
-        
-        try {
-            tailor.datasource.PDBFileList fileList = new tailor.datasource.PDBFileList(path, files);
-            while (fileList.hasNext()) {
-                tailor.datasource.Structure structure = fileList.next();
-                System.err.println("Structure " + structure.getId());
-                tailor.engine.BasicEngine engine = new tailor.engine.BasicEngine();
-                java.util.ArrayList<tailor.datasource.Structure> matches 
-                	= engine.scan(description, structure);
-                for (tailor.datasource.Structure match : matches) {
-                    System.out.println(match.toString() + " "  + measure.measure(match));
-                }
-            }
-        } catch (java.io.IOException ioe) {
-            System.err.println(ioe);
-        } catch (DescriptionException de) {
-            System.err.println(de);
-        }
     }
     
 }
