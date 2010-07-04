@@ -173,7 +173,7 @@ public class ChainDescription implements Description {
         for (GroupDescription groupDescription : this.groupDescriptions) {
             int position = 0;
             for (Structure group : chain.getSubStructures()) {
-                if (groupDescription.matches(group) 
+                if (groupDescription.nameMatches(group) 
                         && groupDescription.offsetMatches(position)) {
 //                    System.err.println("group matches : " + group.getId());
                     Vector groupCenter = 

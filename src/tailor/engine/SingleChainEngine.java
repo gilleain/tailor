@@ -100,7 +100,7 @@ public class SingleChainEngine extends AbstractBaseEngine implements Engine {
              chainDescription.getGroupDescriptions()) {
              int offset = groupDescription.getOffset();
              Structure group = groups.get(start + offset);
-             if (groupDescription.matches(group)) {
+             if (groupDescription.nameMatches(group)) {
 
                  // returns a new group filled with 
                  // as many matching atoms as possible
@@ -108,14 +108,12 @@ public class SingleChainEngine extends AbstractBaseEngine implements Engine {
                  
                  // only if we get a match of sufficient size
                  // is it worthwhile to consider any conditions
-                 if (groupMatch.size() == groupDescription.size()) {
-                     if (groupDescription.conditionsSatisfied(groupMatch)) {
-                         groupMatch.setProperty("Name", 
-                                 group.getProperty("Name"));
-                         groupMatch.setProperty("Number", 
-                                 group.getProperty("Number"));
-                         chain.addSubStructure(groupMatch);
-                     }
+                 if (groupDescription.fullyMatches(groupMatch)) {
+                     groupMatch.setProperty(
+                             "Name", group.getProperty("Name"));
+                     groupMatch.setProperty(
+                             "Number", group.getProperty("Number"));
+                     chain.addSubStructure(groupMatch);
                  }
              } else {
                  return chain;

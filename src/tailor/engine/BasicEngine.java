@@ -168,7 +168,7 @@ public class BasicEngine implements Engine, Runnable {
 		 for (GroupDescription groupDescription : description.getGroupDescriptions()) {
 			 int offset = groupDescription.getOffset();
 			 Structure group = groups.get(start + offset);
-			 if (groupDescription.matches(group)) {
+			 if (groupDescription.nameMatches(group)) {
 
 				 // returns a new group filled with as many matching atoms as possible
 				 Structure groupMatch = groupDescription.matchTo(group);

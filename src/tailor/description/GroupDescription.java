@@ -123,7 +123,8 @@ public class GroupDescription implements Description {
     }
     
     public ArrayList<TorsionBoundCondition> getTorsionBoundConditions() {
-        ArrayList<TorsionBoundCondition> torsions = new ArrayList<TorsionBoundCondition>();
+        ArrayList<TorsionBoundCondition> torsions = 
+            new ArrayList<TorsionBoundCondition>();
         for (Condition condition : this.atomConditions) {
             if (condition instanceof TorsionBoundCondition) {
                 torsions.add((TorsionBoundCondition) condition);
@@ -161,6 +162,38 @@ public class GroupDescription implements Description {
         return matchingGroup;
     }
     
+    /**
+     * A potential match only truly matches if it has the same number of
+     * atoms as the description, and if any conditions are satisfied.
+     * 
+     * @param potentialMatch
+     * @return
+     */
+    public boolean fullyMatches(Structure potentialMatch) {
+        return potentialMatch.size() == this.size() 
+            && conditionsSatisfied(potentialMatch);
+    }
+    
+    /**
+     * The basic match : consider only the group name
+     * but not any attached conditions.
+     * 
+     * @param residue the Structure to compare to
+     * @return true if this has no set name or the names match
+     */
+    public boolean nameMatches(Structure residue) {
+        return this.groupName == null 
+            || this.groupName.equals(residue.getProperty("Name"));
+    }
+
+    public boolean offsetMatches(int offset) {
+        return this.offset == offset;
+    }
+
+    public boolean nameMatches(String groupName) {
+        return this.groupName.equals(groupName);
+    }
+
     /**
      * Search the supplied structure to find the
      * subtree matching this description and
@@ -204,27 +237,8 @@ public class GroupDescription implements Description {
         return null;
     }
     
-    /**
-     * The basic match : consider only the group name
-     * but not any attached conditions.
-     * 
-     * @param residue the Structure to compare to
-     * @return true if this has no set name or the names match
-     */
-    public boolean matches(Structure residue) {
-        return this.groupName == null || this.groupName.equals(residue.getProperty("Name"));
-    }
-    
     public int getOffset() {
         return this.offset;
-    }
-    
-    public boolean offsetMatches(int offset) {
-        return this.offset == offset;
-    }
-    
-    public boolean nameMatches(String groupName) {
-        return this.groupName.equals(groupName);
     }
     
     public Description getPathEnd() {
