@@ -34,7 +34,7 @@ public class SingleChainEngine extends AbstractBaseEngine implements Engine {
                 ChainDescription chainDescription = chainDescriptions.get(0);
                 
                 // XXX assumes that the structure passed in is a protein!
-                for (Structure chain : structure.getSubStructures()) {
+                for (Structure chain : structure) {
                     for (Structure chainMatch : scan(chainDescription, chain)) {
                         Structure motif = new Structure(Level.PROTEIN);
                         motif.setProperty("Name", structure.getId());

@@ -2,11 +2,12 @@ package tailor.datasource;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 
 import tailor.Level;
 import tailor.geometry.Vector;
 
-public class Structure {
+public class Structure implements Iterable<Structure> {
 	
 	private ArrayList<Structure> children;
 	private HashMap<String, String> properties;
@@ -25,7 +26,12 @@ public class Structure {
 		this.level = level;
 	}
 	
-	public Level getLevel() {
+	@Override
+    public Iterator<Structure> iterator() {
+        return children.iterator();
+    }
+
+    public Level getLevel() {
 		return level;
 	}
 
