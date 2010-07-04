@@ -58,7 +58,7 @@ public class RangedSingleChainEngine extends AbstractBaseEngine {
                 
                 // the next group description to match is at index == length
                 GroupDescription groupDescription = 
-                    chainDescription.getGroupDescription(partialLength);
+                    chainDescription.getGroupDescriptions().get(partialLength);
                 
                 // check and add
                 if (groupDescription.nameMatches(residue)) {
@@ -72,12 +72,14 @@ public class RangedSingleChainEngine extends AbstractBaseEngine {
                 }
                 
                 // the partial may now be complete
+                boolean complete = false;
                 if (extended && partialLength == descriptionLength) {
                     fullMatches.add(partial);
+                    complete = true;
                 }
                 
                 // remove those partials that have not been extended
-                if (!extended) {
+                if (!extended || complete) {
                     partialMatches.remove(partialsIndex);
                 } else {
                     partialsIndex++;
@@ -90,6 +92,7 @@ public class RangedSingleChainEngine extends AbstractBaseEngine {
                     firstGroupDescription.matchTo(residue);
                 if (firstGroupDescription.fullyMatches(matchingResidue)) {
                     Structure partial = new Structure(Level.CHAIN);
+                    partial.setProperty("Name", "A");
                     completeMatch(matchingResidue, partial, residue);
                     partialMatches.add(partial);
                 }
