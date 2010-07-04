@@ -63,7 +63,7 @@ public class SingleChainEngine extends AbstractBaseEngine implements Engine {
             ChainDescription chainDescription, Structure chain) {
         List<Structure> matches = new ArrayList<Structure>();
 
-        int span = chainDescription.last().getOffset();
+        int span = chainDescription.size();
 
         List<Structure> groups = chain.getSubStructures();
         int lastPossibleStart = groups.size() - span;
@@ -96,10 +96,10 @@ public class SingleChainEngine extends AbstractBaseEngine implements Engine {
     public Structure scan(ChainDescription chainDescription, 
                             List<Structure> groups, int start) {
          Structure chain = new Structure(Level.CHAIN);
-         for (GroupDescription groupDescription : 
-             chainDescription.getGroupDescriptions()) {
-             int offset = groupDescription.getOffset();
-             Structure group = groups.get(start + offset);
+         for (int index = 0; index < chainDescription.size(); index++) {
+             GroupDescription groupDescription = 
+                 chainDescription.getGroupDescription(index);
+             Structure group = groups.get(start + index);
              if (groupDescription.nameMatches(group)) {
 
                  // returns a new group filled with 

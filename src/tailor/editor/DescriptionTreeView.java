@@ -163,15 +163,18 @@ public class DescriptionTreeView extends JPanel  {
         // FIXME : this doesn't really make sense. Perhaps throw error.
         if (currentlySelectedNode == null) {
             DefaultMutableTreeNode root = this.getRoot();
-            Description description = DescriptionFactory.createFromLevel(Level.PROTEIN, name, 0);
+            Description description = 
+                DescriptionFactory.createFromLevel(Level.PROTEIN, name);
             this.addDescriptionToNewChildNode(root, description);
         } else {
-            Level currentLevel = ((Description) currentlySelectedNode.getUserObject()).getLevel();
+            Level currentLevel = 
+                ((Description) currentlySelectedNode.getUserObject()).getLevel();
             Level childLevel = DescriptionFactory.getSubLevel(currentLevel);
             if (position == -1) {
                 position = currentlySelectedNode.getChildCount();
             }
-            Description description = DescriptionFactory.createFromLevel(childLevel, name, position);
+            Description description = 
+                DescriptionFactory.createFromLevel(childLevel, name);
             this.addDescriptionToNewChildNode(currentlySelectedNode, description);
         }
     }

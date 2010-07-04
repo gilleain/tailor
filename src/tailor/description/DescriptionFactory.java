@@ -58,8 +58,10 @@ public class DescriptionFactory {
 		} else if (level == Level.RESIDUE) {
 			GroupDescription pathGroup = (GroupDescription) path;
 			AtomDescription pathAtom = pathGroup.getAtomDescriptions().get(0);
-			int offset = pathGroup.getOffset();
-			self = ((ChainDescription) self).getGroupDescription(offset);
+//			int offset = pathGroup.getOffset();
+			// TODO : FIXME
+//			self = ((ChainDescription) self).getGroupDescription(offset);
+			self = ((ChainDescription) self).getGroupDescription(0);
 			return this.lookup(pathAtom, self);
 		} else if (level == Level.ATOM) {
 			AtomDescription pathAtom = (AtomDescription) path;
@@ -150,17 +152,17 @@ public class DescriptionFactory {
 		this.root.addChainDescription(new ChainDescription(name));
 	}
 	
-	public void addResidueToChain(String chainName, int position) {
+	public void addResidueToChain(String chainName) {
 		ChainDescription chain = this.root.getChainDescription(chainName);
 		if (chain != null) {
-			this.addResidue(chain, new GroupDescription(null, position));
+			this.addResidue(chain, new GroupDescription());
 		}
 	}
 	
-	public void addResidueToChain(String chainName, int position, String residueName) {
+	public void addResidueToChain(String chainName, String residueName) {
 		ChainDescription chain = this.root.getChainDescription(chainName);
 		if (chain != null) {
-			this.addResidue(chain, new GroupDescription(residueName, position));
+			this.addResidue(chain, new GroupDescription(residueName));
 		}
 	}
 	
@@ -169,7 +171,7 @@ public class DescriptionFactory {
 		if (chain != null) {
 			for (int i = 0; i < numberOfResidues; i++) {
 				// XXX ACK! - overwrites 0 to numberOfResidues...
-				this.addResidue(chain, new GroupDescription(null, i));
+				this.addResidue(chain, new GroupDescription());
 			}
 		}
 	}
@@ -311,11 +313,11 @@ public class DescriptionFactory {
 	}
 	
     
-    public static Description createFromLevel(Level level, String name, int position) {
+    public static Description createFromLevel(Level level, String name) {
         switch (level) {
             case PROTEIN : return new ProteinDescription(name);
             case CHAIN   : return new ChainDescription(name);
-            case RESIDUE : return new GroupDescription(name, position);
+            case RESIDUE : return new GroupDescription(name);
             case ATOM    : return new AtomDescription(name);
             default      : return null;
         }

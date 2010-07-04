@@ -19,27 +19,23 @@ public class GroupDescription implements Description {
     
     private String groupName;
     
-    private int offset;
-    
     private ArrayList<AtomDescription> atomDescriptions;
     
     private ArrayList<Condition> atomConditions;
     
     public GroupDescription() {
         this.groupName = null;
-        this.offset = -1; // NOTE : -1 means 'not set'
         this.atomDescriptions = new ArrayList<AtomDescription>();
         this.atomConditions = new ArrayList<Condition>();
     }
     
-    public GroupDescription(String groupName, int offset) {
+    public GroupDescription(String groupName) {
         this();
         this.groupName = groupName;
-        this.offset = offset;
     }
     
     public GroupDescription(GroupDescription groupDescription) {
-    	this(groupDescription.groupName, groupDescription.offset);
+    	this(groupDescription.groupName);
     	for (AtomDescription atomDescription : groupDescription.atomDescriptions) {
     		this.atomDescriptions.add(new AtomDescription(atomDescription));
     	}
@@ -52,7 +48,9 @@ public class GroupDescription implements Description {
     
     public boolean contains(Description d) {
     	if (d.getLevel() == GroupDescription.level) {
-    		return this.getOffset() == ((GroupDescription) d).getOffset();
+    	    // TODO
+//    		return this.getOffset() == ((GroupDescription) d).getOffset();
+    	    return true;
     	} else {
     		for (AtomDescription atom : this.atomDescriptions) {
     			if (atom.getName().equals(((AtomDescription) d).getName())) {
@@ -64,7 +62,7 @@ public class GroupDescription implements Description {
     }
     
     public Description shallowCopy() {
-        return new GroupDescription(this.groupName, this.offset);
+        return new GroupDescription(this.groupName);
     }
     
     public Level getLevel() {
@@ -186,10 +184,6 @@ public class GroupDescription implements Description {
             || this.groupName.equals(residue.getProperty("Name"));
     }
 
-    public boolean offsetMatches(int offset) {
-        return this.offset == offset;
-    }
-
     public boolean nameMatches(String groupName) {
         return this.groupName.equals(groupName);
     }
@@ -237,10 +231,6 @@ public class GroupDescription implements Description {
         return null;
     }
     
-    public int getOffset() {
-        return this.offset;
-    }
-    
     public Description getPathEnd() {
     	if (this.atomDescriptions.size() == 0) {
     		return this;
@@ -251,7 +241,7 @@ public class GroupDescription implements Description {
     
     public String toPathString() {
         StringBuffer s = new StringBuffer();
-        s.append("i + ").append(this.offset).append("/");
+        s.append("i + ").append(0).append("/"); // TODO
         for (AtomDescription atomDescription : this.atomDescriptions) {
             s.append(atomDescription.getName());
         }
@@ -260,14 +250,14 @@ public class GroupDescription implements Description {
     
     public String toXmlPathString() {
     	// XXX we assume that there is only one Atom!
-    	String s = "<Path position=\"" + this.offset + "\" "; 
+    	String s = "<Path position=\"" + 0 + "\" ";    // TODO 
     	return s + this.atomDescriptions.get(0).toXmlPathString();
     }
     
     public String toString() {
         return "Group " 
             + ((this.groupName == null)? "" : this.groupName)
-            + this.offset;
+            + 0;    // TODO
     }
 
 }

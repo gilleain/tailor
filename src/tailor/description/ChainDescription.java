@@ -119,17 +119,14 @@ public class ChainDescription implements Description {
         return this.groupDescriptions;
     }
     
-    public GroupDescription getGroupDescription(int residueNumber) {
-    	for (GroupDescription groupDescription : this.groupDescriptions) {
-    		if (groupDescription.offsetMatches(residueNumber)) {
-    			return groupDescription;
-    		}
-    	}
-    	System.err.println("No group found with residueNumber " + residueNumber);
-    	for (GroupDescription groupDescription : this.groupDescriptions) {
-    		System.err.println(groupDescription);
-    	}
-    	return null;
+    /**
+     * Get the group description at index <code>groupIndex</code>.
+     * 
+     * @param groupIndex
+     * @return
+     */
+    public GroupDescription getGroupDescription(int groupIndex) {
+        return groupDescriptions.get(groupIndex);
     }
     
     /**
@@ -171,16 +168,13 @@ public class ChainDescription implements Description {
     public Vector findStructureCenter(Structure chain) {
         Vector center = new Vector();
         for (GroupDescription groupDescription : this.groupDescriptions) {
-            int position = 0;
             for (Structure group : chain.getSubStructures()) {
-                if (groupDescription.nameMatches(group) 
-                        && groupDescription.offsetMatches(position)) {
+                if (groupDescription.nameMatches(group)) {
 //                    System.err.println("group matches : " + group.getId());
                     Vector groupCenter = 
                         groupDescription.findStructureCenter(group);
                     center.add(groupCenter);
                 }
-                position++;
             }
         }
         
@@ -205,19 +199,17 @@ public class ChainDescription implements Description {
         return root;
     }
     
-    public ChainDescription getPath(int groupPosition, String atomName) {
+    public ChainDescription getPath(int groupIndex, String atomName) {
         ChainDescription root = new ChainDescription(this.chainName);
         
         // TODO : what if multiple matches...
-        for (GroupDescription groupDescription : this.groupDescriptions) {
-            if (groupDescription.offsetMatches(groupPosition)) {
-                GroupDescription group = 
-                    (GroupDescription) groupDescription.shallowCopy();
-                AtomDescription atom = new AtomDescription(atomName);
-                group.addAtomDescription(atom);
-                root.addGroupDescription(group);
-            }
-        }
+        GroupDescription groupDescription = groupDescriptions.get(groupIndex);
+        
+        GroupDescription group = 
+            (GroupDescription) groupDescription.shallowCopy();
+        AtomDescription atom = new AtomDescription(atomName);
+        group.addAtomDescription(atom);
+        root.addGroupDescription(group);
         
         return root;
     }
@@ -229,8 +221,9 @@ public class ChainDescription implements Description {
      * @param chain the Structure to compare to
      * @return true if this has no set chain name or the names are equal
      */
-    public boolean matches(Structure chain) {
-        return this.chainName == null || this.chainName.equals(chain.getProperty("Name"));
+    public boolean nameMatches(Structure chain) {
+        return this.chainName == null 
+            || this.chainName.equals(chain.getProperty("Name"));
     }
     
     public Description getPathEnd() {

@@ -142,7 +142,7 @@ public class BasicEngine implements Engine, Runnable {
 	public ArrayList<Structure> scan(ChainDescription description, Structure chain) {
 		ArrayList<Structure> matches = new ArrayList<Structure>();
 
-		int span = description.last().getOffset();
+		int span = description.size();
 
 		ArrayList<Structure> groups = chain.getSubStructures();
 		int lastPossibleStart = groups.size() - span;
@@ -162,23 +162,27 @@ public class BasicEngine implements Engine, Runnable {
 		return matches;
 	}
 	
-	public Structure scan(ChainDescription description, ArrayList<Structure> groups, 
-			 	int start) {
+	public Structure scan(ChainDescription description, 
+	        ArrayList<Structure> groups, int start) {
 		 Structure chain = new Structure(Level.CHAIN);
-		 for (GroupDescription groupDescription : description.getGroupDescriptions()) {
-			 int offset = groupDescription.getOffset();
-			 Structure group = groups.get(start + offset);
+		 for (int index = 0; index < description.size(); index++) {
+		     GroupDescription groupDescription = 
+		         description.getGroupDescription(index);
+			 Structure group = groups.get(start + index);
 			 if (groupDescription.nameMatches(group)) {
 
-				 // returns a new group filled with as many matching atoms as possible
+				 // returns a new group filled with 
+			     // as many matching atoms as possible
 				 Structure groupMatch = groupDescription.matchTo(group);
 				 
 				 // only if we get a match of sufficient size
 				 // is it worthwhile to consider any conditions
 				 if (groupMatch.size() == groupDescription.size()) {
 					 if (groupDescription.conditionsSatisfied(groupMatch)) {
-						 groupMatch.setProperty("Name", group.getProperty("Name"));
-						 groupMatch.setProperty("Number", group.getProperty("Number"));
+						 groupMatch.setProperty(
+						         "Name", group.getProperty("Name"));
+						 groupMatch.setProperty(
+						         "Number", group.getProperty("Number"));
 						 chain.addSubStructure(groupMatch);
 					 }
 				 }

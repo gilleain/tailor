@@ -66,8 +66,9 @@ public class XmlDescriptionReader {
                     nameStr = null;
                 }
                 if (!positionStr.equals("")) {
-                    int position = Integer.parseInt(positionStr); 
-                    this.currentGroup = new GroupDescription(nameStr, position);
+                    int position = Integer.parseInt(positionStr);
+                    // TODO : get rid of position string
+                    this.currentGroup = new GroupDescription(nameStr);
                     this.currentChain.addGroupDescription(this.currentGroup);
                 }
                 this.currentDescription = this.currentGroup;

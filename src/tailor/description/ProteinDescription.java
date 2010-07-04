@@ -168,7 +168,7 @@ public class ProteinDescription implements Description {
         Vector center = new Vector();
         for (ChainDescription chainDescription : this.chainDescriptions) {
             for (Structure chain : protein.getSubStructures()) {
-                if (chainDescription.matches(chain)) {
+                if (chainDescription.nameMatches(chain)) {
 //                    System.err.println("chain matches");
                     Vector chainCenter = chainDescription.findStructureCenter(chain);
                     center.add(chainCenter);

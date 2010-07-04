@@ -46,13 +46,10 @@ public class XmlDescriptionWriter {
 			writer.write("\t\t");
 			String name = g.getName();
 			String out;
-			int offset = g.getOffset();
 			if (name == null) {
-				out = String.format("" +
-						"<GroupDescription name=\"%s\" position=\"%s\">","*", offset);
+				out = String.format("" +"<GroupDescription name=\"%s\">","*");
 			} else {
-				out = String.format(
-						"<GroupDescription name=\"%s\" position=\"%s\">", name, offset);
+				out = String.format("<GroupDescription name=\"%s\">", name);
 			}
 			writer.write(out + "\n");
 			for (AtomDescription atom : g.getAtomDescriptions()) {

@@ -216,15 +216,15 @@ public class ResidueDiagram {
 	
 	private void fillMap(ChainDescription chain) {
 		int symbolIndex = 0;
-		for (int residueNumber = 0; residueNumber < chain.size(); residueNumber++) {
-			GroupDescription group = chain.getGroupDescription(residueNumber);
-			System.out.println("got group " + group + " residueNumber " + residueNumber);
-			Symbol nSymbol = this.backboneSymbols.get(symbolIndex++);
-			Symbol caSymbol = this.backboneSymbols.get(symbolIndex++);
-			Symbol oSymbol = this.backboneSymbols.get(symbolIndex++);
-			this.symbolToObjectMap.put(nSymbol, group.getAtomDescription("N"));
-			this.symbolToObjectMap.put(caSymbol, group.getAtomDescription("CA"));
-			this.symbolToObjectMap.put(oSymbol, group.getAtomDescription("O"));
+		for (int groupIndex = 0; groupIndex < chain.size(); groupIndex++) {
+			GroupDescription group = chain.getGroupDescription(groupIndex);
+			System.out.println("got group " + group + " index " + groupIndex);
+			Symbol nSymbol = backboneSymbols.get(symbolIndex++);
+			Symbol caSymbol = backboneSymbols.get(symbolIndex++);
+			Symbol oSymbol = backboneSymbols.get(symbolIndex++);
+			symbolToObjectMap.put(nSymbol, group.getAtomDescription("N"));
+			symbolToObjectMap.put(caSymbol, group.getAtomDescription("CA"));
+			symbolToObjectMap.put(oSymbol, group.getAtomDescription("O"));
 		}
 	}
 	
@@ -471,9 +471,12 @@ public class ResidueDiagram {
 		this.relayout();
 
 		// now, map the new symbols to their AtomDescription counterparts
-		this.factory.addResidueToChain("A", this.numberOfResidues - 1);
-		ChainDescription chain = factory.getChainDescription("A");	// TODO : >1 chain?
-		GroupDescription group = chain.getGroupDescription(this.numberOfResidues - 1);
+		this.factory.addResidueToChain("A");
+		
+		// TODO : >1 chain?
+		ChainDescription chain = factory.getChainDescription("A");	
+		
+		GroupDescription group = chain.getGroupDescription(numberOfResidues - 1);
 		this.symbolToObjectMap.put(nSymbol, group.getAtomDescription("N"));
 		this.symbolToObjectMap.put(caSymbol, group.getAtomDescription("CA"));
 		this.symbolToObjectMap.put(oSymbol, group.getAtomDescription("O"));
@@ -497,7 +500,8 @@ public class ResidueDiagram {
 		
 		this.relayout();
 		
-		ChainDescription chain = factory.getChainDescription("A");	// TODO : >1 chain?
+		// TODO : >1 chain?
+		ChainDescription chain = factory.getChainDescription("A");
 		chain.removeLastGroupDescription();
 	}
 	

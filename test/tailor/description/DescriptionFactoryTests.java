@@ -16,8 +16,8 @@ public class DescriptionFactoryTests {
     public void setupFactory(DescriptionFactory factory) {
         factory.addChainToProtein("A");
         
-        factory.addResidueToChain("A", 0, "GLY");
-        factory.addResidueToChain("A", 1, "LYS");
+        factory.addResidueToChain("A", "GLY");
+        factory.addResidueToChain("A", "LYS");
         
         factory.addAtomToResidue("A", 0, "N");
         factory.addAtomToResidue("A", 1, "O");
