@@ -1,6 +1,7 @@
 package tailor.description;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import tailor.Level;
 import tailor.condition.Condition;
@@ -120,7 +121,7 @@ public class GroupDescription implements Description {
         return true;
     }
     
-    public ArrayList<TorsionBoundCondition> getTorsionBoundConditions() {
+    public List<TorsionBoundCondition> getTorsionBoundConditions() {
         ArrayList<TorsionBoundCondition> torsions = 
             new ArrayList<TorsionBoundCondition>();
         for (Condition condition : this.atomConditions) {
