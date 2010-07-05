@@ -41,4 +41,7 @@ public interface Engine {
                     ArrayList<Measure> measures,
                     StructureSource source);
 
+    public void setRun(Run run);
+    
+    public void run();
 }

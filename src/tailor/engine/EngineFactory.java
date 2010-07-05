@@ -1,5 +1,9 @@
 package tailor.engine;
 
+import java.io.PrintStream;
+
+import tailor.datasource.ResultsPrinter;
+import tailor.datasource.StructureSource;
 import tailor.description.Description;
 import tailor.description.ProteinDescription;
 
@@ -27,6 +31,26 @@ public class EngineFactory {
             if (chainCount == 1) {
                 return new SingleChainEngine();
             } else {
+                return new MultiChainEngine();
+            }
+        }
+        return null;
+    }
+    
+    public static Engine getEngine(Description description, 
+                                   ResultsPrinter resultsPrinter,
+                                   PrintStream errStream,
+                                   StructureSource structureSource) {
+        int chainCount = 0;
+        if (description instanceof ProteinDescription) {
+            ProteinDescription proteinDescription = 
+                (ProteinDescription) description;
+            chainCount = proteinDescription.getChainDescriptions().size();
+            if (chainCount == 1) {
+                return new SingleChainEngine(
+                        resultsPrinter, errStream, structureSource);
+            } else {
+                // TODO
                 return new MultiChainEngine();
             }
         }

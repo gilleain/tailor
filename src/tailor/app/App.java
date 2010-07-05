@@ -22,8 +22,8 @@ import tailor.datasource.GuiResultsPrinter;
 import tailor.datasource.XmlDescriptionReader;
 import tailor.description.Description;
 import tailor.description.ProteinDescription;
-import tailor.engine.BasicEngine;
 import tailor.engine.Engine;
+import tailor.engine.EngineFactory;
 import tailor.engine.Run;
 import tailor.msdmotif.DescriptionToXmlQueryTranslator;
 import tailor.msdmotif.MSDMotifResultTableModel;
@@ -237,7 +237,8 @@ public class App implements ActionListener, CategoryChangeListener {
         	FileDataTableModel fileDataTableModel = new FileDataTableModel(m + 2);
         	
         	// TODO : don't want to be making a new engine every time!
-        	this.engine = new BasicEngine(
+        	this.engine = EngineFactory.getEngine(
+        	        description,
         			new GuiResultsPrinter(fileDataTableModel), 
         			System.err,
         			run.getStructureSource()

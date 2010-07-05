@@ -1,10 +1,13 @@
 package tailor.engine;
 
+import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.List;
 
 import tailor.Level;
+import tailor.datasource.ResultsPrinter;
 import tailor.datasource.Structure;
+import tailor.datasource.StructureSource;
 import tailor.description.ChainDescription;
 import tailor.description.Description;
 import tailor.description.GroupDescription;
@@ -19,6 +22,15 @@ import tailor.description.ProteinDescription;
  *
  */
 public class SingleChainEngine extends AbstractBaseEngine implements Engine {
+
+    public SingleChainEngine() {
+        super();
+    }
+    
+    public SingleChainEngine(ResultsPrinter resultsPrinter,
+            PrintStream errStream, StructureSource structureSource) {
+        super(resultsPrinter, errStream, structureSource);
+    }
 
     @Override
     public List<Structure> match(Description description, Structure structure) {

@@ -37,7 +37,19 @@ public class MSDMotifEngine implements Engine {
 		this.err = err;
 	}
 	
-	public void run(Run run) {
+	@Override
+    public void run() {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public void setRun(Run run) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    public void run(Run run) {
 		this.run(run.getDescription(), run.getMeasures());
 	}
 	

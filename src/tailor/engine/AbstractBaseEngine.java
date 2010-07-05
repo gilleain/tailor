@@ -34,7 +34,10 @@ public abstract class AbstractBaseEngine implements Engine {
     /**
      * The structures to be matched.
      */
-    private StructureSource structureSource;    
+    private StructureSource structureSource;   
+    
+    // TMP
+    private Run run;
     
     public AbstractBaseEngine() {
         this.printer = new StreamResultsPrinter(System.out);
@@ -67,6 +70,14 @@ public abstract class AbstractBaseEngine implements Engine {
         this.printer = printer;
         this.err = err;
         this.structureSource = new PDBFileList(path, filenames);
+    }
+    
+    public void setRun(Run run) {
+        this.run = run;
+    }
+    
+    public void run() {
+        run(run);
     }
     
     @Override

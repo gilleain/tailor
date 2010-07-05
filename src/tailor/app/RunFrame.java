@@ -28,8 +28,8 @@ import tailor.description.Description;
 import tailor.description.ProteinDescription;
 import tailor.editor.LibraryDialog;
 import tailor.editor.MeasureListBox;
-import tailor.engine.BasicEngine;
 import tailor.engine.Engine;
+import tailor.engine.EngineFactory;
 import tailor.engine.Run;
 
 public class RunFrame extends JFrame implements ActionListener, CategoryChangeListener {
@@ -224,9 +224,10 @@ public class RunFrame extends JFrame implements ActionListener, CategoryChangeLi
 	public void doRun() {
 		if (this.hasDescription) {
 			try {
-				Run run = new Run((ProteinDescription)this.descriptionPanel.getDescription(),
-						this.measureList.getMeasures(),
-						this.currentRunDirectory.getText());
+			    Description description = descriptionPanel.getDescription();
+				Run run = new Run((ProteinDescription)description,
+						          measureList.getMeasures(),
+						          currentRunDirectory.getText());
 			
 				int m = run.getMeasures().size();
 				FileDataTableModel fileDataTableModel = new FileDataTableModel(m + 2);
@@ -240,19 +241,19 @@ public class RunFrame extends JFrame implements ActionListener, CategoryChangeLi
 				progressDialog.setVisible(true);
 				
 				// TODO : don't want to be making a new engine every time!
-				this.engine = new BasicEngine(
-						new GuiResultsPrinter(fileDataTableModel, 
-								progressDialog.getProgressBar()), 
-								System.err,
-								source
-				);
+				this.engine = EngineFactory.getEngine(
+	                    description,
+	                    new GuiResultsPrinter(fileDataTableModel), 
+	                    System.err,
+	                    run.getStructureSource()
+	            );
 //				this.engine.run(run);
 				
 				// FIXME Ack! - this should be done with SwingWorker?
-				((BasicEngine)this.engine).setRun(run);
+				engine.setRun(run);
 				Thread engineThread = new Thread() {
 					public void run() {
-						((BasicEngine)engine).run();
+						engine.run();
 						progressDialog.setVisible(false);
 						resultTable.setTitle();
 					}

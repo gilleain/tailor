@@ -8,7 +8,7 @@ import org.junit.Test;
 import tailor.condition.DistanceBoundCondition;
 import tailor.datasource.PDBFileList;
 import tailor.datasource.Structure;
-import tailor.engine.BasicEngine;
+import tailor.engine.SingleChainEngine;
 import tailor.measure.DistanceMeasure;
 
 public class DescriptionFactoryTests {
@@ -60,8 +60,8 @@ public class DescriptionFactoryTests {
             while (fileList.hasNext()) {
                 Structure structure = fileList.next();
                 System.err.println("Structure " + structure.getId());
-                BasicEngine engine = new BasicEngine();
-                List<Structure> matches = engine.scan(description, structure);
+                SingleChainEngine engine = new SingleChainEngine();
+                List<Structure> matches = engine.scan(chain, structure);
                 for (Structure match : matches) {
                     System.out.println(match.toString() 
                             + " "  + measure.measure(match));
