@@ -8,6 +8,7 @@ import tailor.Level;
 import tailor.datasource.ResultsPrinter;
 import tailor.datasource.Structure;
 import tailor.datasource.StructureSource;
+import tailor.description.AtomDescription;
 import tailor.description.ChainDescription;
 import tailor.description.Description;
 import tailor.description.GroupDescription;
@@ -33,8 +34,8 @@ public class SingleChainEngine extends AbstractBaseEngine implements Engine {
     }
 
     @Override
-    public List<Structure> match(Description description, Structure structure) {
-        List<Structure> results = new ArrayList<Structure>();
+    public List<Match> match(Description description, Structure structure) {
+        List<Match> results = new ArrayList<Match>();
         if (description instanceof ProteinDescription) {
             ProteinDescription proteinDescription = 
                 (ProteinDescription)description; 
@@ -47,11 +48,19 @@ public class SingleChainEngine extends AbstractBaseEngine implements Engine {
                 
                 // XXX assumes that the structure passed in is a protein!
                 for (Structure chain : structure) {
-                    for (Structure chainMatch : scan(chainDescription, chain)) {
+                    for (Match chainMatch : scan(chainDescription, chain)) {
+                        // make a structure for the match
                         Structure motif = new Structure(Level.PROTEIN);
                         motif.setProperty("Name", structure.getId());
-                        motif.addSubStructure(chainMatch);
-                        results.add(motif);
+                        
+                        // add the chain structure match to the top
+                        Structure matchedChain = chainMatch.getStructure();
+                        motif.addSubStructure(matchedChain);
+                        
+                        // associate at the top level
+                        Match match = new Match(description, motif);
+                        match.addSubMatch(chainMatch);
+                        results.add(match);
                     }
                 }
             } else {
@@ -71,9 +80,8 @@ public class SingleChainEngine extends AbstractBaseEngine implements Engine {
      * @param chain
      * @return
      */
-    public List<Structure> scan(
-            ChainDescription chainDescription, Structure chain) {
-        List<Structure> matches = new ArrayList<Structure>();
+    public List<Match> scan(ChainDescription chainDescription, Structure chain) {
+        List<Match> matches = new ArrayList<Match>();
 
         int span = chainDescription.size();
 
@@ -81,13 +89,14 @@ public class SingleChainEngine extends AbstractBaseEngine implements Engine {
         int lastPossibleStart = groups.size() - span;
         for (int start = 0; start < lastPossibleStart; start++) {
             // starting at this position, scan the groups 
-            Structure chainMatch = scan(chainDescription, groups, start);
+            Match chainMatch = scan(chainDescription, groups, start);
 
             // only if we get a match of sufficient size
             // is it worthwhile to consider any conditions
             if (chainMatch.size() == chainDescription.size()) {
-                if (chainDescription.conditionsSatisfied(chainMatch)) {
-                    chainMatch.setProperty("Name", chain.getProperty("Name"));
+                Structure matchedChain = chainMatch.getStructure();
+                if (chainDescription.conditionsSatisfied(matchedChain)) {
+                    matchedChain.setProperty("Name", chain.getProperty("Name"));
                     matches.add(chainMatch);
                 }
             }
@@ -105,9 +114,10 @@ public class SingleChainEngine extends AbstractBaseEngine implements Engine {
      * @param start
      * @return
      */
-    public Structure scan(ChainDescription chainDescription, 
+    public Match scan(ChainDescription chainDescription, 
                             List<Structure> groups, int start) {
          Structure chain = new Structure(Level.CHAIN);
+         Match chainMatch = new Match(chainDescription, chain);
          for (int index = 0; index < chainDescription.size(); index++) {
              GroupDescription groupDescription = 
                  chainDescription.getGroupDescription(index);
@@ -116,22 +126,47 @@ public class SingleChainEngine extends AbstractBaseEngine implements Engine {
 
                  // returns a new group filled with 
                  // as many matching atoms as possible
-                 Structure groupMatch = groupDescription.matchTo(group);
+                 Match groupMatch = match(groupDescription, group);
                  
                  // only if we get a match of sufficient size
                  // is it worthwhile to consider any conditions
-                 if (groupDescription.fullyMatches(groupMatch)) {
-                     groupMatch.setProperty(
+                 Structure matchedGroup = groupMatch.getStructure();
+                 if (groupDescription.fullyMatches(matchedGroup)) {
+                     matchedGroup.setProperty(
                              "Name", group.getProperty("Name"));
-                     groupMatch.setProperty(
+                     matchedGroup.setProperty(
                              "Number", group.getProperty("Number"));
-                     chain.addSubStructure(groupMatch);
+                     chain.addSubStructure(matchedGroup);
+                     chainMatch.addSubMatch(groupMatch);
                  }
              } else {
-                 return chain;
+                 return chainMatch;
              }
          }
-         return chain;
+         return chainMatch;
      }
+    
+    public Match match(GroupDescription groupDescription, Structure group) {
+        Structure matchingGroup = new Structure(Level.RESIDUE);
+        Match match = new Match(groupDescription, matchingGroup);
+        for (AtomDescription atomDescription : groupDescription) {
+            boolean matchFound = false;
+            for (Structure atom : group.getSubStructures()) {
+                if (atomDescription.matches(atom)) {
+                    matchingGroup.addSubStructure(atom);
+                    match.associate(atomDescription, atom);
+                    matchFound = true;
+                    break;
+                }
+            }
+            
+            // purely an optimization step...
+            if (!matchFound) {
+                // TODO : allow for recording partial matches?
+                return match;   // an incomplete one
+            }
+        }
+        return match;
+    }
 
 }

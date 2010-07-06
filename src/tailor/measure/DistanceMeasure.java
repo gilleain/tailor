@@ -1,8 +1,9 @@
 package tailor.measure;
 
-import tailor.datasource.Structure;
 import tailor.description.DescriptionException;
 import tailor.description.Description;
+import tailor.engine.CenterFinder;
+import tailor.engine.Match;
 import tailor.geometry.Geometry;
 import tailor.geometry.Vector;
 
@@ -25,16 +26,17 @@ public class DistanceMeasure extends Measure {
 	 * @param descriptionA
 	 * @param descriptionB
 	 */
-	public DistanceMeasure(String name, Description descriptionA, Description descriptionB) {
+	public DistanceMeasure(
+	        String name, Description descriptionA, Description descriptionB) {
 	    super(name);
 		this.descriptionA = descriptionA;
 		this.descriptionB = descriptionB;
 	}
 
 	@Override
-	public Measurement measure(Structure structure) throws DescriptionException {
-		Vector a = this.descriptionA.findStructureCenter(structure);
-		Vector b = this.descriptionB.findStructureCenter(structure);
+	public Measurement measure(Match match) throws DescriptionException {
+		Vector a = CenterFinder.findCenter(descriptionA, match);
+		Vector b = CenterFinder.findCenter(descriptionB, match);
         
 //        System.err.println("a " + a + " b " + b);
 		
@@ -43,7 +45,8 @@ public class DistanceMeasure extends Measure {
 	}
     
     public String toString() {
-        return "d (" + this.descriptionA.toPathString() + ", " + this.descriptionB.toPathString() + ") ";
+        return "d (" + descriptionA.toPathString() 
+        + ", " + descriptionB.toPathString() + ") ";
     }
 
 }

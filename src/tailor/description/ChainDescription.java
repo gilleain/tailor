@@ -1,6 +1,7 @@
 package tailor.description;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 import tailor.Level;
 import tailor.condition.Condition;
@@ -12,7 +13,7 @@ import tailor.geometry.Vector;
  * @author maclean
  *
  */
-public class ChainDescription implements Description {
+public class ChainDescription implements Description, Iterable<GroupDescription> {
     
     private static final Level level = Level.CHAIN;
     
@@ -43,6 +44,11 @@ public class ChainDescription implements Description {
     	}
     }
     
+    @Override
+    public Iterator<GroupDescription> iterator() {
+        return groupDescriptions.iterator();
+    }
+
     public boolean contains(Description d) {
     	if (d.getLevel() == ChainDescription.level) {
     		return this.getName().equals(((ChainDescription) d).getName());

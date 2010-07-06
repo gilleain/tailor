@@ -1,13 +1,16 @@
 package tailor.measure;
 
-import tailor.datasource.Structure;
 import tailor.description.Description;
 import tailor.description.DescriptionException;
+import tailor.engine.CenterFinder;
+import tailor.engine.Match;
 import tailor.geometry.Geometry;
 import tailor.geometry.Vector;
 
 
 /**
+ * Measures the torsion (or dihedral angle) between four points.
+ * 
  * @author maclean
  *
  */
@@ -26,7 +29,8 @@ public class TorsionMeasure extends Measure {
     }
 
     public TorsionMeasure(String name, Description descriptionA, 
-            Description descriptionB, Description descriptionC, Description descriptionD) {
+            Description descriptionB, Description descriptionC, 
+            Description descriptionD) {
         super(name);
         this.descriptionA = descriptionA;
         this.descriptionB = descriptionB;
@@ -40,11 +44,11 @@ public class TorsionMeasure extends Measure {
     }
 
     @Override
-    public Measurement measure(Structure structure) throws DescriptionException {
-        Vector a = this.descriptionA.findStructureCenter(structure);
-        Vector b = this.descriptionB.findStructureCenter(structure);
-        Vector c = this.descriptionC.findStructureCenter(structure);
-        Vector d = this.descriptionD.findStructureCenter(structure);
+    public Measurement measure(Match match) throws DescriptionException {
+        Vector a = CenterFinder.findCenter(descriptionA, match);
+        Vector b = CenterFinder.findCenter(descriptionB, match);
+        Vector c = CenterFinder.findCenter(descriptionC, match);
+        Vector d = CenterFinder.findCenter(descriptionD, match);
         
         double torsion = Geometry.torsion(a, b, c, d);
         return new Measurement(this.getName(), torsion);

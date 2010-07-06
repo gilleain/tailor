@@ -100,7 +100,7 @@ public abstract class AbstractBaseEngine implements Engine {
         run((Description) description, measures);
     }
 
-    public abstract List<Structure> match(
+    public abstract List<Match> match(
             Description description, Structure structure); 
     
     public void setPath(File path) throws IOException {
@@ -111,23 +111,22 @@ public abstract class AbstractBaseEngine implements Engine {
     public void run(Description description, ArrayList<Measure> measures) {
         printer.printHeader(measures);
         
-        while (this.structureSource.hasNext()) {
+        while (structureSource.hasNext()) {
             try {
                 Structure structure = structureSource.next();
                 printer.signalNextStructure();
                 
-                for (Structure motif : this.match(description, structure)) {
+                for (Match match : this.match(description, structure)) {
                     
                     int i = 0;
                     int n = measures.size();
                     Measurement[] measurements = new Measurement[n];
                     for (Measure measure : measures) {
-                        Measurement measurement = measure.measure(motif);
+                        Measurement measurement = measure.measure(match);
                         measurements[i++] = measurement;
                     }
                     
-                    printer.printResult(
-                            new Result(structure, motif, measurements));
+                    printer.printResult(new Result(match, measurements));
                 }
             } catch (IOException i) {
                 err.println(i.toString());

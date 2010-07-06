@@ -1,6 +1,7 @@
 package tailor.description;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import tailor.Level;
@@ -11,10 +12,12 @@ import tailor.geometry.Vector;
 
 
 /**
+ * Describes a group of atoms, such as a residue in a protein.
+ * 
  * @author maclean
  *
  */
-public class GroupDescription implements Description {
+public class GroupDescription implements Description, Iterable<AtomDescription> {
     
     private static final Level level = Level.RESIDUE;
     
@@ -41,6 +44,10 @@ public class GroupDescription implements Description {
     		this.atomDescriptions.add(new AtomDescription(atomDescription));
     	}
     	// TODO : atom conditions? what even are atom conditions?
+    }
+    
+    public Iterator<AtomDescription> iterator() {
+        return atomDescriptions.iterator();
     }
     
     public Object clone() {

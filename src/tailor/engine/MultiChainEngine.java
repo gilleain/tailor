@@ -17,8 +17,8 @@ import tailor.description.ProteinDescription;
 public class MultiChainEngine extends AbstractBaseEngine {
 
     @Override
-    public List<Structure> match(Description description, Structure structure) {
-        List<Structure> results = new ArrayList<Structure>();
+    public List<Match> match(Description description, Structure structure) {
+        List<Match> results = new ArrayList<Match>();
         if (description instanceof ProteinDescription) {
             ProteinDescription proteinDescription = 
                 (ProteinDescription)description; 

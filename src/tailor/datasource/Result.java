@@ -1,24 +1,36 @@
 package tailor.datasource;
 
+import tailor.engine.Match;
 import tailor.measure.Measurement;
 
 
 /**
- * Semi-temporary class to hold the results of a filesystem run
- * to be passed to a TableModel that will be used by the gui. 
+ * Combines the Match - which is the association between the Description and
+ * the Structure - with the list of Measurements made.
  * 
  * @author maclean
  *
  */
 public class Result {
     
+    private Match match;
+    
     private String structureID;
+    
     private String motifData;
+    
     private Measurement[] measurements;
     
-    public Result(Structure structure, Structure motif, Measurement[] measurements) {
-        this.structureID = structure.getId();
-        this.motifData = motif.toString();
+//    public Result(
+//            Structure structure, Structure motif, Measurement[] measurements) {
+//        this.structureID = structure.getId();
+//        this.motifData = motif.toString();
+//        this.measurements = measurements;
+//    }
+    
+    public Result(Match match, Measurement[] measurements) {
+        // TODO - extract the structureId and 'motifData' from the Match
+        this.match = match;
         this.measurements = measurements;
     }
     

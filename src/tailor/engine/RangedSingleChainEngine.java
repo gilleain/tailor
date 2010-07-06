@@ -9,6 +9,7 @@ import tailor.description.ChainDescription;
 import tailor.description.Description;
 import tailor.description.GroupDescription;
 import tailor.description.ProteinDescription;
+import tailor.description.RangedGroupDescription;
 
 /**
  * Engine that can match GroupDescriptions with ranges. For efficiency reasons,
@@ -23,8 +24,8 @@ import tailor.description.ProteinDescription;
 public class RangedSingleChainEngine extends AbstractBaseEngine {
     
     @Override
-    public List<Structure> match(Description description, Structure structure) {
-        List<Structure> matches = new ArrayList<Structure>();
+    public List<Match> match(Description description, Structure structure) {
+        List<Match> matches = new ArrayList<Match>();
         if (description instanceof ProteinDescription) {
             ProteinDescription proteinDescription =
                 (ProteinDescription) description;
@@ -46,7 +47,7 @@ public class RangedSingleChainEngine extends AbstractBaseEngine {
         GroupDescription firstGroupDescription = 
             chainDescription.getGroupDescriptions().get(0);
         
-        int descriptionLength = chainDescription.size();
+        int descriptionLength = getLength(chainDescription);
         for (Structure residue : chain) {
             
             // check for extensions of the partial matches
@@ -106,6 +107,20 @@ public class RangedSingleChainEngine extends AbstractBaseEngine {
         matchingResidue.setProperty("Name", residue.getProperty("Name"));
         matchingResidue.setProperty("Number", residue.getProperty("Number"));
         chain.addSubStructure(matchingResidue);
+    }
+    
+    private int getLength(ChainDescription chainDescription) {
+        int count = 0;
+        for (GroupDescription groupDescription : chainDescription) {
+            if (groupDescription instanceof RangedGroupDescription) {
+                RangedGroupDescription rgd = 
+                    (RangedGroupDescription) groupDescription;
+                count += rgd.range();
+            } else {
+                count++;
+            }
+        }
+        return count;
     }
     
     private int getLength(Structure partial) {

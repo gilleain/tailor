@@ -1,13 +1,13 @@
 package tailor.description;
 
 import java.io.IOException;
-import java.util.List;
 
 import org.junit.Test;
 
 import tailor.condition.DistanceBoundCondition;
 import tailor.datasource.PDBFileList;
 import tailor.datasource.Structure;
+import tailor.engine.Match;
 import tailor.engine.SingleChainEngine;
 import tailor.measure.DistanceMeasure;
 
@@ -61,8 +61,7 @@ public class DescriptionFactoryTests {
                 Structure structure = fileList.next();
                 System.err.println("Structure " + structure.getId());
                 SingleChainEngine engine = new SingleChainEngine();
-                List<Structure> matches = engine.scan(chain, structure);
-                for (Structure match : matches) {
+                for (Match match : engine.scan(chain, structure)) {
                     System.out.println(match.toString() 
                             + " "  + measure.measure(match));
                 }

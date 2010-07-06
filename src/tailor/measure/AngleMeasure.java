@@ -1,12 +1,19 @@
 package tailor.measure;
 
-import tailor.datasource.Structure;
 import tailor.description.Description;
 import tailor.description.DescriptionException;
+import tailor.engine.CenterFinder;
+import tailor.engine.Match;
 import tailor.geometry.Geometry;
 import tailor.geometry.Vector;
 
 
+/**
+ * Measure an angle between three points.
+ * 
+ * @author maclean
+ *
+ */
 public class AngleMeasure extends Measure {
     
     private Description descriptionA;
@@ -15,7 +22,8 @@ public class AngleMeasure extends Measure {
     
     private Description descriptionC;
 
-    public AngleMeasure(String name, Description descriptionA, Description descriptionB, Description descriptionC) {
+    public AngleMeasure(String name, Description descriptionA, 
+            Description descriptionB, Description descriptionC) {
         super(name);
         this.descriptionA = descriptionA;
         this.descriptionB = descriptionB;
@@ -27,25 +35,26 @@ public class AngleMeasure extends Measure {
      * @param descriptionB
      * @param descriptionC
      */
-    public AngleMeasure(Description descriptionA, Description descriptionB, Description descriptionC) {
+    public AngleMeasure(Description descriptionA, Description descriptionB, 
+            Description descriptionC) {
         this("Angle", descriptionA, descriptionB, descriptionC);
     }
 
 
     @Override
-    public Measurement measure(Structure structure) throws DescriptionException {
-        Vector a = this.descriptionA.findStructureCenter(structure);
-        Vector b = this.descriptionB.findStructureCenter(structure);
-        Vector c = this.descriptionC.findStructureCenter(structure);
+    public Measurement measure(Match match) throws DescriptionException {
+        Vector a = CenterFinder.findCenter(descriptionA, match);
+        Vector b = CenterFinder.findCenter(descriptionA, match);
+        Vector c = CenterFinder.findCenter(descriptionA, match);
         
         double angle = Geometry.angle(a, b, c);
         return new Measurement(this.getName(), angle);
     }
     
     public String toString() {
-        return "a (" + this.descriptionA.toPathString() + ", " 
-                    + this.descriptionB.toPathString() + ", "
-                    + this.descriptionC.toPathString() + ") ";
+        return "a (" + descriptionA.toPathString() + ", " 
+                    + descriptionB.toPathString() + ", "
+                    + descriptionC.toPathString() + ") ";
     }
 
 }

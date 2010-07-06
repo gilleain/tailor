@@ -1,7 +1,7 @@
 package tailor.measure;
 
-import tailor.datasource.Structure;
 import tailor.description.DescriptionException;
+import tailor.engine.Match;
 
 public class HBondMeasure extends Measure {
 	
@@ -10,7 +10,7 @@ public class HBondMeasure extends Measure {
 	    }
 
 	@Override
-	public Measurement measure(Structure structure) throws DescriptionException {
+	public Measurement measure(Match match) throws DescriptionException {
 		// TODO not sure how to 'measure' the hbond.
 		// Do we return an energy?
 		return null;
