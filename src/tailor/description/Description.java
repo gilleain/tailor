@@ -1,6 +1,6 @@
 package tailor.description;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import tailor.Level;
 import tailor.condition.Condition;
@@ -24,9 +24,9 @@ public interface Description extends Cloneable {
     
     public void addCondition(Condition condition);
     
-    public ArrayList<Condition> getConditions();
+    public List<Condition> getConditions();
     
-    public ArrayList<? extends Description> getSubDescriptions();
+    public List<? extends Description> getSubDescriptions();
     
     public Vector findStructureCenter(Structure structure);
     

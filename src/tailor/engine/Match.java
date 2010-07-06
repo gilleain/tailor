@@ -1,6 +1,7 @@
 package tailor.engine;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import tailor.datasource.Structure;
@@ -13,7 +14,7 @@ import tailor.description.Description;
  * @author maclean
  *
  */
-public class Match {
+public class Match implements Iterable<Match> {
     
     private Description description;
     
@@ -25,6 +26,14 @@ public class Match {
         this.description = description;
         this.structure = structure;
         this.subMatches = new ArrayList<Match>();
+    }
+    
+    public Iterator<Match> iterator() {
+        return subMatches.iterator();
+    }
+    
+    public Match getSubMatch(int i) {
+        return subMatches.get(i);
     }
     
     /**

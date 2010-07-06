@@ -2,8 +2,8 @@ package tailor.measure;
 
 import tailor.description.Description;
 import tailor.description.DescriptionException;
-import tailor.engine.CenterFinder;
 import tailor.engine.Match;
+import tailor.geometry.CenterFinder;
 import tailor.geometry.Geometry;
 import tailor.geometry.Vector;
 
