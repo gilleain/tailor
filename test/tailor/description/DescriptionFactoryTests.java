@@ -61,7 +61,8 @@ public class DescriptionFactoryTests {
                 Structure structure = fileList.next();
                 System.err.println("Structure " + structure.getId());
                 SingleChainEngine engine = new SingleChainEngine();
-                for (Match match : engine.scan(chain, structure)) {
+                Structure chainA = structure.getSubStructureAtIndex(0);
+                for (Match match : engine.scan(chain, chainA)) {
                     System.out.println(match.toString() 
                             + " "  + measure.measure(match));
                 }

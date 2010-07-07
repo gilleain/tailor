@@ -65,4 +65,8 @@ public class Match implements Iterable<Match> {
         return this.subMatches.size();
     }
     
+    public String toString() {
+        return "match"; // TODO
+    }
+    
 }

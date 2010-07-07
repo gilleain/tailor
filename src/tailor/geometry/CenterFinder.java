@@ -37,7 +37,7 @@ public class CenterFinder {
             int count = 0;
             List<? extends Description> subdescriptions = 
                 description.getSubDescriptions();
-            for (int i = 0; i < match.size(); i++) {
+            for (int i = 0; i < description.getSubDescriptions().size(); i++) {
                 Match submatch = match.getSubMatch(i);
                 Description subdescription = subdescriptions.get(i);
                 if (match(subdescription, submatch.getStructure())) {
