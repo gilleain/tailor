@@ -38,10 +38,9 @@ public class RangedSingleChainEngine extends AbstractBaseEngine {
         return matches;
     }
     
-    public List<Structure> scan(
-            ChainDescription chainDescription, Structure chain) {
-        List<Structure> fullMatches = new ArrayList<Structure>();
-        List<Structure> partialMatches = new ArrayList<Structure>();
+    public List<Match> scan(ChainDescription chainDescription, Structure chain) {
+        List<Match> fullMatches = new ArrayList<Match>();
+        List<Match> partialMatches = new ArrayList<Match>();
         
         // this will be checked for each residue, to generate new partials
         GroupDescription firstGroupDescription = 
@@ -53,7 +52,7 @@ public class RangedSingleChainEngine extends AbstractBaseEngine {
             // check for extensions of the partial matches
             int partialsIndex = 0; 
             while (partialsIndex < partialMatches.size()) {
-                Structure partial = partialMatches.get(partialsIndex);
+                Match partial = partialMatches.get(partialsIndex);
                 int partialLength = getLength(partial);
                 boolean extended = false;
                 
@@ -66,7 +65,8 @@ public class RangedSingleChainEngine extends AbstractBaseEngine {
                     Structure matchingResidue = 
                         groupDescription.matchTo(residue);
                     if (groupDescription.fullyMatches(matchingResidue)) {
-                        completeMatch(matchingResidue, partial, residue);
+                        completeMatch(groupDescription, matchingResidue, 
+                                partial, residue);
                         partialLength++;
                         extended = true;
                     }
@@ -92,9 +92,11 @@ public class RangedSingleChainEngine extends AbstractBaseEngine {
                 Structure matchingResidue = 
                     firstGroupDescription.matchTo(residue);
                 if (firstGroupDescription.fullyMatches(matchingResidue)) {
-                    Structure partial = new Structure(Level.CHAIN);
-                    partial.setProperty("Name", "A");
-                    completeMatch(matchingResidue, partial, residue);
+                    Structure partialStructure = new Structure(Level.CHAIN);
+                    partialStructure.setProperty("Name", "A");
+                    Match partial = new Match(chainDescription, partialStructure);
+                    completeMatch(firstGroupDescription, matchingResidue, 
+                            partial, residue);
                     partialMatches.add(partial);
                 }
             }
@@ -102,11 +104,12 @@ public class RangedSingleChainEngine extends AbstractBaseEngine {
         return fullMatches;
     }
     
-    private void completeMatch(
-            Structure matchingResidue, Structure chain, Structure residue) {
+    private void completeMatch(GroupDescription description, 
+            Structure matchingResidue, Match chain, Structure residue) {
         matchingResidue.setProperty("Name", residue.getProperty("Name"));
         matchingResidue.setProperty("Number", residue.getProperty("Number"));
-        chain.addSubStructure(matchingResidue);
+        chain.getStructure().addSubStructure(matchingResidue);
+        chain.associate(description, matchingResidue);
     }
     
     private int getLength(ChainDescription chainDescription) {
@@ -123,8 +126,8 @@ public class RangedSingleChainEngine extends AbstractBaseEngine {
         return count;
     }
     
-    private int getLength(Structure partial) {
-        return partial.getSubStructures().size();
+    private int getLength(Match partial) {
+        return partial.size();
     }
 
 }

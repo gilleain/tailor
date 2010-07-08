@@ -25,8 +25,8 @@ public class RangedChainSingleEngineTest {
         
         // match
         RangedSingleChainEngine engine = new RangedSingleChainEngine();
-        List<Structure> matches = engine.scan(chainDescription, protein);
-        for (Structure match : matches) {
+        List<Match> matches = engine.scan(chainDescription, protein);
+        for (Match match : matches) {
             System.out.println(match);
         }
     }
@@ -43,8 +43,8 @@ public class RangedChainSingleEngineTest {
         
         // match
         RangedSingleChainEngine engine = new RangedSingleChainEngine();
-        List<Structure> matches = engine.scan(chainDescription, protein);
-        for (Structure match : matches) {
+        List<Match> matches = engine.scan(chainDescription, protein);
+        for (Match match : matches) {
             System.out.println(match);
         }
     }
