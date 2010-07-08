@@ -5,10 +5,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import tailor.Level;
+import tailor.condition.Condition;
 import tailor.datasource.ResultsPrinter;
 import tailor.datasource.Structure;
 import tailor.datasource.StructureSource;
-import tailor.description.AtomDescription;
 import tailor.description.ChainDescription;
 import tailor.description.Description;
 import tailor.description.GroupDescription;
@@ -24,13 +24,17 @@ import tailor.description.ProteinDescription;
  */
 public class SingleChainEngine extends AbstractBaseEngine implements Engine {
 
+    private GroupEngine groupEngine;
+    
     public SingleChainEngine() {
         super();
+        this.groupEngine = new GroupEngine();
     }
     
     public SingleChainEngine(ResultsPrinter resultsPrinter,
             PrintStream errStream, StructureSource structureSource) {
         super(resultsPrinter, errStream, structureSource);
+        this.groupEngine = new GroupEngine();
     }
 
     @Override
@@ -91,14 +95,10 @@ public class SingleChainEngine extends AbstractBaseEngine implements Engine {
             // starting at this position, scan the groups 
             Match chainMatch = scan(chainDescription, groups, start);
 
-            // only if we get a match of sufficient size
-            // is it worthwhile to consider any conditions
-            if (chainMatch.size() == chainDescription.size()) {
+            if (fullMatch(chainDescription, chainMatch)) {
                 Structure matchedChain = chainMatch.getStructure();
-                if (chainDescription.conditionsSatisfied(matchedChain)) {
-                    matchedChain.setProperty("Name", chain.getProperty("Name"));
-                    matches.add(chainMatch);
-                }
+                matchedChain.setProperty("Name", chain.getProperty("Name"));
+                matches.add(chainMatch);
             }
         }
 
@@ -126,17 +126,12 @@ public class SingleChainEngine extends AbstractBaseEngine implements Engine {
 
                  // returns a new group filled with 
                  // as many matching atoms as possible
-                 Match groupMatch = match(groupDescription, group);
+                 Match groupMatch = groupEngine.match(groupDescription, group);
                  
                  // only if we get a match of sufficient size
                  // is it worthwhile to consider any conditions
-                 Structure matchedGroup = groupMatch.getStructure();
-                 if (groupDescription.fullyMatches(matchedGroup)) {
-                     matchedGroup.setProperty(
-                             "Name", group.getProperty("Name"));
-                     matchedGroup.setProperty(
-                             "Number", group.getProperty("Number"));
-                     chain.addSubStructure(matchedGroup);
+                 if (groupEngine.fullMatch(groupDescription, groupMatch)) {
+                     chain.addSubStructure(groupMatch.getStructure());
                      chainMatch.addSubMatch(groupMatch);
                  }
              } else {
@@ -146,27 +141,23 @@ public class SingleChainEngine extends AbstractBaseEngine implements Engine {
          return chainMatch;
      }
     
-    public Match match(GroupDescription groupDescription, Structure group) {
-        Structure matchingGroup = new Structure(Level.RESIDUE);
-        Match match = new Match(groupDescription, matchingGroup);
-        for (AtomDescription atomDescription : groupDescription) {
-            boolean matchFound = false;
-            for (Structure atom : group.getSubStructures()) {
-                if (atomDescription.matches(atom)) {
-                    matchingGroup.addSubStructure(atom);
-                    match.associate(atomDescription, atom);
-                    matchFound = true;
-                    break;
-                }
-            }
-            
-            // purely an optimization step...
-            if (!matchFound) {
-                // TODO : allow for recording partial matches?
-                return match;   // an incomplete one
+    public boolean fullMatch(ChainDescription chainDescription, Match match) {
+        // only if we get a match of sufficient size
+        // is it worthwhile to consider any conditions
+        return chainDescription.size() == match.size()
+            && conditionsSatisfied(chainDescription, match);
+    }
+    
+    // TODO : put this in a base class
+    public boolean conditionsSatisfied(
+            ChainDescription chainDescription, Match match) {
+        for (Condition condition : chainDescription.getConditions()) {
+            if (condition.satisfiedBy(match)) {
+                continue;
+            } else {
+                return false;
             }
         }
-        return match;
+        return true;
     }
-
 }

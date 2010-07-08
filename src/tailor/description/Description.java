@@ -4,8 +4,6 @@ import java.util.List;
 
 import tailor.Level;
 import tailor.condition.Condition;
-import tailor.datasource.Structure;
-import tailor.geometry.Vector;
 
 
 /**
@@ -27,8 +25,6 @@ public interface Description extends Cloneable {
     public List<Condition> getConditions();
     
     public List<? extends Description> getSubDescriptions();
-    
-    public Vector findStructureCenter(Structure structure);
     
     public String toPathString();
     

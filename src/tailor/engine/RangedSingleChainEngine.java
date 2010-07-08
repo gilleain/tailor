@@ -23,6 +23,12 @@ import tailor.description.RangedGroupDescription;
  */
 public class RangedSingleChainEngine extends AbstractBaseEngine {
     
+    private GroupEngine groupEngine;
+    
+    public RangedSingleChainEngine() {
+        this.groupEngine = new GroupEngine();
+    }
+    
     @Override
     public List<Match> match(Description description, Structure structure) {
         List<Match> matches = new ArrayList<Match>();
@@ -62,11 +68,10 @@ public class RangedSingleChainEngine extends AbstractBaseEngine {
                 
                 // check and add
                 if (groupDescription.nameMatches(residue)) {
-                    Structure matchingResidue = 
-                        groupDescription.matchTo(residue);
-                    if (groupDescription.fullyMatches(matchingResidue)) {
-                        completeMatch(groupDescription, matchingResidue, 
-                                partial, residue);
+                    Match matchingResidue = 
+                        groupEngine.match(groupDescription, residue);
+                    if (groupEngine.fullMatch(groupDescription, matchingResidue)) {
+                        completeMatch(matchingResidue, partial);
                         partialLength++;
                         extended = true;
                     }
@@ -89,14 +94,13 @@ public class RangedSingleChainEngine extends AbstractBaseEngine {
             
             // check for new matches
             if (firstGroupDescription.nameMatches(residue)) {
-                Structure matchingResidue = 
-                    firstGroupDescription.matchTo(residue);
-                if (firstGroupDescription.fullyMatches(matchingResidue)) {
+                Match matchingResidue = 
+                    groupEngine.match(firstGroupDescription, residue);
+                if (groupEngine.fullMatch(firstGroupDescription, matchingResidue)) {
                     Structure partialStructure = new Structure(Level.CHAIN);
                     partialStructure.setProperty("Name", "A");
                     Match partial = new Match(chainDescription, partialStructure);
-                    completeMatch(firstGroupDescription, matchingResidue, 
-                            partial, residue);
+                    completeMatch(matchingResidue, partial);
                     partialMatches.add(partial);
                 }
             }
@@ -104,12 +108,8 @@ public class RangedSingleChainEngine extends AbstractBaseEngine {
         return fullMatches;
     }
     
-    private void completeMatch(GroupDescription description, 
-            Structure matchingResidue, Match chain, Structure residue) {
-        matchingResidue.setProperty("Name", residue.getProperty("Name"));
-        matchingResidue.setProperty("Number", residue.getProperty("Number"));
-        chain.getStructure().addSubStructure(matchingResidue);
-        chain.associate(description, matchingResidue);
+    private void completeMatch(Match matchingResidue, Match chain) {
+        chain.getStructure().addSubStructure(matchingResidue.getStructure());
     }
     
     private int getLength(ChainDescription chainDescription) {

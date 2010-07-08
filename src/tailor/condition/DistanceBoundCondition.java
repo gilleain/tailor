@@ -1,11 +1,18 @@
 package tailor.condition;
 
-import tailor.datasource.Structure;
 import tailor.description.Description;
+import tailor.engine.Match;
+import tailor.geometry.CenterFinder;
 import tailor.geometry.Geometry;
 import tailor.geometry.Vector;
 
 
+/**
+ * Constrains two structures to be less than a particular distance.
+ * 
+ * @author maclean
+ *
+ */
 public class DistanceBoundCondition implements Condition {
 	
 	private String name;
@@ -45,9 +52,9 @@ public class DistanceBoundCondition implements Condition {
 		return false;
 	}
 
-	public boolean satisfiedBy(Structure structure) {
-	    Vector a = this.descriptionA.findStructureCenter(structure);
-	    Vector b = this.descriptionB.findStructureCenter(structure);
+	public boolean satisfiedBy(Match match) {
+	    Vector a = CenterFinder.findCenter(descriptionA, match);
+	    Vector b = CenterFinder.findCenter(descriptionB, match);
 
 	    double d = Geometry.distance(a, b);
 //        System.err.println("distance " + d);

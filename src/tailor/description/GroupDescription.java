@@ -8,7 +8,6 @@ import tailor.Level;
 import tailor.condition.Condition;
 import tailor.condition.TorsionBoundCondition;
 import tailor.datasource.Structure;
-import tailor.geometry.Vector;
 
 
 /**
@@ -117,17 +116,6 @@ public class GroupDescription implements Description, Iterable<AtomDescription> 
         return this.atomDescriptions;
     }
     
-    public boolean conditionsSatisfied(Structure group) {
-        for (Condition condition : this.atomConditions) {
-            if (condition.satisfiedBy(group)) {
-                continue;
-            } else {
-                return false;
-            }
-        }
-        return true;
-    }
-    
     public List<TorsionBoundCondition> getTorsionBoundConditions() {
         ArrayList<TorsionBoundCondition> torsions = 
             new ArrayList<TorsionBoundCondition>();
@@ -138,46 +126,6 @@ public class GroupDescription implements Description, Iterable<AtomDescription> 
         }
         
         return torsions;
-    }
-    
-    /**
-     * Try to find in Structure <code>group</code>
-     * all the atoms that match the AtomDescriptions
-     * in this GroupDescription.
-     * 
-     * @param group
-     * @return a Structure
-     */
-    public Structure matchTo(Structure group) {
-        Structure matchingGroup = new Structure(Level.RESIDUE);
-        for (AtomDescription atomDescription : this.atomDescriptions) {
-            boolean matchFound = false;
-            for (Structure atom : group.getSubStructures()) {
-                if (atomDescription.matches(atom)) {
-                    matchingGroup.addSubStructure(atom);
-                    matchFound = true;
-                    break;
-                }
-            }
-            
-            // purely an optimization step...
-            if (!matchFound) {
-                return matchingGroup;   // an incomplete one
-            }
-        }
-        return matchingGroup;
-    }
-    
-    /**
-     * A potential match only truly matches if it has the same number of
-     * atoms as the description, and if any conditions are satisfied.
-     * 
-     * @param potentialMatch
-     * @return
-     */
-    public boolean fullyMatches(Structure potentialMatch) {
-        return potentialMatch.size() == this.size() 
-            && conditionsSatisfied(potentialMatch);
     }
     
     /**
@@ -196,29 +144,6 @@ public class GroupDescription implements Description, Iterable<AtomDescription> 
         return this.groupName.equals(groupName);
     }
 
-    /**
-     * Search the supplied structure to find the
-     * subtree matching this description and
-     * return the center of mass (or atom coord).
-     * 
-     * @param group the (fragment of a) group to search
-     * @return a Vector
-     */
-    public Vector findStructureCenter(Structure group) {
-        Vector center = new Vector();
-        
-        for (AtomDescription atomDescription : this.atomDescriptions) {
-            for (Structure atom : group.getSubStructures()) {
-                if (atomDescription.matches(atom)) {
-                    center.add(atomDescription.findStructureCenter(atom));
-                    break;  // only one atom should match a description?
-                }
-            }
-        }
-        
-        return center.divide(this.size());
-    }
-    
     public String getName() {
     	return this.groupName;
     }

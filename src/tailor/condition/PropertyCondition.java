@@ -1,7 +1,7 @@
 package tailor.condition;
 
-import tailor.datasource.Structure;
 import tailor.description.Description;
+import tailor.engine.Match;
 
 
 //TODO : this whole class may be unnecessary...
@@ -48,8 +48,8 @@ public class PropertyCondition implements Condition {
 		return this.propertyValue;
 	}
 	
-	public boolean satisfiedBy(Structure structure) {
-		return structure.hasPropertyEqualTo(this.propertyKey, this.propertyValue);
+	public boolean satisfiedBy(Match match) {
+		return match.hasPropertyEqualTo(propertyKey, propertyValue);
 	}
 	
     public String toXml() {

@@ -1,11 +1,16 @@
 package tailor.condition;
 
-import tailor.datasource.Structure;
 import tailor.description.Description;
+import tailor.engine.Match;
+import tailor.geometry.CenterFinder;
 import tailor.geometry.Geometry;
 import tailor.geometry.Vector;
 
 
+/**
+ * @author maclean
+ *
+ */
 public class HBondCondition implements Condition {
     
     private String name;
@@ -141,11 +146,11 @@ public class HBondCondition implements Condition {
         return false;
     }
 
-    public boolean satisfiedBy(Structure structure) {
-        Vector d = this.donorAtomDescription.findStructureCenter(structure);
-        Vector h = this.hydrogenAtomDescription.findStructureCenter(structure);
-        Vector a = this.acceptorAtomDescription.findStructureCenter(structure);
-        Vector aa = this.attachedAtomDescription.findStructureCenter(structure);
+    public boolean satisfiedBy(Match match) {
+        Vector d = CenterFinder.findCenter(donorAtomDescription, match);
+        Vector h = CenterFinder.findCenter(hydrogenAtomDescription, match);
+        Vector a = CenterFinder.findCenter(acceptorAtomDescription, match);
+        Vector aa = CenterFinder.findCenter(attachedAtomDescription, match);
         
         boolean satisfied = false;
         double h_a = Geometry.distance(h, a);

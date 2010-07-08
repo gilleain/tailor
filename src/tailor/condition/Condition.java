@@ -1,11 +1,17 @@
 package tailor.condition;
 
-import tailor.datasource.Structure;
 import tailor.description.Description;
+import tailor.engine.Match;
 
+/**
+ * A condition is a measure with an associated constraint.
+ *  
+ * @author maclean
+ *
+ */
 public interface Condition extends Cloneable {
 	
-	public boolean satisfiedBy(Structure structure);
+	public boolean satisfiedBy(Match match);
 	
 	public boolean equals(Condition other);
 	

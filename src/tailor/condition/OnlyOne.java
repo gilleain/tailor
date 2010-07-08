@@ -2,8 +2,8 @@ package tailor.condition;
 
 import java.util.ArrayList;
 
-import tailor.datasource.Structure;
 import tailor.description.Description;
+import tailor.engine.Match;
 
 
 public class OnlyOne implements Condition {
@@ -30,10 +30,10 @@ public class OnlyOne implements Condition {
         return false;
     }
 
-    public boolean satisfiedBy(Structure structure) {
+    public boolean satisfiedBy(Match match) {
         boolean satisfied = false;
         for (Condition condition : this.conditions) {
-            if (condition.satisfiedBy(structure)) {
+            if (condition.satisfiedBy(match)) {
                 if (!satisfied) {
                     satisfied = true;
                     continue;

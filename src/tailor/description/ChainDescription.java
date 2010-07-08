@@ -6,7 +6,6 @@ import java.util.Iterator;
 import tailor.Level;
 import tailor.condition.Condition;
 import tailor.datasource.Structure;
-import tailor.geometry.Vector;
 
 
 /**
@@ -148,43 +147,6 @@ public class ChainDescription implements Description, Iterable<GroupDescription>
     
     public GroupDescription last() {
         return this.groupDescriptions.get(this.size() - 1);
-    }
-    
-    public boolean conditionsSatisfied(Structure chain) {
-        for (Condition condition : this.groupConditions) {
-            if (condition.satisfiedBy(chain)) {
-                continue;
-            } else {
-//                System.err.println(condition + " not satisfied by " + chain);
-                return false;
-            }
-        }
-        return true;
-    }
-    
-    
-    /**
-     * Search the supplied structure to find the
-     * subtree matching this description and
-     * return the center of mass (or atom coord).
-     * 
-     * @param chain the (fragment of a) chain to search
-     * @return a Vector
-     */
-    public Vector findStructureCenter(Structure chain) {
-        Vector center = new Vector();
-        for (GroupDescription groupDescription : this.groupDescriptions) {
-            for (Structure group : chain.getSubStructures()) {
-                if (groupDescription.nameMatches(group)) {
-//                    System.err.println("group matches : " + group.getId());
-                    Vector groupCenter = 
-                        groupDescription.findStructureCenter(group);
-                    center.add(groupCenter);
-                }
-            }
-        }
-        
-        return center.divide(this.size());
     }
     
     public ChainDescription getPath(String groupName, String atomName) {

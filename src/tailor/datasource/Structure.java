@@ -137,6 +137,10 @@ public class Structure implements Iterable<Structure> {
 	public void setProperty(String propertyName, String propertyValue) {
 		this.properties.put(propertyName, propertyValue);
 	}
+	
+	public void copyProperty(Structure other, String propertyKey) {
+	    setProperty(propertyKey, other.getProperty(propertyKey));
+	}
     
     public String getId() {
         switch (this.level) {
@@ -170,7 +174,12 @@ public class Structure implements Iterable<Structure> {
             if (name != null) {
                 s.append(name);
             }
-            s.append("{ ");
+            String number = this.getProperty("Number");
+            if (number != null) {
+                s.append(number);
+            }
+            
+            s.append(":{ ");
             for (Structure atom : this) {
                 s.append(atom.getProperty("Name")).append(" ");
             }

@@ -1,7 +1,8 @@
 package tailor.condition;
 
-import tailor.datasource.Structure;
 import tailor.description.Description;
+import tailor.engine.Match;
+import tailor.geometry.CenterFinder;
 import tailor.geometry.Geometry;
 import tailor.geometry.Vector;
 
@@ -130,14 +131,15 @@ public class TorsionBoundCondition implements Condition {
 		return false;
 	}
 
-	public boolean satisfiedBy(Structure structure) {
-	    Vector a = this.descriptionA.findStructureCenter(structure);
-	    Vector b = this.descriptionB.findStructureCenter(structure);
-	    Vector c = this.descriptionC.findStructureCenter(structure);
-	    Vector d = this.descriptionD.findStructureCenter(structure);
+	public boolean satisfiedBy(Match match) {
+	    Vector a = CenterFinder.findCenter(descriptionA, match);
+	    Vector b = CenterFinder.findCenter(descriptionB, match);
+	    Vector c = CenterFinder.findCenter(descriptionC, match);
+	    Vector d = CenterFinder.findCenter(descriptionD, match);
 
 	    double result = Geometry.torsion(a, b, c, d);
-	    boolean satisfied = this.midPoint - this.range < result && this.midPoint + this.range > result;
+	    boolean satisfied = 
+	        midPoint - range < result && midPoint + range > result;
 	    if (satisfied) {
 	        return true;
 	    } else {

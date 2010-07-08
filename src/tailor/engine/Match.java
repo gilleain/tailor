@@ -53,6 +53,10 @@ public class Match implements Iterable<Match> {
         this.subMatches.add(match);
     }
     
+    public boolean hasPropertyEqualTo(String propertyKey, String propertyValue) {
+        return structure.hasPropertyEqualTo(propertyKey, propertyValue);
+    }
+
     public Description getDescription() {
         return this.description;
     }

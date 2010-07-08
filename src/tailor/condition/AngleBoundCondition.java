@@ -1,7 +1,8 @@
 package tailor.condition;
 
-import tailor.datasource.Structure;
 import tailor.description.Description;
+import tailor.engine.Match;
+import tailor.geometry.CenterFinder;
 import tailor.geometry.Geometry;
 import tailor.geometry.Vector;
 
@@ -52,13 +53,13 @@ public class AngleBoundCondition implements Condition {
         return false;
     }
     
-    public boolean satisfiedBy(Structure structure) {
-        Vector a = this.descriptionA.findStructureCenter(structure);
-        Vector b = this.descriptionB.findStructureCenter(structure);
-        Vector c = this.descriptionB.findStructureCenter(structure);
+    public boolean satisfiedBy(Match match) {
+        Vector a = CenterFinder.findCenter(descriptionA, match);
+        Vector b = CenterFinder.findCenter(descriptionB, match);
+        Vector c = CenterFinder.findCenter(descriptionC, match);
 
         double angle = Geometry.angle(a, b, c);
-        boolean satisfied = this.center - this.range < angle && this.center + this.range > angle;
+        boolean satisfied = center - range < angle && center + range > angle;
         if (satisfied) {
             return true;
         } else {
@@ -71,7 +72,7 @@ public class AngleBoundCondition implements Condition {
     }
 
     public String toString() {
-        return String.format("%s (%s : %s)", this.name, this.center - this.range, this.center + this.range);
+        return String.format("%s (%s : %s)", name, center - range, center + range);
     }
     
 }

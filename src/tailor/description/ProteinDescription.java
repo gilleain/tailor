@@ -4,8 +4,6 @@ import java.util.ArrayList;
 
 import tailor.Level;
 import tailor.condition.Condition;
-import tailor.datasource.Structure;
-import tailor.geometry.Vector;
 
 
 /**
@@ -154,28 +152,6 @@ public class ProteinDescription implements Description {
         root.addChainDescription(chainPath);
         
         return root;
-    }
-    
-    /**
-     * Search the supplied structure to find the
-     * subtree matching this description and
-     * return the center of mass (or atom coord).
-     * 
-     * @param protein the (fragment of a) protein to search
-     * @return a Vector
-     */
-    public Vector findStructureCenter(Structure protein) {
-        Vector center = new Vector();
-        for (ChainDescription chainDescription : this.chainDescriptions) {
-            for (Structure chain : protein.getSubStructures()) {
-                if (chainDescription.nameMatches(chain)) {
-//                    System.err.println("chain matches");
-                    Vector chainCenter = chainDescription.findStructureCenter(chain);
-                    center.add(chainCenter);
-                }
-            }
-        }
-        return center.divide(this.size());
     }
     
     public String getName() {
