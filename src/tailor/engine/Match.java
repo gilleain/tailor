@@ -66,7 +66,7 @@ public class Match implements Iterable<Match> {
     }
     
     public String toString() {
-        return "match"; // TODO
+        return description + " matches " + structure;
     }
     
 }

@@ -20,8 +20,10 @@ public class RangedChainSingleEngineTest {
         ChainDescription chainDescription = new ChainDescription();
         GroupDescription groupDescriptionA = new GroupDescription();
         GroupDescription groupDescriptionB = new GroupDescription();
+        GroupDescription groupDescriptionC = new GroupDescription();
         chainDescription.addGroupDescription(groupDescriptionA);
         chainDescription.addGroupDescription(groupDescriptionB);
+        chainDescription.addGroupDescription(groupDescriptionC);
         
         // match
         RangedSingleChainEngine engine = new RangedSingleChainEngine();

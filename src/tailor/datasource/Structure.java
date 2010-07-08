@@ -60,9 +60,10 @@ public class Structure implements Iterable<Structure> {
         return this.children.get(this.size() - 1);
     }
 	
-	public Structure getSubStructureByProperty(String propertyName, String propertyValue) {
+	public Structure getSubStructureByProperty(
+	        String propertyName, String propertyValue) {
 		for (Structure structure : this.children) {
-			if (structure.getProperty(propertyName).equals(propertyValue)) {
+			if (structure.hasPropertyEqualTo(propertyName, propertyValue)) {
 				return structure;
 			}
 		}
@@ -151,17 +152,29 @@ public class Structure implements Iterable<Structure> {
 		StringBuffer s = new StringBuffer();
         if (this.level == Level.PROTEIN) {
             s.append(this.getId()).append(".");
-            for (Structure chain : this.children) {
+            for (Structure chain : this) {
                 s.append(chain.toString()).append(' ');
             }
         }
         
-        if (this.level == Level.CHAIN) {
+        else if (this.level == Level.CHAIN) {
             s.append(this.getId()).append(' ');
             Structure f = this.children.get(0);
             Structure l = this.children.get(this.size() - 1);
             s.append(f.getProperty("Name")).append(f.getId()).append("-");
             s.append(l.getProperty("Name")).append(l.getId());
+        }
+        
+        else if (this.level == Level.RESIDUE) {
+            String name = this.getProperty("Name");
+            if (name != null) {
+                s.append(name);
+            }
+            s.append("{ ");
+            for (Structure atom : this) {
+                s.append(atom.getProperty("Name")).append(" ");
+            }
+            s.append("}");
         }
         
 		return s.toString();
