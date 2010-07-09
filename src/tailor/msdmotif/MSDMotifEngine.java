@@ -72,13 +72,13 @@ public class MSDMotifEngine implements Engine {
     }
 
     @Override
-    public void run(ProteinDescription description) {
+    public void run(Description description) {
         // TODO Auto-generated method stub
         
     }
 
     @Override
-    public void run(ProteinDescription description, StructureSource source) {
+    public void run(Description description, StructureSource source) {
         // TODO Auto-generated method stub
         
     }

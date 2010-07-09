@@ -32,6 +32,7 @@ public class ProteinDescription implements Description {
         this.name = name;
         this.chainDescriptions = new ArrayList<ChainDescription>();
         this.chainConditions = new ArrayList<Condition>();
+        this.chainMeasures = new ArrayList<Measure>();
     }
     
     public ProteinDescription(ProteinDescription description) {

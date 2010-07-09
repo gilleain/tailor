@@ -33,6 +33,7 @@ public class GroupDescription implements Description, Iterable<AtomDescription> 
         this.groupName = null;
         this.atomDescriptions = new ArrayList<AtomDescription>();
         this.atomMeasures = new ArrayList<Measure>();
+        this.atomConditions = new ArrayList<Condition>();
     }
     
     public GroupDescription(String groupName) {
