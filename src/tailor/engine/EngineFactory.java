@@ -6,6 +6,7 @@ import tailor.datasource.ResultsPrinter;
 import tailor.datasource.StructureSource;
 import tailor.description.Description;
 import tailor.description.ProteinDescription;
+import tailor.validate.DescriptionValidator;
 
 /**
  * Creates, configures, or returns a suitable engine to match a Description
@@ -23,6 +24,10 @@ public class EngineFactory {
      * @return
      */
     public static Engine getEngine(Description description) {
+        DescriptionValidator validator = new DescriptionValidator();
+        if (!validator.isValid(description)) {
+            // TODO : raise exception
+        }
         int chainCount = 0;
         if (description instanceof ProteinDescription) {
             ProteinDescription proteinDescription = 
@@ -41,6 +46,10 @@ public class EngineFactory {
                                    ResultsPrinter resultsPrinter,
                                    PrintStream errStream,
                                    StructureSource structureSource) {
+        DescriptionValidator validator = new DescriptionValidator();
+        if (!validator.isValid(description)) {
+            // TODO : raise exception
+        }
         int chainCount = 0;
         if (description instanceof ProteinDescription) {
             ProteinDescription proteinDescription = 
