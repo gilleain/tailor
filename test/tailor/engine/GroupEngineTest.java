@@ -34,7 +34,7 @@ public class GroupEngineTest {
         aminoAcidDescription.addCondition(new PropertyCondition("Name", "AA"));
         
         GroupEngine groupEngine = new GroupEngine();
-        Match match = groupEngine.match(aminoAcidDescription, aminoAcid);
+        Match match = groupEngine.match(aminoAcidDescription, aminoAcid).get(0);
         boolean complete = groupEngine.fullMatch(aminoAcidDescription, match);
         System.out.println(match + " is complete? " + complete);
     }

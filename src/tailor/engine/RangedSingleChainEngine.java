@@ -4,11 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import tailor.Level;
+import tailor.condition.Condition;
+import tailor.condition.PropertyCondition;
 import tailor.datasource.Structure;
-import tailor.description.ChainDescription;
 import tailor.description.Description;
-import tailor.description.GroupDescription;
-import tailor.description.ProteinDescription;
 import tailor.description.RangedGroupDescription;
 
 /**
@@ -23,37 +22,22 @@ import tailor.description.RangedGroupDescription;
  */
 public class RangedSingleChainEngine extends AbstractBaseEngine {
     
-    private GroupEngine groupEngine;
+    private GroupEngine subEngine;
     
     public RangedSingleChainEngine() {
-        this.groupEngine = new GroupEngine();
+        this.subEngine = new GroupEngine();
     }
     
-    @Override
     public List<Match> match(Description description, Structure structure) {
-        List<Match> matches = new ArrayList<Match>();
-        if (description instanceof ProteinDescription) {
-            ProteinDescription proteinDescription =
-                (ProteinDescription) description;
-            ChainDescription chainDescription = 
-                proteinDescription.getChainDescriptions().get(0);
-            for (Structure chain : structure) {
-                scan(chainDescription, chain);
-            }
-        }
-        return matches;
-    }
-    
-    public List<Match> scan(ChainDescription chainDescription, Structure chain) {
         List<Match> fullMatches = new ArrayList<Match>();
         List<Match> partialMatches = new ArrayList<Match>();
+        Level level = structure.getLevel();
         
         // this will be checked for each residue, to generate new partials
-        GroupDescription firstGroupDescription = 
-            chainDescription.getGroupDescriptions().get(0);
+        Description firstDescription = description.getSubDescriptions().get(0);
         
-        int descriptionLength = getLength(chainDescription);
-        for (Structure residue : chain) {
+        int descriptionLength = getLength(description);
+        for (Structure subStructure : structure) {
             
             // check for extensions of the partial matches
             int partialsIndex = 0; 
@@ -63,15 +47,15 @@ public class RangedSingleChainEngine extends AbstractBaseEngine {
                 boolean extended = false;
                 
                 // the next group description to match is at index == length
-                GroupDescription groupDescription = 
-                    chainDescription.getGroupDescriptions().get(partialLength);
+                Description subDescription = 
+                    description.getSubDescriptions().get(partialLength);
                 
                 // check and add
-                if (groupDescription.nameMatches(residue)) {
-                    Match matchingResidue = 
-                        groupEngine.match(groupDescription, residue);
-                    if (groupEngine.fullMatch(groupDescription, matchingResidue)) {
-                        completeMatch(matchingResidue, partial);
+                if (nameMatches(subDescription, subStructure)) {
+                    Match matchingCopy = 
+                        subEngine.match(subDescription, subStructure).get(0);
+                    if (subEngine.fullMatch(subDescription, matchingCopy)) {
+                        partial.completeMatch(matchingCopy);
                         partialLength++;
                         extended = true;
                     }
@@ -93,14 +77,14 @@ public class RangedSingleChainEngine extends AbstractBaseEngine {
             }
             
             // check for new matches
-            if (firstGroupDescription.nameMatches(residue)) {
+            if (nameMatches(firstDescription, subStructure)) {
                 Match matchingResidue = 
-                    groupEngine.match(firstGroupDescription, residue);
-                if (groupEngine.fullMatch(firstGroupDescription, matchingResidue)) {
-                    Structure partialStructure = new Structure(Level.CHAIN);
+                    subEngine.match(firstDescription, subStructure).get(0);
+                if (subEngine.fullMatch(firstDescription, matchingResidue)) {
+                    Structure partialStructure = new Structure(level);
                     partialStructure.setProperty("Name", "A");
-                    Match partial = new Match(chainDescription, partialStructure);
-                    completeMatch(matchingResidue, partial);
+                    Match partial = new Match(description, partialStructure);
+                    partial.completeMatch(matchingResidue);
                     partialMatches.add(partial);
                 }
             }
@@ -108,13 +92,27 @@ public class RangedSingleChainEngine extends AbstractBaseEngine {
         return fullMatches;
     }
     
-    private void completeMatch(Match matchingResidue, Match chain) {
-        chain.getStructure().addSubStructure(matchingResidue.getStructure());
+    private boolean nameMatches(Description description, Structure structure) {
+        String name = null;
+        for (Condition condition : description.getConditions()) {
+            if (condition instanceof PropertyCondition) {
+                PropertyCondition prop = (PropertyCondition) condition;
+                if (prop.keyEquals("Name")) {
+                    name = prop.getValue();
+                    break;
+                }
+            }
+        }
+        if (name != null) {
+            return structure.hasPropertyEqualTo("Name", name);
+        }
+        return true;
     }
+   
     
-    private int getLength(ChainDescription chainDescription) {
+    private int getLength(Description chainDescription) {
         int count = 0;
-        for (GroupDescription groupDescription : chainDescription) {
+        for (Description groupDescription : chainDescription.getSubDescriptions()) {
             if (groupDescription instanceof RangedGroupDescription) {
                 RangedGroupDescription rgd = 
                     (RangedGroupDescription) groupDescription;

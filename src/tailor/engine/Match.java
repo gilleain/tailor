@@ -49,6 +49,15 @@ public class Match implements Iterable<Match> {
         return childMatch;
     }
     
+    /**
+     * Adds the substructure in subMatch to the structure in this match.
+     * 
+     * @param subMatch
+     */
+    public void completeMatch(Match subMatch) {
+        structure.addSubStructure(subMatch.getStructure());
+    }
+    
     public void addSubMatch(Match match) {
         this.subMatches.add(match);
     }

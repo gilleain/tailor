@@ -17,6 +17,8 @@ public interface Description extends Cloneable {
     
     public Description shallowCopy();
     
+    public int size();
+    
     public Level getLevel();
     
     public void addSubDescription(Description subDescription);

@@ -52,7 +52,7 @@ public class Result {
     }
     
     public String toString() {
-        String val = this.structureID + " " + this.motifData;
+        String val = this.structureID + " " + this.motifData + "[";
         for (Measurement measurement : this.measurements) {
         	try {
         		val += measurement.getValue() + " ";
@@ -60,6 +60,6 @@ public class Result {
         		// XXX FIXME
         	}
         }
-        return val;
+        return val + "]";
     }
 }

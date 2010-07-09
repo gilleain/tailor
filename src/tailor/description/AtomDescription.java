@@ -44,6 +44,10 @@ public class AtomDescription implements Description {
         return new AtomDescription(this.atomName);
     }
     
+    public int size() {
+        return 1;
+    }
+    
     public Level getLevel() {
         return AtomDescription.level;
     }

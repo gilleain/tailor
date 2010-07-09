@@ -1,19 +1,23 @@
 package tailor.engine;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import tailor.Level;
 import tailor.condition.Condition;
+import tailor.condition.PropertyCondition;
 import tailor.datasource.Structure;
-import tailor.description.AtomDescription;
+import tailor.datasource.StructureSource;
 import tailor.description.Description;
-import tailor.description.GroupDescription;
 
 /**
- * Matches a group Description to a group.
+ * Matches a description of a set of atoms (that have no children) to a
+ * structure containing a set of atoms.
  * 
  * @author maclean
  *
  */
-public class GroupEngine {  // TODO : implement the Engine interface
+public class GroupEngine implements Engine {  
 
     /**
      * Perform a single match between a GroupDescription and a group, moving
@@ -23,33 +27,66 @@ public class GroupEngine {  // TODO : implement the Engine interface
      * partial match will result in a partial copy, which should be checked with
      * the fullMatch method.
      * 
-     * @param groupDescription
-     * @param group
+     * @param description
+     * @param structure
      * @return
      */
-    public Match match(GroupDescription groupDescription, Structure group) {
+    public List<Match> match(Description description, Structure structure) {
+        List<Match> matches = new ArrayList<Match>();
+        Level level = structure.getLevel();
         // a copy is made, so that only the matching atoms are stored
-        Structure matchingGroup = new Structure(Level.RESIDUE);
-        matchingGroup.copyProperty(group, "Name");
-        matchingGroup.copyProperty(group, "Number");
+        Structure matchingCopy = new Structure(level);
+        matchingCopy.copyProperty(structure, "Name");
+        matchingCopy.copyProperty(structure, "Number"); // XXX groups only!
         
         // this match will be filled with atom matches
-        Match match = new Match(groupDescription, matchingGroup);
-        for (AtomDescription atomDescription : groupDescription) {
-            String atomName = atomDescription.getName();
-            Structure atom = group.getSubStructureByProperty("Name", atomName);
-            
+        Match match = new Match(description, matchingCopy);
+        for (Description atomDescription : description.getSubDescriptions()) {
+            Structure atom = getMatchingSubstructure(atomDescription, structure);
             // null return value means no match found
-            if (atom == null) {
-                return match;
-            } else {
-                
+            if (nameMatches(atomDescription, atom)) {
                 // we don't clone the atom, as it is immutable
-                matchingGroup.addSubStructure(atom);
+                matchingCopy.addSubStructure(atom);
                 match.associate(atomDescription, atom);
+            } else {
+                matches.add(match);
+                return matches;
+                
             }
         }
-        return match;
+        // TODO : this is stupid - make it go away
+        matches.add(match);
+        return matches;
+    }
+
+    // TODO : this is expensive!
+    private Structure getMatchingSubstructure(
+            Description description, Structure structure) {
+        for (Structure subStructure : structure) {
+            if (nameMatches(description, subStructure)) {
+                return subStructure;
+            }
+        }
+        return null;
+    }
+    
+    
+    // TODO : this is expensive!
+    private boolean nameMatches(Description description, Structure structure) {
+        String name = null;
+        for (Condition condition : description.getConditions()) {
+            if (condition instanceof PropertyCondition) {
+                PropertyCondition prop = (PropertyCondition) condition;
+                if (prop.keyEquals("Name")) {
+                    name = prop.getValue();
+                    break;
+                }
+            }
+        }
+        if (name != null) {
+            return structure.hasPropertyEqualTo("Name", name);
+        }
+        return true;
     }
     
     /**
@@ -60,7 +97,7 @@ public class GroupEngine {  // TODO : implement the Engine interface
      * @param match
      * @return
      */
-    public boolean fullMatch(GroupDescription groupDescription, Match match) {
+    public boolean fullMatch(Description groupDescription, Match match) {
         return match.size() == groupDescription.size() 
             && conditionsSatisfied(groupDescription, match);
     }
@@ -74,6 +111,36 @@ public class GroupEngine {  // TODO : implement the Engine interface
             }
         }
         return true;
+    }
+
+    @Override
+    public void run(Run run) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public void run(Description description) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public void run(Description description, StructureSource source) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public void run() {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public void setRun(Run run) {
+        // TODO Auto-generated method stub
+        
     }
     
 }
