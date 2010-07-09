@@ -13,13 +13,11 @@ public class Run {
 
 	private ProteinDescription description;
 	private StructureSource structureSource;
-	private ArrayList<Measure> measures;
     
     public Run() {
         // TODO : check this before running! - perhaps the empty constructor is a bad idea
         this.description = null;
         this.structureSource = null;
-        this.measures = new ArrayList<Measure>();
     }
     
     public Run(String path) {
@@ -31,30 +29,20 @@ public class Run {
     	}
     }
 	
-	public Run(ProteinDescription description, ArrayList<Measure> measures, String path) throws IOException {
+	public Run(ProteinDescription description, String path) throws IOException {
 		this.description = description;
 		String[] filenames = {};
 		this.structureSource = new PDBFileList(path, filenames);
-		this.measures = measures;
 	}
 	
 	public Run(ProteinDescription description, ArrayList<Measure> measures, String path, String[] filenames) throws IOException {
 		this.description = description;
 		this.structureSource = new PDBFileList(path, filenames);
-		this.measures = measures;
 	}
 	
 	public StructureSource getStructureSource() {
 		return this.structureSource;
 	}
-    
-    public void addMeasure(Measure measure) {
-        this.measures.add(measure);
-    }
-    
-    public ArrayList<Measure> getMeasures() {
-    	return this.measures;
-    }
     
     public void addDescription(ProteinDescription description) {
     	this.description = description;	// TODO : convert to adding to a list...

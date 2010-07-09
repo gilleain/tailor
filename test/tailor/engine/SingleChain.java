@@ -24,11 +24,11 @@ public class SingleChain {
                 new DistanceBoundCondition(
                         "i.O->(i+3).N", carbonylOxygen, amineNitrogen, 3.5, 1));
         
-        Run run = new Run(filename);
-        run.addMeasure(factory.createPhiMeasure("psi2", 2));
-        run.addMeasure(factory.createPsiMeasure("phi2", 2));
-        
         Description description = factory.getProduct(); 
+        description.addMeasure(factory.createPhiMeasure("psi2", 2));
+        description.addMeasure(factory.createPsiMeasure("phi2", 2));
+        
+        Run run = new Run(filename);
         run.addDescription((ProteinDescription)description);
         
         Engine engine = EngineFactory.getEngine(description);
@@ -45,11 +45,12 @@ public class SingleChain {
         // i.O->(i+4).N
         factory.createHBondCondition(3.5, 90, 90, 4, 0);
         
-        Run run = new Run(filename);
-        run.addMeasure(factory.createPhiMeasure("psi2", 2));
-        run.addMeasure(factory.createPsiMeasure("phi2", 2));
+        Description description = factory.getProduct();
+        description.addMeasure(factory.createPhiMeasure("psi2", 2));
+        description.addMeasure(factory.createPsiMeasure("phi2", 2));
         
-        Description description = factory.getProduct(); 
+        
+        Run run = new Run(filename);
         run.addDescription((ProteinDescription)description);
         
         Engine engine = EngineFactory.getEngine(description);

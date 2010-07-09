@@ -54,7 +54,7 @@ public class MSDMotifEngine implements Engine {
     }
 
     public void run(Run run) {
-		this.run(run.getDescription(), run.getMeasures());
+		this.run(run.getDescription());
 	}
 	
 	public void run(ProteinDescription description, ArrayList<Measure> measures) {
@@ -72,14 +72,13 @@ public class MSDMotifEngine implements Engine {
     }
 
     @Override
-    public void run(ProteinDescription description, List<Measure> measures) {
+    public void run(ProteinDescription description) {
         // TODO Auto-generated method stub
         
     }
 
     @Override
-    public void run(ProteinDescription description,
-            List<Measure> measures, StructureSource source) {
+    public void run(ProteinDescription description, StructureSource source) {
         // TODO Auto-generated method stub
         
     }

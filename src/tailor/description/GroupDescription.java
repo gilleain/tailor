@@ -94,6 +94,10 @@ public class GroupDescription implements Description, Iterable<AtomDescription> 
     public ArrayList<Condition> getConditions() {
         return this.atomConditions;
     }
+    
+    public void addMeasure(Measure measure) {
+        atomMeasures.add(measure);
+    }
 
     public List<Measure> getMeasures() {
         return this.atomMeasures;

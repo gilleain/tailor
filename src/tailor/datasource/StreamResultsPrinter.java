@@ -1,7 +1,7 @@
 package tailor.datasource;
 
 import java.io.PrintStream;
-import java.util.ArrayList;
+import java.util.List;
 
 import tailor.measure.Measure;
 
@@ -15,7 +15,7 @@ public class StreamResultsPrinter implements ResultsPrinter {
 		this.columnSeparator = "\t";
 	}
 	
-	public void printHeader(ArrayList<Measure> measures) {
+	public void printHeader(List<Measure> measures) {
 		for (Measure m : measures) {
 			this.out.print(m);
 			this.out.print(this.columnSeparator);

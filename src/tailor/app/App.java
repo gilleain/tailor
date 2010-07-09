@@ -233,7 +233,7 @@ public class App implements ActionListener, CategoryChangeListener {
             Run run = runDialog.getRun();
             this.addRunToList(run);
             
-            int m = run.getMeasures().size();
+            int m = run.getDescription().getMeasures().size();
         	FileDataTableModel fileDataTableModel = new FileDataTableModel(m + 2);
         	
         	// TODO : don't want to be making a new engine every time!

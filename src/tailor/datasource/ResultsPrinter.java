@@ -1,6 +1,6 @@
 package tailor.datasource;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import tailor.measure.Measure;
 
@@ -12,7 +12,7 @@ import tailor.measure.Measure;
  */
 public interface ResultsPrinter {
 	
-	public void printHeader(ArrayList<Measure> measures);
+	public void printHeader(List<Measure> measures);
 	
 	public void printResult(Result result);
 	

@@ -94,6 +94,10 @@ public class ChainDescription implements Description, Iterable<GroupDescription>
         return this.groupConditions;
     }
     
+    public void addMeasure(Measure measure) {
+        groupMeasures.add(measure);
+    }
+    
     public List<Measure> getMeasures() {
         return groupMeasures;
     }

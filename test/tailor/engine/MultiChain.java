@@ -20,8 +20,8 @@ public class MultiChain {
         
         DistanceMeasure distanceMeasure = 
             new DistanceMeasure(chainADescription, chainBDescription);
+        proteinDescription.addMeasure(distanceMeasure);
         Run run = new Run(filename);
-        run.addMeasure(distanceMeasure);
         run.addDescription(proteinDescription);
         
         Engine engine = EngineFactory.getEngine(proteinDescription);

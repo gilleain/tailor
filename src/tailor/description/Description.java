@@ -25,6 +25,8 @@ public interface Description extends Cloneable {
     
     public List<Condition> getConditions();
     
+    public void addMeasure(Measure measure);
+    
     public List<Measure> getMeasures();
     
     public List<? extends Description> getSubDescriptions();

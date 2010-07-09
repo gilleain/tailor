@@ -128,7 +128,7 @@ public class RunDialog extends JDialog implements ActionListener, TreeSelectionL
         DefaultListModel model = (DefaultListModel) this.measureList.getModel();
         for (int i = 0; i < model.size(); i++) {
             Measure measure = (Measure) model.get(i);
-            this.run.addMeasure(measure);
+            this.run.getDescription().addMeasure(measure);
         }
         
         // get the directory

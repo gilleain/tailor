@@ -96,6 +96,10 @@ public class ProteinDescription implements Description {
         this.chainConditions.add(condition);
     }
     
+    public void addMeasure(Measure measure) {
+        chainMeasures.add(measure);
+    }
+    
     public ArrayList<Condition> getConditions() {
         return this.chainConditions;
     }

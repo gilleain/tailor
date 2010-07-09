@@ -1,6 +1,6 @@
 package tailor.datasource;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JProgressBar;
 
@@ -23,7 +23,7 @@ public class GuiResultsPrinter implements ResultsPrinter {
 		this.progressBar = progressBar;
 	}
 	
-	public void printHeader(ArrayList<Measure> measures) {
+	public void printHeader(List<Measure> measures) {
 		String[] headers = new String[measures.size() + 2];
 		headers[0] = "pdbid";
 		headers[1] = "motif";

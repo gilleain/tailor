@@ -57,6 +57,10 @@ public class AtomDescription implements Description {
         return new ArrayList<Condition>();
     }
     
+    public void addMeasure(Measure measure) {
+        // TODO
+    }
+    
     public List<Measure> getMeasures() {
         // TODO 
         return new ArrayList<Measure>();

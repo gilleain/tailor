@@ -3,7 +3,6 @@ package tailor.engine;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintStream;
-import java.util.ArrayList;
 import java.util.List;
 
 import tailor.datasource.PDBFileList;
@@ -85,19 +84,19 @@ public abstract class AbstractBaseEngine implements Engine {
         if (this.structureSource == null) {
             this.structureSource = run.getStructureSource();
         }
-        this.run(run.getDescription(), run.getMeasures());
+        this.run(run.getDescription());
     }
 
     @Override
-    public void run(ProteinDescription description, List<Measure> measures) {
-        this.run(description, measures, structureSource);
+    public void run(ProteinDescription description) {
+        this.run(description, structureSource);
     }
 
     @Override
-    public void run(ProteinDescription description,
-            List<Measure> measures, StructureSource structureSource) {
+    public void run(
+            ProteinDescription description, StructureSource structureSource) {
         this.structureSource = structureSource;
-        run(description, measures);
+        run(description);
     }
 
     public abstract List<Match> match(
@@ -108,7 +107,8 @@ public abstract class AbstractBaseEngine implements Engine {
         this.structureSource = new PDBFileList(path, filenames);
     }
     
-    public void run(Description description, ArrayList<Measure> measures) {
+    public void run(Description description) {
+        List<Measure> measures = description.getMeasures();
         printer.printHeader(measures);
         
         while (structureSource.hasNext()) {

@@ -6,7 +6,6 @@ import tailor.datasource.Structure;
 import tailor.datasource.StructureSource;
 import tailor.description.Description;
 import tailor.description.ProteinDescription;
-import tailor.measure.Measure;
 
 /**
  * An engine matches a description to a structure source, and applies a list 
@@ -38,7 +37,7 @@ public interface Engine {
 	 * @param description
 	 * @param measures
 	 */
-	public void run(ProteinDescription description, List<Measure> measures);
+	public void run(ProteinDescription description);
 
     /**
      * Match the description to the structure source and apply the list of 
@@ -48,9 +47,7 @@ public interface Engine {
      * @param measures
      * @param source
      */
-    public void run(ProteinDescription description, 
-                    List<Measure> measures,
-                    StructureSource source);
+    public void run(ProteinDescription description, StructureSource source);
 
     public void setRun(Run run);
     
