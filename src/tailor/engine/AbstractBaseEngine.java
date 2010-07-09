@@ -89,15 +89,15 @@ public abstract class AbstractBaseEngine implements Engine {
     }
 
     @Override
-    public void run(ProteinDescription description, ArrayList<Measure> measures) {
+    public void run(ProteinDescription description, List<Measure> measures) {
         this.run(description, measures, structureSource);
     }
 
     @Override
     public void run(ProteinDescription description,
-            ArrayList<Measure> measures, StructureSource structureSource) {
+            List<Measure> measures, StructureSource structureSource) {
         this.structureSource = structureSource;
-        run((Description) description, measures);
+        run(description, measures);
     }
 
     public abstract List<Match> match(

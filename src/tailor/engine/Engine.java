@@ -1,8 +1,10 @@
 package tailor.engine;
 
-import java.util.ArrayList;
+import java.util.List;
 
+import tailor.datasource.Structure;
 import tailor.datasource.StructureSource;
+import tailor.description.Description;
 import tailor.description.ProteinDescription;
 import tailor.measure.Measure;
 
@@ -16,6 +18,15 @@ import tailor.measure.Measure;
 public interface Engine {
     
     /**
+     * Match a description to a structure
+     * 
+     * @param description
+     * @param structure
+     * @return
+     */
+    public List<Match> match(Description description, Structure structure);
+    
+    /**
      * @param run
      */
     public void run(Run run);
@@ -27,7 +38,7 @@ public interface Engine {
 	 * @param description
 	 * @param measures
 	 */
-	public void run(ProteinDescription description, ArrayList<Measure> measures);
+	public void run(ProteinDescription description, List<Measure> measures);
 
     /**
      * Match the description to the structure source and apply the list of 
@@ -38,7 +49,7 @@ public interface Engine {
      * @param source
      */
     public void run(ProteinDescription description, 
-                    ArrayList<Measure> measures,
+                    List<Measure> measures,
                     StructureSource source);
 
     public void setRun(Run run);

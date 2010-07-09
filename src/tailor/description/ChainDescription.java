@@ -2,10 +2,12 @@ package tailor.description;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 import tailor.Level;
 import tailor.condition.Condition;
 import tailor.datasource.Structure;
+import tailor.measure.Measure;
 
 
 /**
@@ -22,10 +24,13 @@ public class ChainDescription implements Description, Iterable<GroupDescription>
     
     private ArrayList<Condition> groupConditions;
     
+    private List<Measure> groupMeasures;
+    
     public ChainDescription() {
         this.chainName = null;
         this.groupDescriptions = new ArrayList<GroupDescription>();
         this.groupConditions = new ArrayList<Condition>();
+        this.groupMeasures = new ArrayList<Measure>();
     }
     
     public ChainDescription(String chainName) {
@@ -87,6 +92,10 @@ public class ChainDescription implements Description, Iterable<GroupDescription>
     
     public ArrayList<Condition> getConditions() {
         return this.groupConditions;
+    }
+    
+    public List<Measure> getMeasures() {
+        return groupMeasures;
     }
     
     public void addSubDescription(Description subDescription) {

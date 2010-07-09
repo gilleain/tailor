@@ -1,9 +1,11 @@
 package tailor.description;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import tailor.Level;
 import tailor.condition.Condition;
+import tailor.measure.Measure;
 
 
 /**
@@ -19,6 +21,8 @@ public class ProteinDescription implements Description {
     private ArrayList<ChainDescription> chainDescriptions;
     
     private ArrayList<Condition> chainConditions;
+    
+    private List<Measure> chainMeasures;
     
     public ProteinDescription() {
         this("Motif");
@@ -94,6 +98,10 @@ public class ProteinDescription implements Description {
     
     public ArrayList<Condition> getConditions() {
         return this.chainConditions;
+    }
+    
+    public List<Measure> getMeasures() {
+        return this.chainMeasures;
     }
     
     public ArrayList<ChainDescription> getSubDescriptions() {

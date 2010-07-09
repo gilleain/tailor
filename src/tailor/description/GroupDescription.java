@@ -8,6 +8,7 @@ import tailor.Level;
 import tailor.condition.Condition;
 import tailor.condition.TorsionBoundCondition;
 import tailor.datasource.Structure;
+import tailor.measure.Measure;
 
 
 /**
@@ -26,10 +27,12 @@ public class GroupDescription implements Description, Iterable<AtomDescription> 
     
     private ArrayList<Condition> atomConditions;
     
+    private List<Measure> atomMeasures;
+    
     public GroupDescription() {
         this.groupName = null;
         this.atomDescriptions = new ArrayList<AtomDescription>();
-        this.atomConditions = new ArrayList<Condition>();
+        this.atomMeasures = new ArrayList<Measure>();
     }
     
     public GroupDescription(String groupName) {
@@ -90,6 +93,10 @@ public class GroupDescription implements Description, Iterable<AtomDescription> 
     
     public ArrayList<Condition> getConditions() {
         return this.atomConditions;
+    }
+
+    public List<Measure> getMeasures() {
+        return this.atomMeasures;
     }
     
     public int size() {

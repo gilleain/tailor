@@ -11,6 +11,7 @@ import java.io.PrintStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.zip.GZIPOutputStream;
 
 import javax.xml.parsers.ParserConfigurationException;
@@ -19,9 +20,12 @@ import javax.xml.parsers.SAXParserFactory;
 
 import org.xml.sax.SAXException;
 
+import tailor.datasource.Structure;
 import tailor.datasource.StructureSource;
+import tailor.description.Description;
 import tailor.description.ProteinDescription;
 import tailor.engine.Engine;
+import tailor.engine.Match;
 import tailor.engine.Run;
 import tailor.measure.Measure;
 
@@ -62,8 +66,20 @@ public class MSDMotifEngine implements Engine {
 	}
 
 	@Override
+    public List<Match> match(Description description, Structure structure) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public void run(ProteinDescription description, List<Measure> measures) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
     public void run(ProteinDescription description,
-            ArrayList<Measure> measures, StructureSource source) {
+            List<Measure> measures, StructureSource source) {
         // TODO Auto-generated method stub
         
     }

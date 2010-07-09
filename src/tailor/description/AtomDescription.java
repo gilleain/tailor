@@ -1,11 +1,13 @@
 package tailor.description;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import tailor.Level;
 import tailor.condition.Condition;
 import tailor.datasource.Structure;
 import tailor.geometry.Vector;
+import tailor.measure.Measure;
 
 
 /**
@@ -53,6 +55,11 @@ public class AtomDescription implements Description {
     public ArrayList<Condition> getConditions() {
         // TODO : Atoms don't have conditions
         return new ArrayList<Condition>();
+    }
+    
+    public List<Measure> getMeasures() {
+        // TODO 
+        return new ArrayList<Measure>();
     }
     
     public void addSubDescription(Description subDescription) {

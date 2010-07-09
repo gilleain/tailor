@@ -149,9 +149,8 @@ public class SingleChainEngine extends AbstractBaseEngine implements Engine {
     }
     
     // TODO : put this in a base class
-    public boolean conditionsSatisfied(
-            ChainDescription chainDescription, Match match) {
-        for (Condition condition : chainDescription.getConditions()) {
+    public boolean conditionsSatisfied(Description description, Match match) {
+        for (Condition condition : description.getConditions()) {
             if (condition.satisfiedBy(match)) {
                 continue;
             } else {
