@@ -79,7 +79,7 @@ public class Match implements Iterable<Match> {
     }
     
     public String toString() {
-        return description + " matches " + structure;
+        return description + " matches " + structure.getId();
     }
     
 }
