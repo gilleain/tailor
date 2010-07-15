@@ -1,5 +1,9 @@
 package tailor.engine;
 
+import java.util.List;
+
+import junit.framework.Assert;
+
 import org.junit.Test;
 
 import tailor.Level;
@@ -29,9 +33,12 @@ public class LeafEngineTest {
         addAtom(group, "O");
         
         LeafEngine engine = new LeafEngine();
-        for (Match match : engine.match(groupDescription, group)) {
+        List<Match> matches = engine.match(groupDescription, group); 
+        for (Match match : matches) {
             System.out.println(match);
         }
+        
+        Assert.assertEquals(groupDescription.size(), matches.size());
     }
 
 }

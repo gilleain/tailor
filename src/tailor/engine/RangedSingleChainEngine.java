@@ -22,10 +22,10 @@ import tailor.description.RangedGroupDescription;
  */
 public class RangedSingleChainEngine extends AbstractBaseEngine {
     
-    private GroupEngine subEngine;
+    private Engine subEngine;
     
     public RangedSingleChainEngine() {
-        this.subEngine = new GroupEngine();
+        this.subEngine = new LeafEngine();
     }
     
     public List<Match> match(Description description, Structure structure) {
@@ -52,10 +52,15 @@ public class RangedSingleChainEngine extends AbstractBaseEngine {
                 
                 // check and add
                 if (nameMatches(subDescription, subStructure)) {
-                    Match matchingCopy = 
-                        subEngine.match(subDescription, subStructure).get(0);
-                    if (subEngine.fullMatch(subDescription, matchingCopy)) {
-                        partial.completeMatch(matchingCopy);
+                    List<Match> atomMatches = 
+                        subEngine.match(subDescription, subStructure);
+                    if (atomMatches.size() == subDescription.size()) {
+                        Level subLevel = subStructure.getLevel();
+                        Structure matchingCopy = new Structure(subLevel);
+                        matchingCopy.copyProperty(subStructure, "Name");
+                        matchingCopy.copyProperty(subStructure, "Number");
+                        Match subMatch = new Match(subDescription, matchingCopy);
+                        partial.completeMatch(subMatch);
                         partialLength++;
                         extended = true;
                     }
@@ -78,16 +83,21 @@ public class RangedSingleChainEngine extends AbstractBaseEngine {
             
             // check for new matches
             if (nameMatches(firstDescription, subStructure)) {
-                Match matchingCopy = 
-                    subEngine.match(firstDescription, subStructure).get(0);
-                if (subEngine.fullMatch(firstDescription, matchingCopy)) {
+                List<Match> atomMatches = 
+                    subEngine.match(firstDescription, subStructure);
+                if (atomMatches.size() == firstDescription.size()) {
                     Structure partialStructure = new Structure(level);
                     
                     // TODO : chain specific!
                     partialStructure.setProperty("Name", "A");
                     
                     Match partial = new Match(description, partialStructure);
-                    partial.completeMatch(matchingCopy);
+                    Level subLevel = subStructure.getLevel();
+                    Structure matchingCopy = new Structure(subLevel);
+                    matchingCopy.copyProperty(subStructure, "Name");
+                    matchingCopy.copyProperty(subStructure, "Number");
+                    Match subMatch = new Match(firstDescription, matchingCopy);
+                    partial.completeMatch(subMatch);
                     partialMatches.add(partial);
                 }
             }

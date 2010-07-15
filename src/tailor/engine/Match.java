@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import tailor.condition.Condition;
 import tailor.datasource.Structure;
 import tailor.description.Description;
 
@@ -30,6 +31,23 @@ public class Match implements Iterable<Match> {
     
     public Iterator<Match> iterator() {
         return subMatches.iterator();
+    }
+    
+    /**
+     * Checks the match against the conditions in the description.
+     * 
+     * @param description
+     * @return
+     */
+    public boolean satisfiesConditions(Description description) {
+        for (Condition condition : description.getConditions()) {
+            if (condition.satisfiedBy(this)) {
+                continue;
+            } else {
+                return false;
+            }
+        }
+        return true;
     }
     
     public Match getSubMatch(int i) {
