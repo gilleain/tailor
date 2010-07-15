@@ -8,7 +8,25 @@ import tailor.description.Description;
 import tailor.description.DescriptionFactory;
 import tailor.description.ProteinDescription;
 
-public class SingleChain {
+public class SingleChainTest {
+    
+    @Test
+    public void simpleTest() {
+        String filename = "structures/2bop.pdb";
+        
+        DescriptionFactory factory = new DescriptionFactory();
+        factory.addResidues(4);
+        
+        Description description = factory.getProduct(); 
+        description.addMeasure(factory.createPhiMeasure("psi2", 2));
+        description.addMeasure(factory.createPsiMeasure("phi2", 2));
+        
+        Run run = new Run(filename);
+        run.addDescription((ProteinDescription)description);
+        
+        Engine engine = EngineFactory.getEngine(description);
+        engine.run(run);
+    }
     
     @Test
     public void simpleHBondTest() {

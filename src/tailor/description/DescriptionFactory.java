@@ -272,8 +272,7 @@ public class DescriptionFactory {
 	
 	public TorsionMeasure createPhiMeasure(
 	        String name, int residueNumber, String chainName) {
-		return this.fillPhiMeasure(
-		        new TorsionMeasure(name), residueNumber, chainName);
+		return fillPhiMeasure(new TorsionMeasure(name), residueNumber, chainName);
 	}
 	
 	public TorsionMeasure fillPhiMeasure(

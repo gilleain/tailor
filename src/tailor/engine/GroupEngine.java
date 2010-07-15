@@ -7,7 +7,6 @@ import tailor.Level;
 import tailor.condition.Condition;
 import tailor.condition.PropertyCondition;
 import tailor.datasource.Structure;
-import tailor.datasource.StructureSource;
 import tailor.description.Description;
 
 /**
@@ -17,7 +16,7 @@ import tailor.description.Description;
  * @author maclean
  *
  */
-public class GroupEngine implements Engine {  
+public class GroupEngine extends AbstractBaseEngine {  
 
     /**
      * Perform a single match between a GroupDescription and a group, moving
@@ -73,6 +72,8 @@ public class GroupEngine implements Engine {
     
     // TODO : this is expensive!
     private boolean nameMatches(Description description, Structure structure) {
+        if (structure == null) return false;
+        
         String name = null;
         for (Condition condition : description.getConditions()) {
             if (condition instanceof PropertyCondition) {
@@ -83,10 +84,11 @@ public class GroupEngine implements Engine {
                 }
             }
         }
+        
         if (name != null) {
             return structure.hasPropertyEqualTo("Name", name);
         }
-        return true;
+        return false;
     }
     
     /**
@@ -113,34 +115,4 @@ public class GroupEngine implements Engine {
         return true;
     }
 
-    @Override
-    public void run(Run run) {
-        // TODO Auto-generated method stub
-        
-    }
-
-    @Override
-    public void run(Description description) {
-        // TODO Auto-generated method stub
-        
-    }
-
-    @Override
-    public void run(Description description, StructureSource source) {
-        // TODO Auto-generated method stub
-        
-    }
-
-    @Override
-    public void run() {
-        // TODO Auto-generated method stub
-        
-    }
-
-    @Override
-    public void setRun(Run run) {
-        // TODO Auto-generated method stub
-        
-    }
-    
 }

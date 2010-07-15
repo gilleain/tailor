@@ -21,17 +21,13 @@ public class Result {
     
     private Measurement[] measurements;
     
-//    public Result(
-//            Structure structure, Structure motif, Measurement[] measurements) {
-//        this.structureID = structure.getId();
-//        this.motifData = motif.toString();
-//        this.measurements = measurements;
-//    }
-    
     public Result(Match match, Measurement[] measurements) {
-        // TODO - extract the structureId and 'motifData' from the Match
         this.match = match;
         this.measurements = measurements;
+        
+        // XXX this only works if the match is at the protein level, I guess 
+        this.structureID = match.getStructure().getProperty("Name");
+        this.motifData = match.getStructure().toString();
     }
     
     public int getNumberOfColumns() {

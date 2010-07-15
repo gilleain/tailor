@@ -5,6 +5,7 @@ import java.util.List;
 
 import tailor.Level;
 import tailor.condition.Condition;
+import tailor.condition.PropertyCondition;
 import tailor.datasource.Structure;
 import tailor.geometry.Vector;
 import tailor.measure.Measure;
@@ -18,18 +19,21 @@ public class AtomDescription implements Description {
     
     private static final Level level = Level.ATOM;
     
-    private String atomName;
-
+    private List<Condition> conditions;
+    
     public AtomDescription() {
-        this.atomName = null;
+        this.conditions = new ArrayList<Condition>();
     }
     
     public AtomDescription(String name) {
-        this.atomName = name;
+        this();
+        // TODO : resolve!
+        addCondition(new PropertyCondition("Name", name));
     }
     
     public AtomDescription(AtomDescription atomDescription) {
-    	this(atomDescription.atomName);
+    	this();
+    	this.setName(atomDescription.getName());
     }
     
     public boolean contains(Description d) {
@@ -37,11 +41,11 @@ public class AtomDescription implements Description {
     }
     
     public Object clone() {
-    	return new AtomDescription(this);
+    	return new AtomDescription(this.getName());
     }
     
     public Description shallowCopy() {
-        return new AtomDescription(this.atomName);
+        return new AtomDescription(this.getName());
     }
     
     public int size() {
@@ -53,12 +57,11 @@ public class AtomDescription implements Description {
     }
     
     public void addCondition(Condition condition) {
-        // TODO : Atoms can't really have conditions...
+        this.conditions.add(condition);
     }
     
-    public ArrayList<Condition> getConditions() {
-        // TODO : Atoms don't have conditions
-        return new ArrayList<Condition>();
+    public List<Condition> getConditions() {
+        return this.conditions;
     }
     
     public void addMeasure(Measure measure) {
@@ -79,19 +82,28 @@ public class AtomDescription implements Description {
      * constructor if never used...
      */
     public void setName(String atomName) {
-        this.atomName = atomName;
+        addCondition(new PropertyCondition("Name", atomName));
     }
     
     public String getName() {
-        return this.atomName;
+        String name = "";
+        for (Condition condition : conditions) {
+            if (condition instanceof PropertyCondition) {
+                PropertyCondition prop = (PropertyCondition) condition;
+                if (prop.keyEquals("Name")) {
+                    return prop.getValue();
+                }
+            }
+        }
+        return name;
     }
     
     public boolean nameMatches(String name) {
-        return this.atomName.equals(name);
+        return this.getName().equals(name);
     }
     
     public boolean matches(Structure atom) {
-        return this.atomName.equals(atom.getProperty("Name"));
+        return this.getName().equals(atom.getProperty("Name"));
     }
     
     public ArrayList<Description> getSubDescriptions() {
@@ -107,14 +119,14 @@ public class AtomDescription implements Description {
     }
     
     public String toXmlPathString() {
-    	return "atom=\"" + this.atomName + "\"/>";
+    	return "atom=\"" + this.getName() + "\"/>";
     }
     
     public String toPathString() {
-        return this.atomName;
+        return this.getName();
     }
     
     public String toString() {
-        return "Atom " + this.atomName;
+        return "Atom " + this.getName();
     }
 }

@@ -126,7 +126,8 @@ public class SingleChainEngine extends AbstractBaseEngine implements Engine {
 
                  // returns a new group filled with 
                  // as many matching atoms as possible
-                 Match groupMatch = groupEngine.match(groupDescription, group).get(0);
+                 Match groupMatch = 
+                     groupEngine.match(groupDescription, group).get(0);
                  
                  // only if we get a match of sufficient size
                  // is it worthwhile to consider any conditions

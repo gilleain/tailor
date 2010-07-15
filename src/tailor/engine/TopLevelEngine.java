@@ -14,8 +14,9 @@ public class TopLevelEngine extends AbstractBaseEngine {
         this.subEngine = subEngine;
     }
     
-    /* (non-Javadoc)
-     * @see tailor.engine.AbstractBaseEngine#match(tailor.description.Description, tailor.datasource.Structure)
+    /* 
+     * Matches each subdescription of the description to each substructure
+     * in the structure. 
      */
     public List<Match> match(Description description, Structure structure) {
         

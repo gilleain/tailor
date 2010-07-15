@@ -78,13 +78,16 @@ public class RangedSingleChainEngine extends AbstractBaseEngine {
             
             // check for new matches
             if (nameMatches(firstDescription, subStructure)) {
-                Match matchingResidue = 
+                Match matchingCopy = 
                     subEngine.match(firstDescription, subStructure).get(0);
-                if (subEngine.fullMatch(firstDescription, matchingResidue)) {
+                if (subEngine.fullMatch(firstDescription, matchingCopy)) {
                     Structure partialStructure = new Structure(level);
+                    
+                    // TODO : chain specific!
                     partialStructure.setProperty("Name", "A");
+                    
                     Match partial = new Match(description, partialStructure);
-                    partial.completeMatch(matchingResidue);
+                    partial.completeMatch(matchingCopy);
                     partialMatches.add(partial);
                 }
             }
