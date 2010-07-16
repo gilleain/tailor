@@ -113,6 +113,10 @@ public class ProteinDescription implements Description {
         return this.chainDescriptions;
     }
     
+    public Description getSubDescriptionAt(int i) {
+        return chainDescriptions.get(i);
+    }
+    
     public ArrayList<ChainDescription> getChainDescriptions() {
         return this.chainDescriptions;
     }

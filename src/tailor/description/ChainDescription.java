@@ -133,6 +133,10 @@ public class ChainDescription implements Description, Iterable<GroupDescription>
         return this.groupDescriptions;
     }
     
+    public Description getSubDescriptionAt(int i) {
+        return groupDescriptions.get(i);
+    }
+    
     public ArrayList<GroupDescription> getGroupDescriptions() {
         return this.groupDescriptions;
     }

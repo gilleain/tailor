@@ -33,6 +33,8 @@ public interface Description extends Cloneable {
     
     public List<? extends Description> getSubDescriptions();
     
+    public Description getSubDescriptionAt(int i);
+    
     public String toPathString();
     
     public String toXmlPathString();

@@ -110,6 +110,11 @@ public class AtomDescription implements Description {
         return new ArrayList<Description>();
     }
     
+    public Description getSubDescriptionAt(int i) {
+        // throw error?
+        return null;
+    }
+    
     public Vector findStructureCenter(Structure atom) {
         return atom.getAtomCenter();
     }

@@ -124,6 +124,10 @@ public class GroupDescription implements Description, Iterable<AtomDescription> 
         return this.atomDescriptions;
     }
     
+    public Description getSubDescriptionAt(int i) {
+        return atomDescriptions.get(i);
+    }
+    
     public ArrayList<AtomDescription> getAtomDescriptions() {
         return this.atomDescriptions;
     }
