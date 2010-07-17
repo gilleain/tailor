@@ -34,7 +34,7 @@ public class EngineFactory {
                 (ProteinDescription) description;
             chainCount = proteinDescription.getChainDescriptions().size();
             if (chainCount == 1) {
-                return new SingleChainEngine();
+                return new TopLevelEngine(new SingleChainEngine());
             } else {
                 return new MultiChainEngine();
             }

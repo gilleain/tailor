@@ -27,8 +27,10 @@ public class TopLevelEngine extends AbstractBaseEngine {
                     subEngine.match(subDescription, subStructure);
                 for (Match subMatch : subMatches) {
                     Structure topLevel = new Structure(structure.getLevel());
+                    topLevel.copyProperty(structure, "Name");
                     Match match = new Match(description, topLevel);
                     match.completeMatch(subMatch);
+                    match.addSubMatch(subMatch);
                     matches.add(match);
                 }
             }

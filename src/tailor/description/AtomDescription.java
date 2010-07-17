@@ -7,7 +7,6 @@ import tailor.Level;
 import tailor.condition.Condition;
 import tailor.condition.PropertyCondition;
 import tailor.datasource.Structure;
-import tailor.geometry.Vector;
 import tailor.measure.Measure;
 
 
@@ -20,6 +19,8 @@ public class AtomDescription implements Description {
     private static final Level level = Level.ATOM;
     
     private List<Condition> conditions;
+    
+    private int id;
     
     public AtomDescription() {
         this.conditions = new ArrayList<Condition>();
@@ -34,6 +35,38 @@ public class AtomDescription implements Description {
     public AtomDescription(AtomDescription atomDescription) {
     	this();
     	this.setName(atomDescription.getName());
+    }
+    
+    /*
+     * TODO : consider removing this method and the null
+     * constructor if never used...
+     */
+    public void setName(String atomName) {
+        addCondition(new PropertyCondition("Name", atomName));
+    }
+
+    public boolean nameMatches(String name) {
+        return this.getName().equals(name);
+    }
+
+    public boolean matches(Structure atom) {
+        return this.getName().equals(atom.getProperty("Name"));
+    }
+    
+    public int getID() {
+        return this.id;
+    }
+
+    public void setID(int id) {
+        this.id = id;
+    }
+
+    public Description getByID(int id) {
+        if (id == this.id) {
+            return this;
+        } else {
+            return null;
+        }
     }
     
     public boolean contains(Description d) {
@@ -77,14 +110,6 @@ public class AtomDescription implements Description {
         // TODO : this class should complain about this kind of abuse.
     }
     
-    /*
-     * TODO : consider removing this method and the null
-     * constructor if never used...
-     */
-    public void setName(String atomName) {
-        addCondition(new PropertyCondition("Name", atomName));
-    }
-    
     public String getName() {
         String name = "";
         for (Condition condition : conditions) {
@@ -98,14 +123,6 @@ public class AtomDescription implements Description {
         return name;
     }
     
-    public boolean nameMatches(String name) {
-        return this.getName().equals(name);
-    }
-    
-    public boolean matches(Structure atom) {
-        return this.getName().equals(atom.getProperty("Name"));
-    }
-    
     public ArrayList<Description> getSubDescriptions() {
         return new ArrayList<Description>();
     }
@@ -113,10 +130,6 @@ public class AtomDescription implements Description {
     public Description getSubDescriptionAt(int i) {
         // throw error?
         return null;
-    }
-    
-    public Vector findStructureCenter(Structure atom) {
-        return atom.getAtomCenter();
     }
     
     public Description getPathEnd() {

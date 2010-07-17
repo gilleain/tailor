@@ -47,7 +47,9 @@ public class SingleChainEngine extends AbstractBaseEngine implements Engine {
             // starting at this position, scan the groups 
             Match chainMatch = scan(description, groups, start);
 
-            if (fullMatch(description, chainMatch)) {
+            if (chainMatch != null && chainMatch.size() == span
+//                    ){
+                    && chainMatch.satisfiesConditions(description)) {
                 Structure matchedChain = chainMatch.getStructure();
                 matchedChain.setProperty("Name", structure.getProperty("Name"));
                 matches.add(chainMatch);
@@ -71,6 +73,7 @@ public class SingleChainEngine extends AbstractBaseEngine implements Engine {
         Structure chain = new Structure(Level.CHAIN);
         Match match = new Match(description, chain);
         for (int index = 0; index < description.size(); index++) {
+            boolean hasMatched = false;
             Description subDescription = 
                 description.getSubDescriptionAt(index);
             Structure group = groups.get(start + index);
@@ -93,14 +96,17 @@ public class SingleChainEngine extends AbstractBaseEngine implements Engine {
                     Match subMatch = new Match(subDescription, matchingCopy);
                     for (Match atomMatch : atomMatches) {
                         subMatch.addSubMatch(atomMatch);
+                        subMatch.completeMatch(atomMatch);
                     }
                     if (subMatch.satisfiesConditions(subDescription)) {
                         chain.addSubStructure(matchingCopy);
                         match.addSubMatch(subMatch);
-                    }
-                }
-            } else {
-                return match;
+                        hasMatched = true;
+                    } 
+                } 
+            }
+            if (!hasMatched) {
+                return null;
             }
         }
         return match;
@@ -114,17 +120,14 @@ public class SingleChainEngine extends AbstractBaseEngine implements Engine {
                 if (prop.keyEquals("Name") && 
                         prop.valueEquals(structure.getProperty("Name"))) {
                     return true;
+                } else {
+                    // there is a Name condition, but it doesn't match
+                    return false;
                 }
             }
         }
-        return false;
-    }
-
-    public boolean fullMatch(Description chainDescription, Match match) {
-        // only if we get a match of sufficient size
-        // is it worthwhile to consider any conditions
-        return chainDescription.size() == match.size()
-            && match.satisfiesConditions(chainDescription);
+        // true if there are no property conditions with a key of 'Name'
+        return true;
     }
    
 }

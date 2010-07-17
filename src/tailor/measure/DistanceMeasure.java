@@ -7,18 +7,27 @@ import tailor.geometry.CenterFinder;
 import tailor.geometry.Geometry;
 import tailor.geometry.Vector;
 
+/**
+ * Measures the distance between two points.
+ * 
+ * @author maclean
+ *
+ */
 public class DistanceMeasure extends Measure {
 
-	private Description descriptionA;
+	private int idA;
     
-	private Description descriptionB;
+	private int idB;
+	
+	// possibly needed for printing out details about the endpoints...
+	private Description context;   
 
     /**
      * @param descriptionA
      * @param descriptionB
      */
-    public DistanceMeasure(Description descriptionA, Description descriptionB) {
-        this("Distance", descriptionA, descriptionB);
+    public DistanceMeasure(int idA, int idB, Description context) {
+        this("Distance", idA, idB, context);
     }
     
 	/**
@@ -26,17 +35,17 @@ public class DistanceMeasure extends Measure {
 	 * @param descriptionA
 	 * @param descriptionB
 	 */
-	public DistanceMeasure(
-	        String name, Description descriptionA, Description descriptionB) {
+	public DistanceMeasure(String name, int idA, int idB, Description context) {
 	    super(name);
-		this.descriptionA = descriptionA;
-		this.descriptionB = descriptionB;
+		this.idA = idA;
+		this.idB = idB;
+		this.context = context;
 	}
 
 	@Override
 	public Measurement measure(Match match) throws DescriptionException {
-		Vector a = CenterFinder.findCenter(descriptionA, match);
-		Vector b = CenterFinder.findCenter(descriptionB, match);
+		Vector a = CenterFinder.findCenter(idA, match);
+		Vector b = CenterFinder.findCenter(idB, match);
         
 //        System.err.println("a " + a + " b " + b);
 		
@@ -45,8 +54,7 @@ public class DistanceMeasure extends Measure {
 	}
     
     public String toString() {
-        return "d (" + descriptionA.toPathString() 
-        + ", " + descriptionB.toPathString() + ") ";
+        return "d (" + idA + ", " + idB + ") "; // TODO
     }
 
 }

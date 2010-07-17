@@ -1,8 +1,10 @@
 package tailor.description;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import tailor.Level;
 import tailor.condition.Condition;
@@ -26,11 +28,16 @@ public class ChainDescription implements Description, Iterable<GroupDescription>
     
     private List<Measure> groupMeasures;
     
+    private Map<Integer, Description> descriptionLookup;
+    
+    private int id;
+    
     public ChainDescription() {
         this.chainName = null;
         this.groupDescriptions = new ArrayList<GroupDescription>();
         this.groupConditions = new ArrayList<Condition>();
         this.groupMeasures = new ArrayList<Measure>();
+        this.descriptionLookup = new HashMap<Integer, Description>();
     }
     
     public ChainDescription(String chainName) {
@@ -48,70 +55,15 @@ public class ChainDescription implements Description, Iterable<GroupDescription>
     	}
     }
     
-    @Override
-    public Iterator<GroupDescription> iterator() {
-        return groupDescriptions.iterator();
-    }
-
-    public boolean contains(Description d) {
-    	if (d.getLevel() == ChainDescription.level) {
-    		return this.getName().equals(((ChainDescription) d).getName());
-    	} else {
-    		for (GroupDescription group : this.groupDescriptions) {
-    			if (group.contains(d)) {
-    				return true;
-    			}
-    		}
-    		return false;
-    	}
-    }
-    
-    public Object clone() {
-    	return new ChainDescription(this);
-    }
-    
-    public Description shallowCopy() {
-        return new ChainDescription(this.chainName);
-    }
-    
-    public Level getLevel() {
-        return ChainDescription.level;
-    }
-    
-    public String getName() {
-    	return this.chainName;
-    }
-    
     public boolean hasName(String name) {
     	return this.chainName.equals(name);
     }
     
-    public void addCondition(Condition condition) {
-        this.groupConditions.add(condition);
-    }
-    
-    public ArrayList<Condition> getConditions() {
-        return this.groupConditions;
-    }
-    
-    public void addMeasure(Measure measure) {
-        groupMeasures.add(measure);
-    }
-    
-    public List<Measure> getMeasures() {
-        return groupMeasures;
-    }
-    
-    public void addSubDescription(Description subDescription) {
-        if (subDescription instanceof GroupDescription) {
-            this.addGroupDescription((GroupDescription) subDescription);
-        } else {
-            // TODO : type checking - throw error
-        }
-    }
-    
     public void addGroupDescription(GroupDescription groupDescription) {
         this.groupDescriptions.add(groupDescription);
+        int id = this.id + groupDescriptions.size();
+        groupDescription.setID(id);
+        this.descriptionLookup.put(id, groupDescription);
     }
     
     public void removeLastGroupDescription() {
@@ -129,14 +81,6 @@ public class ChainDescription implements Description, Iterable<GroupDescription>
         this.groupConditions.add(condition);
     }
     
-    public ArrayList<GroupDescription> getSubDescriptions() {
-        return this.groupDescriptions;
-    }
-    
-    public Description getSubDescriptionAt(int i) {
-        return groupDescriptions.get(i);
-    }
-    
     public ArrayList<GroupDescription> getGroupDescriptions() {
         return this.groupDescriptions;
     }
@@ -149,13 +93,6 @@ public class ChainDescription implements Description, Iterable<GroupDescription>
      */
     public GroupDescription getGroupDescription(int groupIndex) {
         return groupDescriptions.get(groupIndex);
-    }
-    
-    /**
-     * @return the number of group descriptions in this chain
-     */
-    public int size() {
-        return this.groupDescriptions.size();
     }
     
     public GroupDescription first() {
@@ -211,6 +148,101 @@ public class ChainDescription implements Description, Iterable<GroupDescription>
             || this.chainName.equals(chain.getProperty("Name"));
     }
     
+    public int getID() {
+        return this.id;
+    }
+    
+    public void setID(int id) {
+        this.id = id;
+    }
+    
+    public Description getByID(int id) {
+        if (descriptionLookup.containsKey(id)) {
+            return descriptionLookup.get(id);
+        } else {
+            for (GroupDescription groupD : this) {
+                Description d = groupD.getByID(id);
+                if (d != null) {
+                    return d;
+                }
+            }
+        }
+        return null;
+    }
+    
+    @Override
+    public Iterator<GroupDescription> iterator() {
+        return groupDescriptions.iterator();
+    }
+
+    public boolean contains(Description d) {
+    	if (d.getLevel() == ChainDescription.level) {
+    		return this.getName().equals(((ChainDescription) d).getName());
+    	} else {
+    		for (GroupDescription group : this.groupDescriptions) {
+    			if (group.contains(d)) {
+    				return true;
+    			}
+    		}
+    		return false;
+    	}
+    }
+
+    public Object clone() {
+    	return new ChainDescription(this);
+    }
+
+    public Description shallowCopy() {
+        return new ChainDescription(this.chainName);
+    }
+
+    public Level getLevel() {
+        return ChainDescription.level;
+    }
+
+    public String getName() {
+    	return this.chainName;
+    }
+
+    public void addCondition(Condition condition) {
+        this.groupConditions.add(condition);
+    }
+
+    public ArrayList<Condition> getConditions() {
+        return this.groupConditions;
+    }
+
+    public void addMeasure(Measure measure) {
+        groupMeasures.add(measure);
+    }
+
+    public List<Measure> getMeasures() {
+        return groupMeasures;
+    }
+
+    public void addSubDescription(Description subDescription) {
+        if (subDescription instanceof GroupDescription) {
+            this.addGroupDescription((GroupDescription) subDescription);
+        } else {
+            // TODO : type checking - throw error
+        }
+    }
+
+    public ArrayList<GroupDescription> getSubDescriptions() {
+        return this.groupDescriptions;
+    }
+
+    public Description getSubDescriptionAt(int i) {
+        return groupDescriptions.get(i);
+    }
+
+    /**
+     * @return the number of group descriptions in this chain
+     */
+    public int size() {
+        return this.groupDescriptions.size();
+    }
+
     public Description getPathEnd() {
     	if (this.groupDescriptions.size() == 0) {
     		return this;

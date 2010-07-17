@@ -1,8 +1,10 @@
 package tailor.description;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import tailor.Level;
 import tailor.condition.Condition;
@@ -29,11 +31,16 @@ public class GroupDescription implements Description, Iterable<AtomDescription> 
     
     private List<Measure> atomMeasures;
     
+    private Map<Integer, Description> descriptionLookup;
+    
+    private int id;
+    
     public GroupDescription() {
         this.groupName = null;
         this.atomDescriptions = new ArrayList<AtomDescription>();
         this.atomMeasures = new ArrayList<Measure>();
         this.atomConditions = new ArrayList<Condition>();
+        this.descriptionLookup = new HashMap<Integer, Description>();
     }
     
     public GroupDescription(String groupName) {
@@ -49,67 +56,11 @@ public class GroupDescription implements Description, Iterable<AtomDescription> 
     	// TODO : atom conditions? what even are atom conditions?
     }
     
-    public Iterator<AtomDescription> iterator() {
-        return atomDescriptions.iterator();
-    }
-    
-    public Object clone() {
-    	return new GroupDescription(this);
-    }
-    
-    public boolean contains(Description d) {
-    	if (d.getLevel() == GroupDescription.level) {
-    	    // TODO
-//    		return this.getOffset() == ((GroupDescription) d).getOffset();
-    	    return true;
-    	} else {
-    		for (AtomDescription atom : this.atomDescriptions) {
-    			if (atom.getName().equals(((AtomDescription) d).getName())) {
-    				return true;
-    			}
-    		}
-    		return false;
-    	}
-    }
-    
-    public Description shallowCopy() {
-        return new GroupDescription(this.groupName);
-    }
-    
-    public Level getLevel() {
-        return GroupDescription.level;
-    }
-
-    public void addSubDescription(Description subDescription) {
-        if (subDescription instanceof AtomDescription) {
-            this.addAtomDescription((AtomDescription) subDescription);
-        } else {
-            // TODO : type safety
-        }
-    }
-    
-    public void addCondition(Condition condition) {
-        this.atomConditions.add(condition);
-    }
-    
-    public ArrayList<Condition> getConditions() {
-        return this.atomConditions;
-    }
-    
-    public void addMeasure(Measure measure) {
-        atomMeasures.add(measure);
-    }
-
-    public List<Measure> getMeasures() {
-        return this.atomMeasures;
-    }
-    
-    public int size() {
-        return this.atomDescriptions.size();
-    }
-    
     public void addAtomDescription(AtomDescription atomDescription) {
         this.atomDescriptions.add(atomDescription);
+        int id = this.id + atomDescriptions.size();
+        atomDescription.setID(id);
+        this.descriptionLookup.put(id, atomDescription);
     }
     
     public void addAtomDescription(String atomName) {
@@ -118,14 +69,6 @@ public class GroupDescription implements Description, Iterable<AtomDescription> 
     
     public void addAtomCondition(Condition condition) {
         this.atomConditions.add(condition);
-    }
-    
-    public ArrayList<AtomDescription> getSubDescriptions() {
-        return this.atomDescriptions;
-    }
-    
-    public Description getSubDescriptionAt(int i) {
-        return atomDescriptions.get(i);
     }
     
     public ArrayList<AtomDescription> getAtomDescriptions() {
@@ -160,10 +103,6 @@ public class GroupDescription implements Description, Iterable<AtomDescription> 
         return this.groupName.equals(groupName);
     }
 
-    public String getName() {
-    	return this.groupName;
-    }
-    
     public AtomDescription getAtomDescription(String atomName) {
         // TODO : what if multiple matches?
         
@@ -178,6 +117,99 @@ public class GroupDescription implements Description, Iterable<AtomDescription> 
         // TODO : what if no matches?
         System.err.println("no atom with name " + atomName + " in " + this);
         return null;
+    }
+    
+    public int getID() {
+        return this.id;
+    }
+    
+    public void setID(int id) {
+        this.id = id;
+    }
+
+    public Description getByID(int id) {
+        if (descriptionLookup.containsKey(id)) {
+            return descriptionLookup.get(id);
+        } else {
+            for (AtomDescription atomD : this) {
+                Description d = atomD.getByID(id);
+                if (d != null) {
+                    return d;
+                }
+            }
+        }
+        return null;
+    }
+
+    public Iterator<AtomDescription> iterator() {
+        return atomDescriptions.iterator();
+    }
+
+    public Object clone() {
+    	return new GroupDescription(this);
+    }
+
+    public boolean contains(Description d) {
+        	if (d.getLevel() == GroupDescription.level) {
+        	    // TODO
+    //    		return this.getOffset() == ((GroupDescription) d).getOffset();
+        	    return true;
+        	} else {
+        		for (AtomDescription atom : this.atomDescriptions) {
+        			if (atom.getName().equals(((AtomDescription) d).getName())) {
+        				return true;
+        			}
+        		}
+        		return false;
+        	}
+        }
+
+    public Description shallowCopy() {
+        return new GroupDescription(this.groupName);
+    }
+
+    public Level getLevel() {
+        return GroupDescription.level;
+    }
+
+    public void addSubDescription(Description subDescription) {
+        if (subDescription instanceof AtomDescription) {
+            this.addAtomDescription((AtomDescription) subDescription);
+        } else {
+            // TODO : type safety
+        }
+    }
+
+    public void addCondition(Condition condition) {
+        this.atomConditions.add(condition);
+    }
+
+    public ArrayList<Condition> getConditions() {
+        return this.atomConditions;
+    }
+
+    public void addMeasure(Measure measure) {
+        atomMeasures.add(measure);
+    }
+
+    public List<Measure> getMeasures() {
+        return this.atomMeasures;
+    }
+
+    public int size() {
+        return this.atomDescriptions.size();
+    }
+
+    public ArrayList<AtomDescription> getSubDescriptions() {
+        return this.atomDescriptions;
+    }
+
+    public Description getSubDescriptionAt(int i) {
+        return atomDescriptions.get(i);
+    }
+
+    public String getName() {
+    	return this.groupName;
     }
     
     public Description getPathEnd() {

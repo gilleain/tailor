@@ -167,7 +167,9 @@ public class RunDialog extends JDialog implements ActionListener, TreeSelectionL
                 String type = selectionDialog.getCurrentlySelectedType();
                 Measure measure;
                 if (type.equals("Distance")) {
-                    measure = new DistanceMeasure(paths.get(0), paths.get(1));
+                    // TODO
+                    measure = null;
+//                    measure = new DistanceMeasure(paths.get(0), paths.get(1));
                 } else if (type.equals("Angle")) {
                     measure = new AngleMeasure(paths.get(0), paths.get(1), paths.get(2));
                 } else if (type.equals("Torsion")) {

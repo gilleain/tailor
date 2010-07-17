@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import tailor.Level;
 import tailor.condition.Condition;
 import tailor.datasource.Structure;
 import tailor.description.Description;
@@ -17,6 +18,8 @@ import tailor.description.Description;
  */
 public class Match implements Iterable<Match> {
     
+    private Level level;
+    
     private Description description;
     
     private Structure structure;
@@ -27,10 +30,39 @@ public class Match implements Iterable<Match> {
         this.description = description;
         this.structure = structure;
         this.subMatches = new ArrayList<Match>();
+        
+        // TODO : check the description level against the structure level
+        this.level = description.getLevel();
     }
     
     public Iterator<Match> iterator() {
         return subMatches.iterator();
+    }
+    
+    public Level getLevel() {
+        return this.level;
+    }
+    
+    /**
+     * Lookup the structure in the match corresponding to the description with
+     * the id <code>id</code>.
+     * 
+     * @param id
+     * @return
+     */
+    public Structure getStructureByDescriptionID(int id) {
+        System.out.println("checking " + id + " against " + description.getID());
+        if (description.getID() == id) {
+            return structure;
+        } else {
+            for (Match subMatch : subMatches) {
+                Structure found = subMatch.getStructureByDescriptionID(id);
+                if (found != null) {
+                    return found;
+                }
+            }
+        }
+        return null;
     }
     
     /**

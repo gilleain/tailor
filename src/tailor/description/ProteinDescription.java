@@ -1,7 +1,9 @@
 package tailor.description;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import tailor.Level;
 import tailor.condition.Condition;
@@ -24,6 +26,10 @@ public class ProteinDescription implements Description {
     
     private List<Measure> chainMeasures;
     
+    private Map<Integer, Description> descriptionLookup;
+    
+    private int id;
+    
     public ProteinDescription() {
         this("Motif");
     }
@@ -33,6 +39,9 @@ public class ProteinDescription implements Description {
         this.chainDescriptions = new ArrayList<ChainDescription>();
         this.chainConditions = new ArrayList<Condition>();
         this.chainMeasures = new ArrayList<Measure>();
+        this.descriptionLookup = new HashMap<Integer, Description>();
+        
+        this.id = 0;    // XXX bit of an assumption, surely...
     }
     
     public ProteinDescription(ProteinDescription description) {
@@ -52,69 +61,15 @@ public class ProteinDescription implements Description {
     	return false;
     }
     
-    public boolean contains(Description d) {
-    	if (d.getLevel() == ProteinDescription.level) {
-    		return this.equals(d);
-    	} else {
-    		for (ChainDescription chain : this.chainDescriptions) {
-    			if (chain.contains(d)) {
-    				return true;
-    			}
-    		}
-    		return false;
-    	}
-    }
-    
-    public Object clone() {
-    	return new ProteinDescription(this);
-    }
-    
-    public Description shallowCopy() {
-        return new ProteinDescription(this.name);
-    }
-    
-    public Level getLevel() {
-        return ProteinDescription.level;
-    }
-    
-    public void addSubDescription(Description subDescription) {
-        if (subDescription instanceof ChainDescription) {
-            this.addChainDescription((ChainDescription) subDescription);
-        } else {
-            // TODO : type safety!
-        }
-    }
-    
     public void addChainDescription(ChainDescription chainDescription) {
         this.chainDescriptions.add(chainDescription);
-    }
-    
-    public void addCondition(Condition condition) {
-        this.chainConditions.add(condition);
+        int id = this.id + this.chainDescriptions.size();
+        chainDescription.setID(id);
+        this.descriptionLookup.put(id, chainDescription);
     }
     
     public void addChainCondition(Condition condition) {
         this.chainConditions.add(condition);
-    }
-    
-    public void addMeasure(Measure measure) {
-        chainMeasures.add(measure);
-    }
-    
-    public ArrayList<Condition> getConditions() {
-        return this.chainConditions;
-    }
-    
-    public List<Measure> getMeasures() {
-        return this.chainMeasures;
-    }
-    
-    public ArrayList<ChainDescription> getSubDescriptions() {
-        return this.chainDescriptions;
-    }
-    
-    public Description getSubDescriptionAt(int i) {
-        return chainDescriptions.get(i);
     }
     
     public ArrayList<ChainDescription> getChainDescriptions() {
@@ -155,6 +110,65 @@ public class ProteinDescription implements Description {
         return root;
     }
     
+    public int getID() {
+        return this.id;
+    }
+    
+    public void setID(int id) {
+        this.id = id;
+    }
+    
+    public Description getByID(int id) {
+        if (descriptionLookup.containsKey(id)) {
+            return descriptionLookup.get(id);
+        } else {
+            for (ChainDescription chainD : this.chainDescriptions) {
+                Description d = chainD.getByID(id);
+                if (d != null) {
+                    return d;
+                }
+            }
+        }
+        return null;
+    }
+    
+    public boolean contains(Description d) {
+    	if (d.getLevel() == ProteinDescription.level) {
+    		return this.equals(d);
+    	} else {
+    		for (ChainDescription chain : this.chainDescriptions) {
+    			if (chain.contains(d)) {
+    				return true;
+    			}
+    		}
+    		return false;
+    	}
+    }
+
+    public Object clone() {
+    	return new ProteinDescription(this);
+    }
+
+    public Description shallowCopy() {
+        return new ProteinDescription(this.name);
+    }
+
+    public Level getLevel() {
+        return ProteinDescription.level;
+    }
+
+    public void addSubDescription(Description subDescription) {
+        if (subDescription instanceof ChainDescription) {
+            this.addChainDescription((ChainDescription) subDescription);
+        } else {
+            // TODO : type safety!
+        }
+    }
+
+    public void addCondition(Condition condition) {
+        this.chainConditions.add(condition);
+    }
+
     public ProteinDescription getPath(String chainName, int residuePosition, String atomName) {
         // we don't really need to name paths, but I suppose it could be useful for debugging
         ProteinDescription root = new ProteinDescription(this.name);
@@ -175,6 +189,26 @@ public class ProteinDescription implements Description {
     	return this.name;
     }
     
+    public void addMeasure(Measure measure) {
+        chainMeasures.add(measure);
+    }
+
+    public ArrayList<Condition> getConditions() {
+        return this.chainConditions;
+    }
+
+    public List<Measure> getMeasures() {
+        return this.chainMeasures;
+    }
+
+    public ArrayList<ChainDescription> getSubDescriptions() {
+        return this.chainDescriptions;
+    }
+
+    public Description getSubDescriptionAt(int i) {
+        return chainDescriptions.get(i);
+    }
+
     public int size() {
         return this.chainDescriptions.size();
     }

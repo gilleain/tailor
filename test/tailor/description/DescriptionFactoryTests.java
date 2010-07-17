@@ -51,7 +51,8 @@ public class DescriptionFactoryTests {
             new DistanceBoundCondition("NODistance", a, b, 4, 2);
         chain.addGroupCondition(bound);
         
-        DistanceMeasure measure = new DistanceMeasure(a, b);
+        //TODO
+        DistanceMeasure measure = new DistanceMeasure(0, 1, description);
         
         // TODO : factor below code into separate test? 
         String path = "structures/1a2p.pdb";

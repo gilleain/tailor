@@ -21,6 +21,8 @@ public interface Description extends Cloneable {
     
     public Level getLevel();
     
+    public String getName();
+    
     public void addSubDescription(Description subDescription);
     
     public void addCondition(Condition condition);
@@ -43,5 +45,10 @@ public interface Description extends Cloneable {
     
     public boolean contains(Description d);
     
+    public Description getByID(int id);
+    
+    public void setID(int id);
+    
+    public int getID();
     
 }
