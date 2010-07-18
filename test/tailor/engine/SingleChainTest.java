@@ -59,11 +59,12 @@ public class SingleChainTest {
             factory.getChainDescription("A").getPath(0, "O");
         ChainDescription amineNitrogen = 
             factory.getChainDescription("A").getPath(3, "N");
-        factory.getChainDescription("A").addCondition(
-                new DistanceBoundCondition(
-                        "i.O->(i+3).N", carbonylOxygen, amineNitrogen, 3.5, 1));
         
         Description description = factory.getProduct(); 
+        factory.getChainDescription("A").addCondition(
+                new DistanceBoundCondition(
+                        "i.O->(i+3).N", carbonylOxygen.getID(), amineNitrogen.getID(), description, 3.5, 1));
+        
         description.addMeasure(factory.createPhiMeasure("psi2", 2));
         description.addMeasure(factory.createPsiMeasure("phi2", 2));
         

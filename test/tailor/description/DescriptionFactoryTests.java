@@ -48,7 +48,8 @@ public class DescriptionFactoryTests {
         ChainDescription b = chain.getPath("LYS", "O");
         
         DistanceBoundCondition bound = 
-            new DistanceBoundCondition("NODistance", a, b, 4, 2);
+            new DistanceBoundCondition(
+                    "NODistance", a.getID(), b.getID(), description, 4, 2);
         chain.addGroupCondition(bound);
         
         //TODO

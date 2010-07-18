@@ -32,10 +32,10 @@ public class CatmatTest {
         description.addSubDescription(waterChain);
         description.addCondition(
                 new DistanceBoundCondition(
-                        "i.O-W", carbonylOxygenI, waterOxygen, 3.5, 1));
+                        "i.O-W", carbonylOxygenI.getID(), waterOxygen.getID(), description, 3.5, 1));
         description.addCondition(
                 new DistanceBoundCondition(
-                        "i+2.O-W", carbonylOxygenIPlusTwo, waterOxygen, 3.5, 1));
+                        "i+2.O-W", carbonylOxygenIPlusTwo.getID(), waterOxygen.getID(), description, 3.5, 1));
         description.addMeasure(factory.createPhiMeasure("phi2", 2));
         description.addMeasure(factory.createPhiMeasure("psi2", 2));
         Run run = new Run(filename);
