@@ -42,16 +42,34 @@ public class TorsionMeasure extends Measure {
                             Description descriptionC, Description descriptionD) {
         this("Torsion", descriptionA, descriptionB, descriptionC, descriptionD);
     }
-
-    @Override
-    public Measurement measure(Match match) throws DescriptionException {
+    
+    public double calculate(Match match) {
         Vector a = CenterFinder.findCenter(descriptionA, match);
         Vector b = CenterFinder.findCenter(descriptionB, match);
         Vector c = CenterFinder.findCenter(descriptionC, match);
         Vector d = CenterFinder.findCenter(descriptionD, match);
-        
-        double torsion = Geometry.torsion(a, b, c, d);
-        return new Measurement(this.getName(), torsion);
+        return Geometry.torsion(a, b, c, d);        
+    }
+
+    @Override
+    public Measurement measure(Match match) throws DescriptionException {
+        return new Measurement(this.getName(), calculate(match));
+    }
+    
+    public Description getDescriptionA() {
+        return this.descriptionA;
+    }
+    
+    public Description getDescriptionB() {
+        return this.descriptionB;
+    }
+    
+    public Description getDescriptionC() {
+        return this.descriptionC;
+    }
+    
+    public Description getDescriptionD() {
+        return this.descriptionD;
     }
     
     public void setDescriptionA(Description descriptionA) {

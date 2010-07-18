@@ -41,16 +41,16 @@ public class DistanceMeasure extends Measure {
 		this.idB = idB;
 		this.context = context;
 	}
+	
+	public double calculate(Match match) {
+	    Vector a = CenterFinder.findCenter(idA, match);
+        Vector b = CenterFinder.findCenter(idB, match);
+        return Geometry.distance(a, b);
+	}
 
 	@Override
 	public Measurement measure(Match match) throws DescriptionException {
-		Vector a = CenterFinder.findCenter(idA, match);
-		Vector b = CenterFinder.findCenter(idB, match);
-        
-//        System.err.println("a " + a + " b " + b);
-		
-		double distance = Geometry.distance(a, b);
-		return new Measurement(this.getName(), new Double(distance));
+		return new Measurement(this.getName(), calculate(match));
 	}
     
     public String toString() {

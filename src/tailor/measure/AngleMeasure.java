@@ -40,15 +40,16 @@ public class AngleMeasure extends Measure {
         this("Angle", descriptionA, descriptionB, descriptionC);
     }
 
-
-    @Override
-    public Measurement measure(Match match) throws DescriptionException {
+    public double calculate(Match match) {
         Vector a = CenterFinder.findCenter(descriptionA, match);
         Vector b = CenterFinder.findCenter(descriptionA, match);
         Vector c = CenterFinder.findCenter(descriptionA, match);
-        
-        double angle = Geometry.angle(a, b, c);
-        return new Measurement(this.getName(), angle);
+        return Geometry.angle(a, b, c);
+    }
+
+    @Override
+    public Measurement measure(Match match) throws DescriptionException {
+        return new Measurement(this.getName(), calculate(match));
     }
     
     public String toString() {

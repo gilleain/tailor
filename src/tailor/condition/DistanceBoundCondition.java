@@ -2,9 +2,7 @@ package tailor.condition;
 
 import tailor.description.Description;
 import tailor.engine.Match;
-import tailor.geometry.CenterFinder;
-import tailor.geometry.Geometry;
-import tailor.geometry.Vector;
+import tailor.measure.DistanceMeasure;
 
 
 /**
@@ -16,15 +14,14 @@ import tailor.geometry.Vector;
 public class DistanceBoundCondition implements Condition {
 	
 	private String name;
-	private Description descriptionA;
-	private Description descriptionB;
+	private DistanceMeasure distanceMeasure;
 	private double center;
 	private double range;
 	
-	public DistanceBoundCondition(String name, Description descriptionA, Description descriptionB, double center, double range) {
+	public DistanceBoundCondition(String name, int idA, int idB,
+	        Description context, double center, double range) {
 		this.name = name;
-		this.descriptionA = descriptionA;
-		this.descriptionB = descriptionB;
+		this.distanceMeasure = new DistanceMeasure(idA, idB, context);
 		this.center = center;
 		this.range = range;
 	}
@@ -42,8 +39,7 @@ public class DistanceBoundCondition implements Condition {
 		if (other instanceof DistanceBoundCondition) {
 			DistanceBoundCondition o = (DistanceBoundCondition) other;
 			if (this.name.equals(o.name) &&
-					this.descriptionA == o.descriptionA &&
-					this.descriptionB == o.descriptionB &&
+					this.distanceMeasure == o.distanceMeasure &&
 					this.center == o.center &&
 					this.range == o.range) {
 				return true;
@@ -53,10 +49,7 @@ public class DistanceBoundCondition implements Condition {
 	}
 
 	public boolean satisfiedBy(Match match) {
-	    Vector a = CenterFinder.findCenter(descriptionA, match);
-	    Vector b = CenterFinder.findCenter(descriptionB, match);
-
-	    double d = Geometry.distance(a, b);
+	    double d = distanceMeasure.calculate(match);
 //        System.err.println("distance " + d);
 	    boolean satisfied = (center - range < d) && (center + range > d);
 	    if (satisfied) {

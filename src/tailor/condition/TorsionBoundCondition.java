@@ -2,19 +2,14 @@ package tailor.condition;
 
 import tailor.description.Description;
 import tailor.engine.Match;
-import tailor.geometry.CenterFinder;
-import tailor.geometry.Geometry;
-import tailor.geometry.Vector;
+import tailor.measure.TorsionMeasure;
 
 
 public class TorsionBoundCondition implements Condition {
 	
 	private String name;
 	private String letterSymbol;
-	private Description descriptionA;
-	private Description descriptionB;
-	private Description descriptionC;
-	private Description descriptionD;
+	private TorsionMeasure torsionMeasure;
 	private double midPoint;
 	private double range;
 	
@@ -33,7 +28,8 @@ public class TorsionBoundCondition implements Condition {
 	}
 	
 	/**
-	 * A Condition that sets a bound on what a torsion between 4 Descriptions (probably atoms) can be.
+	 * A Condition that sets a bound on what a torsion between 4 Descriptions 
+	 * (probably atoms) can be.
 	 * 
 	 * @param name
 	 * @param descriptionA
@@ -43,46 +39,46 @@ public class TorsionBoundCondition implements Condition {
 	 * @param midPoint
 	 * @param range
 	 */
-	public TorsionBoundCondition(String name, Description descriptionA, Description descriptionB, 
-			Description descriptionC, Description descriptionD, double midPoint, double range) {
+	public TorsionBoundCondition(String name, Description descriptionA, 
+	        Description descriptionB, Description descriptionC, 
+	        Description descriptionD, double midPoint, double range) {
 		this(name, midPoint, range);
-		this.descriptionA = descriptionA;
-		this.descriptionB = descriptionB;
-		this.descriptionC = descriptionC;
-		this.descriptionD = descriptionD;
+		this.torsionMeasure = 
+		    new TorsionMeasure(
+		            descriptionA, descriptionB, descriptionC, descriptionD);
 	}
 	
 
 	public Description getDescriptionA() {
-		return this.descriptionA;
+		return this.torsionMeasure.getDescriptionA();
 	}
 	
 	public Description getDescriptionB() {
-		return this.descriptionB;
+	    return this.torsionMeasure.getDescriptionB();
 	}
 	
 	public Description getDescriptionC() {
-		return this.descriptionC;
+	    return this.torsionMeasure.getDescriptionC();
 	}
 	
 	public Description getDescriptionD() {
-		return this.descriptionD;
+	    return this.torsionMeasure.getDescriptionD();
 	}
 	
 	public void setDescriptionA(Description descriptionA) {
-		this.descriptionA = descriptionA;
+	    this.torsionMeasure.setDescriptionA(descriptionA);
 	}
 	
 	public void setDescriptionB(Description descriptionB) {
-		this.descriptionB = descriptionB;
+	    this.torsionMeasure.setDescriptionA(descriptionB);
 	}
 	
 	public void setDescriptionC(Description descriptionC) {
-		this.descriptionC = descriptionC;
+	    this.torsionMeasure.setDescriptionA(descriptionC);
 	}
 	
 	public void setDescriptionD(Description descriptionD) {
-		this.descriptionD = descriptionD;
+	    this.torsionMeasure.setDescriptionA(descriptionD);
 	}
 	
 	public String getName() {
@@ -98,20 +94,19 @@ public class TorsionBoundCondition implements Condition {
 	}
 	
 	public boolean contains(Description d) {
-		return this.descriptionD.contains(d) 
-				|| this.descriptionC.contains(d)
-				|| this.descriptionB.contains(d)
-				|| this.descriptionA.contains(d);
+//		return this.descriptionD.contains(d) 
+//				|| this.descriptionC.contains(d)
+//				|| this.descriptionB.contains(d)
+//				|| this.descriptionA.contains(d);
+	    // TODO
+	    return false;
 	}
 
     public Object clone() {
     	TorsionBoundCondition clonedCopy 
     		= new TorsionBoundCondition(this.name, this.midPoint, this.range);
     	clonedCopy.letterSymbol = this.letterSymbol;
-    	clonedCopy.descriptionA = (Description) this.descriptionA.clone();
-    	clonedCopy.descriptionB = (Description) this.descriptionB.clone();
-    	clonedCopy.descriptionC = (Description) this.descriptionC.clone();
-    	clonedCopy.descriptionD = (Description) this.descriptionD.clone();
+//    	clonedCopy.torsionMeasure = this.torsionMeasure.clone(); TODO
     	return clonedCopy;
     }
     
@@ -119,10 +114,7 @@ public class TorsionBoundCondition implements Condition {
 		if (other instanceof TorsionBoundCondition) {
 			TorsionBoundCondition o = (TorsionBoundCondition) other;
 			if (this.name.equals(o.name) &&
-					this.descriptionA == o.descriptionA &&
-					this.descriptionB == o.descriptionB &&
-					this.descriptionC == o.descriptionC &&
-					this.descriptionD == o.descriptionD &&
+					this.torsionMeasure == o.torsionMeasure &&
 					this.midPoint == o.midPoint &&
 					this.range == o.range) {
 				return true;
@@ -132,12 +124,7 @@ public class TorsionBoundCondition implements Condition {
 	}
 
 	public boolean satisfiedBy(Match match) {
-	    Vector a = CenterFinder.findCenter(descriptionA, match);
-	    Vector b = CenterFinder.findCenter(descriptionB, match);
-	    Vector c = CenterFinder.findCenter(descriptionC, match);
-	    Vector d = CenterFinder.findCenter(descriptionD, match);
-
-	    double result = Geometry.torsion(a, b, c, d);
+	    double result = torsionMeasure.calculate(match);
 	    boolean satisfied = 
 	        midPoint - range < result && midPoint + range > result;
 	    if (satisfied) {
@@ -162,18 +149,20 @@ public class TorsionBoundCondition implements Condition {
 	}
 	
     public String toXml() {
-    	String s = String.format("<TorsionBoundCondition midPoint=\"%s\" range=\"%s\">", 
+    	String s = String.format(
+    	        "<TorsionBoundCondition midPoint=\"%s\" range=\"%s\">", 
     			this.midPoint, this.range);
-    	s += "\t\t\t" + this.descriptionA.toXmlPathString();
-    	s += "\t\t\t" + this.descriptionB.toXmlPathString();
-    	s += "\t\t\t" + this.descriptionC.toXmlPathString();
-    	s += "\t\t\t" + this.descriptionD.toXmlPathString();
+    	s += "\t\t\t" + this.torsionMeasure.getDescriptionA().toXmlPathString();
+    	s += "\t\t\t" + this.torsionMeasure.getDescriptionB().toXmlPathString();
+    	s += "\t\t\t" + this.torsionMeasure.getDescriptionC().toXmlPathString();
+    	s += "\t\t\t" + this.torsionMeasure.getDescriptionD().toXmlPathString();
     	s += "</TorsionBoundCondition>";
     	return s;
     }
 	
 	public String toString() {
-		return String.format("%s (%s : %s)", this.name, this.midPoint - this.range, this.midPoint + this.range);
+		return String.format("%s (%s : %s)", 
+		     this.name, this.midPoint - this.range, this.midPoint + this.range);
 	}
 
 }
