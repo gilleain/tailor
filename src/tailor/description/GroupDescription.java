@@ -59,7 +59,7 @@ public class GroupDescription implements Description, Iterable<AtomDescription> 
     public void addAtomDescription(AtomDescription atomDescription) {
         this.atomDescriptions.add(atomDescription);
         int id = this.id + atomDescriptions.size();
-        atomDescription.setID(id);
+//        atomDescription.setID(id);
         this.descriptionLookup.put(id, atomDescription);
     }
     

@@ -62,7 +62,7 @@ public class ChainDescription implements Description, Iterable<GroupDescription>
     public void addGroupDescription(GroupDescription groupDescription) {
         this.groupDescriptions.add(groupDescription);
         int id = this.id + groupDescriptions.size();
-        groupDescription.setID(id);
+//        groupDescription.setID(id);
         this.descriptionLookup.put(id, groupDescription);
     }
     

@@ -64,7 +64,7 @@ public class ProteinDescription implements Description {
     public void addChainDescription(ChainDescription chainDescription) {
         this.chainDescriptions.add(chainDescription);
         int id = this.id + this.chainDescriptions.size();
-        chainDescription.setID(id);
+//        chainDescription.setID(id);
         this.descriptionLookup.put(id, chainDescription);
     }
     

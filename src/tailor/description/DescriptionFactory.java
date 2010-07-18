@@ -42,6 +42,14 @@ public class DescriptionFactory {
 	    this.addBackboneAmineHydrogens = value;
 	}
 	
+	public int lookupID(int groupIndex, String atomName) {
+	    // XXX assumes that there is only one chain
+	    ChainDescription chainD = root.getChainDescription(DEFAULT_CHAIN_NAME);
+	    GroupDescription groupD = chainD.getGroupDescription(groupIndex);
+	    AtomDescription  atomD  = groupD.getAtomDescription(atomName);
+	    return atomD.getID();
+	}
+	
 	public AtomDescription lookup(Description path) {
 		return this.lookup(path, this.root);
 	}
@@ -177,6 +185,7 @@ public class DescriptionFactory {
 	}
 	
 	private void addResidue(ChainDescription chain, GroupDescription residue) {
+	    chain.addGroupDescription(residue);
 		residue.addAtomDescription("N");
 		if (addBackboneAmineHydrogens) {
 		    residue.addAtomDescription("H");
@@ -184,7 +193,6 @@ public class DescriptionFactory {
 		residue.addAtomDescription("CA");
 		residue.addAtomDescription("C");
 		residue.addAtomDescription("O");
-		chain.addGroupDescription(residue);
 	}
 	
 	public void addAtomToResidue(
