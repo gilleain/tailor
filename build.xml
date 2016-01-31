@@ -67,8 +67,21 @@
         		<attribute name="Main-Class" value="tailor.app.RunFrame"/>
         	</manifest>
         	<include name="descriptions/*.xml"/>
-        	<fileset dir="classes"/>
+        	<fileset dir="build"/>
         </jar>
         <copy file="tailor.jar" todir="${site.dir}"/>
     </target>
+
+    <target name="compile" description="compile classes">
+     <javac srcdir="src" destdir="build" includeantruntime="false">
+	<classpath>
+		<pathelement path="Jmol.jar"/>
+		<!--
+		     <pathelement path="build"/>
+	<pathelement path="develjar/junit-4.10.jar"/>
+	<pathelement path="${CDK_dir}/jar/signatures-1.0.jar"/>-->
+	</classpath>
+     </javac>
+    </target>
+
 </project>

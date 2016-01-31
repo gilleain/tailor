@@ -116,7 +116,7 @@ public class TorsionDial extends Canvas implements MouseListener, MouseMotionLis
         this.tics[0] = new Tic(new Line2D.Double(this.center, p1), "+90", p1.x - stringWidth / 2, p1.y - stringHeight / 2);
         this.tics[1] = new Tic(new Line2D.Double(this.center, p2), "0", p2.x, p2.y);
         this.tics[2] = new Tic(new Line2D.Double(this.center, p3), "-90", p3.x, p3.y + stringHeight);
-        this.tics[3] = new Tic(new Line2D.Double(this.center, p4), "±180", p4.x - stringWidth, p4.y);
+        this.tics[3] = new Tic(new Line2D.Double(this.center, p4), "+/-180", p4.x - stringWidth, p4.y);
     }
     
     public void positionStartHandle() {
