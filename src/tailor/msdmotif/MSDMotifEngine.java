@@ -186,6 +186,7 @@ public class MSDMotifEngine implements Engine {
     		fileOut.write(buf, 0, l);
     	}
     	in.close();
+    	fileOut.close();
     	connection.disconnect();
     }
     

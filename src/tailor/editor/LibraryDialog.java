@@ -22,7 +22,7 @@ public class LibraryDialog extends JDialog implements ActionListener, ListSelect
 	
 	private JLabel directoryLabel;
 	
-	private JList descriptionList;
+	private JList<Description> descriptionList;
 	
 	private JButton confirmButton;
 	
@@ -54,7 +54,7 @@ public class LibraryDialog extends JDialog implements ActionListener, ListSelect
 		final int w = 250;
 		final int h = 100;
 		
-		descriptionList = new JList(descriptions.toArray());
+		descriptionList = new JList<Description>((Description[]) descriptions.toArray());
 		descriptionList.setCellRenderer(new DiagramListCellRenderer(w, h, descriptions));
 		descriptionList.addListSelectionListener(this);
 		

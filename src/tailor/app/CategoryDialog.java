@@ -24,7 +24,7 @@ import tailor.app.filter.BoundShape;
 public class CategoryDialog extends JDialog implements ActionListener {
     
     private JLabel[] residueNameLabels;
-    private JComboBox[] boundTypeComboBoxes;
+    private JComboBox<String>[] boundTypeComboBoxes;
     
     private TorsionDial[] torsionX;
     private TorsionDial[] torsionY;
@@ -64,6 +64,7 @@ public class CategoryDialog extends JDialog implements ActionListener {
         this.setFieldsFromCategory(category);
     }
     
+    @SuppressWarnings("unchecked")
     public void createInterface(Category category) {
         JPanel namePanel = new JPanel();
         this.nameLabel = new JLabel("Name");
@@ -99,7 +100,7 @@ public class CategoryDialog extends JDialog implements ActionListener {
             this.torsionY[i] = new TorsionDial(150, 150);
             controlPanel.add(this.torsionY[i]);
             
-            this.boundTypeComboBoxes[i] = new JComboBox(CategoryDialog.boundTypes);
+            this.boundTypeComboBoxes[i] = new JComboBox<String>(CategoryDialog.boundTypes);
             controlPanel.add(boundTypeComboBoxes[i]);
             
             this.rotationFields[i] = new JTextField("0");

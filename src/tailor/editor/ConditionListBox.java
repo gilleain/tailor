@@ -15,11 +15,11 @@ import tailor.condition.Condition;
 
 public class ConditionListBox extends JPanel {
 	
-	private JList conditionList;
+	private JList<Condition> conditionList;
 	
 	public ConditionListBox() {
 		
-		this.conditionList = new JList(new DefaultListModel());
+		this.conditionList = new JList<Condition>(new DefaultListModel<Condition>());
 		this.conditionList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		this.setPreferredSize(new Dimension(200, 200));
 		
@@ -40,8 +40,8 @@ public class ConditionListBox extends JPanel {
 		this.conditionList.setSelectedIndex(this.getListModel().size() - 1);
 	}
 	
-	public DefaultListModel getListModel() { 
-		return (DefaultListModel) this.conditionList.getModel();
+	public DefaultListModel<Condition> getListModel() { 
+		return (DefaultListModel<Condition>) this.conditionList.getModel();
 	}
     
     public void setConditions(Description description) {

@@ -5,7 +5,7 @@ import java.awt.CardLayout;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.ButtonGroup;
 import javax.swing.JPanel;
@@ -141,8 +141,8 @@ public class MultipleAnalysisPanel extends JPanel
 		}
 		System.out.println();
 		if (selectedColumns.length > 1) {
-			ArrayList<String> ids = this.resultTable.getIdColumn();
-			ArrayList[] data = this.resultTable.getSelectedColumnData();
+			List<String> ids = this.resultTable.getIdColumn();
+			List<String>[] data = this.resultTable.getSelectedColumnData();
 			this.plotPanel.addColumns(ids, data);
 		}
 	}

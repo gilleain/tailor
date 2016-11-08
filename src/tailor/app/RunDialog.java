@@ -27,7 +27,6 @@ import tailor.editor.DescriptionTreeView;
 import tailor.editor.SelectionDialog;
 import tailor.engine.Run;
 import tailor.measure.AngleMeasure;
-import tailor.measure.DistanceMeasure;
 import tailor.measure.Measure;
 import tailor.measure.TorsionMeasure;
 
@@ -36,11 +35,11 @@ public class RunDialog extends JDialog implements ActionListener, TreeSelectionL
     
     private DescriptionTreeView treeView;
     
-    private JList measureList;
+    private JList<Measure> measureList;
     
     private JTextField directoryField; 
     
-    private JList filenameList;
+    private JList<String> filenameList;
     
     private Run run;
     
@@ -71,7 +70,7 @@ public class RunDialog extends JDialog implements ActionListener, TreeSelectionL
         removeMeasureButton.addActionListener(this);
         measureControls.add(removeMeasureButton);
         
-        this.measureList = new JList(new DefaultListModel());
+        this.measureList = new JList<Measure>(new DefaultListModel<Measure>());
         this.measureList.setPreferredSize(new Dimension(150, 200));
         
         measurePanel.add(measureControls, BorderLayout.NORTH);
@@ -84,7 +83,7 @@ public class RunDialog extends JDialog implements ActionListener, TreeSelectionL
         this.directoryField.setBorder(BorderFactory.createCompoundBorder(
                 BorderFactory.createTitledBorder("Directory"),
                 BorderFactory.createEmptyBorder(1, 1, 1, 1)));
-        this.filenameList = new JList();
+        this.filenameList = new JList<String>();
         this.filenameList.setPreferredSize(new Dimension(150, 250));
         this.filenameList.setBorder(BorderFactory.createCompoundBorder(
                 BorderFactory.createTitledBorder("Files"),
@@ -125,7 +124,7 @@ public class RunDialog extends JDialog implements ActionListener, TreeSelectionL
     
     public Run getRun() {
         // get the measures from the list and add to the Run
-        DefaultListModel model = (DefaultListModel) this.measureList.getModel();
+        DefaultListModel<Measure> model = (DefaultListModel<Measure>) this.measureList.getModel();
         for (int i = 0; i < model.size(); i++) {
             Measure measure = (Measure) model.get(i);
             this.run.getDescription().addMeasure(measure);
@@ -177,7 +176,7 @@ public class RunDialog extends JDialog implements ActionListener, TreeSelectionL
                 } else {
                     return; // just in case
                 }
-                ((DefaultListModel) this.measureList.getModel()).addElement(measure);
+                ((DefaultListModel<Measure>) this.measureList.getModel()).addElement(measure);
             }
             
         } else if (command.equals("Remove")) {

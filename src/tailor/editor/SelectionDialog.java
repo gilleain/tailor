@@ -38,7 +38,7 @@ public class SelectionDialog extends JDialog implements ActionListener, TreeSele
     
     private ArrayList<Description> selectedDescriptions;
     
-    private JComboBox typeSelector;
+    private JComboBox<String> typeSelector;
     
     private JButton okayButton;
     
@@ -59,7 +59,7 @@ public class SelectionDialog extends JDialog implements ActionListener, TreeSele
         
         String[] typeNames = { "Distance", "Angle", "Torsion" };
         
-        this.typeSelector = new JComboBox(typeNames);
+        this.typeSelector = new JComboBox<String>(typeNames);
         this.typeSelector.setActionCommand("CHANGE");
         this.typeSelector.addActionListener(this); 
 

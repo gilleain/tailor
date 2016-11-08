@@ -31,6 +31,7 @@ public class SimpleTableModel extends RowBasedTableModel {
 			bits = line.split("\t");
 			this.addRow(bits);
 		}
+		bufferedReader.close();
 	}
 
 	public void setColumnHeaders(String[] headers) {

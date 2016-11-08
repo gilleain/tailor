@@ -15,11 +15,11 @@ import tailor.measure.Measure;
 
 public class MeasureListBox extends JPanel {
 	
-	private JList measureList;
+	private JList<Measure> measureList;
 	
 	public MeasureListBox() {
 		
-		this.measureList = new JList(new DefaultListModel());
+		this.measureList = new JList<Measure>(new DefaultListModel<Measure>());
 		this.measureList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		this.setPreferredSize(new Dimension(200, 200));
 		
@@ -40,13 +40,13 @@ public class MeasureListBox extends JPanel {
 		this.measureList.setSelectedIndex(this.getListModel().size() - 1);
 	}
 	
-	public DefaultListModel getListModel() { 
-		return (DefaultListModel) this.measureList.getModel();
+	public DefaultListModel<Measure> getListModel() { 
+		return (DefaultListModel<Measure>) this.measureList.getModel();
 	}
 	
 	public ArrayList<Measure> getMeasures() {
 		ArrayList<Measure> measures = new ArrayList<Measure>();
-		DefaultListModel model = this.getListModel();
+		DefaultListModel<Measure> model = this.getListModel();
 		for (int i = 0; i < model.size(); i++) {
 			measures.add((Measure) model.get(i));
 		}

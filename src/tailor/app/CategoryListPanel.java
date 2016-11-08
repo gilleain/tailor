@@ -16,10 +16,10 @@ import javax.swing.ListSelectionModel;
  */
 public class CategoryListPanel extends JPanel {
     
-    private JList categoryDisplay;
+    private JList<Category> categoryDisplay;
     
     public CategoryListPanel() {
-        this.categoryDisplay = new JList(new DefaultListModel());
+        this.categoryDisplay = new JList<Category>(new DefaultListModel<Category>());
         this.categoryDisplay.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         //this.categoryDisplay.setPreferredSize(new Dimension(200, 400));
         JScrollPane scrollPane = new JScrollPane(this.categoryDisplay);
@@ -37,8 +37,8 @@ public class CategoryListPanel extends JPanel {
         this.getListModel().removeElement(category);
     }
     
-    public DefaultListModel getListModel() {
-        return (DefaultListModel) this.categoryDisplay.getModel();
+    public DefaultListModel<Category> getListModel() {
+        return (DefaultListModel<Category>) this.categoryDisplay.getModel();
     }
     
     public void deleteSelected() {

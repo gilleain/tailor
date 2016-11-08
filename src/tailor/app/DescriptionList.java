@@ -17,10 +17,10 @@ import tailor.description.Description;
 public class DescriptionList extends JPanel {
 	
 	private App app;
-	private JList list;
+	private JList<Description> list;
 	
 	public DescriptionList(Border border, App app) {
-		this.list = new JList(new DefaultListModel());
+		this.list = new JList<Description>(new DefaultListModel<Description>());
 		this.list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		this.add(this.list);
 		
@@ -73,8 +73,8 @@ public class DescriptionList extends JPanel {
 		return (Description) this.getListModel().getElementAt(this.list.getSelectedIndex());
 	}
 
-	 public DefaultListModel getListModel() {
-		 return (DefaultListModel) this.list.getModel();
+	 public DefaultListModel<Description> getListModel() {
+		 return (DefaultListModel<Description>) this.list.getModel();
 	 }
 
 }

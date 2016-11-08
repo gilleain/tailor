@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
@@ -41,14 +43,17 @@ public class XmlDescriptionReader {
         
         private AtomDescription currentAtom;
         
-        private HashMap dataStore;
+        private Map<String, String> dataStore;
+        
+        private Map<String, List<Description>> pathMap;
         
         public XmlMotifHandler() {
             this.currentProtein = null;
             this.currentChain = null;
             this.currentGroup = null;
             this.currentAtom = null;
-            this.dataStore = new HashMap();
+            this.dataStore = new HashMap<String, String>();
+            this.pathMap = new HashMap<String, List<Description>>();
         }
         
         public void startElement(String namespaceURI, String sName, String qName, Attributes attrs) throws SAXException {
@@ -103,12 +108,12 @@ public class XmlDescriptionReader {
                 // store the path
                 System.err.println("adding path " + path.toPathString());
                 if (this.dataStore.containsKey("paths")) {
-                    ArrayList paths = (ArrayList) this.dataStore.get("paths");
+                    List<Description> paths = this.pathMap.get("paths");
                     paths.add(path);
                 } else {
-                    ArrayList paths = new ArrayList();
+                    List<Description> paths = new ArrayList<>();
                     paths.add(path);
-                    this.dataStore.put("paths", paths);
+                    this.pathMap.put("paths", paths);
                 }
             }
         }
@@ -120,11 +125,11 @@ public class XmlDescriptionReader {
                 double haMax = Double.parseDouble((String) this.dataStore.get("haMax"));
                 double dhaMin = Double.parseDouble((String) this.dataStore.get("dhaMin"));
                 double haaMin = Double.parseDouble((String) this.dataStore.get("haaMin"));
-                ArrayList paths = (ArrayList) this.dataStore.get("paths");
-                Description d  = (Description) paths.get(0);
-                Description h  = (Description) paths.get(1);
-                Description a  = (Description) paths.get(2);
-                Description aa = (Description) paths.get(3);
+                List<Description> paths = this.pathMap.get("paths");
+                Description d  = paths.get(0);
+                Description h  = paths.get(1);
+                Description a  = paths.get(2);
+                Description aa = paths.get(3);
                 HBondCondition hbond = new HBondCondition(d, h, a, aa, haMax, dhaMin, haaMin);
                 
                 if (this.dataStore.containsKey("isNegated")) {

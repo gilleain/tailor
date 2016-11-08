@@ -39,7 +39,7 @@ public class App implements ActionListener, CategoryChangeListener {
     
     private DescriptionList descriptionList;
     
-    private JList runList;
+    private JList<Run> runList;
     
     private ResultTable resultTable;
     
@@ -64,7 +64,7 @@ public class App implements ActionListener, CategoryChangeListener {
         this.descriptionList = new DescriptionList(border, this);
         motifAndRunPanel.add(this.descriptionList, BorderLayout.NORTH);
         
-        this.runList = new JList(new DefaultListModel());
+        this.runList = new JList<Run>(new DefaultListModel<Run>());
         this.runList.setPreferredSize(new Dimension(100, 300));
         motifAndRunPanel.add(new JScrollPane(this.runList), BorderLayout.CENTER);
         
@@ -196,7 +196,7 @@ public class App implements ActionListener, CategoryChangeListener {
     public void close() {
         this.resultTable.clearData();
 //        this.plotPanel.clearPoints();		// FIXME : close the plot window?
-        ((DefaultListModel)this.runList.getModel()).clear();
+        ((DefaultListModel<Run>)this.runList.getModel()).clear();
         this.descriptionList.clear();
         this.jMolPanel.clear();
     }
@@ -217,7 +217,7 @@ public class App implements ActionListener, CategoryChangeListener {
     }
     
     private void addRunToList(Run run) {
-    	((DefaultListModel) this.runList.getModel()).addElement(run);
+    	((DefaultListModel<Run>) this.runList.getModel()).addElement(run);
     }
     
     public void createRun() {

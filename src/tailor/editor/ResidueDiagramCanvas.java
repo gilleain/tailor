@@ -8,6 +8,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import javax.swing.JPanel;
 import javax.swing.Scrollable;
@@ -140,9 +141,9 @@ public class ResidueDiagramCanvas extends JPanel implements MouseListener, Scrol
 		this.diagram.relayout(this.width / 2, this.height / 2);
 	}
  	
-	public HashMap createMap(DescriptionFactory factory) {
-		HashMap map = new HashMap();
-		ArrayList<Symbol> symbols = this.diagram.getBackboneSymbols();
+	public HashMap<Symbol, AtomDescription> createMap(DescriptionFactory factory) {
+		HashMap<Symbol, AtomDescription> map = new HashMap<Symbol, AtomDescription>();
+		List<Symbol> symbols = this.diagram.getBackboneSymbols();
 		
 		ChainDescription chain = factory.getChainDescription("A");	// TODO : >1 chain?
 		int symbolIndex = 0;

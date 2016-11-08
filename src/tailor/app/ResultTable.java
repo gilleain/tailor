@@ -7,6 +7,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -179,13 +180,14 @@ public class ResultTable extends JPanel {
 		return idColumn;
 	}
 	
-	public ArrayList[] getSelectedColumnData() {
+	public List<String>[] getSelectedColumnData() {
 		int[] selectedColumnIndices = this.table.getSelectedColumns();
 		int rowCount = this.table.getRowCount();
-		ArrayList<String>[] columns = new ArrayList[selectedColumnIndices.length];
+		@SuppressWarnings("unchecked")
+        ArrayList<String>[] columns = new ArrayList[selectedColumnIndices.length];
 		int i = 0;
 		for (int index : selectedColumnIndices) {
-			columns[i] = new ArrayList();
+			columns[i] = new ArrayList<String>();
 			for (int row = 0; row < rowCount; row++) {
 				columns[i].add((String)this.table.getValueAt(row, index));
 			}

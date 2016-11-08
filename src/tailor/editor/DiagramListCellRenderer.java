@@ -15,7 +15,7 @@ import javax.swing.ListCellRenderer;
 import tailor.description.Description;
 import tailor.description.ProteinDescription;
 
-public class DiagramListCellRenderer extends JLabel implements ListCellRenderer {
+public class DiagramListCellRenderer extends JLabel implements ListCellRenderer<Description> {
 	
 	private final int w;
 	private final int h;
@@ -65,18 +65,18 @@ public class DiagramListCellRenderer extends JLabel implements ListCellRenderer 
 	}
 	
 	public Component getListCellRendererComponent(
-		       JList list,
-		       Object value,            // value to display
+		       JList<? extends Description> list,
+		       Description value,            // value to display
 		       int index,               // cell index
 		       boolean isSelected,      // is the cell selected
 		       boolean cellHasFocus) {   // the list and the cell have the focus
 		
 		if (isSelected) {
-			this.setIcon(this.selectedIconMap.get((Description)value));
+			this.setIcon(this.selectedIconMap.get(value));
 			setBackground(list.getSelectionBackground());
 			setForeground(list.getSelectionForeground());
 		} else {
-			this.setIcon(this.unselectedIconMap.get((Description)value));
+			this.setIcon(this.unselectedIconMap.get(value));
 			setBackground(list.getBackground());
 			setForeground(list.getForeground());
 		}
@@ -84,4 +84,5 @@ public class DiagramListCellRenderer extends JLabel implements ListCellRenderer 
 		setOpaque(false);
 		return this;
 	}
+
 }

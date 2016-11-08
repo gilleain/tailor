@@ -10,6 +10,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
@@ -46,7 +47,7 @@ public class RamachandranPlotPanel extends JPanel {
         return this.canvas.numberOfPointLists();
     }
 	
-	public void addColumns(ArrayList<String> ids, ArrayList[] columns) {
+	public void addColumns(List<String> ids, List<String>[] columns) {
 		if (columns.length % 2 != 0) {
 			System.err.println("Trying to add uneven number of columns! : " + columns.length);
             return;
@@ -141,8 +142,9 @@ public class RamachandranPlotPanel extends JPanel {
         
         // read in the data file
         ArrayList<String[]> rowData = new ArrayList<String[]>();
+        BufferedReader bufferedReader = null;
         try {
-            BufferedReader bufferedReader = new BufferedReader(new FileReader(dataFilePath));
+            bufferedReader = new BufferedReader(new FileReader(dataFilePath));
             String line;
             while ((line = bufferedReader.readLine()) != null) {
                 String[] bits = line.split("\t");
@@ -154,6 +156,14 @@ public class RamachandranPlotPanel extends JPanel {
         } catch (IOException i) {
             System.err.println("IO error");
             System.exit(1);
+        } finally {
+            if (bufferedReader != null) {
+                try {
+                    bufferedReader.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
         }
         
         // parse the column numbers and get the data in column form
