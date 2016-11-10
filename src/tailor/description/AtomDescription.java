@@ -3,11 +3,11 @@ package tailor.description;
 import java.util.ArrayList;
 import java.util.List;
 
-import tailor.Level;
 import tailor.condition.Condition;
 import tailor.condition.PropertyCondition;
 import tailor.datasource.Structure;
 import tailor.measure.Measure;
+import tailor.structure.Level;
 
 
 /**

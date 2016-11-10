@@ -4,13 +4,13 @@ import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.List;
 
-import tailor.Level;
 import tailor.condition.Condition;
 import tailor.condition.PropertyCondition;
 import tailor.datasource.ResultsPrinter;
 import tailor.datasource.Structure;
 import tailor.datasource.StructureSource;
 import tailor.description.Description;
+import tailor.structure.Level;
 
 /**
  * Matches descriptions that only cover a single chain. If the structure has

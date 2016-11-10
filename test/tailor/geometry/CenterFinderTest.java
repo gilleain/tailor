@@ -2,7 +2,6 @@ package tailor.geometry;
 
 import org.junit.Test;
 
-import tailor.Level;
 import tailor.condition.PropertyCondition;
 import tailor.datasource.Structure;
 import tailor.description.AtomDescription;
@@ -13,6 +12,7 @@ import tailor.description.GroupDescription;
 import tailor.description.ProteinDescription;
 import tailor.engine.Match;
 import tailor.measure.DistanceMeasure;
+import tailor.structure.Level;
 
 public class CenterFinderTest {
     

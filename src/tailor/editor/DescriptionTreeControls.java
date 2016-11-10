@@ -11,7 +11,7 @@ import javax.swing.JToolBar;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 
-import tailor.Level;
+import tailor.structure.Level;
 
 /**
  * @author maclean

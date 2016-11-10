@@ -5,11 +5,11 @@ import java.util.List;
 import org.junit.Assert;
 import org.junit.Test;
 
-import tailor.Level;
 import tailor.datasource.Structure;
 import tailor.description.AtomDescription;
 import tailor.description.Description;
 import tailor.description.GroupDescription;
+import tailor.structure.Level;
 
 public class LeafEngineTest {
     

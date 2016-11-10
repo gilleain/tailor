@@ -4,10 +4,10 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import tailor.Level;
 import tailor.condition.Condition;
 import tailor.datasource.Structure;
 import tailor.description.Description;
+import tailor.structure.Level;
 
 /**
  * A search will produce a series of Match objects, that stores the association 

@@ -6,11 +6,11 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import tailor.Level;
 import tailor.condition.Condition;
 import tailor.condition.TorsionBoundCondition;
 import tailor.datasource.Structure;
 import tailor.measure.Measure;
+import tailor.structure.Level;
 
 
 /**

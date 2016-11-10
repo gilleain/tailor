@@ -15,7 +15,7 @@ import javax.swing.tree.TreeSelectionModel;
 import tailor.description.Description;
 import tailor.description.DescriptionFactory;
 import tailor.description.ProteinDescription;
-import tailor.Level;
+import tailor.structure.Level;
 
 public class DescriptionTreeView extends JPanel  {
 

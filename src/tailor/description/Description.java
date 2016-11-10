@@ -2,9 +2,9 @@ package tailor.description;
 
 import java.util.List;
 
-import tailor.Level;
 import tailor.condition.Condition;
 import tailor.measure.Measure;
+import tailor.structure.Level;
 
 
 /**

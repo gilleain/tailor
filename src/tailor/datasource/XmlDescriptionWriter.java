@@ -4,13 +4,13 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
-import tailor.Level;
 import tailor.condition.Condition;
 import tailor.description.AtomDescription;
 import tailor.description.ChainDescription;
 import tailor.description.Description;
 import tailor.description.GroupDescription;
 import tailor.description.ProteinDescription;
+import tailor.structure.Level;
 
 public class XmlDescriptionWriter {
 	

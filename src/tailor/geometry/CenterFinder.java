@@ -2,13 +2,13 @@ package tailor.geometry;
 
 import java.util.List;
 
-import tailor.Level;
 import tailor.datasource.Structure;
 import tailor.description.AtomDescription;
 import tailor.description.ChainDescription;
 import tailor.description.Description;
 import tailor.description.GroupDescription;
 import tailor.engine.Match;
+import tailor.structure.Level;
 
 /**
  * Utility class that finds the center for a piece of structure, where the

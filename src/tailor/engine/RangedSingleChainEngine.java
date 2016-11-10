@@ -3,12 +3,12 @@ package tailor.engine;
 import java.util.ArrayList;
 import java.util.List;
 
-import tailor.Level;
 import tailor.condition.Condition;
 import tailor.condition.PropertyCondition;
 import tailor.datasource.Structure;
 import tailor.description.Description;
 import tailor.description.RangedGroupDescription;
+import tailor.structure.Level;
 
 /**
  * Engine that can match GroupDescriptions with ranges. For efficiency reasons,

@@ -1,7 +1,7 @@
 package tailor.engine;
 
-import tailor.Level;
 import tailor.datasource.Structure;
+import tailor.structure.Level;
 
 public class StructureFactory {
     

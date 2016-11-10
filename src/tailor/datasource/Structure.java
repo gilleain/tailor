@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 
-import tailor.Level;
 import tailor.geometry.Vector;
+import tailor.structure.Level;
 
 public class Structure implements Iterable<Structure> {
 	

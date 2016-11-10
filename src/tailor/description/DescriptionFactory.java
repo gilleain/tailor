@@ -1,10 +1,11 @@
 package tailor.description;
 
 import java.util.ArrayList;
-import tailor.Level;
+
 import tailor.condition.HBondCondition;
 import tailor.condition.TorsionBoundCondition;
 import tailor.measure.TorsionMeasure;
+import tailor.structure.Level;
 
 
 /**

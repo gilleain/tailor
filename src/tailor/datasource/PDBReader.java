@@ -6,7 +6,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import tailor.Level;
+import tailor.structure.Level;
 
 public class PDBReader {
 	
