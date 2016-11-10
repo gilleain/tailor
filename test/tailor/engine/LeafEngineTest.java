@@ -2,8 +2,7 @@ package tailor.engine;
 
 import java.util.List;
 
-import junit.framework.Assert;
-
+import org.junit.Assert;
 import org.junit.Test;
 
 import tailor.Level;

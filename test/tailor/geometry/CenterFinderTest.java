@@ -2,7 +2,6 @@ package tailor.geometry;
 
 import org.junit.Test;
 
-import sun.awt.SunGraphicsCallback.PrintHeavyweightComponentsCallback;
 import tailor.Level;
 import tailor.condition.PropertyCondition;
 import tailor.datasource.Structure;
