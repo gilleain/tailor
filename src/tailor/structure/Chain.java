@@ -18,11 +18,20 @@ public class Chain implements Structure {
     }
 
     @Override
-    public void visit(StructureVisitor visitor) {
+    public void accept(StructureVisitor visitor) {
         visitor.visit(this);
         for (Group group : groups) {
-            group.visit(visitor);
+            group.accept(visitor);
         }
+    }
+    
+    @Override
+    public void accept(HierarchyVisitor visitor) {
+        visitor.enter(this);
+        for (Group group : groups) {
+            group.accept(visitor);
+        }
+        visitor.exit(this);
     }
 
     @Override

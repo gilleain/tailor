@@ -18,11 +18,19 @@ public class Group implements Structure {
     }
 
     @Override
-    public void visit(StructureVisitor visitor) {
+    public void accept(StructureVisitor visitor) {
         visitor.visit(this);
         for (String atomName : atomMap.keySet()) {
             visitor.visit(atomMap.get(atomName));
         }
+    }
+    
+    public void accept(HierarchyVisitor visitor) {
+        visitor.enter(this);
+        for (String atomName : atomMap.keySet()) {
+            atomMap.get(atomName).accept(visitor);
+        }
+        visitor.exit(this);
     }
 
     @Override

@@ -15,7 +15,11 @@ public class Atom implements Structure {
     }
 
     @Override
-    public void visit(StructureVisitor visitor) {
+    public void accept(StructureVisitor visitor) {
+        visitor.visit(this);
+    }
+    
+    public void accept(HierarchyVisitor visitor) {
         visitor.visit(this);
     }
 
