@@ -16,7 +16,7 @@ import tailor.structure.Level;
 
 public class CenterFinderTest {
     
-    public void connectHierarchy(Structure... structures) {
+    private void connectHierarchy(Structure... structures) {
         for (int i = 0; i < structures.length; i++) {
             if (i + 1 < structures.length) {
                 structures[i].addSubStructure(structures[i+1]);
@@ -24,7 +24,7 @@ public class CenterFinderTest {
         }
     }
     
-    public void connectHierarchy(Description... descriptions) {
+    private void connectHierarchy(Description... descriptions) {
         for (int i = 0; i < descriptions.length; i++) {
             if (i + 1 < descriptions.length) {
                 descriptions[i].addSubDescription(descriptions[i+1]);
@@ -32,14 +32,14 @@ public class CenterFinderTest {
         }
     }
     
-    public void printHierarchy(Structure structure) {
+    private void printHierarchy(Structure structure) {
         System.out.println(structure.getLevel());
         for (Structure subStructure : structure) {
             printHierarchy(subStructure);
         }
     }
     
-    public void printHierarchy(Description description) {
+    private void printHierarchy(Description description) {
         System.out.println(description.getLevel() + " " + description.getID());
         for (Description subDescription : description.getSubDescriptions()) {
             printHierarchy(subDescription);
@@ -47,7 +47,7 @@ public class CenterFinderTest {
     }
 
     
-    public void zip(Match match, Description description, Structure structure) {
+    private void zip(Match match, Description description, Structure structure) {
         Match subMatch = match.associate(description, structure);
         if (description.getSubDescriptions().size() > 0) {
             zip(subMatch, description.getSubDescriptionAt(0), 
