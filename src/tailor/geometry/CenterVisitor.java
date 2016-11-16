@@ -1,5 +1,6 @@
 package tailor.geometry;
 
+import tailor.structure.Atom;
 import tailor.structure.Level;
 import tailor.structure.Structure;
 import tailor.structure.StructureVisitor;
@@ -12,6 +13,10 @@ public class CenterVisitor implements StructureVisitor {
     
     public CenterVisitor() {
         center = new Vector();
+    }
+    
+    public Vector get() {
+        return center.divide(Double.valueOf(counter));
     }
 
     @Override
@@ -33,6 +38,8 @@ public class CenterVisitor implements StructureVisitor {
     }
     
     private void handleAtom(Structure structure) {
+        Atom atom = (Atom)structure;
+        center = center.plus(atom.getCenter());
         counter++;
     }
 
