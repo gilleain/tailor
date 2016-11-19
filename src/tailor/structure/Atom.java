@@ -41,5 +41,4 @@ public class Atom implements Structure {
     public Level getLevel() {
         return level;
     }
-
 }

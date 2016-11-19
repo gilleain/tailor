@@ -9,8 +9,19 @@ public class Chain implements Structure {
     
     private final List<Group> groups;
     
+    private final List<SSE> sses;
+    
     public Chain() {
         this.groups = new ArrayList<Group>();
+        this.sses = new ArrayList<SSE>();
+    }
+    
+    public void addSSE(SSE sse) {
+        this.sses.add(sse);
+    }
+    
+    public List<SSE> getSSEs() {
+        return this.sses;
     }
     
     public void addGroup(Group group) {

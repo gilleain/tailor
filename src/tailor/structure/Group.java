@@ -8,6 +8,8 @@ public class Group implements Structure {
     private final Level level = Level.RESIDUE;
     
     private final Map<String, Atom> atomMap;
+
+    private String id;
     
     public Group() {
         this.atomMap = new HashMap<String, Atom>();
@@ -36,6 +38,14 @@ public class Group implements Structure {
     @Override
     public Level getLevel() {
         return level;
+    }
+
+    public String getId() {
+        return id;
+    }
+    
+    public void setId(String id) {
+        this.id = id;
     }
 
 }
