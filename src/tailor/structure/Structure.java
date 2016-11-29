@@ -26,5 +26,15 @@ public interface Structure {
      * @return the specific level of this structure
      */
     public Level getLevel();
+    
+    /**
+     * TODO - not sure about this...
+     * 
+     * @return
+     */
+    public String getName();
+
+    // TODO - allow external iteration?
+//    public List<Structure> getSubstructures();
 
 }

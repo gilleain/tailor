@@ -50,4 +50,10 @@ public class Chain implements Structure {
         return level;
     }
 
+    @Override
+    public String getName() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
 }

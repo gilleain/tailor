@@ -201,7 +201,7 @@ public class ProteinDescription implements Description {
         return this.chainMeasures;
     }
 
-    public ArrayList<ChainDescription> getSubDescriptions() {
+    public List<ChainDescription> getSubDescriptions() {
         return this.chainDescriptions;
     }
 

@@ -43,4 +43,10 @@ public class Helix implements Structure, SSE {
         return groups.get(groups.size() - 1);
     }
 
+    @Override
+    public String getName() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
 }

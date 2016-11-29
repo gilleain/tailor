@@ -22,7 +22,7 @@ public class ChainDescription implements Description, Iterable<GroupDescription>
     
     private String chainName;
     
-    private ArrayList<GroupDescription> groupDescriptions;
+    private List<GroupDescription> groupDescriptions;
     
     private ArrayList<Condition> groupConditions;
     
@@ -81,7 +81,7 @@ public class ChainDescription implements Description, Iterable<GroupDescription>
         this.groupConditions.add(condition);
     }
     
-    public ArrayList<GroupDescription> getGroupDescriptions() {
+    public List<GroupDescription> getGroupDescriptions() {
         return this.groupDescriptions;
     }
     
@@ -228,7 +228,7 @@ public class ChainDescription implements Description, Iterable<GroupDescription>
         }
     }
 
-    public ArrayList<GroupDescription> getSubDescriptions() {
+    public List<GroupDescription> getSubDescriptions() {
         return this.groupDescriptions;
     }
 

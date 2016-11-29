@@ -41,11 +41,17 @@ public class Group implements Structure {
     }
 
     public String getId() {
+        // TODO : why ID and name...
         return id;
     }
     
     public void setId(String id) {
         this.id = id;
+    }
+
+    @Override
+    public String getName() {
+        return id;
     }
 
 }
