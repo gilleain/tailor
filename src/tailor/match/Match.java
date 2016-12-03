@@ -3,6 +3,7 @@ package tailor.match; // TODO : move to right package
 import java.util.ArrayList;
 import java.util.List;
 
+import tailor.description.AtomDescription;
 import tailor.description.Description;
 import tailor.structure.Structure;
 
@@ -38,5 +39,9 @@ public class Match {
         } else {
             return false;
         }
+    }
+
+    public Structure getStructure() {
+        return structure;
     }
 }

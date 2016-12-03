@@ -1,6 +1,8 @@
 package tailor.structure;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class Group implements Structure {
@@ -52,6 +54,10 @@ public class Group implements Structure {
     @Override
     public String getName() {
         return id;
+    }
+
+    public List<Atom> getAtoms() {
+        return new ArrayList<Atom>(this.atomMap.values());
     }
 
 }
