@@ -56,4 +56,8 @@ public class Chain implements Structure {
         return null;
     }
 
+    public List<Group> getGroups() {
+        return this.groups;
+    }
+
 }

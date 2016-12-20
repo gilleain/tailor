@@ -3,7 +3,6 @@ package tailor.match; // TODO : move to right package
 import java.util.ArrayList;
 import java.util.List;
 
-import tailor.description.AtomDescription;
 import tailor.description.Description;
 import tailor.structure.Structure;
 
@@ -43,5 +42,14 @@ public class Match {
 
     public Structure getStructure() {
         return structure;
+    }
+    
+    /**
+     * Get the size of the level below.
+     * 
+     * @return the number of sub-matches
+     */
+    public int getLevelSize() {
+        return subMatches.size();
     }
 }
