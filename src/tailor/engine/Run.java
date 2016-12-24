@@ -2,16 +2,17 @@ package tailor.engine;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
+import java.util.List;
 
 import tailor.datasource.PDBFileList;
 import tailor.datasource.StructureSource;
+import tailor.description.Description;
 import tailor.description.ProteinDescription;
 import tailor.measure.Measure;
 
 public class Run {
 
-	private ProteinDescription description;
+	private Description description;
 	private StructureSource structureSource;
     
     public Run() {
@@ -35,7 +36,12 @@ public class Run {
 		this.structureSource = new PDBFileList(path, filenames);
 	}
 	
-	public Run(ProteinDescription description, ArrayList<Measure> measures, String path, String[] filenames) throws IOException {
+	public Run(Description description, StructureSource structureSource) throws IOException {
+	    this.description = description;
+	    this.structureSource = structureSource;
+	}
+	
+	public Run(Description description, List<Measure> measures, String path, String[] filenames) throws IOException {
 		this.description = description;
 		this.structureSource = new PDBFileList(path, filenames);
 	}
@@ -48,7 +54,7 @@ public class Run {
     	this.description = description;	// TODO : convert to adding to a list...
     }
     
-    public ProteinDescription getDescription() {
+    public Description getDescription() {
     	return this.description;		// TODO : convert to getting from a list
     }
     
