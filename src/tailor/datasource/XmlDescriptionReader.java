@@ -122,9 +122,9 @@ public class XmlDescriptionReader {
             if (qName.equals("HBondCondition")) {
                 
                 // TODO : these data items might not exist / be complete
-                double haMax = Double.parseDouble((String) this.dataStore.get("haMax"));
-                double dhaMin = Double.parseDouble((String) this.dataStore.get("dhaMin"));
-                double haaMin = Double.parseDouble((String) this.dataStore.get("haaMin"));
+                double haMax = Double.parseDouble(this.dataStore.get("haMax"));
+                double dhaMin = Double.parseDouble(this.dataStore.get("dhaMin"));
+                double haaMin = Double.parseDouble(this.dataStore.get("haaMin"));
                 List<Description> paths = this.pathMap.get("paths");
                 Description d  = paths.get(0);
                 Description h  = paths.get(1);
@@ -191,12 +191,4 @@ public class XmlDescriptionReader {
             return null;
         }
     }
-    
-    
-    public static void main(String[] args) {
-        XmlDescriptionReader reader = new XmlDescriptionReader();
-        Description d = reader.readDescription(new File(args[0]));
-        System.out.println(d.toPathString());
-    }
-
 }

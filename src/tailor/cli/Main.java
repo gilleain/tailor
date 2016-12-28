@@ -20,19 +20,21 @@ public class Main {
         return reader.readDescription(new File(filename));
     }
     
-    public static void run(CommandLineHandler commandLineHandler) throws IOException {
+    public static void run(CommandLineHandler args) throws IOException {
         Description description = null;
-        if (commandLineHandler.getDescriptionFileName() != null) {
-            description = read(commandLineHandler.getDescriptionFileName());
+        if (args.getDescriptionFileName() != null) {
+            description = read(args.getDescriptionFileName());
         }
         
         StructureSource structureSource = null;
-        if (commandLineHandler.getStructureSourceFileName() != null) {
-            structureSource = new PDBFileList(commandLineHandler.getStructureSourceFileName(), null);
+        if (args.getStructureSourceFileName() != null) {
+            structureSource = new PDBFileList(args.getStructureSourceFileName(), null);
         }
         
         // XXX TODO - error
+        System.err.println("Matching " + args.getDescriptionFileName() + " to " + args.getStructureSourceFileName());
         if (description == null || structureSource == null) return;
+        
         
         Run run = new Run(description, structureSource);
         Engine engine = EngineFactory.getEngine(description);
@@ -40,6 +42,7 @@ public class Main {
     }
     
     public static void main(String[] args) throws ParseException, IOException {
+        System.err.println("Starting...");
         CommandLineHandler handler = new CommandLineHandler();
         Main.run(handler.processArguments(args));
     }
