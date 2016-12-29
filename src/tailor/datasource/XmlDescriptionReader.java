@@ -45,7 +45,7 @@ public class XmlDescriptionReader {
         
         private Map<String, String> dataStore;
         
-        private Map<String, List<Description>> pathMap;
+        private List<Description> pathMap;
         
         public XmlMotifHandler() {
             this.currentProtein = null;
@@ -53,7 +53,7 @@ public class XmlDescriptionReader {
             this.currentGroup = null;
             this.currentAtom = null;
             this.dataStore = new HashMap<String, String>();
-            this.pathMap = new HashMap<String, List<Description>>();
+            this.pathMap = new ArrayList<Description>();
         }
         
         public void startElement(String namespaceURI, String sName, String qName, Attributes attrs) throws SAXException {
@@ -107,14 +107,7 @@ public class XmlDescriptionReader {
                 
                 // store the path
                 System.err.println("adding path " + path.toPathString());
-                if (this.dataStore.containsKey("paths")) {
-                    List<Description> paths = this.pathMap.get("paths");
-                    paths.add(path);
-                } else {
-                    List<Description> paths = new ArrayList<>();
-                    paths.add(path);
-                    this.pathMap.put("paths", paths);
-                }
+                pathMap.add(path);
             }
         }
         
@@ -125,7 +118,7 @@ public class XmlDescriptionReader {
                 double haMax = Double.parseDouble(this.dataStore.get("haMax"));
                 double dhaMin = Double.parseDouble(this.dataStore.get("dhaMin"));
                 double haaMin = Double.parseDouble(this.dataStore.get("haaMin"));
-                List<Description> paths = this.pathMap.get("paths");
+                List<Description> paths = this.pathMap;
                 Description d  = paths.get(0);
                 Description h  = paths.get(1);
                 Description a  = paths.get(2);
@@ -141,7 +134,7 @@ public class XmlDescriptionReader {
                 this.currentDescription.addCondition(hbond);
                 
                 // don't want to accumulate paths
-                this.dataStore.remove("paths");
+                pathMap.clear();
             } else if (qName.equals("GroupDescription")) {
                 this.currentDescription = this.currentChain;
             }

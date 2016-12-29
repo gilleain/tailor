@@ -12,6 +12,8 @@ import java.nio.charset.StandardCharsets;
 
 import org.junit.Test;
 
+import tailor.condition.Condition;
+import tailor.condition.HBondCondition;
 import tailor.description.AtomDescription;
 import tailor.description.ChainDescription;
 import tailor.description.Description;
@@ -92,9 +94,8 @@ public class TestXmlDescriptionReader {
         
         Description description = read(xml);
         ChainDescription chainDescription = (ChainDescription) description.getSubDescriptionAt(0);
-        GroupDescription groupDescription = (GroupDescription) chainDescription.getSubDescriptionAt(0);
-        AtomDescription atomDescription = (AtomDescription) groupDescription.getSubDescriptionAt(0);
-        assertEquals("N", atomDescription.getName());
+        Condition condition = chainDescription.getConditions().get(0);
+        assertThat(condition, instanceOf(HBondCondition.class));
     }
     
     private Description read(String xml) {
