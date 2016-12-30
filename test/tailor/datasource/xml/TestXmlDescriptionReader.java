@@ -1,4 +1,4 @@
-package tailor.datasource;
+package tailor.datasource.xml;
 
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -14,6 +14,7 @@ import org.junit.Test;
 
 import tailor.condition.Condition;
 import tailor.condition.HBondCondition;
+import tailor.datasource.xml.XmlDescriptionReader;
 import tailor.description.AtomDescription;
 import tailor.description.ChainDescription;
 import tailor.description.Description;

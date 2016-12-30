@@ -4,7 +4,7 @@ import java.io.File;
 import java.io.InputStream;
 import java.util.ArrayList;
 
-import tailor.datasource.XmlDescriptionReader;
+import tailor.datasource.xml.XmlDescriptionReader;
 import tailor.description.Description;
 
 public class DescriptionLibrary {

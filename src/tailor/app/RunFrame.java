@@ -22,8 +22,8 @@ import javax.swing.border.Border;
 
 import tailor.datasource.GuiResultsPrinter;
 import tailor.datasource.StructureSource;
-import tailor.datasource.XmlDescriptionReader;
-import tailor.datasource.XmlDescriptionWriter;
+import tailor.datasource.xml.XmlDescriptionReader;
+import tailor.datasource.xml.XmlDescriptionWriter;
 import tailor.description.Description;
 import tailor.description.ProteinDescription;
 import tailor.editor.LibraryDialog;

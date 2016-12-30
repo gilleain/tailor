@@ -7,7 +7,7 @@ import org.apache.commons.cli.ParseException;
 
 import tailor.datasource.PDBFileList;
 import tailor.datasource.StructureSource;
-import tailor.datasource.XmlDescriptionReader;
+import tailor.datasource.xml.XmlDescriptionReader;
 import tailor.description.Description;
 import tailor.engine.Engine;
 import tailor.engine.EngineFactory;

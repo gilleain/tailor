@@ -19,7 +19,7 @@ import javax.swing.JScrollPane;
 import javax.swing.border.Border;
 
 import tailor.datasource.GuiResultsPrinter;
-import tailor.datasource.XmlDescriptionReader;
+import tailor.datasource.xml.XmlDescriptionReader;
 import tailor.description.Description;
 import tailor.description.ProteinDescription;
 import tailor.engine.Engine;

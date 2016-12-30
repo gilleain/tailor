@@ -20,7 +20,7 @@ import javax.swing.JScrollPane;
 import tailor.condition.Condition;
 import tailor.condition.HBondCondition;
 import tailor.condition.TorsionBoundCondition;
-import tailor.datasource.XmlDescriptionReader;
+import tailor.datasource.xml.XmlDescriptionReader;
 import tailor.description.AtomDescription;
 import tailor.description.ChainDescription;
 import tailor.description.Description;

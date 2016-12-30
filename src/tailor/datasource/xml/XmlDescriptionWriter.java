@@ -1,4 +1,4 @@
-package tailor.datasource;
+package tailor.datasource.xml;
 
 import java.io.File;
 import java.io.FileWriter;
