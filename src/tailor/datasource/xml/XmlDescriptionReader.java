@@ -47,6 +47,14 @@ public class XmlDescriptionReader {
         
         private List<Description> pathMap;
         
+        private ProteinDescriptionXmlHandler proteinDescriptionXmlHandler;
+        
+        private ChainDescriptionXmlHandler chainDescriptionXmlHandler;
+        
+        private GroupDescriptionXmlHandler groupDescriptionXmlHandler;
+        
+        private AtomDescriptionXmlHandler atomDescriptionXmlHandler;
+        
         public XmlMotifHandler() {
             this.currentProtein = null;
             this.currentChain = null;
@@ -54,32 +62,25 @@ public class XmlDescriptionReader {
             this.currentAtom = null;
             this.dataStore = new HashMap<String, String>();
             this.pathMap = new ArrayList<Description>();
+            
+            this.proteinDescriptionXmlHandler = new ProteinDescriptionXmlHandler();
+            this.chainDescriptionXmlHandler = new ChainDescriptionXmlHandler();
+            this.groupDescriptionXmlHandler = new GroupDescriptionXmlHandler();
+            this.atomDescriptionXmlHandler = new AtomDescriptionXmlHandler();
         }
         
         public void startElement(String namespaceURI, String sName, String qName, Attributes attrs) throws SAXException {
             if (qName.equals("ProteinDescription")) {
-                this.currentProtein = new ProteinDescription(attrs.getValue("name"));
+                this.currentProtein = proteinDescriptionXmlHandler.create(attrs);
                 this.currentDescription = this.currentProtein;
             } else if (qName.equals("ChainDescription")) {
-                this.currentChain = new ChainDescription(attrs.getValue("name"));
-                this.currentProtein.addChainDescription(this.currentChain);
+                this.currentChain = chainDescriptionXmlHandler.create(attrs, currentProtein);
                 this.currentDescription = this.currentChain;
             } else if (qName.equals("GroupDescription")) {
-                String positionStr = attrs.getValue("position");
-                String nameStr = attrs.getValue("name");
-                if (nameStr.equals("*")) {
-                    nameStr = null;
-                }
-                if (!positionStr.equals("")) {
-                    int position = Integer.parseInt(positionStr);
-                    // TODO : get rid of position string
-                    this.currentGroup = new GroupDescription(nameStr);
-                    this.currentChain.addGroupDescription(this.currentGroup);
-                }
+                this.currentGroup = groupDescriptionXmlHandler.create(attrs, currentChain);
                 this.currentDescription = this.currentGroup;
             } else if (qName.equals("AtomDescription")) {
-                this.currentAtom = new AtomDescription(attrs.getValue("name"));
-                this.currentGroup.addAtomDescription(this.currentAtom);
+                this.currentAtom = atomDescriptionXmlHandler.create(attrs, currentGroup);
                 this.currentDescription = this.currentAtom;
             } else if (qName.equals("HBondCondition")) {
                 this.dataStore.put("haMax", attrs.getValue("haMax"));
