@@ -8,16 +8,18 @@ import tailor.description.GroupDescription;
 public class GroupDescriptionXmlHandler {
     
     public GroupDescription create(Attributes attrs, ChainDescription chainDescription) {
-        String positionStr = attrs.getValue("position");
+        String labelStr = attrs.getValue("label");
         String nameStr = attrs.getValue("name");
-        if (nameStr.equals("*")) {
-            nameStr = null;
-        }
-        GroupDescription groupDescription = null;
-        if (!positionStr.equals("")) {
-            int position = Integer.parseInt(positionStr);
-            // TODO : get rid of position string
+        
+        GroupDescription groupDescription;
+        if (nameStr == null) {
+            groupDescription = new GroupDescription();
+        } else {
             groupDescription = new GroupDescription(nameStr);
+        }
+        
+        if (labelStr != null) {
+            groupDescription.setLabel(labelStr);
         }
         chainDescription.addGroupDescription(groupDescription);
         return groupDescription;

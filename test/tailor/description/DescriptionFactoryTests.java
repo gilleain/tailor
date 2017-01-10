@@ -44,8 +44,8 @@ public class DescriptionFactoryTests {
         ProteinDescription description = factory.getProduct();
         
         ChainDescription chain = description.getChainDescription("A");
-        ChainDescription a = chain.getPath("GLY", "N");
-        ChainDescription b = chain.getPath("LYS", "O");
+        ChainDescription a = chain.getPathByGroupName("GLY", "N");
+        ChainDescription b = chain.getPathByGroupName("LYS", "O");
         
         DistanceBoundCondition bound = 
             new DistanceBoundCondition(

@@ -97,10 +97,9 @@ public class XmlDescriptionReader {
                     // TODO : handle paths at the structure level
                     //String chainName = attrs.getValue("chain");
                 } else if (this.currentDescription == this.currentChain) {
-                    String positionStr = attrs.getValue("position");
-                    int position = Integer.parseInt(positionStr);
+                    String labelStr = attrs.getValue("label");
                     String atomName = attrs.getValue("atom");
-                    path = this.currentChain.getPath(position, atomName);
+                    path = this.currentChain.getPathByGroupLabel(labelStr, atomName);
                     
                 } else if (this.currentDescription == this.currentGroup) {
                     // TODO : handle paths at the group level

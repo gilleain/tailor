@@ -101,7 +101,7 @@ public class ProteinDescription implements Description {
         // XXX what happens if we have multiple chains?
         ChainDescription chainPath;
         if (chainName == null) {
-            chainPath = this.chainDescriptions.get(0).getPath(residueName, atomName);
+            chainPath = this.chainDescriptions.get(0).getPathByGroupName(residueName, atomName);
         } else {
         	chainPath = this.getChainDescription(chainName);
         }

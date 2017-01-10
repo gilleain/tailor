@@ -35,6 +35,13 @@ public class GroupDescription implements Description, Iterable<AtomDescription> 
     
     private int id;
     
+    /**
+     * A label for a group is some identifier that makes sense in the context of
+     * the pattern, like "i + 1" although note that is just intended as an identifier
+     * and not be parsable as a number
+     */
+    private String label;
+    
     public GroupDescription() {
         this.groupName = null;
         this.atomDescriptions = new ArrayList<AtomDescription>();
@@ -46,6 +53,13 @@ public class GroupDescription implements Description, Iterable<AtomDescription> 
     public GroupDescription(String groupName) {
         this();
         this.groupName = groupName;
+    }
+    
+    // XXX multiple constructors - bleh
+    public GroupDescription(String groupName, String label) {
+        this();
+        this.groupName = groupName;
+        this.label = label;
     }
     
     public GroupDescription(GroupDescription groupDescription) {
@@ -165,7 +179,12 @@ public class GroupDescription implements Description, Iterable<AtomDescription> 
         }
 
     public Description shallowCopy() {
-        return new GroupDescription(this.groupName);
+        // XXX TODO UGH - this is now horrible
+        if (this.label == null) {
+            return new GroupDescription(this.groupName);
+        } else {
+            return new GroupDescription(this.groupName, this.label);
+        }
     }
 
     public Level getLevel() {
@@ -222,7 +241,7 @@ public class GroupDescription implements Description, Iterable<AtomDescription> 
     
     public String toPathString() {
         StringBuffer s = new StringBuffer();
-        s.append("i + ").append(0).append("/"); // TODO
+        s.append(label).append("/"); // TODO
         for (AtomDescription atomDescription : this.atomDescriptions) {
             s.append(atomDescription.getName());
         }
@@ -230,8 +249,13 @@ public class GroupDescription implements Description, Iterable<AtomDescription> 
     }
     
     public String toXmlPathString() {
-    	// XXX we assume that there is only one Atom!
-    	String s = "<Path position=\"" + 0 + "\" ";    // TODO 
+        String s;
+        if (label != null) {
+            s = "<Path =\"" + label + "\" "; 
+        } else {
+            s = "<Path ";   // TODO ?
+        }
+    	 // XXX we assume that there is only one Atom!
     	return s + this.atomDescriptions.get(0).toXmlPathString();
     }
     
@@ -239,6 +263,18 @@ public class GroupDescription implements Description, Iterable<AtomDescription> 
         return "Group " 
             + ((this.groupName == null)? "" : this.groupName)
             + 0;    // TODO
+    }
+
+    public void setLabel(String label) {
+        this.label = label;
+    }
+    
+    public String getLabel() {
+        return label;
+    }
+
+    public boolean labelMatches(String groupLabel) {
+        return groupLabel.equals(label);
     }
 
 }

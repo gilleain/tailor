@@ -103,12 +103,30 @@ public class ChainDescription implements Description, Iterable<GroupDescription>
         return this.groupDescriptions.get(this.size() - 1);
     }
     
-    public ChainDescription getPath(String groupName, String atomName) {
+    public ChainDescription getPathByGroupName(String groupName, String atomName) {
         ChainDescription root = new ChainDescription(this.chainName);
         
         // TODO : what if multiple matches...
         for (GroupDescription groupDescription : this.groupDescriptions) {
             if (groupDescription.nameMatches(groupName)) {
+                GroupDescription group = 
+                    (GroupDescription) groupDescription.shallowCopy();
+                AtomDescription atom = 
+                    groupDescription.getAtomDescription(atomName);
+                group.addAtomDescription(atom);
+                root.addGroupDescription(group);
+            }
+        }
+        
+        return root;
+    }
+    
+    public ChainDescription getPathByGroupLabel(String groupLabel, String atomName) {
+        ChainDescription root = new ChainDescription(this.chainName);
+        
+        // TODO : what if multiple matches...
+        for (GroupDescription groupDescription : this.groupDescriptions) {
+            if (groupDescription.labelMatches(groupLabel)) {
                 GroupDescription group = 
                     (GroupDescription) groupDescription.shallowCopy();
                 AtomDescription atom = 

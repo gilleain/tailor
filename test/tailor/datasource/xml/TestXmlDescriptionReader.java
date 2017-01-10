@@ -46,21 +46,25 @@ public class TestXmlDescriptionReader {
     public void testChainPlusGroup() {
         String xml = "<ProteinDescription name=\"test\">"
                 + "<ChainDescription name=\"A\">"
-                + "<GroupDescription name=\"GLY\" position=\"0\">"
-                + "</GroupDescription>\""
+                + "<GroupDescription name=\"GLY\"></GroupDescription>\""
+                + "<GroupDescription label=\"X\"></GroupDescription>\""
                 + "</ChainDescription>"
                 + "</ProteinDescription>";
         Description description = read(xml);
         ChainDescription chainDescription = (ChainDescription) description.getSubDescriptionAt(0);
-        GroupDescription groupDescription = (GroupDescription) chainDescription.getSubDescriptionAt(0);
-        assertEquals("GLY", groupDescription.getName());
+        
+        GroupDescription groupDescription1 = (GroupDescription) chainDescription.getSubDescriptionAt(0);
+        assertEquals("GLY", groupDescription1.getName());
+        
+        GroupDescription groupDescription2 = (GroupDescription) chainDescription.getSubDescriptionAt(1);
+        assertEquals("X", groupDescription2.getLabel());
     }
     
     @Test
     public void testGroupPlusAtom() {
         String xml = "<ProteinDescription name=\"test\">"
                 + "<ChainDescription name=\"A\">"
-                + "<GroupDescription name=\"GLY\" position=\"0\">"
+                + "<GroupDescription name=\"GLY\">"
                 + "<AtomDescription name=\"N\"/>"
                 + "</GroupDescription>\""
                 + "</ChainDescription>"
@@ -76,19 +80,19 @@ public class TestXmlDescriptionReader {
     public void testHBondCondition() {
         String xml = "<ProteinDescription name=\"test\">"
                 + "<ChainDescription name=\"A\">"
-                + "<GroupDescription name=\"GLY\" position=\"0\">"
+                + "<GroupDescription name=\"GLY\" label=\"i\">"
                 + "<AtomDescription name=\"O\"/>"
                 + "<AtomDescription name=\"C\"/>"
                 + "</GroupDescription>\""
-                + "<GroupDescription name=\"ALA\" position=\"1\">"
+                + "<GroupDescription name=\"ALA\" label=\"i + 1\">"
                 + "<AtomDescription name=\"N\"/>"
                 + "<AtomDescription name=\"H\"/>"
                 + "</GroupDescription>\""
                 + "<HBondCondition haMax=\"2.5\" dhaMin=\"120.0\" haaMin=\"90.0\">"
-                + "<Path position=\"1\" atom=\"N\"/>"
-                + "<Path position=\"1\" atom=\"H\"/>"
-                + "<Path position=\"0\" atom=\"O\"/>"
-                + "<Path position=\"0\" atom=\"C\"/>"
+                + "<Path label=\"i + 1\" atom=\"N\"/>"
+                + "<Path label=\"i + 1\" atom=\"H\"/>"
+                + "<Path label=\"i\" atom=\"O\"/>"
+                + "<Path label=\"i\" atom=\"C\"/>"
                 + "</HBondCondition>"
                 + "</ChainDescription>"
                 + "</ProteinDescription>";
@@ -97,6 +101,16 @@ public class TestXmlDescriptionReader {
         ChainDescription chainDescription = (ChainDescription) description.getSubDescriptionAt(0);
         Condition condition = chainDescription.getConditions().get(0);
         assertThat(condition, instanceOf(HBondCondition.class));
+        
+        HBondCondition hBondCondition = (HBondCondition) condition;
+        assertEquals("i + 1", getGroupLabel(hBondCondition.getDonorAtomDescription()));
+        assertEquals("i + 1", getGroupLabel(hBondCondition.getHydrogenAtomDescription()));
+        assertEquals("i", getGroupLabel(hBondCondition.getAcceptorAtomDescription()));
+        assertEquals("i", getGroupLabel(hBondCondition.getAttachedAtomDescription()));
+    }
+    
+    private String getGroupLabel(Description chainDescription) {
+        return ((GroupDescription)chainDescription.getSubDescriptionAt(0)).getLabel();
     }
     
     private Description read(String xml) {
