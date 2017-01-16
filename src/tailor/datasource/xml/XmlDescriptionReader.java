@@ -16,7 +16,6 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
-import tailor.condition.HBondCondition;
 import tailor.description.Description;
 
 
@@ -34,16 +33,15 @@ public class XmlDescriptionReader {
         
         private Description currentParent;
         
-        private Map<String, String> dataStore;
-        
         private Stack<Description> seenStack;
         
         private Map<String, DescriptionXmlHandler> descriptionHandlers;
         
         private PathXmlHandler pathXmlHandler;
         
+        private Map<String, ConditionXmlHandler> conditionHandlers;
+        
         public XmlMotifHandler() {
-            this.dataStore = new HashMap<String, String>();
             this.seenStack = new Stack<Description>();
             
             descriptionHandlers = new HashMap<>();
@@ -53,10 +51,12 @@ public class XmlDescriptionReader {
             descriptionHandlers.put("AtomDescription", new AtomDescriptionXmlHandler());
             
             pathXmlHandler = new PathXmlHandler();
+            
+            conditionHandlers = new HashMap<>();
+            conditionHandlers.put("HBondCondition", new HBondConditionXmlHandler());
         }
         
         public void startElement(String namespaceURI, String sName, String qName, Attributes attrs) throws SAXException {
-
             if (descriptionHandlers.containsKey(qName)) {
                 DescriptionXmlHandler handler = descriptionHandlers.get(qName);
                 try {
@@ -71,53 +71,21 @@ public class XmlDescriptionReader {
                     // TODO
                     System.err.println(dpe.toString());
                 }
-            }
-                
-            if (qName.equals("HBondCondition")) {
-                this.dataStore.put("haMax", attrs.getValue("haMax"));
-                this.dataStore.put("dhaMin", attrs.getValue("dhaMin"));
-                this.dataStore.put("haaMin", attrs.getValue("haaMin"));
-                if (attrs.getIndex("isNegated") != -1) {
-                    this.dataStore.put("isNegated", attrs.getValue("isNegated"));
-                }
+            } else if (conditionHandlers.containsKey(qName)) {
+                conditionHandlers.get(qName).create(attrs);
             } else if (qName.equals("Path")) {
                 pathXmlHandler.create(attrs, currentParent);
             }
         }
         
         public void endElement(String namespaceURI, String sName, String qName) throws SAXException {
-            
             if (descriptionHandlers.containsKey(qName)) {
                 seenStack.pop();
                 if (!seenStack.isEmpty()) {
                     currentParent = seenStack.peek();
                 }
-            }
-            
-            if (qName.equals("HBondCondition")) {
-                
-                // TODO : these data items might not exist / be complete
-                double haMax = Double.parseDouble(this.dataStore.get("haMax"));
-                double dhaMin = Double.parseDouble(this.dataStore.get("dhaMin"));
-                double haaMin = Double.parseDouble(this.dataStore.get("haaMin"));
-                
-                // TODO : assumes order!
-                Description d  = pathXmlHandler.getPath("donor");
-                Description h  = pathXmlHandler.getPath("hydrogen");
-                Description a  = pathXmlHandler.getPath("acceptor");
-                Description aa = pathXmlHandler.getPath("adjacent");
-                HBondCondition hbond = new HBondCondition(d, h, a, aa, haMax, dhaMin, haaMin);
-                
-                if (this.dataStore.containsKey("isNegated")) {
-                    boolean isNegated = Boolean.parseBoolean((String) this.dataStore.get("isNegated"));
-                    System.err.println("setting negated to " + isNegated);
-                    hbond.setNegated(isNegated);
-                }
-                
-                this.currentParent.addCondition(hbond);
-                
-                // don't want to accumulate paths
-                pathXmlHandler.clearPaths();
+            } else if (conditionHandlers.containsKey(qName)) {
+                conditionHandlers.get(qName).complete(currentParent, pathXmlHandler);
             } 
         }
         
