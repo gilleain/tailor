@@ -1,7 +1,7 @@
 package tailor.datasource.xml;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.xml.sax.Attributes;
 
@@ -12,14 +12,14 @@ import tailor.description.ProteinDescription;
 
 public class PathXmlHandler {
     
-    private List<Description> pathMap;
+    private Map<String, Description> pathMap;
     
     public PathXmlHandler() {
-        this.pathMap = new ArrayList<Description>();
+        this.pathMap = new HashMap<String, Description>();
     }
     
-    public List<Description> getPaths() {
-        return this.pathMap;
+    public Description getPath(String name) {
+        return this.pathMap.get(name);
     }
     
     public void clearPaths() {
@@ -30,11 +30,14 @@ public class PathXmlHandler {
 
         // create the path
         Description path = null;
+        String name = null;
+        
         if (currentParent instanceof ProteinDescription) {
             // TODO : handle paths at the structure level
             //String chainName = attrs.getValue("chain");
         } else if (currentParent instanceof ChainDescription) {
             ChainDescription chainDescription = (ChainDescription) currentParent;
+            name = attrs.getValue("name");
             String labelStr = attrs.getValue("label");
             String atomName = attrs.getValue("atom");
             path = chainDescription.getPathByGroupLabel(labelStr, atomName);
@@ -43,8 +46,8 @@ public class PathXmlHandler {
         }
         
         // store the path
-        System.err.println("adding path " + path.toPathString());
-        pathMap.add(path);
+        System.err.println("adding path " + name + " " + path.toPathString());
+        pathMap.put(name, path);
     }
 
 }

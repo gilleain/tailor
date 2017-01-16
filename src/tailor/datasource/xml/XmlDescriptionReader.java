@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Stack;
 
@@ -101,13 +100,12 @@ public class XmlDescriptionReader {
                 double haMax = Double.parseDouble(this.dataStore.get("haMax"));
                 double dhaMin = Double.parseDouble(this.dataStore.get("dhaMin"));
                 double haaMin = Double.parseDouble(this.dataStore.get("haaMin"));
-                List<Description> paths = pathXmlHandler.getPaths();
                 
                 // TODO : assumes order!
-                Description d  = paths.get(0);
-                Description h  = paths.get(1);
-                Description a  = paths.get(2);
-                Description aa = paths.get(3);
+                Description d  = pathXmlHandler.getPath("donor");
+                Description h  = pathXmlHandler.getPath("hydrogen");
+                Description a  = pathXmlHandler.getPath("acceptor");
+                Description aa = pathXmlHandler.getPath("adjacent");
                 HBondCondition hbond = new HBondCondition(d, h, a, aa, haMax, dhaMin, haaMin);
                 
                 if (this.dataStore.containsKey("isNegated")) {
