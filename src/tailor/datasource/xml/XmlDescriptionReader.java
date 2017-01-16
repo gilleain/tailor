@@ -3,7 +3,6 @@ package tailor.datasource.xml;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -19,11 +18,7 @@ import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
 import tailor.condition.HBondCondition;
-import tailor.description.AtomDescription;
-import tailor.description.ChainDescription;
 import tailor.description.Description;
-import tailor.description.GroupDescription;
-import tailor.description.ProteinDescription;
 
 
 /**
@@ -40,29 +35,16 @@ public class XmlDescriptionReader {
         
         private Description currentParent;
         
-        private ProteinDescription currentProtein;
-        
-        private ChainDescription currentChain;
-        
-        private GroupDescription currentGroup;
-        
-//        private AtomDescription currentAtom;
-        
         private Map<String, String> dataStore;
-        
-        private List<Description> pathMap;
         
         private Stack<Description> seenStack;
         
         private Map<String, DescriptionXmlHandler> descriptionHandlers;
         
+        private PathXmlHandler pathXmlHandler;
+        
         public XmlMotifHandler() {
-            this.currentProtein = null;
-            this.currentChain = null;
-            this.currentGroup = null;
-//            this.currentAtom = null;
             this.dataStore = new HashMap<String, String>();
-            this.pathMap = new ArrayList<Description>();
             this.seenStack = new Stack<Description>();
             
             descriptionHandlers = new HashMap<>();
@@ -70,6 +52,8 @@ public class XmlDescriptionReader {
             descriptionHandlers.put("ChainDescription", new ChainDescriptionXmlHandler());
             descriptionHandlers.put("GroupDescription", new GroupDescriptionXmlHandler());
             descriptionHandlers.put("AtomDescription", new AtomDescriptionXmlHandler());
+            
+            pathXmlHandler = new PathXmlHandler();
         }
         
         public void startElement(String namespaceURI, String sName, String qName, Attributes attrs) throws SAXException {
@@ -98,24 +82,7 @@ public class XmlDescriptionReader {
                     this.dataStore.put("isNegated", attrs.getValue("isNegated"));
                 }
             } else if (qName.equals("Path")) {
-                
-                // create the path
-                Description path = null;
-                if (this.currentDescription == this.currentProtein) {
-                    // TODO : handle paths at the structure level
-                    //String chainName = attrs.getValue("chain");
-                } else if (this.currentDescription == this.currentChain) {
-                    String labelStr = attrs.getValue("label");
-                    String atomName = attrs.getValue("atom");
-                    path = this.currentChain.getPathByGroupLabel(labelStr, atomName);
-                    
-                } else if (this.currentDescription == this.currentGroup) {
-                    // TODO : handle paths at the group level
-                }
-                
-                // store the path
-                System.err.println("adding path " + path.toPathString());
-                pathMap.add(path);
+                pathXmlHandler.create(attrs, currentParent);
             }
         }
         
@@ -134,7 +101,9 @@ public class XmlDescriptionReader {
                 double haMax = Double.parseDouble(this.dataStore.get("haMax"));
                 double dhaMin = Double.parseDouble(this.dataStore.get("dhaMin"));
                 double haaMin = Double.parseDouble(this.dataStore.get("haaMin"));
-                List<Description> paths = this.pathMap;
+                List<Description> paths = pathXmlHandler.getPaths();
+                
+                // TODO : assumes order!
                 Description d  = paths.get(0);
                 Description h  = paths.get(1);
                 Description a  = paths.get(2);
@@ -147,14 +116,11 @@ public class XmlDescriptionReader {
                     hbond.setNegated(isNegated);
                 }
                 
-                this.currentDescription.addCondition(hbond);
+                this.currentParent.addCondition(hbond);
                 
                 // don't want to accumulate paths
-                pathMap.clear();
-            } else if (qName.equals("GroupDescription")) {
-                this.currentDescription = this.currentChain;
-            }
-            
+                pathXmlHandler.clearPaths();
+            } 
         }
         
         public Description getDescription() {
