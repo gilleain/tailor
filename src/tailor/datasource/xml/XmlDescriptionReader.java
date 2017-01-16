@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Stack;
 
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
@@ -35,54 +36,61 @@ public class XmlDescriptionReader {
         
         private Description currentDescription;
         
+        private Description root;
+        
+        private Description currentParent;
+        
         private ProteinDescription currentProtein;
         
         private ChainDescription currentChain;
         
         private GroupDescription currentGroup;
         
-        private AtomDescription currentAtom;
+//        private AtomDescription currentAtom;
         
         private Map<String, String> dataStore;
         
         private List<Description> pathMap;
         
-        private ProteinDescriptionXmlHandler proteinDescriptionXmlHandler;
+        private Stack<Description> seenStack;
         
-        private ChainDescriptionXmlHandler chainDescriptionXmlHandler;
-        
-        private GroupDescriptionXmlHandler groupDescriptionXmlHandler;
-        
-        private AtomDescriptionXmlHandler atomDescriptionXmlHandler;
+        private Map<String, DescriptionXmlHandler> descriptionHandlers;
         
         public XmlMotifHandler() {
             this.currentProtein = null;
             this.currentChain = null;
             this.currentGroup = null;
-            this.currentAtom = null;
+//            this.currentAtom = null;
             this.dataStore = new HashMap<String, String>();
             this.pathMap = new ArrayList<Description>();
+            this.seenStack = new Stack<Description>();
             
-            this.proteinDescriptionXmlHandler = new ProteinDescriptionXmlHandler();
-            this.chainDescriptionXmlHandler = new ChainDescriptionXmlHandler();
-            this.groupDescriptionXmlHandler = new GroupDescriptionXmlHandler();
-            this.atomDescriptionXmlHandler = new AtomDescriptionXmlHandler();
+            descriptionHandlers = new HashMap<>();
+            descriptionHandlers.put("ProteinDescription", new ProteinDescriptionXmlHandler());
+            descriptionHandlers.put("ChainDescription", new ChainDescriptionXmlHandler());
+            descriptionHandlers.put("GroupDescription", new GroupDescriptionXmlHandler());
+            descriptionHandlers.put("AtomDescription", new AtomDescriptionXmlHandler());
         }
         
         public void startElement(String namespaceURI, String sName, String qName, Attributes attrs) throws SAXException {
-            if (qName.equals("ProteinDescription")) {
-                this.currentProtein = proteinDescriptionXmlHandler.create(attrs);
-                this.currentDescription = this.currentProtein;
-            } else if (qName.equals("ChainDescription")) {
-                this.currentChain = chainDescriptionXmlHandler.create(attrs, currentProtein);
-                this.currentDescription = this.currentChain;
-            } else if (qName.equals("GroupDescription")) {
-                this.currentGroup = groupDescriptionXmlHandler.create(attrs, currentChain);
-                this.currentDescription = this.currentGroup;
-            } else if (qName.equals("AtomDescription")) {
-                this.currentAtom = atomDescriptionXmlHandler.create(attrs, currentGroup);
-                this.currentDescription = this.currentAtom;
-            } else if (qName.equals("HBondCondition")) {
+
+            if (descriptionHandlers.containsKey(qName)) {
+                DescriptionXmlHandler handler = descriptionHandlers.get(qName);
+                try {
+                    currentDescription = handler.create(attrs, currentParent);
+                    seenStack.push(currentDescription);
+                    currentParent = currentDescription;
+                    
+                    if (root == null) {
+                        root = currentDescription;
+                    }
+                } catch (DescriptionParseException dpe) {
+                    // TODO
+                    System.err.println(dpe.toString());
+                }
+            }
+                
+            if (qName.equals("HBondCondition")) {
                 this.dataStore.put("haMax", attrs.getValue("haMax"));
                 this.dataStore.put("dhaMin", attrs.getValue("dhaMin"));
                 this.dataStore.put("haaMin", attrs.getValue("haaMin"));
@@ -112,6 +120,14 @@ public class XmlDescriptionReader {
         }
         
         public void endElement(String namespaceURI, String sName, String qName) throws SAXException {
+            
+            if (descriptionHandlers.containsKey(qName)) {
+                seenStack.pop();
+                if (!seenStack.isEmpty()) {
+                    currentParent = seenStack.peek();
+                }
+            }
+            
             if (qName.equals("HBondCondition")) {
                 
                 // TODO : these data items might not exist / be complete
@@ -142,7 +158,7 @@ public class XmlDescriptionReader {
         }
         
         public Description getDescription() {
-            return (Description) this.currentProtein;
+            return this.root;
         }
         
     }

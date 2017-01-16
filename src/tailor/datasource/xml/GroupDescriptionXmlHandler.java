@@ -3,26 +3,32 @@ package tailor.datasource.xml;
 import org.xml.sax.Attributes;
 
 import tailor.description.ChainDescription;
+import tailor.description.Description;
 import tailor.description.GroupDescription;
 
-public class GroupDescriptionXmlHandler {
+public class GroupDescriptionXmlHandler implements DescriptionXmlHandler {
     
-    public GroupDescription create(Attributes attrs, ChainDescription chainDescription) {
-        String labelStr = attrs.getValue("label");
-        String nameStr = attrs.getValue("name");
-        
-        GroupDescription groupDescription;
-        if (nameStr == null) {
-            groupDescription = new GroupDescription();
+    public GroupDescription create(Attributes attrs, Description parent) throws DescriptionParseException {
+        if (parent instanceof ChainDescription) {
+            ChainDescription chainDescription = (ChainDescription) parent;
+            String labelStr = attrs.getValue("label");
+            String nameStr = attrs.getValue("name");
+
+            GroupDescription groupDescription;
+            if (nameStr == null) {
+                groupDescription = new GroupDescription();
+            } else {
+                groupDescription = new GroupDescription(nameStr);
+            }
+
+            if (labelStr != null) {
+                groupDescription.setLabel(labelStr);
+            }
+            chainDescription.addGroupDescription(groupDescription);
+            return groupDescription;
         } else {
-            groupDescription = new GroupDescription(nameStr);
+            throw new DescriptionParseException("Invalid parent "  + parent.getClass().getSimpleName());
         }
-        
-        if (labelStr != null) {
-            groupDescription.setLabel(labelStr);
-        }
-        chainDescription.addGroupDescription(groupDescription);
-        return groupDescription;
     }
 
 }
