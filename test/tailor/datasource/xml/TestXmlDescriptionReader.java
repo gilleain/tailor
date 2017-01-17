@@ -92,7 +92,7 @@ public class TestXmlDescriptionReader {
                 + "<Path name=\"donor\" label=\"i + 1\" atom=\"N\"/>"
                 + "<Path name=\"hydrogen\" label=\"i + 1\" atom=\"H\"/>"
                 + "<Path name=\"acceptor\" label=\"i\" atom=\"O\"/>"
-                + "<Path name=\"adjacent\" label=\"i\" atom=\"C\"/>"
+                + "<Path name=\"attached\" label=\"i\" atom=\"C\"/>"
                 + "</HBondCondition>"
                 + "</ChainDescription>"
                 + "</ProteinDescription>";

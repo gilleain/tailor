@@ -36,11 +36,11 @@ public class HBondConditionXmlHandler implements ConditionXmlHandler {
         Description d  = pathXmlHandler.getPath("donor");
         Description h  = pathXmlHandler.getPath("hydrogen");
         Description a  = pathXmlHandler.getPath("acceptor");
-        Description aa = pathXmlHandler.getPath("adjacent");
+        Description aa = pathXmlHandler.getPath("attached");
         HBondCondition hbond = new HBondCondition(d, h, a, aa, haMax, dhaMin, haaMin);
         
         if (this.dataStore.containsKey("isNegated")) {
-            boolean isNegated = Boolean.parseBoolean((String) this.dataStore.get("isNegated"));
+            boolean isNegated = Boolean.parseBoolean(this.dataStore.get("isNegated"));
             System.err.println("setting negated to " + isNegated);
             hbond.setNegated(isNegated);
         }

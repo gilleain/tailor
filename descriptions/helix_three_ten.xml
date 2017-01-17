@@ -46,13 +46,13 @@
 			<Path name="donor" label="i + 3" atom="N"/>
 			<Path name="hydrogen" label="i + 3" atom="H"/>
 			<Path name="acceptor" label="i" atom="O"/>
-			<Path name="adjacent" label="i" atom="C"/>
+			<Path name="attached" label="i" atom="C"/>
 		</HBondCondition>
 		<HBondCondition haMax="2.5" dhaMin="120.0" haaMin="90.0">
 			<Path name="donor" label="i + 4" atom="N"/>
 			<Path name="hydrogen" label="i + 4" atom="H"/>
 			<Path name="acceptor" label="i + 1" atom="O"/>
-			<Path name="adjacent" label="i + 1" atom="C"/>
+			<Path name="attached" label="i + 1" atom="C"/>
 		</HBondCondition>
 	</ChainDescription>
 </ProteinDescription>
