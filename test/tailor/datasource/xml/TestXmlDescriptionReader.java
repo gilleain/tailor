@@ -14,7 +14,7 @@ import org.junit.Test;
 
 import tailor.condition.Condition;
 import tailor.condition.HBondCondition;
-import tailor.datasource.xml.XmlDescriptionReader;
+import tailor.condition.TorsionBoundCondition;
 import tailor.description.AtomDescription;
 import tailor.description.ChainDescription;
 import tailor.description.Description;
@@ -107,6 +107,43 @@ public class TestXmlDescriptionReader {
         assertEquals("i + 1", getGroupLabel(hBondCondition.getHydrogenAtomDescription()));
         assertEquals("i", getGroupLabel(hBondCondition.getAcceptorAtomDescription()));
         assertEquals("i", getGroupLabel(hBondCondition.getAttachedAtomDescription()));
+    }
+    
+    @Test
+    public void testTorsionCondition() {
+        String xml = "<ProteinDescription name=\"test\">"
+                + "<ChainDescription name=\"A\">"
+                + "<GroupDescription name=\"GLY\" label=\"i\">"
+                + "<AtomDescription name=\"C\"/>"
+                + "</GroupDescription>\""
+                + "<GroupDescription name=\"GLY\" label=\"i + 1\">"
+                + "<AtomDescription name=\"C\"/>"
+                + "</GroupDescription>\""
+                + "<GroupDescription name=\"GLY\" label=\"i + 2\">"
+                + "<AtomDescription name=\"C\"/>"
+                + "</GroupDescription>\""
+                + "<GroupDescription name=\"GLY\" label=\"i + 3\">"
+                + "<AtomDescription name=\"C\"/>"
+                + "</GroupDescription>\""
+                + "<TorsionCondition name=\"gamma\" midPoint=\"120.0\" range=\"10.0\">"
+                + "<Path name=\"a\" label=\"i\" atom=\"C\"/>"
+                + "<Path name=\"b\" label=\"i + 1\" atom=\"C\"/>"
+                + "<Path name=\"c\" label=\"i + 2\" atom=\"C\"/>"
+                + "<Path name=\"d\" label=\"i + 3\" atom=\"C\"/>"
+                + "</TorsionCondition>"
+                + "</ChainDescription>"
+                + "</ProteinDescription>";
+        
+        Description description = read(xml);
+        ChainDescription chainDescription = (ChainDescription) description.getSubDescriptionAt(0);
+        Condition condition = chainDescription.getConditions().get(0);
+        assertThat(condition, instanceOf(TorsionBoundCondition.class));
+        
+        TorsionBoundCondition hBondCondition = (TorsionBoundCondition) condition;
+        assertEquals("i", getGroupLabel(hBondCondition.getDescriptionA()));
+        assertEquals("i + 1", getGroupLabel(hBondCondition.getDescriptionB()));
+        assertEquals("i + 2", getGroupLabel(hBondCondition.getDescriptionC()));
+        assertEquals("i + 3", getGroupLabel(hBondCondition.getDescriptionD()));
     }
     
     private String getGroupLabel(Description chainDescription) {
