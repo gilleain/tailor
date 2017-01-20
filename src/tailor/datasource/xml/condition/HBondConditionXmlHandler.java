@@ -1,4 +1,4 @@
-package tailor.datasource.xml;
+package tailor.datasource.xml.condition;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -6,6 +6,7 @@ import java.util.Map;
 import org.xml.sax.Attributes;
 
 import tailor.condition.HBondCondition;
+import tailor.datasource.xml.PathXmlHandler;
 import tailor.description.Description;
 
 public class HBondConditionXmlHandler implements ConditionXmlHandler {

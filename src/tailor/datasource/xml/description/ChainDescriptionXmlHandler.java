@@ -1,7 +1,8 @@
-package tailor.datasource.xml;
+package tailor.datasource.xml.description;
 
 import org.xml.sax.Attributes;
 
+import tailor.datasource.xml.DescriptionParseException;
 import tailor.description.ChainDescription;
 import tailor.description.Description;
 import tailor.description.ProteinDescription;

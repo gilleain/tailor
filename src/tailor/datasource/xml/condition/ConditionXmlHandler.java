@@ -1,7 +1,8 @@
-package tailor.datasource.xml;
+package tailor.datasource.xml.condition;
 
 import org.xml.sax.Attributes;
 
+import tailor.datasource.xml.PathXmlHandler;
 import tailor.description.Description;
 
 public interface ConditionXmlHandler {

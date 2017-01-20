@@ -16,6 +16,13 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
+import tailor.datasource.xml.condition.ConditionXmlHandler;
+import tailor.datasource.xml.condition.HBondConditionXmlHandler;
+import tailor.datasource.xml.description.AtomDescriptionXmlHandler;
+import tailor.datasource.xml.description.ChainDescriptionXmlHandler;
+import tailor.datasource.xml.description.DescriptionXmlHandler;
+import tailor.datasource.xml.description.GroupDescriptionXmlHandler;
+import tailor.datasource.xml.description.ProteinDescriptionXmlHandler;
 import tailor.description.Description;
 
 
