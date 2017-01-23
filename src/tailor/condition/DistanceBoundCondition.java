@@ -18,10 +18,10 @@ public class DistanceBoundCondition implements Condition {
 	private double center;
 	private double range;
 	
-	public DistanceBoundCondition(String name, int idA, int idB,
-	        Description context, double center, double range) {
+	public DistanceBoundCondition(String name, 
+	        Description descriptionA, Description descriptionB, double center, double range) {
 		this.name = name;
-		this.distanceMeasure = new DistanceMeasure(idA, idB, context);
+		this.distanceMeasure = new DistanceMeasure(name, descriptionA, descriptionB);
 		this.center = center;
 		this.range = range;
 	}
@@ -66,5 +66,14 @@ public class DistanceBoundCondition implements Condition {
 	public String toString() {
 		return String.format("%s (%s : %s)", this.name, this.center - this.range, this.center + this.range);
 	}
+
+    public Description getDescriptionA() {
+        return distanceMeasure.getDescriptionA();
+    }
+    
+    public Description getDescriptionB() {
+        return distanceMeasure.getDescriptionB();
+    }
+
 	
 }

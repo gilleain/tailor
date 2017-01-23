@@ -19,8 +19,7 @@ public class MultiChain {
         proteinDescription.addChainDescription(chainBDescription);
         
         // TODO
-        DistanceMeasure distanceMeasure = 
-            new DistanceMeasure(0, 1, proteinDescription);
+        DistanceMeasure distanceMeasure = new DistanceMeasure("D", chainADescription, chainBDescription);
         
         proteinDescription.addMeasure(distanceMeasure);
         Run run = new Run(filename);

@@ -32,20 +32,21 @@ public class CatmatTest {
         Util.labelTree(description);
 //        Util.printHierarchy(description);
         
-        int carbonylOxygenI  = factory.lookupID(0, "O");
-        int carbonylOxygenI2 = factory.lookupID(2, "O");
-        int waterID = waterOxygen.getID();
+        ChainDescription proteinChain = (ChainDescription)description.getSubDescriptionAt(0);
+        Description carbonylOxygenI  = proteinChain.getPath(0, "O");
+        Description carbonylOxygenI2 = proteinChain.getPath(2, "O");
+        Description waterPath = waterChain.getPathByGroupName("HOH", "O");
         
         System.out.println("COI " + carbonylOxygenI + 
                            " COIP2 " + carbonylOxygenI2 + 
-                           " W " + waterID);
+                           " W " + waterPath);
         
         description.addCondition(
                 new DistanceBoundCondition(
-                       "i.O-W", carbonylOxygenI, waterID, description, 3.5, 1));
+                       "i.O-W", carbonylOxygenI, waterPath,  3.5, 1));
         description.addCondition(
                 new DistanceBoundCondition(
-                    "i+2.O-W", carbonylOxygenI2, waterID, description, 3.5, 1));
+                    "i+2.O-W", carbonylOxygenI2, waterPath, 3.5, 1));
         
         description.addMeasure(factory.createPhiMeasure("phi2", 2));
         description.addMeasure(factory.createPhiMeasure("psi2", 2));

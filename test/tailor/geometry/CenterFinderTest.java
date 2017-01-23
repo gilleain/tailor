@@ -83,7 +83,7 @@ public class CenterFinderTest {
     public void simpleMeasureTest() throws DescriptionException {
         Description protD = new ProteinDescription();
         Description chainD = new ChainDescription();
-        Description groupD = new GroupDescription();
+        Description groupD = new GroupDescription("", "G1");
         
         Description atomND = new AtomDescription();
         atomND.addCondition(new PropertyCondition("Name", "N"));
@@ -111,8 +111,9 @@ public class CenterFinderTest {
         match.getSubMatch(0).getSubMatch(0).associate(atomOD, atomB);
         
         printHierarchy(protD);
-        DistanceMeasure measure = 
-            new DistanceMeasure(atomOD.getID(), atomND.getID(), protD);
+        Description pathToOD = ((ChainDescription)chainD).getPathByGroupLabel("G1", "O");
+        Description pathToND = ((ChainDescription)chainD).getPathByGroupLabel("G1", "N");
+        DistanceMeasure measure = new DistanceMeasure("D", pathToOD, pathToND);
         System.out.println(measure.measure(match));
     }
 

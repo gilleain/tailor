@@ -17,6 +17,7 @@ import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
 import tailor.datasource.xml.condition.ConditionXmlHandler;
+import tailor.datasource.xml.condition.DistanceConditionXmlHandler;
 import tailor.datasource.xml.condition.HBondConditionXmlHandler;
 import tailor.datasource.xml.condition.TorsionConditionXmlHandler;
 import tailor.datasource.xml.description.AtomDescriptionXmlHandler;
@@ -61,6 +62,7 @@ public class XmlDescriptionReader {
             pathXmlHandler = new PathXmlHandler();
             
             conditionHandlers = new HashMap<>();
+            conditionHandlers.put("DistanceCondition", new DistanceConditionXmlHandler());
             conditionHandlers.put("HBondCondition", new HBondConditionXmlHandler());
             conditionHandlers.put("TorsionCondition", new TorsionConditionXmlHandler());
         }

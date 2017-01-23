@@ -14,37 +14,25 @@ import tailor.geometry.Vector;
  *
  */
 public class DistanceMeasure extends Measure {
-
-	private int idA;
+	 
+    private Description descriptionA;
     
-	private int idB;
-	
-	// possibly needed for printing out details about the endpoints...
-	private Description context;   
-
-    /**
-     * @param descriptionA
-     * @param descriptionB
-     */
-    public DistanceMeasure(int idA, int idB, Description context) {
-        this("Distance", idA, idB, context);
-    }
+    private Description descriptionB;
     
 	/**
      * @param name the name of this measure
 	 * @param descriptionA
 	 * @param descriptionB
 	 */
-	public DistanceMeasure(String name, int idA, int idB, Description context) {
+	public DistanceMeasure(String name, Description descriptionA, Description descriptionB) {
 	    super(name);
-		this.idA = idA;
-		this.idB = idB;
-		this.context = context;
+		this.descriptionA = descriptionA;
+		this.descriptionB = descriptionB;
 	}
 	
 	public double calculate(Match match) {
-	    Vector a = CenterFinder.findCenter(idA, match);
-        Vector b = CenterFinder.findCenter(idB, match);
+	    Vector a = CenterFinder.findCenter(descriptionA, match);
+        Vector b = CenterFinder.findCenter(descriptionB, match);
         return Geometry.distance(a, b);
 	}
 
@@ -54,7 +42,16 @@ public class DistanceMeasure extends Measure {
 	}
     
     public String toString() {
-        return "d (" + idA + ", " + idB + ") "; // TODO
+        return "d (" + descriptionA.toXmlPathString() 
+                  + ", " + descriptionB.toXmlPathString() + ") "; // TODO
+    }
+
+    public Description getDescriptionA() {
+        return this.descriptionA;
+    }
+    
+    public Description getDescriptionB() {
+        return this.descriptionB;
     }
 
 }

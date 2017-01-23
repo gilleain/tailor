@@ -13,6 +13,7 @@ import java.nio.charset.StandardCharsets;
 import org.junit.Test;
 
 import tailor.condition.Condition;
+import tailor.condition.DistanceBoundCondition;
 import tailor.condition.HBondCondition;
 import tailor.condition.TorsionBoundCondition;
 import tailor.description.AtomDescription;
@@ -110,6 +111,33 @@ public class TestXmlDescriptionReader {
     }
     
     @Test
+    public void testDistanceCondition() {
+        String xml = "<ProteinDescription name=\"test\">"
+                + "<ChainDescription name=\"A\">"
+                + "<GroupDescription name=\"GLY\" label=\"i\">"
+                + "<AtomDescription name=\"C\"/>"
+                + "</GroupDescription>\""
+                + "<GroupDescription name=\"GLY\" label=\"i + 1\">"
+                + "<AtomDescription name=\"C\"/>"
+                + "</GroupDescription>\""
+                + "<DistanceCondition name=\"d\" center=\"3.5\" range=\"1.0\">"
+                + "<Path name=\"a\" label=\"i\" atom=\"C\"/>"
+                + "<Path name=\"b\" label=\"i + 1\" atom=\"C\"/>"
+                + "</DistanceCondition>"
+                + "</ChainDescription>"
+                + "</ProteinDescription>";
+        
+        Description description = read(xml);
+        ChainDescription chainDescription = (ChainDescription) description.getSubDescriptionAt(0);
+        Condition condition = chainDescription.getConditions().get(0);
+        assertThat(condition, instanceOf(DistanceBoundCondition.class));
+        
+        DistanceBoundCondition distanceCondition = (DistanceBoundCondition) condition;
+        assertEquals("i", getGroupLabel(distanceCondition.getDescriptionA()));
+        assertEquals("i + 1", getGroupLabel(distanceCondition.getDescriptionB()));
+    }
+    
+    @Test
     public void testTorsionCondition() {
         String xml = "<ProteinDescription name=\"test\">"
                 + "<ChainDescription name=\"A\">"
@@ -139,11 +167,11 @@ public class TestXmlDescriptionReader {
         Condition condition = chainDescription.getConditions().get(0);
         assertThat(condition, instanceOf(TorsionBoundCondition.class));
         
-        TorsionBoundCondition hBondCondition = (TorsionBoundCondition) condition;
-        assertEquals("i", getGroupLabel(hBondCondition.getDescriptionA()));
-        assertEquals("i + 1", getGroupLabel(hBondCondition.getDescriptionB()));
-        assertEquals("i + 2", getGroupLabel(hBondCondition.getDescriptionC()));
-        assertEquals("i + 3", getGroupLabel(hBondCondition.getDescriptionD()));
+        TorsionBoundCondition torsion = (TorsionBoundCondition) condition;
+        assertEquals("i", getGroupLabel(torsion.getDescriptionA()));
+        assertEquals("i + 1", getGroupLabel(torsion.getDescriptionB()));
+        assertEquals("i + 2", getGroupLabel(torsion.getDescriptionC()));
+        assertEquals("i + 3", getGroupLabel(torsion.getDescriptionD()));
     }
     
     private String getGroupLabel(Description chainDescription) {
