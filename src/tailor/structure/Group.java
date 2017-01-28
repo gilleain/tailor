@@ -13,6 +13,11 @@ public class Group implements Structure {
 
     private String id;
     
+    private int index;
+    
+    private int number; // TODO - id, index, number...
+    
+
     public Group() {
         this.atomMap = new HashMap<String, Atom>();
     }
@@ -50,10 +55,26 @@ public class Group implements Structure {
     public void setId(String id) {
         this.id = id;
     }
+    
+    public int getIndex() {
+        return index;
+    }
+
+    public void setIndex(int index) {
+        this.index = index;
+    }
 
     @Override
     public String getName() {
         return id;
+    }
+    
+    public int getNumber() {
+        return number;
+    }
+
+    public void setNumber(int number) {
+        this.number = number;
     }
 
     public List<Atom> getAtoms() {

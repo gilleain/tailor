@@ -11,7 +11,14 @@ public class Chain implements Structure {
     
     private final List<SSE> sses;
     
+    private final String name;
+    
     public Chain() {
+        this("A");  // XXX is this a sensible default?
+    }
+    
+    public Chain(String name) {
+        this.name = name;
         this.groups = new ArrayList<Group>();
         this.sses = new ArrayList<SSE>();
     }
@@ -52,8 +59,7 @@ public class Chain implements Structure {
 
     @Override
     public String getName() {
-        // TODO Auto-generated method stub
-        return null;
+        return name;
     }
 
     public List<Group> getGroups() {
