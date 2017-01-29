@@ -13,7 +13,7 @@ import tailor.engine.Engine;
 import tailor.engine.EngineFactory;
 import tailor.engine.Run;
 
-public class Main {
+public class Matcher {
     
     private static Description read(String filename) {
         XmlDescriptionReader reader = new XmlDescriptionReader();
@@ -44,7 +44,7 @@ public class Main {
     public static void main(String[] args) throws ParseException, IOException {
         System.err.println("Starting...");
         CommandLineHandler handler = new CommandLineHandler();
-        Main.run(handler.processArguments(args));
+        Matcher.run(handler.processArguments(args));
     }
 
 }
