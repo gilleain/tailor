@@ -10,7 +10,7 @@ import tailor.structure.Protein;
 
 public class PDBWriter {
     
-    private static final String FORMAT = "ATOM %6d %-3s %s %5s     % 7.3f % 7.3f % 7.3f";
+    private static final String FORMAT = "ATOM %6d %s %s %5s     % 7.3f % 7.3f % 7.3f";
     
     public static void write(Protein protein, BufferedWriter out) throws IOException {
         int index = 1;
@@ -36,9 +36,27 @@ public class PDBWriter {
     public static void write(Atom atom, int index, 
             String residueName, int residueNumber, BufferedWriter out) throws IOException {
         out.write(String.format(
-                FORMAT, index, atom.getName(), residueName, residueNumber, 
+                FORMAT, index, centerPad(atom.getName()), residueName, residueNumber, 
                 atom.getCenter().x(), atom.getCenter().y(), atom.getCenter().z()));
         
+    }
+    
+    /**
+     * Pad specifically for PDB files...
+     * 
+     * @param name
+     * @return
+     */
+    private static String centerPad(String name) {
+        if (name.length() == 1) {
+            return " " + name + "  ";
+        } else if (name.length() == 2) {
+            return " " + name + " ";
+        } else if (name.length() == 3) {
+            return name + " ";
+        } else {
+            return name;
+        }
     }
 
 }
