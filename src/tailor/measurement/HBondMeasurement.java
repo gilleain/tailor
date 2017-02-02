@@ -13,7 +13,18 @@ public class HBondMeasurement implements Measurement {
         this.dhaAngle = dhaAngle;
         this.haaAngle = haaAngle;
     }
-
+    
+    public double getHaDistance() {
+        return haDistance;
+    }
+    
+    public double getDhaAngle() {
+        return dhaAngle;
+    }
+    
+    public double getHaaAngle() {
+        return haaAngle;
+    }
 
     public String toString() {
         return "HBond Measurement";

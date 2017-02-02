@@ -1,31 +1,18 @@
 package tailor.condition;
 
 import tailor.description.Description;
-import tailor.engine.Match;
-import tailor.measure.TorsionMeasure;
+import tailor.match.Match;
+import tailor.measurement.TorsionMeasure;
 
 
 public class TorsionBoundCondition implements Condition {
 	
-	private String name;
+	private final String name;
+	private final TorsionMeasure torsionMeasure;
+	private final double midPoint;
+	private final double range;
+
 	private String letterSymbol;
-	private TorsionMeasure torsionMeasure;
-	private double midPoint;
-	private double range;
-	
-	/**
-	 * A partial Condition, with just the numeric values filled. Use with care.
-	 * 
-	 * @param name
-	 * @param midPoint
-	 * @param range
-	 */
-	public TorsionBoundCondition(String name, double midPoint, double range) {
-		this.name = name;
-		this.midPoint = midPoint;
-		this.range = range;
-		this.letterSymbol = "";
-	}
 	
 	/**
 	 * A Condition that sets a bound on what a torsion between 4 Descriptions 
@@ -42,7 +29,10 @@ public class TorsionBoundCondition implements Condition {
 	public TorsionBoundCondition(String name, Description descriptionA, 
 	        Description descriptionB, Description descriptionC, 
 	        Description descriptionD, double midPoint, double range) {
-		this(name, midPoint, range);
+	    this.name = name;
+        this.midPoint = midPoint;
+        this.range = range;
+        this.letterSymbol = "";
 		this.torsionMeasure = 
 		    new TorsionMeasure(
 		            descriptionA, descriptionB, descriptionC, descriptionD);
@@ -65,21 +55,6 @@ public class TorsionBoundCondition implements Condition {
 	    return this.torsionMeasure.getDescriptionD();
 	}
 	
-	public void setDescriptionA(Description descriptionA) {
-	    this.torsionMeasure.setDescriptionA(descriptionA);
-	}
-	
-	public void setDescriptionB(Description descriptionB) {
-	    this.torsionMeasure.setDescriptionA(descriptionB);
-	}
-	
-	public void setDescriptionC(Description descriptionC) {
-	    this.torsionMeasure.setDescriptionA(descriptionC);
-	}
-	
-	public void setDescriptionD(Description descriptionD) {
-	    this.torsionMeasure.setDescriptionA(descriptionD);
-	}
 	
 	public String getName() {
 		return this.name;
@@ -102,13 +77,6 @@ public class TorsionBoundCondition implements Condition {
 	    return false;
 	}
 
-    public Object clone() {
-    	TorsionBoundCondition clonedCopy 
-    		= new TorsionBoundCondition(this.name, this.midPoint, this.range);
-    	clonedCopy.letterSymbol = this.letterSymbol;
-//    	clonedCopy.torsionMeasure = this.torsionMeasure.clone(); TODO
-    	return clonedCopy;
-    }
     
 	public boolean equals(Condition other) {
 		if (other instanceof TorsionBoundCondition) {

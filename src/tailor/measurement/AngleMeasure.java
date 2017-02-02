@@ -1,11 +1,9 @@
-package tailor.measure;
+package tailor.measurement;
 
 import tailor.description.Description;
-import tailor.description.DescriptionException;
-import tailor.engine.Match;
-import tailor.geometry.CenterFinder;
 import tailor.geometry.Geometry;
 import tailor.geometry.Vector;
+import tailor.match.Match;
 
 
 /**
@@ -14,7 +12,7 @@ import tailor.geometry.Vector;
  * @author maclean
  *
  */
-public class AngleMeasure extends Measure {
+public class AngleMeasure extends GeometricMeasure implements Measure<DoubleMeasurement> {
     
     private Description descriptionA;
     
@@ -41,15 +39,15 @@ public class AngleMeasure extends Measure {
     }
 
     public double calculate(Match match) {
-        Vector a = CenterFinder.findCenter(descriptionA, match);
-        Vector b = CenterFinder.findCenter(descriptionA, match);
-        Vector c = CenterFinder.findCenter(descriptionA, match);
+        Vector a = getPoint(descriptionA, match);
+        Vector b = getPoint(descriptionB, match);
+        Vector c = getPoint(descriptionC, match);
         return Geometry.angle(a, b, c);
     }
 
     @Override
-    public Measurement measure(Match match) throws DescriptionException {
-        return new Measurement(this.getName(), calculate(match));
+    public DoubleMeasurement measure(Match match) {
+        return new DoubleMeasurement(calculate(match));
     }
     
     public String toString() {

@@ -1,11 +1,9 @@
-package tailor.measure;
+package tailor.measurement;
 
-import tailor.description.DescriptionException;
 import tailor.description.Description;
-import tailor.engine.Match;
-import tailor.geometry.CenterFinder;
 import tailor.geometry.Geometry;
 import tailor.geometry.Vector;
+import tailor.match.Match;
 
 /**
  * Measures the distance between two points.
@@ -13,7 +11,7 @@ import tailor.geometry.Vector;
  * @author maclean
  *
  */
-public class DistanceMeasure extends Measure {
+public class DistanceMeasure extends GeometricMeasure implements Measure<DoubleMeasurement>{
 	 
     private Description descriptionA;
     
@@ -31,14 +29,14 @@ public class DistanceMeasure extends Measure {
 	}
 	
 	public double calculate(Match match) {
-	    Vector a = CenterFinder.findCenter(descriptionA, match);
-        Vector b = CenterFinder.findCenter(descriptionB, match);
+	    Vector a = getPoint(descriptionA, match);
+        Vector b = getPoint(descriptionB, match);
         return Geometry.distance(a, b);
 	}
 
 	@Override
-	public Measurement measure(Match match) throws DescriptionException {
-		return new Measurement(this.getName(), calculate(match));
+	public DoubleMeasurement measure(Match match) {
+		return new DoubleMeasurement(calculate(match));
 	}
     
     public String toString() {

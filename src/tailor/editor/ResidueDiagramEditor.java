@@ -7,7 +7,7 @@ import java.awt.Image;
 import java.awt.image.RenderedImage;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
+import java.util.List;
 
 import javax.imageio.ImageIO;
 import javax.swing.ButtonGroup;
@@ -24,11 +24,13 @@ import tailor.datasource.xml.XmlDescriptionReader;
 import tailor.description.AtomDescription;
 import tailor.description.ChainDescription;
 import tailor.description.Description;
+import tailor.description.DescriptionFactory;
+import tailor.description.GroupDescription;
 import tailor.description.ProteinDescription;
 import tailor.editor.symbol.Symbol;
-import tailor.measure.HBondMeasure;
-import tailor.measure.Measure;
-import tailor.measure.TorsionMeasure;
+import tailor.measurement.HBondMeasure;
+import tailor.measurement.Measure;
+import tailor.measurement.TorsionMeasure;
 
 public class ResidueDiagramEditor extends JPanel implements SymbolSelectionListener {
 	
@@ -59,11 +61,15 @@ public class ResidueDiagramEditor extends JPanel implements SymbolSelectionListe
 	
 	private State state;
 	
+	private DescriptionFactory factory;
+	
 	public ResidueDiagramEditor() {
 		int numberOfResidues = 6;
 		int numberOfResiduesInView = 6;
+		this.factory = new DescriptionFactory();
 		
-		this.canvas = new ResidueDiagramCanvas(numberOfResidues, numberOfResiduesInView);
+		ChainDescription chainDescription = makeChain(numberOfResidues);
+		this.canvas = new ResidueDiagramCanvas(chainDescription, numberOfResiduesInView);
 		this.canvas.addSymbolSelectionListener(this);
 		
 		this.previouslySelectedSymbol = null;
@@ -76,7 +82,7 @@ public class ResidueDiagramEditor extends JPanel implements SymbolSelectionListe
 		this.conditionToolBar = new ConditionToolbar(this, buttonGroup);
 		this.measureToolBar = new MeasureToolbar(this, buttonGroup);
 		
-		this.conditionPropertySheetPanel = new ConditionPropertySheetPanel();
+		this.conditionPropertySheetPanel = new ConditionPropertySheetPanel(factory);
 		this.conditionListBox = new ConditionListBox();
 		
 		this.measurePropertySheetPanel = new MeasurePropertySheetPanel();
@@ -111,6 +117,12 @@ public class ResidueDiagramEditor extends JPanel implements SymbolSelectionListe
 		
 		this.state = State.MAKING_PHI_TORSION_CONDITION;
 		this.conditionPropertySheetPanel.initialiseTorsionSheet("phi");
+	}
+	
+	private ChainDescription makeChain(int numberOfResidues) {
+	    this.factory.addChainToProtein("A");
+        this.factory.addMultipleResiduesToChain("A", numberOfResidues);
+        return factory.getChainDescription("A");  // TODO : >1 chain?
 	}
 	
 	public void toggleLabels() {
@@ -148,10 +160,10 @@ public class ResidueDiagramEditor extends JPanel implements SymbolSelectionListe
 	}
 	
 	public ProteinDescription getDescription() {
-		return this.canvas.getDiagram().getFactory().getProduct();
+		return this.factory.getProduct();
 	}
 	
-	public ArrayList<Measure> getMeasures() {
+	public List<Measure<?>> getMeasures() {
 		return this.measureListBox.getMeasures();
 	}
 	
@@ -173,9 +185,16 @@ public class ResidueDiagramEditor extends JPanel implements SymbolSelectionListe
 	}
 	
 	public void addResidueToEnd() {
+	    
+        // TODO : >1 chain?
+	    this.factory.addResidueToChain("A");
+        ChainDescription chain = factory.getChainDescription("A");  
+        
+        int index = chain.getGroupDescriptions().size() - 1;
+        GroupDescription group = chain.getGroupDescription(index);
 		
 		// update the display and the model
-		this.canvas.addResidueToEnd();
+		this.canvas.addResidueToEnd(group);
 		this.diagramPropertyPanel.incrementNumberOfResidues();
 		
 		// repaint changes
@@ -192,6 +211,10 @@ public class ResidueDiagramEditor extends JPanel implements SymbolSelectionListe
 		this.canvas.removeResidueFromEnd();
 		this.diagramPropertyPanel.decrementNumberOfResidues();
 		
+		// TODO : >1 chain?
+        ChainDescription chain = factory.getChainDescription("A");
+        chain.removeLastGroupDescription();
+		
 		// repaint changes
 		this.canvas.calculateDimensions(6); //FIXME
 		this.repaint();
@@ -199,6 +222,20 @@ public class ResidueDiagramEditor extends JPanel implements SymbolSelectionListe
 		// nasty, but seemingly necessary
 		((JComponent)this.canvas.getParent()).revalidate();
 	}
+    
+    public void fillPhiMeasure(
+            TorsionMeasure torsionMeasure, int residueNumber, String chainName) {
+        this.factory.fillPhiMeasure(torsionMeasure, residueNumber, chainName);
+    }
+    
+    public void fillPsiMeasure(
+            TorsionMeasure torsionMeasure, int residueNumber, String chainName) {
+        this.factory.fillPsiMeasure(torsionMeasure, residueNumber, chainName);
+    }
+    
+    public boolean canHydrogenBond(AtomDescription a, AtomDescription b) {
+        return this.factory.canHydrogenBond(a, b);
+    }
 	
 	public void makeBondCondition(Symbol newlySelectedSymbol) {
 		
@@ -214,27 +251,24 @@ public class ResidueDiagramEditor extends JPanel implements SymbolSelectionListe
 				this.canvas.getAtomDescriptionFromSymbol(this.previouslySelectedSymbol);
 			
 			// bail out if incompatible partners have been selected
-			if (!this.canvas.canHydrogenBond(selectedAtomDescription, 
-					previousAtomDescription)) {
+			if (!this.canHydrogenBond(selectedAtomDescription, previousAtomDescription)) {
 				return;
 			}
 			
 			int startNum = this.previouslySelectedSymbol.getResidueIndex();
 			int endNum = newlySelectedSymbol.getResidueIndex();
 			
-			HBondCondition hBondCondition = 
-				this.conditionPropertySheetPanel.getHBondCondition();
 
 			String startAtomLabel = this.previouslySelectedSymbol.getLabel();
+			HBondCondition hBondCondition;
 			if (startAtomLabel.equals("O")) {	// endAtomType must be "N"
-				this.conditionPropertySheetPanel.
-				setHBondSheetResidues(endNum + 1, startNum + 1);
-				this.canvas.addHBondConditionToChain(hBondCondition, endNum, startNum, "A");
+				this.conditionPropertySheetPanel.setHBondSheetResidues(endNum + 1, startNum + 1);
+				hBondCondition = this.conditionPropertySheetPanel.getHBondCondition(endNum, startNum);
 			} else {							// endAtomType must be "O"
-				this.conditionPropertySheetPanel.
-					setHBondSheetResidues(startNum + 1, endNum + 1);
-				this.canvas.addHBondConditionToChain(hBondCondition, startNum, endNum, "A");
+				this.conditionPropertySheetPanel.setHBondSheetResidues(startNum + 1, endNum + 1);
+				hBondCondition = this.conditionPropertySheetPanel.getHBondCondition(startNum, endNum);
 			}
+			factory.addHBondConditionToChain(hBondCondition, "A");
 
 			this.conditionListBox.addConditionToList(hBondCondition);
 			this.diagramPropertyPanel.incrementNumberOfHBondConditions();
@@ -257,8 +291,7 @@ public class ResidueDiagramEditor extends JPanel implements SymbolSelectionListe
 				this.canvas.getAtomDescriptionFromSymbol(this.previouslySelectedSymbol);
 			
 			// bail out if incompatible partners have been selected
-			if (!this.canvas.canHydrogenBond(selectedAtomDescription, 
-					previousAtomDescription)) {
+			if (!this.canHydrogenBond(selectedAtomDescription, previousAtomDescription)) {
 				return;
 			}
 			
@@ -288,8 +321,8 @@ public class ResidueDiagramEditor extends JPanel implements SymbolSelectionListe
 		int residueNumber = newlySelectedSymbol.getResidueIndex();
 		this.conditionPropertySheetPanel.setTorsionSheetResidue("phi", residueNumber, residueNumber + 1);
 		
-		TorsionBoundCondition torsionCondition = this.conditionPropertySheetPanel.getTorsionCondition();
-		this.canvas.addPhiConditionToChain(torsionCondition, residueNumber, "A");
+		TorsionBoundCondition torsionCondition = this.conditionPropertySheetPanel.getTorsionCondition(residueNumber);
+		factory.addPhiConditionToChain(torsionCondition, "A");
 		this.showTorsionCondition(torsionCondition);
 		
 		torsionCondition.setLetterSymbol("\u03C6");
@@ -302,7 +335,7 @@ public class ResidueDiagramEditor extends JPanel implements SymbolSelectionListe
 		this.measurePropertySheetPanel.setTorsionSheetResidue("phi", residueNumber, residueNumber + 1);
 		
 		TorsionMeasure torsionMeasure = this.measurePropertySheetPanel.getTorsionMeasure();
-		this.canvas.fillPhiMeasure(torsionMeasure, residueNumber, "A");
+		this.fillPhiMeasure(torsionMeasure, residueNumber, "A");
 		this.showTorsionMeasure(torsionMeasure);
 		
 		this.canvas.makePhi(residueNumber, "\u03C6?", Symbol.Stroke.DOTTED);
@@ -312,8 +345,9 @@ public class ResidueDiagramEditor extends JPanel implements SymbolSelectionListe
 		int residueNumber = newlySelectedSymbol.getResidueIndex();
 		this.conditionPropertySheetPanel.setTorsionSheetResidue("psi", residueNumber + 1, residueNumber + 2);
 		
-		TorsionBoundCondition torsionCondition = this.conditionPropertySheetPanel.getTorsionCondition();
-		this.canvas.addPsiConditionToChain(torsionCondition, residueNumber, "A");
+		TorsionBoundCondition torsionCondition = 
+		        this.conditionPropertySheetPanel.getTorsionCondition(residueNumber);
+		factory.addPsiConditionToChain(torsionCondition, "A");
 		this.showTorsionCondition(torsionCondition);
 		
 		torsionCondition.setLetterSymbol("\u03C8");
@@ -326,7 +360,7 @@ public class ResidueDiagramEditor extends JPanel implements SymbolSelectionListe
 		this.measurePropertySheetPanel.setTorsionSheetResidue("psi", residueNumber + 1, residueNumber + 2);
 		
 		TorsionMeasure torsionMeasure = this.measurePropertySheetPanel.getTorsionMeasure();
-		this.canvas.fillPsiMeasure(torsionMeasure, residueNumber, "A");
+		this.fillPsiMeasure(torsionMeasure, residueNumber, "A");
 		this.showTorsionMeasure(torsionMeasure);
 		
 		this.canvas.makePsi(residueNumber, "\u03C8?", Symbol.Stroke.DOTTED);
@@ -409,7 +443,10 @@ public class ResidueDiagramEditor extends JPanel implements SymbolSelectionListe
         if (fileTypeFlag.equals("--xml-motif")) {
         	File file = new File(args[1]);
         	if (file.exists()) {
+        	    System.err.println("reading file " + file.getAbsolutePath());
         		this.loadMotifFile(file);
+        	} else {
+        	    System.err.println("file does not exist" + file.getAbsolutePath());
         	}
         }
     }

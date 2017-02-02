@@ -1,15 +1,8 @@
 package tailor.description;
 
-import java.io.IOException;
-
 import org.junit.Test;
 
 import tailor.condition.DistanceBoundCondition;
-import tailor.datasource.PDBFileList;
-import tailor.datasource.Structure;
-import tailor.engine.Match;
-import tailor.engine.SingleChainEngine;
-import tailor.measure.DistanceMeasure;
 
 public class DescriptionFactoryTests {
     
@@ -49,29 +42,7 @@ public class DescriptionFactoryTests {
         
         DistanceBoundCondition bound = new DistanceBoundCondition("NODistance", a, b, 4, 2);
         chain.addGroupCondition(bound);
-        
-        //TODO
-        DistanceMeasure measure = new DistanceMeasure("test", a, b);
-        
-        // TODO : factor below code into separate test? 
-        String path = "structures/1a2p.pdb";
-        try {
-            PDBFileList fileList = new PDBFileList(path, new String[]{});
-            while (fileList.hasNext()) {
-                Structure structure = fileList.next();
-                System.err.println("Structure " + structure.getId());
-                SingleChainEngine engine = new SingleChainEngine();
-                Structure chainA = structure.getSubStructureAtIndex(0);
-                for (Match match : engine.match(chain, chainA)) {
-                    System.out.println(match.toString() 
-                            + " "  + measure.measure(match));
-                }
-            }
-        } catch (IOException ioe) {
-            System.err.println(ioe);
-        } catch (DescriptionException de) {
-            System.err.println(de);
-        }
+        // TODO - asserts!
     }
 
 }

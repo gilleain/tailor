@@ -11,9 +11,8 @@ import tailor.datasource.StreamResultsPrinter;
 import tailor.datasource.Structure;
 import tailor.datasource.StructureSource;
 import tailor.description.Description;
-import tailor.description.DescriptionException;
-import tailor.measure.Measure;
-import tailor.measure.Measurement;
+import tailor.measurement.Measure;
+import tailor.measurement.Measurement;
 
 public abstract class AbstractBaseEngine implements Engine {
     
@@ -110,18 +109,20 @@ public abstract class AbstractBaseEngine implements Engine {
                     int n = measures.size();
                     Measurement[] measurements = new Measurement[n];
                     for (Measure measure : measures) {
-                        Measurement measurement = measure.measure(match);
-                        measurements[i++] = measurement;
+                        // XXX refactor to switch Match object types
+//                        Measurement measurement = measure.measure(match);
+//                        measurements[i++] = measurement;
                     }
                     
                     printer.printResult(new Result(match, measurements));
                 }
             } catch (IOException i) {
                 err.println(i.toString());
-            } catch (DescriptionException d) {
-                err.println(d.toString());
-                d.printStackTrace(err);
             }
+//            } catch (DescriptionException d) {
+//                err.println(d.toString());
+//                d.printStackTrace(err);
+//            }
         }
     }
 }

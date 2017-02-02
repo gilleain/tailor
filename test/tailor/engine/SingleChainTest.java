@@ -13,8 +13,8 @@ import tailor.description.Description;
 import tailor.description.DescriptionException;
 import tailor.description.DescriptionFactory;
 import tailor.description.ProteinDescription;
-import tailor.measure.Measure;
-import tailor.measure.Measurement;
+import tailor.measurement.Measure;
+import tailor.measurement.Measurement;
 
 public class SingleChainTest {
     
@@ -40,8 +40,9 @@ public class SingleChainTest {
                 for (Match match : engine.match(chainD, chain)) {
                     System.out.print(match + " ");
                     for (Measure measure : chainD.getMeasures()) {
-                        Measurement measurement = measure.measure(match);
-                        System.out.print(measurement + ", ");
+                        // XXX refactor of Match objects
+//                        Measurement measurement = measure.measure(match);
+//                        System.out.print(measurement + ", ");
                     }
                     System.out.println();
                 }

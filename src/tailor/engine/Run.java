@@ -8,7 +8,7 @@ import tailor.datasource.PDBFileList;
 import tailor.datasource.StructureSource;
 import tailor.description.Description;
 import tailor.description.ProteinDescription;
-import tailor.measure.Measure;
+import tailor.measurement.Measure;
 
 public class Run {
 

@@ -12,6 +12,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import tailor.condition.TorsionBoundCondition;
+import tailor.description.DescriptionFactory;
 
 public class TorsionConditionPropertySheet extends JPanel implements ActionListener {
 	
@@ -27,8 +28,11 @@ public class TorsionConditionPropertySheet extends JPanel implements ActionListe
 	private JButton updateButton;
 	private JButton revertButton;
 	
-	public TorsionConditionPropertySheet() {
-		
+	private DescriptionFactory descriptionFactory;
+	
+	public TorsionConditionPropertySheet(DescriptionFactory descriptionFactory) {
+	    this.descriptionFactory = descriptionFactory;
+	    
 		this.setLayout(new BorderLayout());
 		this.add(new JLabel("Torsion Condition", JLabel.CENTER), BorderLayout.NORTH);
 
@@ -131,21 +135,31 @@ public class TorsionConditionPropertySheet extends JPanel implements ActionListe
 		}
 	}
 	
-	public TorsionBoundCondition getCondition() {
+	public TorsionBoundCondition getCondition(int residueNumber) {
 		double min = Double.parseDouble(this.minValue.getText());
 		double max = Double.parseDouble(this.maxValue.getText());
 		double range = (max - min) / 2;
 		double midPoint = (max + min) / 2;
-		String name = this.nameField.getText();
+		String torsionName = this.nameField.getText();
 		
-		return new TorsionBoundCondition(name, midPoint, range);
+		if (torsionName.startsWith("phi")) {
+		    return descriptionFactory.createPhiCondition(midPoint, range, residueNumber, "A");
+		} else if (torsionName.startsWith("psi")) {
+		    return descriptionFactory.createPsiCondition(midPoint, range, residueNumber, "A");
+		} else if (torsionName.equals("omega")) {
+		    // XXX this won't work for omega, as we need start/end!
+		    return null; 
+		} else {
+		    return null;  // XX throw error
+		}
+		
 	}
 	
 	public void actionPerformed(ActionEvent ae) {
 		 String command = ae.getActionCommand();
-	        if (command.equals("Update")) {
-	        } else if (command.equals("Revert")) {
-	        }
+		 if (command.equals("Update")) {
+		 } else if (command.equals("Revert")) {
+		 }
 	}
 
 }

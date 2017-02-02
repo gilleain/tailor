@@ -3,7 +3,7 @@ package tailor.datasource;
 import java.io.PrintStream;
 import java.util.List;
 
-import tailor.measure.Measure;
+import tailor.measurement.Measure;
 
 public class StreamResultsPrinter implements ResultsPrinter {
 	

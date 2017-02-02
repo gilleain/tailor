@@ -6,7 +6,7 @@ import java.util.List;
 import tailor.condition.Condition;
 import tailor.condition.PropertyCondition;
 import tailor.datasource.Structure;
-import tailor.measure.Measure;
+import tailor.measurement.Measure;
 import tailor.structure.Level;
 
 

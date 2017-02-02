@@ -2,7 +2,7 @@ package tailor.datasource;
 
 import java.util.List;
 
-import tailor.measure.Measure;
+import tailor.measurement.Measure;
 
 /**
  * A results printer is the output sink for results from an Engine. 

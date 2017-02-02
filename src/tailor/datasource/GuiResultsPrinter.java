@@ -5,7 +5,7 @@ import java.util.List;
 import javax.swing.JProgressBar;
 
 import tailor.app.FileDataTableModel;
-import tailor.measure.Measure;
+import tailor.measurement.Measure;
 
 public class GuiResultsPrinter implements ResultsPrinter {
 	

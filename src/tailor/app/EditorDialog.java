@@ -4,7 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -14,7 +14,7 @@ import javax.swing.JPanel;
 import tailor.description.Description;
 import tailor.description.ProteinDescription;
 import tailor.editor.ResidueDiagramEditor;
-import tailor.measure.Measure;
+import tailor.measurement.Measure;
 
 public class EditorDialog extends JDialog implements ActionListener {
 	
@@ -83,7 +83,7 @@ public class EditorDialog extends JDialog implements ActionListener {
 		return this.editor.getDescription();
 	}
 	
-	public ArrayList<Measure> getMeasures() {
+	public List<Measure<?>> getMeasures() {
 		return this.editor.getMeasures();
 	}
 	

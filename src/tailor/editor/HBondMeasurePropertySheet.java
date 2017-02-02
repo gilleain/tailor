@@ -10,7 +10,7 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import tailor.measure.HBondMeasure;
+import tailor.measurement.HBondMeasure;
 
 public class HBondMeasurePropertySheet extends JPanel implements ActionListener {
 	
@@ -80,7 +80,8 @@ public class HBondMeasurePropertySheet extends JPanel implements ActionListener 
 	}
 	
 	public HBondMeasure getMeasure() {
-		return new HBondMeasure();
+//		return new HBondMeasure();   XXX FIXME
+	    return null;
 	}
 	
 	public void actionPerformed(ActionEvent ae) {

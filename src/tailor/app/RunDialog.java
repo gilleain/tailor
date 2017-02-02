@@ -26,9 +26,9 @@ import tailor.description.ProteinDescription;
 import tailor.editor.DescriptionTreeView;
 import tailor.editor.SelectionDialog;
 import tailor.engine.Run;
-import tailor.measure.AngleMeasure;
-import tailor.measure.Measure;
-import tailor.measure.TorsionMeasure;
+import tailor.measurement.AngleMeasure;
+import tailor.measurement.Measure;
+import tailor.measurement.TorsionMeasure;
 
 
 public class RunDialog extends JDialog implements ActionListener, TreeSelectionListener {

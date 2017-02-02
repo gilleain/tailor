@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import tailor.condition.Condition;
-import tailor.measure.Measure;
+import tailor.measurement.Measure;
 import tailor.structure.Level;
 
 

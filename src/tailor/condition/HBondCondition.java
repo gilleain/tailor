@@ -1,10 +1,9 @@
 package tailor.condition;
 
 import tailor.description.Description;
-import tailor.engine.Match;
-import tailor.geometry.CenterFinder;
-import tailor.geometry.Geometry;
-import tailor.geometry.Vector;
+import tailor.match.Match;
+import tailor.measurement.HBondMeasure;
+import tailor.measurement.HBondMeasurement;
 
 
 /**
@@ -15,13 +14,7 @@ public class HBondCondition implements Condition {
     
     private String name;
     
-    private Description donorAtomDescription;
-    
-    private Description hydrogenAtomDescription;
-    
-    private Description acceptorAtomDescription;
-    
-    private Description attachedAtomDescription;
+    private HBondMeasure hBondMeasure;
     
     private double haMax;
     
@@ -30,20 +23,6 @@ public class HBondCondition implements Condition {
     private double haaMin;
     
     private boolean isNegated;
-    
-    /**
-     * A partial Condition, with only the values filled. Use with care.
-     * 
-     * @param haMax
-     * @param dhaMin
-     * @param haaMin
-     */
-    public HBondCondition(double haMax, double dhaMin, double haaMin) {
-    	this.name = "HBond";
-    	this.haMax = haMax;
-        this.dhaMin = dhaMin;
-        this.haaMin = haaMin;
-    }
     
     /**
      * An anonymous HBond that will be called "HBond".
@@ -75,10 +54,13 @@ public class HBondCondition implements Condition {
             Description hydrogenAtomDescription, Description acceptorAtomDescription, 
             Description attachedAtomDescription, double haMax, double dhaMin, double haaMin) {
         this.name = name;
-        this.donorAtomDescription = donorAtomDescription;
-        this.hydrogenAtomDescription = hydrogenAtomDescription;
-        this.acceptorAtomDescription = acceptorAtomDescription;
-        this.attachedAtomDescription = attachedAtomDescription;
+        this.hBondMeasure = 
+                new HBondMeasure(
+                    name, 
+                    donorAtomDescription, 
+                    hydrogenAtomDescription, 
+                    acceptorAtomDescription, 
+                    attachedAtomDescription);
         this.haMax = haMax;
         this.dhaMin = dhaMin;
         this.haaMin = haaMin;
@@ -89,78 +71,44 @@ public class HBondCondition implements Condition {
     }
     
     public Description getDonorAtomDescription() {
-		return this.donorAtomDescription;
+		return this.hBondMeasure.getDonorAtomDescription();
 	}
 
 	public Description getHydrogenAtomDescription() {
-		return this.hydrogenAtomDescription;
+		return this.hBondMeasure.getHydrogenAtomDescription();
 	}
 
 	public Description getAcceptorAtomDescription() {
-		return this.acceptorAtomDescription;
+		return this.hBondMeasure.getAcceptorAtomDescription();
 	}
 
 	public Description getAttachedAtomDescription() {
-		return this.attachedAtomDescription;
-	}
-
-    public void setDonorAtomDescription(Description donorAtomDescription) {
-		this.donorAtomDescription = donorAtomDescription;
-	}
-
-	public void setHydrogenAtomDescription(Description hydrogenAtomDescription) {
-		this.hydrogenAtomDescription = hydrogenAtomDescription;
-	}
-
-	public void setAcceptorAtomDescription(Description acceptorAtomDescription) {
-		this.acceptorAtomDescription = acceptorAtomDescription;
-	}
-
-	public void setAttachedAtomDescription(Description attachedAtomDescription) {
-		this.attachedAtomDescription = attachedAtomDescription;
+		return this.hBondMeasure.getAttachedAtomDescription();
 	}
 	
 	public boolean contains(Description d) {
-		return this.acceptorAtomDescription.contains(d)
-				|| this.attachedAtomDescription.contains(d)
-				|| this.donorAtomDescription.contains(d)
-				|| this.hydrogenAtomDescription.contains(d);
+		return getAcceptorAtomDescription().contains(d)
+				|| getAttachedAtomDescription().contains(d)
+				|| getDonorAtomDescription().contains(d)
+				|| getHydrogenAtomDescription().contains(d);
 	}
 
-    public Object clone() {
-    	HBondCondition clonedCopy 
-			= new HBondCondition(this.haMax, this.dhaMin, this.haaMin);
-		clonedCopy.name = this.name;
-		clonedCopy.acceptorAtomDescription 
-			= (Description) this.acceptorAtomDescription.clone();
-		clonedCopy.attachedAtomDescription 
-			= (Description) this.attachedAtomDescription.clone();
-		clonedCopy.donorAtomDescription 
-			= (Description) this.donorAtomDescription.clone();
-		clonedCopy.hydrogenAtomDescription 
-			= (Description) this.hydrogenAtomDescription.clone();
-		return clonedCopy;
-    }
-	
 	public boolean equals(Condition other) {
         return false;
     }
 
     public boolean satisfiedBy(Match match) {
-        Vector d = CenterFinder.findCenter(donorAtomDescription, match);
-        Vector h = CenterFinder.findCenter(hydrogenAtomDescription, match);
-        Vector a = CenterFinder.findCenter(acceptorAtomDescription, match);
-        Vector aa = CenterFinder.findCenter(attachedAtomDescription, match);
+        HBondMeasurement hBondMeasurement = hBondMeasure.measure(match);
         
         boolean satisfied = false;
-        double h_a = Geometry.distance(h, a);
+        double h_a = hBondMeasurement.getHaDistance();
 //        System.err.println("h_a " + h_a);
         
         if (h_a < this.haMax) {
-            double dha = Geometry.angle(d, h, a);
+            double dha = hBondMeasurement.getDhaAngle();
 //            System.err.println("dha " + dha);
             if (dha > this.dhaMin) {
-                double haa = Geometry.angle(h, a, aa);
+                double haa = hBondMeasurement.getHaaAngle();
 //                System.err.println("haa " + haa);
                 if (haa > this.haaMin) {
                     satisfied = true;
@@ -179,17 +127,17 @@ public class HBondCondition implements Condition {
     	String s = String.format(
     			"\t\t<HBondCondition haMax=\"%s\" dhaMin=\"%s\" haaMin=\"%s\">\n", 
     			this.haMax, this.dhaMin, this.haaMin);
-    	s += "\t\t\t" + this.donorAtomDescription.toXmlPathString() + "\n";
-    	s += "\t\t\t" + this.hydrogenAtomDescription.toXmlPathString() + "\n";
-    	s += "\t\t\t" + this.acceptorAtomDescription.toXmlPathString() + "\n";
-    	s += "\t\t\t" + this.attachedAtomDescription.toXmlPathString() + "\n";
+    	s += "\t\t\t" + getDonorAtomDescription().toXmlPathString() + "\n";
+    	s += "\t\t\t" + getHydrogenAtomDescription().toXmlPathString() + "\n";
+    	s += "\t\t\t" + getAcceptorAtomDescription().toXmlPathString() + "\n";
+    	s += "\t\t\t" + getAttachedAtomDescription().toXmlPathString() + "\n";
     	s += "\t\t</HBondCondition>\n";
     	return s;
     }
     
     public String toString() {
-        return this.name + " (" + this.donorAtomDescription.toPathString() 
-        				 + " -> " + this.acceptorAtomDescription.toPathString() + ")";
+        return this.name + " (" + getDonorAtomDescription().toPathString() 
+        				 + " -> " + getAcceptorAtomDescription().toPathString() + ")";
     }
 
 }

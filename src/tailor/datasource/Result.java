@@ -1,7 +1,7 @@
 package tailor.datasource;
 
 import tailor.engine.Match;
-import tailor.measure.Measurement;
+import tailor.measurement.Measurement;
 
 
 /**
@@ -39,7 +39,8 @@ public class Result {
             switch (i) {
                 case 0 : return this.structureID;
                 case 1 : return this.motifData;
-                default: return this.measurements[i - 2].getValue();
+                // XXX FIXME
+                default: return this.measurements[i - 2].toString();   
             }
         } catch (NullPointerException npe) {
             System.err.println("npe " + this);
@@ -51,7 +52,7 @@ public class Result {
         String val = this.structureID + " " + this.motifData + "[";
         for (Measurement measurement : this.measurements) {
         	try {
-        		val += measurement.getValue() + " ";
+        		val += measurement.toString() + " ";
         	} catch (NullPointerException npe) {
         		// XXX FIXME
         	}

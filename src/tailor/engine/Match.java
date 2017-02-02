@@ -73,11 +73,12 @@ public class Match implements Iterable<Match> {
      */
     public boolean satisfiesConditions(Description description) {
         for (Condition condition : description.getConditions()) {
-            if (condition.satisfiedBy(this)) {
-                continue;
-            } else {
-                return false;
-            }
+            // XXX Refactor of Match
+//            if (condition.satisfiedBy(this)) {
+//                continue;
+//            } else {
+//                return false;
+//            }
         }
         return true;
     }

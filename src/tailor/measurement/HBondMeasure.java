@@ -10,16 +10,27 @@ import tailor.match.Match;
  * @author maclean
  *
  */
-public class HBondMeasure implements Measure<HBondMeasurement> {
+public class HBondMeasure extends GeometricMeasure implements Measure<HBondMeasurement> {
     
-    private Description donorAtomDescription;
+    private final Description donorAtomDescription;
     
-    private Description hydrogenAtomDescription;
+    private final Description hydrogenAtomDescription;
     
-    private Description acceptorAtomDescription;
+    private final Description acceptorAtomDescription;
     
-    private Description attachedAtomDescription;
+    private final Description attachedAtomDescription;
     
+    public HBondMeasure(String name, Description donorAtomDescription,
+            Description hydrogenAtomDescription,
+            Description acceptorAtomDescription,
+            Description attachedAtomDescription) {
+        super(name);
+        this.donorAtomDescription = donorAtomDescription;
+        this.hydrogenAtomDescription = hydrogenAtomDescription;
+        this.acceptorAtomDescription = acceptorAtomDescription;
+        this.attachedAtomDescription = attachedAtomDescription;
+    }
+
     @Override
     public HBondMeasurement measure(Match match) {
         Vector d = getPoint(donorAtomDescription, match);
@@ -32,10 +43,6 @@ public class HBondMeasure implements Measure<HBondMeasurement> {
         double haaAngle = Geometry.angle(h, a, aa);
         
         return new HBondMeasurement(haDistance, dhaAngle, haaAngle);
-    }
-    
-    private Vector getPoint(Description description, Match match) {
-        return null;    // TODO
     }
 
     public Description getDonorAtomDescription() {
@@ -54,22 +61,6 @@ public class HBondMeasure implements Measure<HBondMeasurement> {
 		return this.attachedAtomDescription;
 	}
 
-    public void setDonorAtomDescription(Description donorAtomDescription) {
-		this.donorAtomDescription = donorAtomDescription;
-	}
-
-	public void setHydrogenAtomDescription(Description hydrogenAtomDescription) {
-		this.hydrogenAtomDescription = hydrogenAtomDescription;
-	}
-
-	public void setAcceptorAtomDescription(Description acceptorAtomDescription) {
-		this.acceptorAtomDescription = acceptorAtomDescription;
-	}
-
-	public void setAttachedAtomDescription(Description attachedAtomDescription) {
-		this.attachedAtomDescription = attachedAtomDescription;
-	}
-	
 	public boolean contains(Description d) {
 		return this.acceptorAtomDescription.contains(d)
 				|| this.attachedAtomDescription.contains(d)

@@ -3,7 +3,7 @@ package tailor.condition;
 import java.util.ArrayList;
 
 import tailor.description.Description;
-import tailor.engine.Match;
+import tailor.match.Match;
 
 
 public class Any implements Condition {

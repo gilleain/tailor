@@ -8,7 +8,7 @@ import java.util.Map;
 
 import tailor.condition.Condition;
 import tailor.datasource.Structure;
-import tailor.measure.Measure;
+import tailor.measurement.Measure;
 import tailor.structure.Level;
 
 
@@ -51,7 +51,8 @@ public class ChainDescription implements Description, Iterable<GroupDescription>
     		this.groupDescriptions.add(new GroupDescription(groupDescription));
     	}
     	for (Condition condition : chainDescription.getConditions()) {
-    		this.groupConditions.add((Condition) condition.clone());
+    	    // TODO ?
+//    		this.groupConditions.add((Condition) condition.clone());
     	}
     }
     

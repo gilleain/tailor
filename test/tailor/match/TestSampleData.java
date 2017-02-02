@@ -44,18 +44,18 @@ public class TestSampleData {
     @Test
     public void helixTorsionTest() throws IOException {
         ChainDescription chainDescription = new ChainDescription();
+        chainDescription.addGroupDescription(makeGroupDescription("i - 1", "N", "CA", "C", "O"));
         chainDescription.addGroupDescription(makeGroupDescription("i",     "N", "CA", "C", "O"));
         chainDescription.addGroupDescription(makeGroupDescription("i + 1", "N", "CA", "C", "O"));
-        chainDescription.addGroupDescription(makeGroupDescription("i + 2", "N", "CA", "C", "O"));
         
-        Description caI  = chainDescription.getPathByGroupLabel("i", "CA");
-        Description cI   = chainDescription.getPathByGroupLabel("i", "C");
+        Description cIM1 = chainDescription.getPathByGroupLabel("i - 1", "C");
+        Description nI   = chainDescription.getPathByGroupLabel("i",     "N");
+        Description caI  = chainDescription.getPathByGroupLabel("i",     "CA");
+        Description cI   = chainDescription.getPathByGroupLabel("i",     "C");
         Description nI1  = chainDescription.getPathByGroupLabel("i + 1", "N");
-        Description caI1 = chainDescription.getPathByGroupLabel("i + 1", "CA");
-        Description cI1 = chainDescription.getPathByGroupLabel("i + 1", "C");
         
-        chainDescription.addCondition(new TorsionBoundCondition("phi", caI, cI, nI1, caI1, 90, 30));
-        chainDescription.addCondition(new TorsionBoundCondition("psi", cI, nI1, caI1, cI1, 90, 30));
+        chainDescription.addCondition(new TorsionBoundCondition("phi", cIM1, nI, caI, cI, 90, 30));
+        chainDescription.addCondition(new TorsionBoundCondition("psi", nI, caI, cI, nI1, 90, 30));
         
         Protein structure = PDBReader.read(new File(DIR, "helix.pdb"));
         Chain chain = structure.getChains().get(0);

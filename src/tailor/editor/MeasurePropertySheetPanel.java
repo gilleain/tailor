@@ -4,8 +4,8 @@ import java.awt.CardLayout;
 
 import javax.swing.JPanel;
 
-import tailor.measure.HBondMeasure;
-import tailor.measure.TorsionMeasure;
+import tailor.measurement.HBondMeasure;
+import tailor.measurement.TorsionMeasure;
 
 public class MeasurePropertySheetPanel extends JPanel {
 	

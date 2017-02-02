@@ -9,7 +9,7 @@ import java.util.Map;
 import tailor.condition.Condition;
 import tailor.condition.TorsionBoundCondition;
 import tailor.datasource.Structure;
-import tailor.measure.Measure;
+import tailor.measurement.Measure;
 import tailor.structure.Level;
 
 

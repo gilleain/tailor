@@ -4,7 +4,7 @@ import org.junit.Test;
 
 import tailor.description.ChainDescription;
 import tailor.description.ProteinDescription;
-import tailor.measure.DistanceMeasure;
+import tailor.measurement.DistanceMeasure;
 
 public class MultiChain {
     

@@ -1,7 +1,7 @@
 package tailor.condition;
 
 import tailor.description.Description;
-import tailor.engine.Match;
+import tailor.match.Match;
 
 
 //TODO : this whole class may be unnecessary...
@@ -49,7 +49,8 @@ public class PropertyCondition implements Condition {
 	}
 	
 	public boolean satisfiedBy(Match match) {
-		return match.hasPropertyEqualTo(propertyKey, propertyValue);
+	    return false;  // XXX FIXME
+//		return match.hasPropertyEqualTo(propertyKey, propertyValue);
 	}
 	
     public String toXml() {

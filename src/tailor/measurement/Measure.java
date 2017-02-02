@@ -20,4 +20,11 @@ public interface Measure<T extends Measurement> {
      */
     public T measure(Match match);
 
+    /**
+     * Provide a readable name for this particular measurement.
+     * 
+     * @return 
+     */
+    public String getName();
+
 }

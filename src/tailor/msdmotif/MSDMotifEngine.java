@@ -27,7 +27,7 @@ import tailor.description.ProteinDescription;
 import tailor.engine.Engine;
 import tailor.engine.Match;
 import tailor.engine.Run;
-import tailor.measure.Measure;
+import tailor.measurement.Measure;
 
 public class MSDMotifEngine implements Engine {
 	

@@ -13,7 +13,6 @@ import tailor.condition.TorsionBoundCondition;
 import tailor.description.AtomDescription;
 import tailor.description.ChainDescription;
 import tailor.description.Description;
-import tailor.description.DescriptionFactory;
 import tailor.description.GroupDescription;
 import tailor.description.ProteinDescription;
 import tailor.editor.symbol.HBondArc;
@@ -21,7 +20,6 @@ import tailor.editor.symbol.PeptideHalfSquare;
 import tailor.editor.symbol.ResidueCircle;
 import tailor.editor.symbol.Symbol;
 import tailor.editor.symbol.TorsionBox;
-import tailor.measure.TorsionMeasure;
 
 public class ResidueDiagram {
 	
@@ -51,7 +49,7 @@ public class ResidueDiagram {
 	private ArrayList<Symbol> hBondSymbols;
 	
 	private HashMap<Symbol, Object> symbolToObjectMap;
-	private DescriptionFactory factory;
+	
 	private boolean shouldDrawLabels;
 	
 	public ResidueDiagram() {
@@ -64,19 +62,17 @@ public class ResidueDiagram {
 		this.torsionBoxHeight = ResidueDiagram.MAX_TORSION_BOX_HEIGHT;
 		this.torsionBoxGap = ResidueDiagram.MAX_TORSION_BOX_GAP;
 		this.symbolToObjectMap = new HashMap<Symbol, Object>();
-		this.factory = new DescriptionFactory();
+		
 		this.shouldDrawLabels = true;
 	}
 	
-	public ResidueDiagram(int numberOfResidues) {
+	public ResidueDiagram(ChainDescription chainDescription) {
 		this();
-		this.numberOfResidues = numberOfResidues;
+		this.numberOfResidues = chainDescription.getGroupDescriptions().size();
 		this.name = "New Motif";
 		this.createBackbone(numberOfResidues);
-		this.factory.addChainToProtein("A");
-		this.factory.addMultipleResiduesToChain("A", numberOfResidues);
-		ChainDescription chain = factory.getChainDescription("A");	// TODO : >1 chain?
-		this.fillMap(chain);
+		
+		this.fillMap(chainDescription);
 	}
 	
 	public ResidueDiagram(ProteinDescription description) {
@@ -105,7 +101,6 @@ public class ResidueDiagram {
 	
 	public void createFromDescription(ProteinDescription description) {
 		this.name = description.getName();
-		this.factory.setDescription(description);
 		
 		ChainDescription chain = description.getChainDescription("A");	// TODO >1 chain
 		this.numberOfResidues = chain.size();
@@ -120,36 +115,6 @@ public class ResidueDiagram {
 				this.makeBond(h);
 			}
 		}
-	}
-	
-	public void addHBondConditionToChain(HBondCondition hBondCondition, 
-			int donorNumber, int acceptorNumber, String chainName) {
-		this.factory.addHBondConditionToChain(hBondCondition, donorNumber, 
-				acceptorNumber, chainName);
-	}
-	
-	public void addPhiConditionToChain(TorsionBoundCondition torsionCondition, 
-			int residueNumber, String chainName) {
-		this.factory.addPhiConditionToChain(torsionCondition, residueNumber, chainName);
-	}
-	
-	public void addPsiConditionToChain(TorsionBoundCondition torsionCondition, 
-			int residueNumber, String chainName) {
-		this.factory.addPsiConditionToChain(torsionCondition, residueNumber, chainName);
-	}
-	
-	public void fillPhiMeasure(TorsionMeasure torsionMeasure, int residueNumber, 
-			String chainName) {
-		this.factory.fillPhiMeasure(torsionMeasure, residueNumber, chainName);
-	}
-	
-	public void fillPsiMeasure(TorsionMeasure torsionMeasure, int residueNumber, 
-			String chainName) {
-		this.factory.fillPsiMeasure(torsionMeasure, residueNumber, chainName);
-	}
-	
-	public boolean canHydrogenBond(AtomDescription a, AtomDescription b) {
-		return this.factory.canHydrogenBond(a, b);
 	}
 	
 	public void makeTorsion(TorsionBoundCondition t) {
@@ -168,8 +133,8 @@ public class ResidueDiagram {
 			d.setName("O");
 		}
 		
-		Symbol first = this.reverseLookup(firstDesc);
-		Symbol last = this.reverseLookup(lastDesc);
+		Symbol first = this.reverseLookup((AtomDescription) firstDesc.getPathEnd());
+		Symbol last = this.reverseLookup((AtomDescription) lastDesc.getPathEnd());
 		
 		if (first == null || last == null) {
 			return;							// FIXME
@@ -191,8 +156,12 @@ public class ResidueDiagram {
 	}
 	
 	public void makeBond(HBondCondition h) {
-		Symbol donor = this.reverseLookup(h.getDonorAtomDescription());
-		Symbol acceptor = this.reverseLookup(h.getAcceptorAtomDescription());
+	    AtomDescription donorAtom = (AtomDescription) h.getDonorAtomDescription().getPathEnd();
+		Symbol donor = this.reverseLookup(donorAtom);
+		
+		AtomDescription acceptorAtom = (AtomDescription) h.getAcceptorAtomDescription().getPathEnd();
+		Symbol acceptor = this.reverseLookup(acceptorAtom);
+		
 		if (donor.getResidueIndex() < acceptor.getResidueIndex()) {
 			this.makeBond(donor, acceptor, Symbol.Stroke.DASHED);
 		} else {
@@ -200,9 +169,7 @@ public class ResidueDiagram {
 		}
 	}
 	
-	private Symbol reverseLookup(Description path) {
-		AtomDescription atom = this.factory.lookup(path);
-		System.err.print("lookup found : " + path.toPathString() + " -> " + atom);
+	private Symbol reverseLookup(AtomDescription atom) {
 		for (Symbol s : this.symbolToObjectMap.keySet()) {
 			Object p = this.symbolToObjectMap.get(s);
 			if (p.equals(atom)) {
@@ -453,11 +420,7 @@ public class ResidueDiagram {
 		return this.numberOfResidues;
 	}
 	
-	public DescriptionFactory getFactory() {
-		return this.factory;
-	}
-	
-	public void addResidueToEnd() {
+	public void addResidueToEnd(GroupDescription group) {
 		this.numberOfResidues += 1;
 		
 		// create the symbols
@@ -471,12 +434,6 @@ public class ResidueDiagram {
 		this.relayout();
 
 		// now, map the new symbols to their AtomDescription counterparts
-		this.factory.addResidueToChain("A");
-		
-		// TODO : >1 chain?
-		ChainDescription chain = factory.getChainDescription("A");	
-		
-		GroupDescription group = chain.getGroupDescription(numberOfResidues - 1);
 		this.symbolToObjectMap.put(nSymbol, group.getAtomDescription("N"));
 		this.symbolToObjectMap.put(caSymbol, group.getAtomDescription("CA"));
 		this.symbolToObjectMap.put(oSymbol, group.getAtomDescription("O"));
@@ -499,10 +456,6 @@ public class ResidueDiagram {
 		this.symbolToObjectMap.remove(o);
 		
 		this.relayout();
-		
-		// TODO : >1 chain?
-		ChainDescription chain = factory.getChainDescription("A");
-		chain.removeLastGroupDescription();
 	}
 	
 	private void removeTorsionsWithSymbol(Symbol s) {

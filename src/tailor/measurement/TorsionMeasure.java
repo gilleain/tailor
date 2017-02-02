@@ -1,11 +1,9 @@
-package tailor.measure;
+package tailor.measurement;
 
 import tailor.description.Description;
-import tailor.description.DescriptionException;
-import tailor.engine.Match;
-import tailor.geometry.CenterFinder;
 import tailor.geometry.Geometry;
 import tailor.geometry.Vector;
+import tailor.match.Match;
 
 
 /**
@@ -14,7 +12,7 @@ import tailor.geometry.Vector;
  * @author maclean
  *
  */
-public class TorsionMeasure extends Measure {
+public class TorsionMeasure extends GeometricMeasure implements Measure<DoubleMeasurement> {
     
     private Description descriptionA;
     
@@ -24,8 +22,9 @@ public class TorsionMeasure extends Measure {
     
     private Description descriptionD;
     
+    // XXX why?
     public TorsionMeasure(String name) {
-    	super(name);
+        super(name);
     }
 
     public TorsionMeasure(String name, Description descriptionA, 
@@ -44,16 +43,16 @@ public class TorsionMeasure extends Measure {
     }
     
     public double calculate(Match match) {
-        Vector a = CenterFinder.findCenter(descriptionA, match);
-        Vector b = CenterFinder.findCenter(descriptionB, match);
-        Vector c = CenterFinder.findCenter(descriptionC, match);
-        Vector d = CenterFinder.findCenter(descriptionD, match);
+        Vector a = getPoint(descriptionA, match);
+        Vector b = getPoint(descriptionB, match);
+        Vector c = getPoint(descriptionC, match);
+        Vector d = getPoint(descriptionD, match);
         return Geometry.torsion(a, b, c, d);        
     }
 
     @Override
-    public Measurement measure(Match match) throws DescriptionException {
-        return new Measurement(this.getName(), calculate(match));
+    public DoubleMeasurement measure(Match match) {
+        return new DoubleMeasurement(calculate(match));
     }
     
     public Description getDescriptionA() {

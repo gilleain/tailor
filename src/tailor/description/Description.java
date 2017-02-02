@@ -3,7 +3,7 @@ package tailor.description;
 import java.util.List;
 
 import tailor.condition.Condition;
-import tailor.measure.Measure;
+import tailor.measurement.Measure;
 import tailor.structure.Level;
 
 

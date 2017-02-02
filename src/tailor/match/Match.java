@@ -24,6 +24,12 @@ public class Match {
         this.subMatches.add(match);
     }
     
+    public Match associate(Description description, Structure structure) {
+        Match childMatch = new Match(description, structure);
+        subMatches.add(childMatch);
+        return childMatch;
+    }
+    
     public boolean accept(MatchVisitor matchVisitor) {
         if (matchVisitor.visitDescription(description)
             && matchVisitor.visitStructure(structure)) {

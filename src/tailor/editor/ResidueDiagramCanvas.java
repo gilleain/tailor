@@ -13,15 +13,12 @@ import java.util.List;
 import javax.swing.JPanel;
 import javax.swing.Scrollable;
 
-import tailor.condition.HBondCondition;
-import tailor.condition.TorsionBoundCondition;
 import tailor.description.AtomDescription;
 import tailor.description.ChainDescription;
 import tailor.description.DescriptionFactory;
 import tailor.description.GroupDescription;
 import tailor.description.ProteinDescription;
 import tailor.editor.symbol.Symbol;
-import tailor.measure.TorsionMeasure;
 
 public class ResidueDiagramCanvas extends JPanel implements MouseListener, Scrollable {
 	
@@ -43,8 +40,8 @@ public class ResidueDiagramCanvas extends JPanel implements MouseListener, Scrol
 	 * @param numberOfResiduesInView 
 	 * 		The number of residues to show in the scrollable viewport.
 	 */
-	public ResidueDiagramCanvas(int numberOfResidues, int numberOfResiduesInView){
-		this.diagram = new ResidueDiagram(numberOfResidues);
+	public ResidueDiagramCanvas(ChainDescription chainDescription, int numberOfResiduesInView) {
+		this.diagram = new ResidueDiagram(chainDescription);
 		this.numberOfResiduesInView = numberOfResiduesInView;
 		
 		this.calculateDimensions(numberOfResiduesInView);
@@ -62,36 +59,6 @@ public class ResidueDiagramCanvas extends JPanel implements MouseListener, Scrol
 	public void createFromDescription(ProteinDescription description) {
 		this.diagram = new ResidueDiagram(description);
 		this.calculateDimensions(this.numberOfResiduesInView);
-	}
-	
-	public void addHBondConditionToChain(HBondCondition hBondCondition, 
-			int donorNumber, int acceptorNumber, String chainName) {
-		this.diagram.addHBondConditionToChain(hBondCondition, donorNumber, 
-				acceptorNumber, chainName);
-	}
-	
-	public void addPhiConditionToChain(TorsionBoundCondition torsionCondition, 
-			int residueNumber, String chainName) {
-		this.diagram.addPhiConditionToChain(torsionCondition, residueNumber, chainName);
-	}
-	
-	public void addPsiConditionToChain(TorsionBoundCondition torsionCondition, 
-			int residueNumber, String chainName) {
-		this.diagram.addPsiConditionToChain(torsionCondition, residueNumber, chainName);
-	}
-	
-	public void fillPhiMeasure(TorsionMeasure torsionMeasure, int residueNumber, 
-			String chainName) {
-		this.diagram.fillPhiMeasure(torsionMeasure, residueNumber, chainName);
-	}
-	
-	public void fillPsiMeasure(TorsionMeasure torsionMeasure, int residueNumber, 
-			String chainName) {
-		this.diagram.fillPsiMeasure(torsionMeasure, residueNumber, chainName);
-	}
-	
-	public boolean canHydrogenBond(AtomDescription a, AtomDescription b) {
-		return this.diagram.canHydrogenBond(a, b);
 	}
 	
 	public AtomDescription getAtomDescriptionFromSymbol(Symbol symbol) {
@@ -128,8 +95,8 @@ public class ResidueDiagramCanvas extends JPanel implements MouseListener, Scrol
 		this.repaint();
 	}
 	
-	public void addResidueToEnd() {
-		this.diagram.addResidueToEnd();
+	public void addResidueToEnd(GroupDescription group) {
+		this.diagram.addResidueToEnd(group);
 //		this.center();
 	}
 	

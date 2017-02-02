@@ -11,7 +11,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-import tailor.measure.TorsionMeasure;
+import tailor.measurement.TorsionMeasure;
 
 public class TorsionMeasurePropertySheet extends JPanel implements ActionListener {
 	

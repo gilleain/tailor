@@ -1,8 +1,8 @@
 package tailor.condition;
 
 import tailor.description.Description;
-import tailor.engine.Match;
-import tailor.measure.DistanceMeasure;
+import tailor.match.Match;
+import tailor.measurement.DistanceMeasure;
 
 
 /**

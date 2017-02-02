@@ -6,6 +6,7 @@ import javax.swing.JPanel;
 
 import tailor.condition.HBondCondition;
 import tailor.condition.TorsionBoundCondition;
+import tailor.description.DescriptionFactory;
 
 public class ConditionPropertySheetPanel extends JPanel {
 	
@@ -16,14 +17,15 @@ public class ConditionPropertySheetPanel extends JPanel {
 	private TorsionConditionPropertySheet torsionSheet;
 	private HBondConditionPropertySheet hBondSheet;
 	
-	public ConditionPropertySheetPanel() {
+	public ConditionPropertySheetPanel(DescriptionFactory descriptionFactory) {
+	    
 		this.cardLayout = new CardLayout(); 
 		this.setLayout(this.cardLayout);
 		
-		this.torsionSheet = new TorsionConditionPropertySheet();
+		this.torsionSheet = new TorsionConditionPropertySheet(descriptionFactory);
 		this.add(this.torsionSheet, ConditionPropertySheetPanel.TORSION_TAG);
 		
-		this.hBondSheet = new HBondConditionPropertySheet();
+		this.hBondSheet = new HBondConditionPropertySheet(descriptionFactory);
 		this.add(this.hBondSheet, ConditionPropertySheetPanel.H_BOND_TAG);
 	}
 	
@@ -43,12 +45,12 @@ public class ConditionPropertySheetPanel extends JPanel {
 		this.torsionSheet.setValues(name, start, end);
 	}
 	
-	public TorsionBoundCondition getTorsionCondition() {
-		return this.torsionSheet.getCondition();
+	public TorsionBoundCondition getTorsionCondition(int residueStart) {
+		return this.torsionSheet.getCondition(residueStart);
 	}
 	
-	public HBondCondition getHBondCondition() {
-		return this.hBondSheet.getCondition();
+	public HBondCondition getHBondCondition(int residueStart, int residueEnd) {
+		return this.hBondSheet.getCondition(residueStart, residueEnd);
 	}
 
 }
