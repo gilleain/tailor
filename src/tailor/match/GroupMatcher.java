@@ -3,6 +3,7 @@ package tailor.match;
 import java.util.ArrayList;
 import java.util.List;
 
+import tailor.condition.Condition;
 import tailor.description.ChainDescription;
 import tailor.description.GroupDescription;
 import tailor.structure.Chain;
@@ -73,7 +74,8 @@ public class GroupMatcher {
     private Match startNewMatch(ChainDescription chainDescription, Chain chain, Group currentGroup) {
         GroupDescription groupDescription = chainDescription.getGroupDescription(0);
         Match match = null;
-        if (groupDescription.nameMatches(currentGroup.getName())) {
+        if (groupDescription.getName() == null
+                || groupDescription.nameMatches(currentGroup.getName())) {
             match = new Match(chainDescription, chain);
             match.addMatch(new Match(groupDescription, currentGroup));
         }
@@ -81,9 +83,9 @@ public class GroupMatcher {
     }
 
     private boolean canExtend(GroupDescription groupDescription, Group group) {
-        return groupDescription.nameMatches(group.getName());
+        return groupDescription.getName() == null || groupDescription.nameMatches(group.getName());
     }
-
+    
     private void addTo(Match partial, GroupDescription groupDescription, Group group) {
         partial.addMatch(new Match(groupDescription, group));
     }
@@ -91,6 +93,11 @@ public class GroupMatcher {
     private boolean isComplete(ChainDescription description, Match partial) {
         // the size of the description at the next level
         int expectedSize = description.getGroupDescriptions().size();
+        
+        for (Condition condition : description.getConditions()) {
+//            condition.satisfiedBy(partial); XXX argh!
+        }
+        
         return partial.getLevelSize() == expectedSize;
     }
 

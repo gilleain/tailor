@@ -29,6 +29,7 @@ public class Match {
             && matchVisitor.visitStructure(structure)) {
             for (Match subMatch : subMatches) {
                 if (matchVisitor.visitMatch(subMatch)) {
+                    subMatch.accept(matchVisitor);
                     continue;
                 } else {
                     return false;

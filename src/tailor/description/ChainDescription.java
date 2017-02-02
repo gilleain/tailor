@@ -226,7 +226,7 @@ public class ChainDescription implements Description, Iterable<GroupDescription>
         this.groupConditions.add(condition);
     }
 
-    public ArrayList<Condition> getConditions() {
+    public List<Condition> getConditions() {
         return this.groupConditions;
     }
 
