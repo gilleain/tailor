@@ -5,6 +5,7 @@ import java.util.List;
 
 import tailor.condition.HBondCondition;
 import tailor.condition.TorsionBoundCondition;
+import tailor.measurement.HBondMeasure;
 import tailor.measurement.TorsionMeasure;
 import tailor.structure.Level;
 
@@ -268,45 +269,27 @@ public class DescriptionFactory {
 	
 	public TorsionMeasure createPhiMeasure(
 	        String name, int residueNumber, String chainName) {
-		return fillPhiMeasure(new TorsionMeasure(name), residueNumber, chainName);
+	    ProteinDescription a = root.getPath(chainName, residueNumber - 1, "C");
+        ProteinDescription b = root.getPath(chainName, residueNumber, "N");
+        ProteinDescription d = root.getPath(chainName, residueNumber, "C");
+        ProteinDescription c = root.getPath(chainName, residueNumber, "CA");
+	    
+		return new TorsionMeasure(name, a, b, c, d);
 	}
 	
-	public TorsionMeasure fillPhiMeasure(
-	       TorsionMeasure partialMeasure, int residueNumber, String chainName) {
-		ProteinDescription a = root.getPath(chainName, residueNumber - 1, "C");
-		ProteinDescription b = root.getPath(chainName, residueNumber, "N");
-		ProteinDescription d = root.getPath(chainName, residueNumber, "C");
-		ProteinDescription c = root.getPath(chainName, residueNumber, "CA");
-		
-		partialMeasure.setDescriptionA(a);
-		partialMeasure.setDescriptionB(b);
-		partialMeasure.setDescriptionC(c);
-		partialMeasure.setDescriptionD(d);
-		
-		return partialMeasure;
+	public void addTorsionMeasureToChain(TorsionMeasure torsionMeasure, String chainName) {
+	    ChainDescription chain = this.root.getChainDescription(chainName);
+	    chain.addMeasure(torsionMeasure);
 	}
 	
-	public TorsionMeasure createPsiMeasure(
-	        String name, int residueNumber, String chainName) {
-		return fillPsiMeasure(
-		        new TorsionMeasure(name), residueNumber, chainName);
+	public TorsionMeasure createPsiMeasure(String name, int residueNumber, String chainName) {
+	    ProteinDescription a = root.getPath(chainName, residueNumber, "N");
+        ProteinDescription b = root.getPath(chainName, residueNumber, "CA");
+        ProteinDescription c = root.getPath(chainName, residueNumber, "C");
+        ProteinDescription d = root.getPath(chainName, residueNumber + 1, "N");
+	    
+		return new TorsionMeasure(name, a, b, c, d);
 	}
-	
-	public TorsionMeasure fillPsiMeasure(
-	       TorsionMeasure partialMeasure, int residueNumber, String chainName) {
-		ProteinDescription a = root.getPath(chainName, residueNumber, "N");
-		ProteinDescription b = root.getPath(chainName, residueNumber, "CA");
-		ProteinDescription c = root.getPath(chainName, residueNumber, "C");
-		ProteinDescription d = root.getPath(chainName, residueNumber + 1, "N");
-		
-		partialMeasure.setDescriptionA(a);
-		partialMeasure.setDescriptionB(b);
-		partialMeasure.setDescriptionC(c);
-		partialMeasure.setDescriptionD(d);
-		
-		return partialMeasure;
-	}
-	
     
     public static Description createFromLevel(Level level, String name) {
         switch (level) {
@@ -326,6 +309,17 @@ public class DescriptionFactory {
             }
         }
         return Level.UNKNOWN;
+    }
+
+    public HBondMeasure createHBondMeasure(int donorNumber, int acceptorNumber) {
+        ChainDescription chain = this.root.getChainDescription(DescriptionFactory.DEFAULT_CHAIN_NAME);
+        
+        ChainDescription a = chain.getPath(donorNumber, "N");
+        ChainDescription b = chain.getPath(donorNumber, "H");
+        ChainDescription c = chain.getPath(acceptorNumber, "O");
+        ChainDescription d = chain.getPath(acceptorNumber, "C");
+        
+        return new HBondMeasure("HBond", a, b, c, d);
     }
     
 }

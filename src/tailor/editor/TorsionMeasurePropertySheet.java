@@ -11,6 +11,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import tailor.description.DescriptionFactory;
 import tailor.measurement.TorsionMeasure;
 
 public class TorsionMeasurePropertySheet extends JPanel implements ActionListener {
@@ -25,8 +26,11 @@ public class TorsionMeasurePropertySheet extends JPanel implements ActionListene
 	private JButton updateButton;
 	private JButton revertButton;
 	
-	public TorsionMeasurePropertySheet() {
-		
+	private DescriptionFactory descriptionFactory;
+	
+	public TorsionMeasurePropertySheet(DescriptionFactory descriptionFactory) {
+	    this.descriptionFactory = descriptionFactory;
+	    
 		this.setLayout(new BorderLayout());
 		this.add(new JLabel("Torsion Measure", JLabel.CENTER), BorderLayout.NORTH);
 
@@ -119,9 +123,15 @@ public class TorsionMeasurePropertySheet extends JPanel implements ActionListene
 		}
 	}
 	
-	public TorsionMeasure getMeasure() {
-		String name = this.nameField.getText();
-		return new TorsionMeasure(name);
+	public TorsionMeasure getMeasure(int residueNumber) {
+		String torsionName = this.nameField.getText();
+		if (torsionName.startsWith("phi")) {
+		    return descriptionFactory.createPhiMeasure(torsionName, residueNumber, "A");
+		} else if (torsionName.startsWith("psi")) {
+		    return descriptionFactory.createPsiMeasure(torsionName, residueNumber, "A");
+		} else {
+		    return null;
+		}
 	}
 	
 	public void actionPerformed(ActionEvent ae) {

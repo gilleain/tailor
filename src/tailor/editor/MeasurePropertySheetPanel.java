@@ -4,6 +4,7 @@ import java.awt.CardLayout;
 
 import javax.swing.JPanel;
 
+import tailor.description.DescriptionFactory;
 import tailor.measurement.HBondMeasure;
 import tailor.measurement.TorsionMeasure;
 
@@ -16,14 +17,14 @@ public class MeasurePropertySheetPanel extends JPanel {
 	private TorsionMeasurePropertySheet torsionSheet;
 	private HBondMeasurePropertySheet hBondSheet;
 	
-	public MeasurePropertySheetPanel() {
+	public MeasurePropertySheetPanel(DescriptionFactory descriptionFactory) {
 		this.cardLayout = new CardLayout(); 
 		this.setLayout(this.cardLayout);
 		
-		this.torsionSheet = new TorsionMeasurePropertySheet();
+		this.torsionSheet = new TorsionMeasurePropertySheet(descriptionFactory);
 		this.add(this.torsionSheet, MeasurePropertySheetPanel.TORSION_TAG);
 		
-		this.hBondSheet = new HBondMeasurePropertySheet();
+		this.hBondSheet = new HBondMeasurePropertySheet(descriptionFactory);
 		this.add(this.hBondSheet, MeasurePropertySheetPanel.H_BOND_TAG);
 	}
 	
@@ -43,12 +44,12 @@ public class MeasurePropertySheetPanel extends JPanel {
 		this.torsionSheet.setValues(name, start, end);
 	}
 	
-	public TorsionMeasure getTorsionMeasure() {
-		return this.torsionSheet.getMeasure();
+	public TorsionMeasure getTorsionMeasure(int residueNumber) {
+		return this.torsionSheet.getMeasure(residueNumber);
 	}
 	
-	public HBondMeasure getHBondMeasure() {
-		return this.hBondSheet.getMeasure();
+	public HBondMeasure getHBondMeasure(int donorNumber, int acceptorNumber) {
+		return this.hBondSheet.getMeasure(donorNumber, acceptorNumber);
 	}
 
 }

@@ -14,19 +14,14 @@ import tailor.match.Match;
  */
 public class TorsionMeasure extends GeometricMeasure implements Measure<DoubleMeasurement> {
     
-    private Description descriptionA;
+    private final Description descriptionA;
     
-    private Description descriptionB;
+    private final Description descriptionB;
     
-    private Description descriptionC;
+    private final Description descriptionC;
     
-    private Description descriptionD;
+    private final Description descriptionD;
     
-    // XXX why?
-    public TorsionMeasure(String name) {
-        super(name);
-    }
-
     public TorsionMeasure(String name, Description descriptionA, 
             Description descriptionB, Description descriptionC, 
             Description descriptionD) {
@@ -70,22 +65,6 @@ public class TorsionMeasure extends GeometricMeasure implements Measure<DoubleMe
     public Description getDescriptionD() {
         return this.descriptionD;
     }
-    
-    public void setDescriptionA(Description descriptionA) {
-		this.descriptionA = descriptionA;
-	}
-	
-	public void setDescriptionB(Description descriptionB) {
-		this.descriptionB = descriptionB;
-	}
-	
-	public void setDescriptionC(Description descriptionC) {
-		this.descriptionC = descriptionC;
-	}
-	
-	public void setDescriptionD(Description descriptionD) {
-		this.descriptionD = descriptionD;
-	}
     
     public String toString() {
         return "t (" + this.descriptionA.toPathString() + ", " 

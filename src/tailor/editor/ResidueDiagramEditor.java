@@ -85,7 +85,7 @@ public class ResidueDiagramEditor extends JPanel implements SymbolSelectionListe
 		this.conditionPropertySheetPanel = new ConditionPropertySheetPanel(factory);
 		this.conditionListBox = new ConditionListBox();
 		
-		this.measurePropertySheetPanel = new MeasurePropertySheetPanel();
+		this.measurePropertySheetPanel = new MeasurePropertySheetPanel(factory);
 		this.measureListBox = new MeasureListBox();
 		
 		this.diagramPropertyPanel = new DiagramPropertyPanel("Motif", numberOfResidues);
@@ -223,16 +223,6 @@ public class ResidueDiagramEditor extends JPanel implements SymbolSelectionListe
 		((JComponent)this.canvas.getParent()).revalidate();
 	}
     
-    public void fillPhiMeasure(
-            TorsionMeasure torsionMeasure, int residueNumber, String chainName) {
-        this.factory.fillPhiMeasure(torsionMeasure, residueNumber, chainName);
-    }
-    
-    public void fillPsiMeasure(
-            TorsionMeasure torsionMeasure, int residueNumber, String chainName) {
-        this.factory.fillPsiMeasure(torsionMeasure, residueNumber, chainName);
-    }
-    
     public boolean canHydrogenBond(AtomDescription a, AtomDescription b) {
         return this.factory.canHydrogenBond(a, b);
     }
@@ -298,7 +288,7 @@ public class ResidueDiagramEditor extends JPanel implements SymbolSelectionListe
 			int startNum = this.previouslySelectedSymbol.getResidueIndex();
 			int endNum = newlySelectedSymbol.getResidueIndex();
 			
-			HBondMeasure hBondMeasure = this.measurePropertySheetPanel.getHBondMeasure();
+			HBondMeasure hBondMeasure = this.measurePropertySheetPanel.getHBondMeasure(startNum, endNum);
 
 			String startAtomLabel = this.previouslySelectedSymbol.getLabel();
 			if (startAtomLabel.equals("O")) {	// endAtomType must be "N"
@@ -334,8 +324,8 @@ public class ResidueDiagramEditor extends JPanel implements SymbolSelectionListe
 		int residueNumber = newlySelectedSymbol.getResidueIndex();
 		this.measurePropertySheetPanel.setTorsionSheetResidue("phi", residueNumber, residueNumber + 1);
 		
-		TorsionMeasure torsionMeasure = this.measurePropertySheetPanel.getTorsionMeasure();
-		this.fillPhiMeasure(torsionMeasure, residueNumber, "A");
+		TorsionMeasure torsionMeasure = this.measurePropertySheetPanel.getTorsionMeasure(residueNumber);
+		factory.addTorsionMeasureToChain(torsionMeasure, "A");
 		this.showTorsionMeasure(torsionMeasure);
 		
 		this.canvas.makePhi(residueNumber, "\u03C6?", Symbol.Stroke.DOTTED);
@@ -359,8 +349,8 @@ public class ResidueDiagramEditor extends JPanel implements SymbolSelectionListe
 		int residueNumber = newlySelectedSymbol.getResidueIndex();
 		this.measurePropertySheetPanel.setTorsionSheetResidue("psi", residueNumber + 1, residueNumber + 2);
 		
-		TorsionMeasure torsionMeasure = this.measurePropertySheetPanel.getTorsionMeasure();
-		this.fillPsiMeasure(torsionMeasure, residueNumber, "A");
+		TorsionMeasure torsionMeasure = this.measurePropertySheetPanel.getTorsionMeasure(residueNumber);
+		factory.addTorsionMeasureToChain(torsionMeasure, "A");
 		this.showTorsionMeasure(torsionMeasure);
 		
 		this.canvas.makePsi(residueNumber, "\u03C8?", Symbol.Stroke.DOTTED);
