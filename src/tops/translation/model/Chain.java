@@ -58,7 +58,7 @@ public class Chain implements Iterable<BackboneSegment> {
     }
 
     public boolean isDNA() {
-        return ((Residue) this.residues.get(0)).isDNA();
+        return this.residues.get(0).isDNA();
     }
 
     // since this doesn't check, in the event that a structure actually HAS
@@ -147,11 +147,11 @@ public class Chain implements Iterable<BackboneSegment> {
             return;
         }
 
-        if (!((BackboneSegment) this.backboneSegments.get(0) instanceof Terminus)) {
+        if (!(this.backboneSegments.get(0) instanceof Terminus)) {
             this.backboneSegments.add(0, new Terminus("N Terminus", 'N'));
         }
 
-        if (!((BackboneSegment) this.backboneSegments.get(this.backboneSegments.size() - 1) instanceof Terminus)) {
+        if (!(this.backboneSegments.get(this.backboneSegments.size() - 1) instanceof Terminus)) {
             this.backboneSegments.add(new Terminus("C Terminus", 'C'));
         }
     }
@@ -227,7 +227,7 @@ public class Chain implements Iterable<BackboneSegment> {
         if (this.sheets.size() == 0) {
             this.sheets.add(new Sheet(1, strand, otherStrand));
         } else {
-            int lastSheetNumber = ((Sheet) this.sheets.get(this.sheets.size() - 1)).getNumber();
+            int lastSheetNumber = this.sheets.get(this.sheets.size() - 1).getNumber();
             this.sheets.add(new Sheet(lastSheetNumber + 1, strand, otherStrand));
         }
     }
@@ -440,7 +440,7 @@ public class Chain implements Iterable<BackboneSegment> {
 
         int vertexNumber = 0;
         while (backboneSegmentIterator.hasNext()) {
-            BackboneSegment nextBackboneSegment = (BackboneSegment) backboneSegmentIterator.next();
+            BackboneSegment nextBackboneSegment = backboneSegmentIterator.next();
             if (nextBackboneSegment instanceof UnstructuredSegment) {
                 continue;
             } else {

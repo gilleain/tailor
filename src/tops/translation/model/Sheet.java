@@ -16,17 +16,16 @@ import translation.Geometer;
 public class Sheet {
 
     private int number;
-    //private ArrayList strands;
 
     // The strand map has as the keys all the strands in the map;
     // the values are the other strands in the sheet that the key is attached to.
     // In theory, a nice pure sheet would only have one value per key. In theory...
     private TreeMap<BackboneSegment, List<BackboneSegment>> strandMap;
+    
     private Axis axis;
 
     public Sheet(int number) {
         this.number = number;
-        //this.strands = new ArrayList();
         this.strandMap = new TreeMap<BackboneSegment, List<BackboneSegment>>();
         this.axis = null;
     }
@@ -77,7 +76,7 @@ public class Sheet {
 
     public Axis getAxis() {
         return this.axis;
-    } 
+    }
 
     public Point3d calculateCentroid() {
         List<Point3d> centers = new ArrayList<Point3d>();
@@ -95,7 +94,7 @@ public class Sheet {
         }
         return size;
     }
-
+    
     public void extend(Sheet other) {
         Iterator<BackboneSegment> keyIterator = other.iterator();
         while (keyIterator.hasNext()) {
@@ -238,7 +237,6 @@ public class Sheet {
         }
     }
 
-
     public List<Edge> toTopsEdges(Domain domain) {
         List<Edge> edges = new ArrayList<Edge>();
 
@@ -273,11 +271,11 @@ public class Sheet {
         return edges;
     }
 
+    @Override
     public String toString() {
         StringBuffer returnValue = new StringBuffer();
         returnValue.append("Sheet (" + this.number + ") [");
 
-        //Iterator iterator = this.strands.iterator();
         Iterator<BackboneSegment> iterator = this.strandMap.keySet().iterator();
 
         while (iterator.hasNext()) {
