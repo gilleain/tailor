@@ -16,3 +16,5 @@ tailor.jar
 /tailor_pysrc.zip
 /tailor.jar
 /target/
+.idea
+*.iml

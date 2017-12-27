@@ -6,11 +6,11 @@ import java.util.List;
 import javax.vecmath.Point3d;
 import javax.vecmath.Vector3d;
 
-import cern.colt.matrix.DoubleFactory2D;
-import cern.colt.matrix.DoubleMatrix1D;
-import cern.colt.matrix.DoubleMatrix2D;
-import cern.colt.matrix.linalg.EigenvalueDecomposition;
-import cern.jet.math.Functions;
+//import cern.colt.matrix.DoubleFactory2D;
+//import cern.colt.matrix.DoubleMatrix1D;
+//import cern.colt.matrix.DoubleMatrix2D;
+//import cern.colt.matrix.linalg.EigenvalueDecomposition;
+//import cern.jet.math.Functions;
 
 public class Geometer {
 
@@ -89,75 +89,76 @@ public class Geometer {
 
     @SuppressWarnings("static-access")
 	public static Axis leastSquareAxis(List<Point3d> points) {
-        int numberOfPoints = points.size();
-        //System.out.println("Running leastSquareAxis on " + numberOfPoints + " points");
-        if (numberOfPoints == 0) {
-            return new Axis();
-        } else if (numberOfPoints < 2) {
-            //no good solution for a single point
-            return new Axis((Point3d) points.get(0), (Point3d) points.get(0));
-        } else if (numberOfPoints == 2) {
-            //take the difference of two points
-            return new Axis((Point3d) points.get(1), (Point3d) points.get(0));
-        }
-
-        //otherwise, make a DoubleMatrix2D
-        DoubleMatrix2D pointMatrix = DoubleFactory2D.dense.make(points.size(), 3);
-        for (int i = 0; i < points.size(); i++) {
-            Point3d point = (Point3d) points.get(i);
-            pointMatrix.set(i, 0, point.x);
-            pointMatrix.set(i, 1, point.y);
-            pointMatrix.set(i, 2, point.z);
-        }
-
-        //find the centroid, also apply points -centroid
-        Functions F = Functions.functions;
-        double num = (new Integer(numberOfPoints)).doubleValue();
-
-        //for x
-        DoubleMatrix1D xColumn = pointMatrix.viewColumn(0);
-        double xAverage = xColumn.aggregate(F.plus, F.identity) / num;
-        xColumn.assign(F.minus(xAverage));
-
-        //for y
-        DoubleMatrix1D yColumn = pointMatrix.viewColumn(1);
-        double yAverage = yColumn.aggregate(F.plus, F.identity) / num;
-        yColumn.assign(F.minus(yAverage));
-
-        //for z
-        DoubleMatrix1D zColumn = pointMatrix.viewColumn(2);
-        double zAverage = zColumn.aggregate(F.plus, F.identity) / num;
-        zColumn.assign(F.minus(zAverage));
-
-        //since we've gone to the trouble of calculating these, we might as well store them!
-        Point3d centroid = new Point3d(xAverage, yAverage, zAverage);
-        //System.out.println("Centroid = " + centroid);
-
-        //transpose : m = multiply(transpose(pointMatrix), pointMatrix)
-        DoubleMatrix2D symmetricMatrix = pointMatrix.zMult(pointMatrix, null, 1, 0, true, false);
-
-        //find eigenvectors, eigenvalues
-        EigenvalueDecomposition eig = new EigenvalueDecomposition(symmetricMatrix);
-        DoubleMatrix1D eigenvalues = eig.getRealEigenvalues();
-        DoubleMatrix2D eigenvectors = eig.getV();
-        //System.out.println("eigenvectors = " + eigenvectors);
-
-        //use the maximum value in the eigenvalues to get the index in the eigenvectors
-        int maxIndex = 0;
-        int maxValue = 0;
-        for (int j = 0; j < eigenvalues.size(); j++) {
-            if (eigenvalues.get(j) > maxValue)
-                maxIndex = j;
-        }
-        //both the sign and the order of the matrix are wrong!?
-        //DoubleMatrix1D v = eigenvectors.viewRow(maxIndex);
-        DoubleMatrix1D v = eigenvectors.viewColumn(maxIndex);    //so we view COLUMN, not row
-        //v.assign(F.mult( -1));                                   //and we multiply all by -1..
-        //System.out.println("v = " + v);
-
-        //finally construct the axis from this principal eigenvector and the centroid
-        Vector3d axisVector = new Vector3d(v.toArray());
-        return new Axis(centroid, axisVector);
+//        int numberOfPoints = points.size();
+//        //System.out.println("Running leastSquareAxis on " + numberOfPoints + " points");
+//        if (numberOfPoints == 0) {
+//            return new Axis();
+//        } else if (numberOfPoints < 2) {
+//            //no good solution for a single point
+//            return new Axis((Point3d) points.get(0), (Point3d) points.get(0));
+//        } else if (numberOfPoints == 2) {
+//            //take the difference of two points
+//            return new Axis((Point3d) points.get(1), (Point3d) points.get(0));
+//        }
+//
+//        //otherwise, make a DoubleMatrix2D
+//        DoubleMatrix2D pointMatrix = DoubleFactory2D.dense.make(points.size(), 3);
+//        for (int i = 0; i < points.size(); i++) {
+//            Point3d point = (Point3d) points.get(i);
+//            pointMatrix.set(i, 0, point.x);
+//            pointMatrix.set(i, 1, point.y);
+//            pointMatrix.set(i, 2, point.z);
+//        }
+//
+//        //find the centroid, also apply points -centroid
+//        Functions F = Functions.functions;
+//        double num = (new Integer(numberOfPoints)).doubleValue();
+//
+//        //for x
+//        DoubleMatrix1D xColumn = pointMatrix.viewColumn(0);
+//        double xAverage = xColumn.aggregate(F.plus, F.identity) / num;
+//        xColumn.assign(F.minus(xAverage));
+//
+//        //for y
+//        DoubleMatrix1D yColumn = pointMatrix.viewColumn(1);
+//        double yAverage = yColumn.aggregate(F.plus, F.identity) / num;
+//        yColumn.assign(F.minus(yAverage));
+//
+//        //for z
+//        DoubleMatrix1D zColumn = pointMatrix.viewColumn(2);
+//        double zAverage = zColumn.aggregate(F.plus, F.identity) / num;
+//        zColumn.assign(F.minus(zAverage));
+//
+//        //since we've gone to the trouble of calculating these, we might as well store them!
+//        Point3d centroid = new Point3d(xAverage, yAverage, zAverage);
+//        //System.out.println("Centroid = " + centroid);
+//
+//        //transpose : m = multiply(transpose(pointMatrix), pointMatrix)
+//        DoubleMatrix2D symmetricMatrix = pointMatrix.zMult(pointMatrix, null, 1, 0, true, false);
+//
+//        //find eigenvectors, eigenvalues
+//        EigenvalueDecomposition eig = new EigenvalueDecomposition(symmetricMatrix);
+//        DoubleMatrix1D eigenvalues = eig.getRealEigenvalues();
+//        DoubleMatrix2D eigenvectors = eig.getV();
+//        //System.out.println("eigenvectors = " + eigenvectors);
+//
+//        //use the maximum value in the eigenvalues to get the index in the eigenvectors
+//        int maxIndex = 0;
+//        int maxValue = 0;
+//        for (int j = 0; j < eigenvalues.size(); j++) {
+//            if (eigenvalues.get(j) > maxValue)
+//                maxIndex = j;
+//        }
+//        //both the sign and the order of the matrix are wrong!?
+//        //DoubleMatrix1D v = eigenvectors.viewRow(maxIndex);
+//        DoubleMatrix1D v = eigenvectors.viewColumn(maxIndex);    //so we view COLUMN, not row
+//        //v.assign(F.mult( -1));                                   //and we multiply all by -1..
+//        //System.out.println("v = " + v);
+//
+//        //finally construct the axis from this principal eigenvector and the centroid
+//        Vector3d axisVector = new Vector3d(v.toArray());
+//        return new Axis(centroid, axisVector);
+        return null;
     }
 
     public static double angle(Point3d a, Point3d b, Point3d c) {
