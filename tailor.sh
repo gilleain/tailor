@@ -1,3 +1,2 @@
 #! /bin/sh
-JMOL_JAR=./Jmol.jar
-java -cp tailor.jar:${JMOL_JAR} tailor.app.RunFrame
+java -cp target/tailor-0.0.1-SNAPSHOT-jar-with-dependencies.jar tailor.app.RunFrame
