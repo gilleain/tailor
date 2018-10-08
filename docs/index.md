@@ -10,5 +10,3 @@ This is a protein motif search library written in Java. It allows clients to des
 - [Examples](functional_examples.md)
 - [Resources](resources.md)
 
-
-![](img/overview.png)
