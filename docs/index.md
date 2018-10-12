@@ -9,6 +9,6 @@ This is a protein motif search library written in Java. It allows clients to des
 - [Conditions](conditions.md)
 - [Measures](measures.md)
 - [Examples](functional_examples.md)
-- [Python API] (python.md)
+- [Python API](python.md)
 - [Resources](resources.md)
 
