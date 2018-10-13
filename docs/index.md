@@ -5,10 +5,10 @@ This is a protein motif search library written in Java. It allows clients to des
 
 - [Overview](overview.md)
 - [Quickstart](quickstart.md)
+- [Python](start_python.md)
 - [Patterns](pattern_definition.md)
 - [Conditions](conditions.md)
 - [Measures](measures.md)
 - [Examples](functional_examples.md)
-- [Python API](python.md)
 - [Resources](resources.md)
 
