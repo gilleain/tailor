@@ -2,6 +2,7 @@
 
 A complete java program, using the api, is shown below.
 
+```java
     import tailor.description.DescriptionFactory;
     import tailor.engine.BasicEngine;
     import tailor.engine.Engine;
@@ -28,6 +29,7 @@ A complete java program, using the api, is shown below.
         }
 
     }
+```
 
 This code is making a very simple 4-residue description, with the condition that it have a backbone hydrogen bond from the CO of residue i + 4 to the NH of residue i. It then sets two torsion measures - phi and psi of residue 2 and runs against the file(s) represented by `path`.
 
