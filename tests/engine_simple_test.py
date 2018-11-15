@@ -12,6 +12,7 @@ structure = structureFromFile(filepath)
 # create a simple description
 description = ChainDescription({"chainType" : "Protein"})
 description.createResidues(3)
+description.createPhiBoundCondition(2, -30, 100) 
 
 # create a simple measure
 o = description.selectResidue(1).selectAtom("O")

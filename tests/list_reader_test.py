@@ -1,7 +1,10 @@
 # test the list reader
 
 import sys
-from Tailor.Engine import TmpDistanceMeasure, constructSelection
+#sys.path.append("../Tailor")
+
+from Tailor.Description import constructSelection
+from Tailor.Measure import DistanceMeasure
 from Tailor.Description import ChainDescription
 from Tailor.ResultParser import ExampleDescription, generateExamples
 
@@ -17,9 +20,9 @@ abstractDescription.createResidues(3)
 
 o = constructSelection(residuePosition=1, atomName="O")
 n = constructSelection(residuePosition=3, atomName="N")
-measures = [TmpDistanceMeasure(o, n)]
+measures = [DistanceMeasure(o, n)]
 
 for e in generateExamples(filename, pdbdir, parse):
     for measure in measures:
         # XXX hack!
-        print measure.measure(e[0][0])
+        print measure.measure(e)
