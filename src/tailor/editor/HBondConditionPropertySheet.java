@@ -115,7 +115,9 @@ public class HBondConditionPropertySheet extends JPanel implements ActionListene
 	public void actionPerformed(ActionEvent ae) {
 		 String command = ae.getActionCommand();
 	        if (command.equals("Update")) {
+	            System.err.println("update");// TODO
 	        } else if (command.equals("Revert")) {
+	            System.err.println("revert");// TODO
 	        }
 	}
 

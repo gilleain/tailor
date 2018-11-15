@@ -54,7 +54,7 @@ public class LibraryDialog extends JDialog implements ActionListener, ListSelect
 		final int w = 250;
 		final int h = 100;
 		
-		descriptionList = new JList<Description>((Description[]) descriptions.toArray());
+		descriptionList = new JList<Description>(descriptions.toArray(new Description[] {}));
 		descriptionList.setCellRenderer(new DiagramListCellRenderer(w, h, descriptions));
 		descriptionList.addListSelectionListener(this);
 		

@@ -20,6 +20,10 @@ public class Edge implements Comparable<Edge> {
             return firstCompare;
         }
     }
+    
+    public int hashCode() {
+        return first.hashCode() * second.hashCode() + type;
+    }
 
     public boolean equals(Object other) {
         if (this == other) return true;

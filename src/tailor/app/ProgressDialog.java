@@ -27,14 +27,14 @@ public class ProgressDialog extends JDialog  {
 		return this.progressBar;
 	}
 	
-	public static void main(String[] args) {
+	public static void main(String[] args) {   // TODO - convert this to a test
 		ProgressDialog d = new ProgressDialog(46);
 		JProgressBar b = d.getProgressBar();
 		for (int i = 0; i < 46; i++) {
 			try {
 				Thread.sleep(10);
 			} catch (InterruptedException ie) {
-				
+				System.err.println(ie);
 			}
 			b.setValue(i);
 		}

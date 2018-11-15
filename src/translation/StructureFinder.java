@@ -686,7 +686,7 @@ public class StructureFinder {
             if (((HBond) nTerminalHBonds.get(0)).hasHelixResidueSeparation()) {
                 residue.setEnvironment("End of a Helix");
             }
-        } else if (numberOfNTerminalHBonds == 1 && numberOfCTerminalHBonds == 0) {
+        } else if (numberOfNTerminalHBonds == 0 && numberOfCTerminalHBonds == 1) {
             if (((HBond) cTerminalHBonds.get(0)).hasHelixResidueSeparation()) {
                 residue.setEnvironment("Start of a Helix");
             }

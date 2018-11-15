@@ -91,7 +91,9 @@ public class HBondMeasurePropertySheet extends JPanel implements ActionListener 
 	public void actionPerformed(ActionEvent ae) {
 		 String command = ae.getActionCommand();
 	        if (command.equals("Update")) {
+	            System.err.println("update");
 	        } else if (command.equals("Revert")) {
+	            System.err.println("revert");
 	        }
 	}
 
