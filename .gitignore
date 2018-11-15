@@ -21,3 +21,5 @@ tailor.jar
 Gemfile
 Gemfile.lock
 _site/
+sonar-project.properties
+.scannerwork
