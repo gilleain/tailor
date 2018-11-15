@@ -33,8 +33,10 @@ public class AngleBoundCondition implements Condition {
     	return null;	// TODO
     }
     
-    public boolean equals(Condition other) {
-        if (other instanceof AngleBoundCondition) {
+    public boolean equals(Object other) {
+        if (this == other) return true;
+        
+        if (other != null && other instanceof AngleBoundCondition) {
             AngleBoundCondition o = (AngleBoundCondition) other;
             if (this.name.equals(o.name) &&
                     this.angleMeasure == o.angleMeasure &&

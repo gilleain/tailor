@@ -30,8 +30,8 @@ public class All implements Condition {
     	return null;
     }
 
-    public boolean equals(Condition other) {
-        return false;
+    public boolean equals(Object other) {
+        return other instanceof All;    // TODO - check the conditions in this
     }
 
     public boolean satisfiedBy(Match match) {

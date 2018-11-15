@@ -78,7 +78,8 @@ public class TorsionBoundCondition implements Condition {
 	}
 
     
-	public boolean equals(Condition other) {
+	public boolean equals(Object other) {
+	    if (this == other) return true;
 		if (other instanceof TorsionBoundCondition) {
 			TorsionBoundCondition o = (TorsionBoundCondition) other;
 			if (this.name.equals(o.name) &&

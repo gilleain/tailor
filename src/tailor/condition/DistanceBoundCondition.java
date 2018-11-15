@@ -35,7 +35,8 @@ public class DistanceBoundCondition implements Condition {
     	return null;	// TODO
     }
 	
-	public boolean equals(Condition other) {
+	public boolean equals(Object other) {
+	    if (this == other) return true;
 		if (other instanceof DistanceBoundCondition) {
 			DistanceBoundCondition o = (DistanceBoundCondition) other;
 			if (this.name.equals(o.name) &&

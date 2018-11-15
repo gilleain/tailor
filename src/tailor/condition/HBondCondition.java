@@ -93,7 +93,11 @@ public class HBondCondition implements Condition {
 				|| getHydrogenAtomDescription().contains(d);
 	}
 
-	public boolean equals(Condition other) {
+	public boolean equals(Object other) {
+	    if (this == other) return true;
+	    if (other instanceof HBondCondition) {
+	        return true;   // TODO
+	    }
         return false;
     }
 

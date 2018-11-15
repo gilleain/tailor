@@ -26,7 +26,11 @@ public class None implements Condition {
     	return null;	// TODO
     }
     
-    public boolean equals(Condition other) {
+    public boolean equals(Object other) {
+        if (this == other) return true;
+        if (other instanceof None) {
+            return true;    // TODO
+        }
         return false;
     }
 

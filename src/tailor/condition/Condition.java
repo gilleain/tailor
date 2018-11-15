@@ -13,8 +13,6 @@ public interface Condition {
 	
 	public boolean satisfiedBy(Match match);
 	
-	public boolean equals(Condition other);
-	
 	public boolean contains(Description d);
 	
 	public String toXml();

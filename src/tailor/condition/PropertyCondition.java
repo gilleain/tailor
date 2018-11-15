@@ -25,7 +25,8 @@ public class PropertyCondition implements Condition {
     	return null;	// TODO
     }
     
-	public boolean equals(Condition other) {
+	public boolean equals(Object other) {
+	    if (this == other) return true;
 		if (other instanceof PropertyCondition) {
 			PropertyCondition o = (PropertyCondition) other;
 //            System.err.println(this + " == " + o);
