@@ -77,6 +77,9 @@ public class TorsionBoundCondition implements Condition {
 	    return false;
 	}
 
+	public int hashCode() {
+        return (int) (this.name.hashCode() * this.torsionMeasure.hashCode() * midPoint * range);
+    }
     
 	public boolean equals(Object other) {
 	    if (this == other) return true;

@@ -29,6 +29,14 @@ public class All implements Condition {
     	// TODO
     	return null;
     }
+    
+    public int hashCode() {
+        int hashcode = 1;
+        for (Condition condition : conditions) {
+            hashcode *= condition.hashCode();
+        }
+        return hashcode;
+    }
 
     public boolean equals(Object other) {
         return other instanceof All;    // TODO - check the conditions in this

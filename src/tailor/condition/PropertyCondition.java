@@ -25,6 +25,10 @@ public class PropertyCondition implements Condition {
     	return null;	// TODO
     }
     
+    public int hashCode() {
+        return propertyKey.hashCode() * propertyValue.hashCode();
+    }
+    
 	public boolean equals(Object other) {
 	    if (this == other) return true;
 		if (other instanceof PropertyCondition) {

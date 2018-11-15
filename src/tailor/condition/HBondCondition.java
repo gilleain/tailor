@@ -92,6 +92,10 @@ public class HBondCondition implements Condition {
 				|| getDonorAtomDescription().contains(d)
 				|| getHydrogenAtomDescription().contains(d);
 	}
+	
+	public int hashCode() {
+        return (int) (this.name.hashCode() * this.hBondMeasure.hashCode() * haMax * dhaMin * haaMin);
+    }
 
 	public boolean equals(Object other) {
 	    if (this == other) return true;

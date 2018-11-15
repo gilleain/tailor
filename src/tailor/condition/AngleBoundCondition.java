@@ -33,6 +33,10 @@ public class AngleBoundCondition implements Condition {
     	return null;	// TODO
     }
     
+    public int hashCode() {
+        return (int) (this.name.hashCode() * this.angleMeasure.hashCode() * center * range);
+    }
+    
     public boolean equals(Object other) {
         if (this == other) return true;
         

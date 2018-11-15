@@ -26,6 +26,14 @@ public class OnlyOne implements Condition {
     	return null;	// TODO
     }
     
+    public int hashCode() {
+        int hashcode = 1;
+        for (Condition condition : conditions) {
+            hashcode *= condition.hashCode();
+        }
+        return hashcode;
+    }
+    
     public boolean equals(Object other) {
         if (this == other) return true;
         if (other instanceof OnlyOne) {
