@@ -20,7 +20,7 @@ public class TopLevelEngine extends AbstractBaseEngine {
      */
     public List<Match> match(Description description, Structure structure) {
         
-        List<Match> matches = new ArrayList<Match>();
+        List<Match> matches = new ArrayList<>();
         for (Description subDescription : description.getSubDescriptions()) {
             for (Structure subStructure : structure) {
                 List<Match> subMatches = 

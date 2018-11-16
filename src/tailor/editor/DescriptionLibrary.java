@@ -3,6 +3,7 @@ package tailor.editor;
 import java.io.File;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.List;
 
 import tailor.datasource.xml.XmlDescriptionReader;
 import tailor.description.Description;
@@ -16,7 +17,7 @@ public class DescriptionLibrary {
 		"descriptions/schellman_loop.xml"
 	};
 	
-	private ArrayList<Description> descriptions;
+	private List<Description> descriptions;
 	
 	/**
 	 * Read all the ".xml" files from {@code directory} and turn them into Descriptions.
@@ -24,7 +25,7 @@ public class DescriptionLibrary {
 	 * @param directoryName where to look for files.
 	 */
 	public DescriptionLibrary(String directoryName) {
-		this.descriptions = new ArrayList<Description>();
+		this.descriptions = new ArrayList<>();
 		XmlDescriptionReader reader = new XmlDescriptionReader();
 		File directory = new File(directoryName);
 		if (directory.exists()) {
@@ -40,7 +41,7 @@ public class DescriptionLibrary {
 		}
 	}
 	
-	public ArrayList<Description> getDescriptions() {
+	public List<Description> getDescriptions() {
 		return this.descriptions;
 	}
 	
@@ -49,9 +50,9 @@ public class DescriptionLibrary {
 	 * 
 	 * @return an ArrayList of Descriptions from the standard library.
 	 */
-	public static ArrayList<Description> getDefaultLibrary() {
+	public static List<Description> getDefaultLibrary() {
 		try {
-			ArrayList<Description> defaultLib = new ArrayList<Description>();
+			List<Description> defaultLib = new ArrayList<>();
 			
 			ClassLoader loader = DescriptionLibrary.class.getClassLoader();
 			XmlDescriptionReader reader = new XmlDescriptionReader();
@@ -69,8 +70,8 @@ public class DescriptionLibrary {
 	}
 	
 	public static void main(String[] args) {
-//		ArrayList<Description> lib = DescriptionLibrary.getDefaultLibrary();
-		ArrayList<Description> lib = new DescriptionLibrary("descriptions").getDescriptions();
+//		List<Description> lib = DescriptionLibrary.getDefaultLibrary();
+		List<Description> lib = new DescriptionLibrary("descriptions").getDescriptions();
 		for (Description d : lib) {
 			System.out.println(d);
 		}

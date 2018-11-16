@@ -19,7 +19,7 @@ public class Group implements Structure {
     
 
     public Group() {
-        this.atomMap = new HashMap<String, Atom>();
+        this.atomMap = new HashMap<>();
     }
     
     public void addAtom(Atom atom) {
@@ -78,7 +78,7 @@ public class Group implements Structure {
     }
 
     public List<Atom> getAtoms() {
-        return new ArrayList<Atom>(this.atomMap.values());
+        return new ArrayList<>(this.atomMap.values());
     }
 
 }

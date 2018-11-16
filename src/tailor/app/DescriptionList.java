@@ -20,7 +20,7 @@ public class DescriptionList extends JPanel {
 	private JList<Description> list;
 	
 	public DescriptionList(Border border, App app) {
-		this.list = new JList<Description>(new DefaultListModel<Description>());
+		this.list = new JList<>(new DefaultListModel<>());
 		this.list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		this.add(this.list);
 		

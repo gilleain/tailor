@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -14,11 +15,11 @@ import java.util.ArrayList;
 public class SimpleTableModel extends RowBasedTableModel {
 
 	private String[] headers;
-	private ArrayList<String[]> data;
+	private List<String[]> data;
 
 	public SimpleTableModel() {
 		this.headers = null;
-		this.data = new ArrayList<String[]>();
+		this.data = new ArrayList<>();
 	}
 
 	public SimpleTableModel(File file) throws IOException {

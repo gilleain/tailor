@@ -1,6 +1,7 @@
 package tailor.app;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import tailor.datasource.Result;
 
@@ -12,7 +13,7 @@ import tailor.datasource.Result;
 public class FileDataTableModel extends RowBasedTableModel {
     
     private String[] columnHeaders;
-    private ArrayList<Result> data;
+    private List<Result> data;
     private int numberOfColumns;
     
     public FileDataTableModel() {
@@ -20,12 +21,12 @@ public class FileDataTableModel extends RowBasedTableModel {
     }
     
     public FileDataTableModel(int numberOfColumns) {
-        this.data = new ArrayList<Result>();
+        this.data = new ArrayList<>();
         this.numberOfColumns = numberOfColumns;
         this.columnHeaders = null;
     }
 
-    public FileDataTableModel(ArrayList<Result> data) {
+    public FileDataTableModel(List<Result> data) {
         this.data = data;
         if (data.size() > 0) {
         	// XXX : while simple, this could be dangerous if the file format is wrong. 

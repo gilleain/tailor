@@ -18,7 +18,7 @@ public class MultiChainEngine extends AbstractBaseEngine {
 
     @Override
     public List<Match> match(Description description, Structure structure) {
-        List<Match> results = new ArrayList<Match>();
+        List<Match> results = new ArrayList<>();
         if (description instanceof ProteinDescription) {
             ProteinDescription proteinDescription = 
                 (ProteinDescription)description; 

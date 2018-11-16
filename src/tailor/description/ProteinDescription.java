@@ -20,9 +20,9 @@ public class ProteinDescription implements Description {
     
     private String name;    // a name for the whole description
     
-    private ArrayList<ChainDescription> chainDescriptions;
+    private List<ChainDescription> chainDescriptions;
     
-    private ArrayList<Condition> chainConditions;
+    private List<Condition> chainConditions;
     
     private List<Measure> chainMeasures;
     
@@ -36,10 +36,10 @@ public class ProteinDescription implements Description {
     
     public ProteinDescription(String name) {
         this.name = name;
-        this.chainDescriptions = new ArrayList<ChainDescription>();
-        this.chainConditions = new ArrayList<Condition>();
-        this.chainMeasures = new ArrayList<Measure>();
-        this.descriptionLookup = new HashMap<Integer, Description>();
+        this.chainDescriptions = new ArrayList<>();
+        this.chainConditions = new ArrayList<>();
+        this.chainMeasures = new ArrayList<>();
+        this.descriptionLookup = new HashMap<>();
         
         this.id = 0;    // XXX bit of an assumption, surely...
     }
@@ -72,7 +72,7 @@ public class ProteinDescription implements Description {
         this.chainConditions.add(condition);
     }
     
-    public ArrayList<ChainDescription> getChainDescriptions() {
+    public List<ChainDescription> getChainDescriptions() {
         return this.chainDescriptions;
     }
     
@@ -193,7 +193,7 @@ public class ProteinDescription implements Description {
         chainMeasures.add(measure);
     }
 
-    public ArrayList<Condition> getConditions() {
+    public List<Condition> getConditions() {
         return this.chainConditions;
     }
 

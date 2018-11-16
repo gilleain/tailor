@@ -2,6 +2,7 @@ package tailor.editor;
 
 import java.awt.Dimension;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -21,7 +22,7 @@ public class DescriptionTreeView extends JPanel  {
 
 	private JTree descriptionTree;
     
-    private ArrayList<Description> descriptions;
+    private List<Description> descriptions;
     
 	private DefaultTreeModel model;
     
@@ -63,7 +64,7 @@ public class DescriptionTreeView extends JPanel  {
 		this.add(this.scrollPane);
         this.setPreferredSize(pref);
         
-        this.descriptions = new ArrayList<Description>();
+        this.descriptions = new ArrayList<>();
 	}
     
     /**

@@ -51,7 +51,7 @@ public class XmlDescriptionReader {
         private Map<String, ConditionXmlHandler> conditionHandlers;
         
         public XmlMotifHandler() {
-            this.seenStack = new Stack<Description>();
+            this.seenStack = new Stack<>();
             
             descriptionHandlers = new HashMap<>();
             descriptionHandlers.put("ProteinDescription", new ProteinDescriptionXmlHandler());

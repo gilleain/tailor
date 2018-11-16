@@ -15,7 +15,7 @@ public class PathXmlHandler {
     private Map<String, Description> pathMap;
     
     public PathXmlHandler() {
-        this.pathMap = new HashMap<String, Description>();
+        this.pathMap = new HashMap<>();
     }
     
     public Description getPath(String name) {

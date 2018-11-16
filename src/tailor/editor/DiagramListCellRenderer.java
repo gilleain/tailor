@@ -6,6 +6,7 @@ import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
@@ -22,11 +23,11 @@ public class DiagramListCellRenderer extends JLabel implements ListCellRenderer<
 	private HashMap<Description, ImageIcon> unselectedIconMap;
 	private HashMap<Description, ImageIcon> selectedIconMap;
 	
-	public DiagramListCellRenderer(int w, int h, ArrayList<Description> descriptions) {
+	public DiagramListCellRenderer(int w, int h, List<Description> descriptions) {
 		this.w = w;
 		this.h = h;
-		this.unselectedIconMap = new HashMap<Description, ImageIcon>();
-		this.selectedIconMap = new HashMap<Description, ImageIcon>();
+		this.unselectedIconMap = new HashMap<>();
+		this.selectedIconMap = new HashMap<>();
 		for (Description description : descriptions) {
 			ResidueDiagram diagram = new ResidueDiagram();
 			diagram.createFromDescription((ProteinDescription)description);

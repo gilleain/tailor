@@ -12,6 +12,7 @@ import java.awt.geom.AffineTransform;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * java.awt.Canvas subclass to draw Ramachandran-like scatterplots
@@ -21,8 +22,8 @@ import java.util.ArrayList;
  */
 public class RamachandranPlotCanvas extends Canvas {
 	
-	private ArrayList<PointList> pointLists;
-    private ArrayList<Shape> bounds;
+	private List<PointList> pointLists;
+    private List<Shape> bounds;
 	
 	private int xGridSeparation;
 	private int yGridSeparation;
@@ -48,9 +49,9 @@ public class RamachandranPlotCanvas extends Canvas {
 	public RamachandranPlotCanvas() {
         this.currentColor = this.colors[0];
         
-		this.pointLists = new ArrayList<PointList>();
+		this.pointLists = new ArrayList<>();
         this.pointLists.add(new PointList(this.currentColor));
-        this.bounds = new ArrayList<Shape>();
+        this.bounds = new ArrayList<>();
 		
 		this.xBorder = 40;
 		this.yBorder = 40;
@@ -107,7 +108,7 @@ public class RamachandranPlotCanvas extends Canvas {
     }
     
     public void selectOnlyCategory(Category category) {
-        ArrayList<String> ids = category.getMemberIds();
+        List<String> ids = category.getMemberIds();
         for (PointList pointList : this.pointLists) {
             pointList.showOnlyPointsWithId(ids);
         }
@@ -293,11 +294,11 @@ public class RamachandranPlotCanvas extends Canvas {
     private class PointList {
         
         private Color color;
-        private ArrayList<Point> points;
+        private List<Point> points;
         
         public PointList(Color color) {
             this.color = color;
-            this.points = new ArrayList<Point>();
+            this.points = new ArrayList<>();
         }
         
         public void add(Point point) {
@@ -313,7 +314,7 @@ public class RamachandranPlotCanvas extends Canvas {
             }
         }
   
-        public void showOnlyPointsWithId(ArrayList<String> ids) {
+        public void showOnlyPointsWithId(List<String> ids) {
             for (Point point : this.points) {
                 for (String id : ids) {
                     if (point.hasId(id)) {

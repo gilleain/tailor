@@ -25,9 +25,9 @@ public class GroupDescription implements Description, Iterable<AtomDescription> 
     
     private String groupName;
     
-    private ArrayList<AtomDescription> atomDescriptions;
+    private List<AtomDescription> atomDescriptions;
     
-    private ArrayList<Condition> atomConditions;
+    private List<Condition> atomConditions;
     
     private List<Measure> atomMeasures;
     
@@ -44,10 +44,10 @@ public class GroupDescription implements Description, Iterable<AtomDescription> 
     
     public GroupDescription() {
         this.groupName = null;
-        this.atomDescriptions = new ArrayList<AtomDescription>();
-        this.atomMeasures = new ArrayList<Measure>();
-        this.atomConditions = new ArrayList<Condition>();
-        this.descriptionLookup = new HashMap<Integer, Description>();
+        this.atomDescriptions = new ArrayList<>();
+        this.atomMeasures = new ArrayList<>();
+        this.atomConditions = new ArrayList<>();
+        this.descriptionLookup = new HashMap<>();
     }
     
     public GroupDescription(String groupName) {
@@ -85,13 +85,12 @@ public class GroupDescription implements Description, Iterable<AtomDescription> 
         this.atomConditions.add(condition);
     }
     
-    public ArrayList<AtomDescription> getAtomDescriptions() {
+    public List<AtomDescription> getAtomDescriptions() {
         return this.atomDescriptions;
     }
     
     public List<TorsionBoundCondition> getTorsionBoundConditions() {
-        ArrayList<TorsionBoundCondition> torsions = 
-            new ArrayList<TorsionBoundCondition>();
+        List<TorsionBoundCondition> torsions = new ArrayList<>();
         for (Condition condition : this.atomConditions) {
             if (condition instanceof TorsionBoundCondition) {
                 torsions.add((TorsionBoundCondition) condition);
@@ -203,7 +202,7 @@ public class GroupDescription implements Description, Iterable<AtomDescription> 
         this.atomConditions.add(condition);
     }
 
-    public ArrayList<Condition> getConditions() {
+    public List<Condition> getConditions() {
         return this.atomConditions;
     }
 
@@ -219,7 +218,7 @@ public class GroupDescription implements Description, Iterable<AtomDescription> 
         return this.atomDescriptions.size();
     }
 
-    public ArrayList<AtomDescription> getSubDescriptions() {
+    public List<AtomDescription> getSubDescriptions() {
         return this.atomDescriptions;
     }
 

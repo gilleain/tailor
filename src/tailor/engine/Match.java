@@ -29,7 +29,7 @@ public class Match implements Iterable<Match> {
     public Match(Description description, Structure structure) {
         this.description = description;
         this.structure = structure;
-        this.subMatches = new ArrayList<Match>();
+        this.subMatches = new ArrayList<>();
         
         // TODO : check the description level against the structure level
         this.level = description.getLevel();

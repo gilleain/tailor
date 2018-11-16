@@ -151,7 +151,7 @@ public class DescriptionFactory {
 	}
 	
 	public List<AtomDescription> getAtomDescriptions(String chainName) {
-		List<AtomDescription> atoms = new ArrayList<AtomDescription>();
+		List<AtomDescription> atoms = new ArrayList<>();
 		ChainDescription chain = this.root.getChainDescription(chainName);
 		for (GroupDescription group : chain.getGroupDescriptions()) {
 			atoms.addAll(group.getAtomDescriptions());

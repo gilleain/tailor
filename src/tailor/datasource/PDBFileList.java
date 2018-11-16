@@ -3,12 +3,13 @@ package tailor.datasource;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 
 public class PDBFileList implements StructureSource {
 	
 	private File path;
-	private ArrayList<File> structurePaths;
+	private List<File> structurePaths;
     private int currentIndex;
 
     public PDBFileList(File file, String[] filenames) throws IOException {
@@ -29,7 +30,7 @@ public class PDBFileList implements StructureSource {
 		}
 		this.path = new File(path);
 		if (this.path.exists()) {
-			this.structurePaths = new ArrayList<File>();
+			this.structurePaths = new ArrayList<>();
 			if (this.path.isDirectory()) {
 				if (filenames.length == 0) {
 					filenames = this.path.list();
@@ -52,7 +53,7 @@ public class PDBFileList implements StructureSource {
         this.currentIndex = 0;
 	}
 	
-	public ArrayList<File> getStructurePaths() {
+	public List<File> getStructurePaths() {
 		return this.structurePaths;
 	}
     

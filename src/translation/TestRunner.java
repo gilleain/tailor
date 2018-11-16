@@ -146,7 +146,6 @@ public class TestRunner {
                     }
                 }
             } catch (Exception ex) {
-                ex.printStackTrace();
                 System.err.println(ex.toString());
             }
         }

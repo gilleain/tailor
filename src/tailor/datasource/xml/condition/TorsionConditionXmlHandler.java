@@ -14,7 +14,7 @@ public class TorsionConditionXmlHandler implements ConditionXmlHandler {
     private Map<String, String> dataStore;
     
     public TorsionConditionXmlHandler() {
-        this.dataStore = new HashMap<String, String>();
+        this.dataStore = new HashMap<>();
     }
 
     @Override

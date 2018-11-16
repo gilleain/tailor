@@ -19,7 +19,7 @@ public class ConditionListBox extends JPanel {
 	
 	public ConditionListBox() {
 		
-		this.conditionList = new JList<Condition>(new DefaultListModel<Condition>());
+		this.conditionList = new JList<>(new DefaultListModel<>());
 		this.conditionList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		this.setPreferredSize(new Dimension(200, 200));
 		

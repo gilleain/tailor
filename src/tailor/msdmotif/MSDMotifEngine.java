@@ -214,7 +214,7 @@ public class MSDMotifEngine implements Engine {
         	engine.doQueryFromFile(queryFile, outFile);
         	engine.processResult(outFile);
         } catch(Exception ex) {
-        	ex.printStackTrace();
+        	System.err.println(ex);
         }
     }
 

@@ -24,7 +24,7 @@ public class ChainDescription implements Description, Iterable<GroupDescription>
     
     private List<GroupDescription> groupDescriptions;
     
-    private ArrayList<Condition> groupConditions;
+    private List<Condition> groupConditions;
     
     private List<Measure> groupMeasures;
     
@@ -34,10 +34,10 @@ public class ChainDescription implements Description, Iterable<GroupDescription>
     
     public ChainDescription() {
         this.chainName = null;
-        this.groupDescriptions = new ArrayList<GroupDescription>();
-        this.groupConditions = new ArrayList<Condition>();
-        this.groupMeasures = new ArrayList<Measure>();
-        this.descriptionLookup = new HashMap<Integer, Description>();
+        this.groupDescriptions = new ArrayList<>();
+        this.groupConditions = new ArrayList<>();
+        this.groupMeasures = new ArrayList<>();
+        this.descriptionLookup = new HashMap<>();
     }
     
     public ChainDescription(String chainName) {
@@ -69,7 +69,7 @@ public class ChainDescription implements Description, Iterable<GroupDescription>
     
     public void removeLastGroupDescription() {
     	GroupDescription g = this.groupDescriptions.remove(this.groupDescriptions.size() - 1);
-    	ArrayList<Condition> toRemove = new ArrayList<Condition>();
+    	List<Condition> toRemove = new ArrayList<>();
     	for (Condition condition : this.groupConditions) {
     		if (condition.contains(g)) {
     			toRemove.add(condition);

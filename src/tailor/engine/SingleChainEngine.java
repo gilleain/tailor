@@ -37,7 +37,7 @@ public class SingleChainEngine extends AbstractBaseEngine implements Engine {
     
     @Override
     public List<Match> match(Description description, Structure structure) {
-        List<Match> matches = new ArrayList<Match>();
+        List<Match> matches = new ArrayList<>();
 
         int span = description.size();
 

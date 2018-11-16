@@ -75,7 +75,7 @@ public class DsspReader {
 
     private static List<String> getRecords(BufferedReader bufferer) {
         String line;
-        List<String> records = new ArrayList<String>();
+        List<String> records = new ArrayList<>();
         try {
             int lineCounter = 0;
             while ((line = bufferer.readLine()) != null) {
@@ -92,7 +92,7 @@ public class DsspReader {
             try {
                 bufferer.close();
             } catch (IOException e) {
-                e.printStackTrace();
+                System.err.println(e);
             }
         }
         return records;

@@ -31,7 +31,7 @@ public class AtomSelector implements StructureVisitor {
     public AtomSelector(Description description) {
         this.root = description;
         this.current = description;
-        this.selected = new ArrayList<Atom>();
+        this.selected = new ArrayList<>();
     }
 
     @Override

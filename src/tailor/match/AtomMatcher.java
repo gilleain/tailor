@@ -17,7 +17,7 @@ import tailor.structure.Group;
 public class AtomMatcher {
     
     public List<Match> match(GroupDescription description, Group group) {
-        List<Match> matches = new ArrayList<Match>();
+        List<Match> matches = new ArrayList<>();
         for (AtomDescription atomDescription : description) {
             for (Atom atom : group.getAtoms()) {    // TODO - more efficient to do hashmap lookup
                 if (atom.getName().equals(atomDescription.getName())) {

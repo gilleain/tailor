@@ -21,7 +21,7 @@ public abstract class BackboneSegment implements Comparable<BackboneSegment>, It
     protected String orientation;
 
     public BackboneSegment() {
-        this.residues = new TreeSet<Residue>();
+        this.residues = new TreeSet<>();
         this.axis = null;
         this.orientation = "None";
     }
@@ -130,7 +130,7 @@ public abstract class BackboneSegment implements Comparable<BackboneSegment>, It
     }
 
     public List<Point3d> getCAlphaCoordinates() {
-        List<Point3d> cAlphas = new ArrayList<Point3d>();
+        List<Point3d> cAlphas = new ArrayList<>();
         Iterator<Residue> itr = this.residues.iterator();
         while (itr.hasNext()) {
             Residue nextResidue = itr.next();
@@ -261,7 +261,7 @@ public abstract class BackboneSegment implements Comparable<BackboneSegment>, It
     }
 
     public List<Residue> getResidues() {
-        List<Residue> residueList = new ArrayList<Residue>();
+        List<Residue> residueList = new ArrayList<>();
         for (Residue residue : this.residues) {
             residueList.add(residue);
         }

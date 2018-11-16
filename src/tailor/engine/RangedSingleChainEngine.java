@@ -29,8 +29,8 @@ public class RangedSingleChainEngine extends AbstractBaseEngine {
     }
     
     public List<Match> match(Description description, Structure structure) {
-        List<Match> fullMatches = new ArrayList<Match>();
-        List<Match> partialMatches = new ArrayList<Match>();
+        List<Match> fullMatches = new ArrayList<>();
+        List<Match> partialMatches = new ArrayList<>();
         Level level = structure.getLevel();
         
         // this will be checked for each residue, to generate new partials

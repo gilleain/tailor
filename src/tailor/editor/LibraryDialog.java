@@ -5,7 +5,7 @@ import java.awt.Dimension;
 import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -39,7 +39,7 @@ public class LibraryDialog extends JDialog implements ActionListener, ListSelect
 		this.directoryLabel = new JLabel();
 		this.directoryLabel.setHorizontalAlignment(JLabel.CENTER);
 		
-		ArrayList<Description> descriptions;
+		List<Description> descriptions;
 		if (directory != null) {
 			descriptions = new DescriptionLibrary(directory).getDescriptions();
 			this.directoryLabel.setText(directory);
@@ -54,7 +54,7 @@ public class LibraryDialog extends JDialog implements ActionListener, ListSelect
 		final int w = 250;
 		final int h = 100;
 		
-		descriptionList = new JList<Description>(descriptions.toArray(new Description[] {}));
+		descriptionList = new JList<>(descriptions.toArray(new Description[] {}));
 		descriptionList.setCellRenderer(new DiagramListCellRenderer(w, h, descriptions));
 		descriptionList.addListSelectionListener(this);
 		

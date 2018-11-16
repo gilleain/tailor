@@ -14,7 +14,7 @@ public class DistanceConditionXmlHandler implements ConditionXmlHandler {
     private Map<String, String> dataStore;
     
     public DistanceConditionXmlHandler() {
-        this.dataStore = new HashMap<String, String>();
+        this.dataStore = new HashMap<>();
     }
 
     @Override

@@ -20,7 +20,7 @@ public class MeasureListBox extends JPanel {
 	
 	public MeasureListBox() {
 		
-		this.measureList = new JList<Measure<?>>(new DefaultListModel<Measure<?>>());
+		this.measureList = new JList<>(new DefaultListModel<>());
 		this.measureList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		this.setPreferredSize(new Dimension(200, 200));
 		
@@ -46,7 +46,7 @@ public class MeasureListBox extends JPanel {
 	}
 	
 	public List<Measure<?>> getMeasures() {
-		List<Measure<?>> measures = new ArrayList<Measure<?>>();
+		List<Measure<?>> measures = new ArrayList<>();
 		DefaultListModel<Measure<?>> model = this.getListModel();
 		for (int i = 0; i < model.size(); i++) {
 			measures.add(model.get(i));

@@ -8,7 +8,7 @@ public class Strand implements Structure, SSE {
     private final List<Group> groups;
     
     public Strand() {
-        this.groups = new ArrayList<Group>();
+        this.groups = new ArrayList<>();
     }
 
     @Override

@@ -27,12 +27,12 @@ public class Chain implements Iterable<BackboneSegment> {
     private List<Domain> domains;
 
     public Chain() {
-        this.residues = new ArrayList<Residue>();
-        this.hbonds = new ArrayList<HBond>();
-        this.sheets = new ArrayList<Sheet>();
-        this.backboneSegments = new ArrayList<BackboneSegment>();
-        this.chiralities = new ArrayList<Edge>();
-        this.domains = new ArrayList<Domain>();
+        this.residues = new ArrayList<>();
+        this.hbonds = new ArrayList<>();
+        this.sheets = new ArrayList<>();
+        this.backboneSegments = new ArrayList<>();
+        this.chiralities = new ArrayList<>();
+        this.domains = new ArrayList<>();
         this.center = null;
     }
 

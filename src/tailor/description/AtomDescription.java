@@ -23,7 +23,7 @@ public class AtomDescription implements Description {
     private int id;
     
     public AtomDescription() {
-        this.conditions = new ArrayList<Condition>();
+        this.conditions = new ArrayList<>();
     }
     
     public AtomDescription(String name) {
@@ -103,7 +103,7 @@ public class AtomDescription implements Description {
     
     public List<Measure> getMeasures() {
         // TODO 
-        return new ArrayList<Measure>();
+        return new ArrayList<>();
     }
     
     public void addSubDescription(Description subDescription) {
@@ -123,8 +123,8 @@ public class AtomDescription implements Description {
         return name;
     }
     
-    public ArrayList<Description> getSubDescriptions() {
-        return new ArrayList<Description>();
+    public List<Description> getSubDescriptions() {
+        return new ArrayList<>();
     }
     
     public Description getSubDescriptionAt(int i) {

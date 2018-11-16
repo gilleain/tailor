@@ -19,7 +19,7 @@ public class CategoryListPanel extends JPanel {
     private JList<Category> categoryDisplay;
     
     public CategoryListPanel() {
-        this.categoryDisplay = new JList<Category>(new DefaultListModel<Category>());
+        this.categoryDisplay = new JList<>(new DefaultListModel<>());
         this.categoryDisplay.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         //this.categoryDisplay.setPreferredSize(new Dimension(200, 400));
         JScrollPane scrollPane = new JScrollPane(this.categoryDisplay);
@@ -47,7 +47,7 @@ public class CategoryListPanel extends JPanel {
     }
     
     public Category getSelectedCategory() {
-        return (Category) this.categoryDisplay.getSelectedValue();
+        return this.categoryDisplay.getSelectedValue();
     }
 
 }

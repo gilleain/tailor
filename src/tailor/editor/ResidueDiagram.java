@@ -6,6 +6,7 @@ import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import tailor.condition.Condition;
 import tailor.condition.HBondCondition;
@@ -53,15 +54,15 @@ public class ResidueDiagram {
 	private boolean shouldDrawLabels;
 	
 	public ResidueDiagram() {
-		this.backboneSymbols = new ArrayList<Symbol>();
-		this.torsionSymbols = new ArrayList<Symbol>();
-		this.hBondSymbols = new ArrayList<Symbol>();
+		this.backboneSymbols = new ArrayList<>();
+		this.torsionSymbols = new ArrayList<>();
+		this.hBondSymbols = new ArrayList<>();
 		
 		this.shapeSize = ResidueDiagram.MAX_SHAPE_SIZE;
 		this.gapSize = ResidueDiagram.MAX_GAP_SIZE;
 		this.torsionBoxHeight = ResidueDiagram.MAX_TORSION_BOX_HEIGHT;
 		this.torsionBoxGap = ResidueDiagram.MAX_TORSION_BOX_GAP;
-		this.symbolToObjectMap = new HashMap<Symbol, Object>();
+		this.symbolToObjectMap = new HashMap<>();
 		
 		this.shouldDrawLabels = true;
 	}
@@ -463,7 +464,7 @@ public class ResidueDiagram {
 	}
 	
 	private void removeTorsionsWithSymbol(Symbol s) {
-		ArrayList<Symbol> torsionsToRemove = new ArrayList<Symbol>();
+		List<Symbol> torsionsToRemove = new ArrayList<>();
 		for (Symbol tb : this.torsionSymbols) {
 			if (((TorsionBox) tb).contains(s)) {	// FIXME : make a base class! 
 				torsionsToRemove.add(tb);
@@ -476,7 +477,7 @@ public class ResidueDiagram {
 	}
 	
 	private void removeHBondsWithSymbol(Symbol s) {
-		ArrayList<Symbol> hBondsToRemove = new ArrayList<Symbol>();
+		List<Symbol> hBondsToRemove = new ArrayList<>();
 		for (Symbol hb : this.hBondSymbols) {
 			if (((HBondArc) hb).contains(s)) {		// FIXME : make a base class!
 				hBondsToRemove.add(hb);
@@ -511,7 +512,7 @@ public class ResidueDiagram {
 		this.name = name;
 	}
 	
-	public ArrayList<Symbol> getBackboneSymbols() {
+	public List<Symbol> getBackboneSymbols() {
 		return this.backboneSymbols;
 	}
 	
@@ -568,8 +569,8 @@ public class ResidueDiagram {
 		return null;
 	}
 	
-	public ArrayList<Symbol> getSelectedBackboneSymbols() {
-		ArrayList<Symbol> selected = new ArrayList<Symbol>();
+	public List<Symbol> getSelectedBackboneSymbols() {
+		List<Symbol> selected = new ArrayList<>();
 		for (Symbol s : this.backboneSymbols) {
 			if (s.isSelected()) {
 				selected.add(s);

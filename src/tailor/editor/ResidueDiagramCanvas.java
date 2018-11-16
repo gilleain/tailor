@@ -9,6 +9,7 @@ import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.swing.JPanel;
 import javax.swing.Scrollable;
@@ -33,7 +34,7 @@ public class ResidueDiagramCanvas extends JPanel implements MouseListener, Scrol
 	private int viewportWidth;
 	
 	private ResidueDiagram diagram;
-	private ArrayList<SymbolSelectionListener> selectionListeners;
+	private List<SymbolSelectionListener> selectionListeners;
 	
 	/**
 	 * @param numberOfResidues The total residues to display.
@@ -108,8 +109,8 @@ public class ResidueDiagramCanvas extends JPanel implements MouseListener, Scrol
 		this.diagram.relayout(this.width / 2, this.height / 2);
 	}
  	
-	public HashMap<Symbol, AtomDescription> createMap(DescriptionFactory factory) {
-		HashMap<Symbol, AtomDescription> map = new HashMap<Symbol, AtomDescription>();
+	public Map<Symbol, AtomDescription> createMap(DescriptionFactory factory) {
+		Map<Symbol, AtomDescription> map = new HashMap<>();
 		List<Symbol> symbols = this.diagram.getBackboneSymbols();
 		
 		ChainDescription chain = factory.getChainDescription("A");	// TODO : >1 chain?

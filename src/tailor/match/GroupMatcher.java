@@ -18,15 +18,15 @@ import tailor.structure.Group;
 public class GroupMatcher {
     
     public List<Match> match(ChainDescription description, Chain chain) {
-        List<Match> matches = new ArrayList<Match>();
+        List<Match> matches = new ArrayList<>();
         
         // guard for empty descriptions
         if (description.getGroupDescriptions().isEmpty()) return matches; 
         
-        List<Match> partialMatches = new ArrayList<Match>();
+        List<Match> partialMatches = new ArrayList<>();
         for (Group currentGroup : chain.getGroups()) {
             
-            List<Match> partialMatchesToExtend = new ArrayList<Match>();
+            List<Match> partialMatchesToExtend = new ArrayList<>();
             
             // extend all the existing partial matches
             for (Match partial : partialMatches) {

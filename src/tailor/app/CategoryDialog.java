@@ -100,7 +100,7 @@ public class CategoryDialog extends JDialog implements ActionListener {
             this.torsionY[i] = new TorsionDial(150, 150);
             controlPanel.add(this.torsionY[i]);
             
-            this.boundTypeComboBoxes[i] = new JComboBox<String>(CategoryDialog.boundTypes);
+            this.boundTypeComboBoxes[i] = new JComboBox<>(CategoryDialog.boundTypes);
             controlPanel.add(boundTypeComboBoxes[i]);
             
             this.rotationFields[i] = new JTextField("0");

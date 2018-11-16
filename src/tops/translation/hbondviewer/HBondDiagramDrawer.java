@@ -35,7 +35,7 @@ public class HBondDiagramDrawer {
         this.backboneSegmentUpper = (13 * h) / 16.0;
         this.backboneSegmentLower = (14 * h) / 16.0;
 
-        this.colorMap = new HashMap<Integer, Color>();
+        this.colorMap = new HashMap<>();
         this.colorMap.put( 2, Color.lightGray);
         this.colorMap.put( 3, Color.magenta);
         this.colorMap.put( 4, Color.red);

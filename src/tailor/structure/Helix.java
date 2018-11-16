@@ -8,7 +8,7 @@ public class Helix implements Structure, SSE {
     private final List<Group> groups;
     
     public Helix() {
-        this.groups = new ArrayList<Group>();
+        this.groups = new ArrayList<>();
     }
 
     @Override

@@ -151,7 +151,7 @@ public class ResultTable extends JPanel {
     
     public void selectRowsInCategory(Category category) {
         this.table.clearSelection();
-        ArrayList<String> ids = category.getMemberIds();
+        List<String> ids = category.getMemberIds();
         for (int rowIndex = 0; rowIndex < this.table.getRowCount(); rowIndex++) {
             String rowId = this.getFullIdForRow(rowIndex);
             for (String id : ids) {
@@ -176,8 +176,8 @@ public class ResultTable extends JPanel {
         return ((String) this.table.getValueAt(row, 0)) + ((String) this.table.getValueAt(row, 1));
     }
 	
-	public ArrayList<String> getIdColumn() {
-		ArrayList<String> idColumn = new ArrayList<String>();
+	public List<String> getIdColumn() {
+		List<String> idColumn = new ArrayList<>();
 		int rowCount = this.table.getRowCount();
 		for (int row = 0; row < rowCount; row++) {
 			String id = this.getFullIdForRow(row);
@@ -190,10 +190,10 @@ public class ResultTable extends JPanel {
 		int[] selectedColumnIndices = this.table.getSelectedColumns();
 		int rowCount = this.table.getRowCount();
 		@SuppressWarnings("unchecked")
-        ArrayList<String>[] columns = new ArrayList[selectedColumnIndices.length];
+        List<String>[] columns = new ArrayList[selectedColumnIndices.length];
 		int i = 0;
 		for (int index : selectedColumnIndices) {
-			columns[i] = new ArrayList<String>();
+			columns[i] = new ArrayList<>();
 			for (int row = 0; row < rowCount; row++) {
 				columns[i].add((String)this.table.getValueAt(row, index));
 			}

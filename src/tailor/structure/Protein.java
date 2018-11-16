@@ -13,7 +13,7 @@ public class Protein implements Structure {
     
     public Protein(String name) {
         this.name = name;
-        this.chains = new ArrayList<Chain>();
+        this.chains = new ArrayList<>();
     }
    
     public void addChain(Chain chain) {

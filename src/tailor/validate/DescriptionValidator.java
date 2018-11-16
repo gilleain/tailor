@@ -23,7 +23,7 @@ public class DescriptionValidator {
      * Make a validator with the standard set of checks.
      */
     public DescriptionValidator() {
-        validators = new ArrayList<Validator>();
+        validators = new ArrayList<>();
         validators.add(new MeasuresAtTopLevel());
     }
     

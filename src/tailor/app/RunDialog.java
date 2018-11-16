@@ -8,7 +8,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.BorderFactory;
 import javax.swing.DefaultListModel;
@@ -70,7 +70,7 @@ public class RunDialog extends JDialog implements ActionListener, TreeSelectionL
         removeMeasureButton.addActionListener(this);
         measureControls.add(removeMeasureButton);
         
-        this.measureList = new JList<Measure>(new DefaultListModel<Measure>());
+        this.measureList = new JList<>(new DefaultListModel<>());
         this.measureList.setPreferredSize(new Dimension(150, 200));
         
         measurePanel.add(measureControls, BorderLayout.NORTH);
@@ -83,7 +83,7 @@ public class RunDialog extends JDialog implements ActionListener, TreeSelectionL
         this.directoryField.setBorder(BorderFactory.createCompoundBorder(
                 BorderFactory.createTitledBorder("Directory"),
                 BorderFactory.createEmptyBorder(1, 1, 1, 1)));
-        this.filenameList = new JList<String>();
+        this.filenameList = new JList<>();
         this.filenameList.setPreferredSize(new Dimension(150, 250));
         this.filenameList.setBorder(BorderFactory.createCompoundBorder(
                 BorderFactory.createTitledBorder("Files"),
@@ -126,7 +126,7 @@ public class RunDialog extends JDialog implements ActionListener, TreeSelectionL
         // get the measures from the list and add to the Run
         DefaultListModel<Measure> model = (DefaultListModel<Measure>) this.measureList.getModel();
         for (int i = 0; i < model.size(); i++) {
-            Measure measure = (Measure) model.get(i);
+            Measure measure = model.get(i);
             this.run.getDescription().addMeasure(measure);
         }
         
@@ -162,7 +162,7 @@ public class RunDialog extends JDialog implements ActionListener, TreeSelectionL
                 new SelectionDialog(description, this, "Create Measure");
             selectionDialog.setVisible(true);
             if (selectionDialog.isComplete()) {
-                ArrayList<Description> paths = selectionDialog.getDescriptions();
+                List<Description> paths = selectionDialog.getDescriptions();
                 String type = selectionDialog.getCurrentlySelectedType();
                 Measure measure;
                 if (type.equals("Distance")) {

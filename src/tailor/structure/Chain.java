@@ -19,8 +19,8 @@ public class Chain implements Structure {
     
     public Chain(String name) {
         this.name = name;
-        this.groups = new ArrayList<Group>();
-        this.sses = new ArrayList<SSE>();
+        this.groups = new ArrayList<>();
+        this.sses = new ArrayList<>();
     }
     
     public void addSSE(SSE sse) {

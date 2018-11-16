@@ -71,7 +71,7 @@ public class RamachandranPlotPanel extends JPanel {
 		this.canvas.repaint();
 	}
     
-    public void addRows(ArrayList<String[]> rowData, int columnStart, int columnEnd) {
+    public void addRows(List<String[]> rowData, int columnStart, int columnEnd) {
         for (String[] row : rowData) {
             String id = row[0] + row[1];
             int residueIndex = 0;
@@ -141,7 +141,7 @@ public class RamachandranPlotPanel extends JPanel {
         String categoryBoundString = args[4];
         
         // read in the data file
-        ArrayList<String[]> rowData = new ArrayList<String[]>();
+        List<String[]> rowData = new ArrayList<>();
         BufferedReader bufferedReader = null;
         try {
             bufferedReader = new BufferedReader(new FileReader(dataFilePath));
@@ -161,7 +161,7 @@ public class RamachandranPlotPanel extends JPanel {
                 try {
                     bufferedReader.close();
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    System.err.println(e);
                 }
             }
         }

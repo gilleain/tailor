@@ -1,15 +1,16 @@
 package tailor.msdmotif;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import tailor.app.RowBasedTableModel;
 
 public class MSDMotifResultTableModel extends RowBasedTableModel {
 	
-	private ArrayList<MSDMotifResult> msdMotifResults;
+	private List<MSDMotifResult> msdMotifResults;
 	
 	public MSDMotifResultTableModel() {
-		this.msdMotifResults = new ArrayList<MSDMotifResult>();
+		this.msdMotifResults = new ArrayList<>();
 	}
 	
 	public void addResult(MSDMotifResult msdMotifResult) {

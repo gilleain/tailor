@@ -14,7 +14,7 @@ public class HBondConditionXmlHandler implements ConditionXmlHandler {
     private Map<String, String> dataStore;
     
     public HBondConditionXmlHandler() {
-        this.dataStore = new HashMap<String, String>();
+        this.dataStore = new HashMap<>();
     }
 
     @Override

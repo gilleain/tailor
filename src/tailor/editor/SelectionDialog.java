@@ -6,6 +6,7 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
@@ -36,7 +37,7 @@ public class SelectionDialog extends JDialog implements ActionListener, TreeSele
     
     private JRadioButton[] radioButtons;
     
-    private ArrayList<Description> selectedDescriptions;
+    private List<Description> selectedDescriptions;
     
     private JComboBox<String> typeSelector;
     
@@ -59,7 +60,7 @@ public class SelectionDialog extends JDialog implements ActionListener, TreeSele
         
         String[] typeNames = { "Distance", "Angle", "Torsion" };
         
-        this.typeSelector = new JComboBox<String>(typeNames);
+        this.typeSelector = new JComboBox<>(typeNames);
         this.typeSelector.setActionCommand("CHANGE");
         this.typeSelector.addActionListener(this); 
 
@@ -90,7 +91,7 @@ public class SelectionDialog extends JDialog implements ActionListener, TreeSele
         this.pack();
         this.setLocation(200, 200);
         
-        this.selectedDescriptions = new ArrayList<Description>();
+        this.selectedDescriptions = new ArrayList<>();
         this.selectedDescriptions.add(null);
         this.selectedDescriptions.add(null);
         
@@ -199,7 +200,7 @@ public class SelectionDialog extends JDialog implements ActionListener, TreeSele
         return (String) this.typeSelector.getSelectedItem();
     }
     
-    public ArrayList<Description> getDescriptions() {
+    public List<Description> getDescriptions() {
         return this.selectedDescriptions;
     }
     

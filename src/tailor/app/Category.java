@@ -2,6 +2,7 @@ package tailor.app;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 import tailor.app.filter.Bound;
 import tailor.app.filter.Filter;
@@ -17,28 +18,28 @@ import tailor.app.filter.Filter;
 public class Category {
 
 	private String name;
-	private ArrayList<Filter> filters;
-	private ArrayList<String> memberIdList;
+	private List<Filter> filters;
+	private List<String> memberIdList;
 	
 	/**
 	 * @param name an arbitrary name for this category
 	 */
 	public Category(String name) {
 		this.name = name;
-		this.filters = new ArrayList<Filter>();
-		this.memberIdList = new ArrayList<String>();
+		this.filters = new ArrayList<>();
+		this.memberIdList = new ArrayList<>();
 	}
     
     public String getName() {
         return this.name;
     }
     
-    public ArrayList<Filter> getFilters() {
+    public List<Filter> getFilters() {
         return this.filters;
     }
     
-    public ArrayList<Bound> getBounds() {
-        ArrayList<Bound> bounds = new ArrayList<Bound>();
+    public List<Bound> getBounds() {
+        List<Bound> bounds = new ArrayList<>();
         for (Filter filter : this.filters) {
             if (filter instanceof Bound) {
                 bounds.add((Bound) filter);
@@ -82,7 +83,7 @@ public class Category {
 		this.memberIdList.add(id);
 	}
     
-    public ArrayList<String> getMemberIds() {
+    public List<String> getMemberIds() {
         return this.memberIdList;
     }
     

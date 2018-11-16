@@ -3,20 +3,21 @@ package tailor.datasource;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 
 import tailor.geometry.Vector;
 import tailor.structure.Level;
 
 public class Structure implements Iterable<Structure> {
 	
-	private ArrayList<Structure> children;
+	private List<Structure> children;
 	private HashMap<String, String> properties;
 	private Vector center;
 	private Level level;
 	
 	public Structure() {
-		this.children = new ArrayList<Structure>();
-		this.properties = new HashMap<String, String>();
+		this.children = new ArrayList<>();
+		this.properties = new HashMap<>();
 		this.center = null;
 		this.level = Level.UNKNOWN;
 	}
@@ -48,7 +49,7 @@ public class Structure implements Iterable<Structure> {
 	 * 
 	 * @return an ArrayList of child Structures
 	 */
-	public ArrayList<Structure> getSubStructures() {
+	public List<Structure> getSubStructures() {
 		return this.children;
 	}
     

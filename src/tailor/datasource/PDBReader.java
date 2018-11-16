@@ -16,7 +16,7 @@ public class PDBReader {
 	        String line;
 
 	        BufferedReader bufferer = null;
-	        List<String> atomRecords = new ArrayList<String>();
+	        List<String> atomRecords = new ArrayList<>();
 	        
 	        try {
     	        bufferer = new BufferedReader(new FileReader(path));

@@ -56,7 +56,7 @@ public class Viewer extends JFrame {
         this.currentView.setSize(Viewer.DEFAULT_WIDTH, Viewer.DEFAULT_HEIGHT);
         this.currentView.setLocation(1, 1);
 
-        this.views = new ArrayList<HBondViewPanel>();
+        this.views = new ArrayList<>();
         this.views.add(this.currentView);
 
         this.getContentPane().add(this.currentView);

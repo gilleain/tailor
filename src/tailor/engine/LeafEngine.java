@@ -19,7 +19,7 @@ public class LeafEngine extends AbstractBaseEngine {
 
     @Override
     public List<Match> match(Description description, Structure structure) {
-        List<Match> matches = new ArrayList<Match>();
+        List<Match> matches = new ArrayList<>();
         for (Description atomDescription : description.getSubDescriptions()) {
             Structure atom = getMatchingSubstructure(atomDescription, structure);
             if (nameMatches(atomDescription, atom)) {
