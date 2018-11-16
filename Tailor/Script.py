@@ -155,7 +155,7 @@ def makeMotif(motifDescriptionText):
             if key == "levelName": continue
             if keywordToConditionMap[key] == PropertyCondition:
                 level.addPropertyCondition(key, values[0])
-        #print "level", levelText
+        #print("level", levelText)
 
     # in a second pass, create those Conditions which rely on the Description tree
     for levelText in motifDescriptionText:
@@ -166,7 +166,7 @@ def makeMotif(motifDescriptionText):
                 params = makeSelections(motifDescription, attr[0])                    
                 for otherParam in attr[1:]:
                     params.append(otherParam)
-                #print keywordToConditionMap[key], params
+                #print(keywordToConditionMap[key], params)
                 condition = keywordToConditionMap[key](*params)
                 
                 # this is absolutely wrong! Need to match the conditions to the right level!
@@ -181,7 +181,7 @@ def makeSelections(motifDefinition, selectionTextList):
     for selectionText in selectionTextList:
 
         # this is not very general!
-        #print selectionText
+        #print(selectionText)
         residueNumber, atomName = selectionText
         selection = motifDefinition.selectResidue(residueNumber).selectAtom(atomName)
 
@@ -199,7 +199,7 @@ def makeMeasures(motifDefinition, measureTextList):
         measureTextList = [tmp]
 
     for measureText in measureTextList:
-        #print "debug", measureText
+        #print("debug", measureText)
         if measureText[0] == "Property":
             measureType, residueNumber, property, valueType = measureText
             measure = PropertyMeasure(motifDefinition.selectResidue(residueNumber), property, typeDict[valueType])
@@ -237,14 +237,14 @@ if __name__ == "__main__":
 
         lines = open(sys.argv[1]).readlines()
         filestr = "".join(lines)
-        print filestr
+        print(filestr)
         grammar = makeGrammar()
         parsed = grammar.parseString(filestr)
         run = translate(parsed)
         run.run()
 
     except ParseException, p:
-        print p
+        print(p)
         col = p.col
         line = p.line
-        print line[0:col], "!", line[col:]
+        print(line[0:col], "!", line[col:])

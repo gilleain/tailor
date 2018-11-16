@@ -67,7 +67,7 @@ class DistanceMeasure(Measure):
 
             return distance(a, b)
         except AttributeError, ae:
-            print "DISTANCE MEASURE FALIURE :", self.descriptionA, self.descriptionB, str(ae)
+            print("DISTANCE MEASURE FALIURE :", self.descriptionA, self.descriptionB, str(ae))
             return 0.0
 
     def getNumberOfColumns(self):
@@ -101,7 +101,7 @@ class AngleMeasure(Measure):
 
             return angle(a, b, c)
         except AttributeError:
-            print "ANGLE MEASURE FALIURE :", self.descriptionA, self.descriptionB, self.descriptionC
+            print("ANGLE MEASURE FALIURE :", self.descriptionA, self.descriptionB, self.descriptionC)
             return 0.0
 
     def getNumberOfColumns(self):
@@ -137,7 +137,7 @@ class TorsionMeasure(Measure):
 
             return torsion(a, b, c, d)
         except AttributeError:
-            print "TORSION MEASURE FALIURE :", self.descriptionA, self.descriptionB, self.descriptionC, self.descriptionD
+            print("TORSION MEASURE FALIURE :", self.descriptionA, self.descriptionB, self.descriptionC, self.descriptionD)
             return 0.0
 
     def getNumberOfColumns(self):
@@ -171,7 +171,7 @@ class HBondMeasure(Measure):
             acceptorAtom = lookup(self.acceptorDescription, structure)
             attachedAtom = lookup(self.attachedDescription, structure)
 
-            #print donorAtom.toFullString(), hydrogenAtom.toFullString(), acceptorAtom.toFullString(), attachedAtom.toFullString()
+            #print(donorAtom.toFullString(), hydrogenAtom.toFullString(), acceptorAtom.toFullString(), attachedAtom.toFullString())
 
         except DescriptionException, d:
             # better to re-raise some kind of error?

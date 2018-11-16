@@ -126,18 +126,18 @@ if __name__=="__main__":
         v3 = Vector(1, 0, 0)
         v4 = Vector(1, 1, 1)
 
-        print v1 + v2
-        print v2 - v3
-        print v1 * v3
-        print v1 / 3
-        print v2.length()
-        print v4.copy()
-        print v1.cross(v3)
+        print(v1 + v2)
+        print(v2 - v3)
+        print(v1 * v3)
+        print(v1 / 3)
+        print(v2.length())
+        print(v4.copy())
+        print(v1.cross(v3))
 
         v4.normalize()
-        print v4
+        print(v4)
 
-        print distance(v1, v2)
-        print angle(v1, v2, v3)
-        print torsion(v1, v2, v3, v4)
+        print(distance(v1, v2))
+        print(angle(v1, v2, v3))
+        print(torsion(v1, v2, v3, v4))
 

@@ -33,7 +33,7 @@ class OXOMeasure(object):
             o3 = lookup(self.oxy3, structure).center
             return planePlaneNormalAngle(l, o1, o2, o3)
         except AttributeError, ae:
-            print str(ae)    
+            print(str(ae)    )
 
 filename = sys.argv[1]
 pdbdir = sys.argv[2]
@@ -59,7 +59,7 @@ measure = OXOMeasure(hoh, o1, o2, o3)
 for e in generateExamples(filename, pdbdir, parse):
     try:
         # XXX hack!
-        print "%s\t%s\t%s" % (e, e[0][0].residueRange, measure.measure(e))
+        print("%s\t%s\t%s" % (e, e[0][0].residueRange, measure.measure(e)))
     except Exception, ex:
         sys.stderr.write("%s in %s\n" % (str(ex), e))
 

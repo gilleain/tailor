@@ -197,8 +197,6 @@ class TorsionBoundCondition(Condition):
             return False
 
         t = torsion(a, b, c, d)
-        #print a, b, c, d
-        #print self.center -self.range, t, self.center + self.range
 
         satisfied = self.center - self.range < t < self.center + self.range
         if self.negated:

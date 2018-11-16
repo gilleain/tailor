@@ -120,7 +120,7 @@ def to_pdb(chain):
 
 if __name__ == "__main__":
     ctbx = makeFragment(catbox)
-    print to_pdb(ctbx)
+    print(to_pdb(ctbx))
     #for residue in ctbx:
     #    print residue
     #    for atom in residue:

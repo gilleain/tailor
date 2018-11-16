@@ -248,6 +248,6 @@ if __name__ == "__main__":
     extraResidue = ResidueDescription({"position" : 4})
     extraResidue.addMatchCondition("resname", "GLY")
     #nestFeature.addResidue(extraResidue)
-    print nestFeature
+    print(nestFeature)
     for i, nest in enumerate(structure.list_features(predefined_descriptions["RLnest"])):
-        print "nest", i, nest
+        print("nest", i, nest)

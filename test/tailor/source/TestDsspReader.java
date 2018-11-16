@@ -33,7 +33,7 @@ public class TestDsspReader {
         assertTrue(isStrand(sses.get(index++), 49, 54));
     }
     
-    private void p(SSE sse, int index) {
+    public void p(SSE sse, int index) {
         System.out.println(sse.getClass().getSimpleName() + " " + index
                 + " " + sse.getFirst().getId() 
                 + "-" + sse.getLast().getId());

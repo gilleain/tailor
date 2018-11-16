@@ -14,7 +14,6 @@ import tailor.description.DescriptionException;
 import tailor.description.DescriptionFactory;
 import tailor.description.ProteinDescription;
 import tailor.measurement.Measure;
-import tailor.measurement.Measurement;
 
 public class SingleChainTest {
     

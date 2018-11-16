@@ -7,7 +7,7 @@ Use like:
         pdbid, chain, start, stop = line.split()
         return ExampleDescription(pdbid, chain, start, stop)
 
-    for e in generateExamples(filename, pdbdir, parse): print e
+    for e in generateExamples(filename, pdbdir, parse): print(e)
 
 """
 import sys
@@ -68,7 +68,7 @@ class ExampleDescription(object):
 
         for chain in model:
             if chain.chainID == self.chain or self.chain == " ":
-                #print "[%s]" % chain.chainID
+                #print("[%s]" % chain.chainID)
                 chainFeature = Chain(chain.chainID, chainType="Protein")
 
                 # XXX obviously better to access by index...
@@ -87,9 +87,9 @@ class ExampleDescription(object):
         # now add the ligand (as of this moment, a water molecule) XXX ugh!
         waterChain = Chain("Water", "Water")
         waterResidue = Residue(self.ligand_num, "HOH")
-        #print "getting", self.ligand_num
+        #print("getting", self.ligand_num)
         waterchains = structure.chainsOfType("Water")
-        #print "chains", waterchains
+        #print("chains", waterchains)
         existingWater = waterchains[0].getResidueNumber(self.ligand_num)
         waterResidue.add(copy(existingWater.getAtom("O")))
         waterChain.add(waterResidue)
@@ -111,7 +111,7 @@ if __name__ == "__main__":
         return ExampleDescription(pdbid, chain, start, stop)
 
     def recurse(tree):
-        print tree.__class__.__name__, tree
+        print(tree.__class__.__name__, tree)
         for child in tree: recurse(child)
 
     for e in generateExamples(filename, pdbdir, parse):

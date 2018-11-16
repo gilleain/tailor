@@ -7,7 +7,6 @@ import tailor.description.Description;
 import tailor.description.GroupDescription;
 import tailor.structure.Atom;
 import tailor.structure.Group;
-import tailor.structure.Structure;
 
 public class TestAtomSelector {
     

@@ -274,14 +274,14 @@ class CategorySet(object):
             if category.count > 1:
                 #print "%s %4d %s" % (category.name, category.count, category.bounds)
                 meanStdDev = ["%4.0f +/- %4.0f" % ms for ms in category.meanWithStdDevs]
-                print "%s %4d %s" % (category.name, category.count, meanStdDev)
+                print("%s %4d %s" % (category.name, category.count, meanStdDev))
             else:
-                print "%s %4d" % (category.name, category.count)
+                print("%s %4d" % (category.name, category.count))
 
         if self.unmatched.count > 0:
-            print "%s %4d %s" % (self.unmatched.name, self.unmatched.count, self.unmatched.bounds)
+            print("%s %4d %s" % (self.unmatched.name, self.unmatched.count, self.unmatched.bounds))
         else:
-            print "%s %4d" % (self.unmatched.name, self.unmatched.count)
+            print("%s %4d" % (self.unmatched.name, self.unmatched.count))
 
     def fromFile(self, filename):
         fp = open(filename)

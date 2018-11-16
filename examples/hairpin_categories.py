@@ -18,8 +18,8 @@ categorySet.createCategoryFromRegions("L", "R")
 
 categorySet.fromFile(sys.argv[1])
 categorySet.printResults()
-print "total", categorySet.total
+print("total", categorySet.total)
 
 for category in categorySet:
     for member in category:
-        print category.name, member
+        print(category.name, member)

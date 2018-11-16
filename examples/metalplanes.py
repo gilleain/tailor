@@ -31,7 +31,7 @@ class PointPlaneDistanceMeasure(object):
             plane3 = lookup(self.planeD3, structure).center
             return signedPointPlaneDistance(point, plane1, plane2, plane3)
         except AttributeError, ae:
-            print str(ae)    
+            print(str(ae)    )
 
 filename = sys.argv[1]
 pdbdir = sys.argv[2]
@@ -48,5 +48,5 @@ measure = PointPlaneDistanceMeasure(metal, o1, o2, o3)
 
 for e in generateExamples(filename, pdbdir, parse):
     # XXX hack!
-    print measure.measure(e[0][0])
+    print(measure.measure(e[0][0]))
 

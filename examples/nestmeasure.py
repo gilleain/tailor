@@ -43,7 +43,7 @@ try:
     nnDistanceMeasure = DistanceMeasure(secondN, fourthN)
 
     # provide a 'header' for the columns
-    print "pdbid\tmotif\t%s\t%s" % (nnnAngleMeasure, nnDistanceMeasure)
+    print("pdbid\tmotif\t%s\t%s" % (nnnAngleMeasure, nnDistanceMeasure))
 
     # this works for 1 or many structures
     for structure in structures:
@@ -58,8 +58,8 @@ try:
             nnnAngle = nnnAngleMeasure.measure(nest)
             nnDistance = nnDistanceMeasure.measure(nest)
 
-            # ...and print out the result
-            print "%s\t%s\t%0.2f\t%0.2f" % (structure, nest.subFeatures, nnnAngle, nnDistance)
+            # ...and print(out the result)
+            print("%s\t%s\t%0.2f\t%0.2f" % (structure, nest.subFeatures, nnnAngle, nnDistance))
 
 # do not let the script continue if there is a problem
 except IOError, ioe:

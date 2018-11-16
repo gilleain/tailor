@@ -56,7 +56,7 @@ class PDBFileList(object):
                     self.mapFilename(filename, fullpath)
                     self.structure_paths.append(fullpath)
             else:
-                print structureList
+                print(structureList)
                 filenamesInDir = os.listdir(path)
                 if filenamesInDir == []:
                     raise IOError, "WARNING : No files in directory %s" % path    

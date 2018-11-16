@@ -10,7 +10,7 @@ catmat3 = ChainDescription({"chainID" : "c3"})
 catmat3.createResidues(4)
 
 for i in range(1, 5):
-    print catmat3.getResidue(i).children.pop()
+    print(catmat3.getResidue(i).children.pop())
 
 catmat3.createPhiBoundCondition(2,  -85, 45)
 catmat3.createPsiBoundCondition(2,   -5, 45)
@@ -24,7 +24,7 @@ catmat4 = ChainDescription({"chainID" : "c4"})
 catmat4.createResidues(5)
 
 for i in range(1, 6):
-    print catmat4.getResidue(i).children.pop()
+    print(catmat4.getResidue(i).children.pop())
 
 catmat4.createPhiBoundCondition(2,  -75, 45)
 catmat4.createPsiBoundCondition(2,  -15, 45)

@@ -134,10 +134,10 @@ if __name__ == "__main__":
 
     p = PDBParser(StructureBuilder())
     s = p.getStructure(sys.argv[1])
-    print s, "has", len(s), "models"
+    print(s, "has", len(s), "models")
     for model in s:
-        print model, "has", len(model), "chains"
+        print(model, "has", len(model), "chains")
         for chain in model:
-            print chain, "has", len(chain), "residues"
+            print(chain, "has", len(chain), "residues")
             for residue in chain:
-                print residue, "has", len(residue), "atoms" 
+                print(residue, "has", len(residue), "atoms" )

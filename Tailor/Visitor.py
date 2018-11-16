@@ -116,7 +116,7 @@ r4.add(a6)
 r4.add(a7)
 
 def printAction(visitor, structure):
-    print structure
+    print(structure)
     return True
 
 def captureAction(visitor, structure):
@@ -154,5 +154,5 @@ compositeV.add(Visitor(RESIDUE, levelEqual, "GLY"))
 selections = p.select(compositeV)
 for selection in selections:
     selection.passDown(printV)
-    print selection
-    print "-" * 10
+    print(selection)
+    print("-" * 10)

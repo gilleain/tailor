@@ -22,12 +22,12 @@ categorySet.fromFile(sys.argv[1])
 
 if len(sys.argv) == 2:
     categorySet.printResults()
-    print "total", categorySet.total
+    print("total", categorySet.total)
 
 else:
     selectedName = sys.argv[2]
     for member in categorySet.getCategory(selectedName):
-        print "\t".join(member)
+        print("\t".join(member))
 
 #for category in categorySet:
-    #for member in category: print category.name, member
+    #for member in category: print(category.name, member)

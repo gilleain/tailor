@@ -10,7 +10,7 @@ rlNest = ChainDescription({"chainID" : "RL"})
 rlNest.createResidues(4)
 
 for i in range(1, 5):
-    print rlNest.getResidue(i).children.pop()
+    print(rlNest.getResidue(i).children.pop())
 
 rlNest.createPhiBoundCondition(2, -90, 45)
 rlNest.createPsiBoundCondition(2,   0, 45)
@@ -24,7 +24,7 @@ lrNest = ChainDescription({"chainID" : "LR"})
 lrNest.createResidues(4)
 
 for i in range(1, 5):
-    print lrNest.getResidue(i).children.pop()
+    print(lrNest.getResidue(i).children.pop())
 
 lrNest.createPhiBoundCondition(2,  80, 45)
 lrNest.createPsiBoundCondition(2,  10, 45)

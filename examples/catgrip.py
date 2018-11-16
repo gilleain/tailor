@@ -10,7 +10,7 @@ rlCatgrip = ChainDescription({"chainID" : "RL"})
 rlCatgrip.createResidues(4)
 
 for i in range(1, 5):
-    print rlCatgrip.getResidue(i).children.pop()
+    print(rlCatgrip.getResidue(i).children.pop())
 
 rlCatgrip.createPhiBoundCondition(2,  -90, 45)
 rlCatgrip.createPsiBoundCondition(2,  135, 45)
@@ -24,7 +24,7 @@ lrCatgrip = ChainDescription({"chainID" : "LR"})
 lrCatgrip.createResidues(4)
 
 for i in range(1, 5):
-    print lrCatgrip.getResidue(i).children.pop()
+    print(lrCatgrip.getResidue(i).children.pop())
 
 lrCatgrip.createPhiBoundCondition(2,   90, 45)
 lrCatgrip.createPsiBoundCondition(2, -135, 45)
