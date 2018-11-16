@@ -28,6 +28,7 @@ public class HBondViewPanel extends JPanel {
         this.repaint();
     }
 
+    @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         if ((this.width == 0) || (this.height == 0)) {

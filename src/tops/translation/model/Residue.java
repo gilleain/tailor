@@ -48,7 +48,7 @@ public class Residue implements Comparable<Residue> {
     }
 
     public int compareTo(Residue other) {
-        return new Integer(this.absoluteNumber).compareTo(new Integer(other.absoluteNumber));
+        return Integer.valueOf(this.absoluteNumber).compareTo(Integer.valueOf(other.absoluteNumber));
     }
 
     public boolean isPro() {

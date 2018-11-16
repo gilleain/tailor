@@ -153,6 +153,7 @@ public class TorsionDial extends Canvas implements MouseListener, MouseMotionLis
         this.repaint();
     }
     
+    @Override
     public void paint(Graphics g) {
         Graphics2D g2 = (Graphics2D) g;
         
@@ -182,14 +183,18 @@ public class TorsionDial extends Canvas implements MouseListener, MouseMotionLis
         }
     }
     
+    @Override
     public void mouseEntered(MouseEvent m) {}
     
+    @Override
     public void mouseClicked(MouseEvent m) {}
     
+    @Override
     public void mouseExited(MouseEvent m) {
         this.unselectHandles();
     }
     
+    @Override
     public void mousePressed(MouseEvent m) {
         int x = m.getX();
         int y = m.getY();
@@ -216,14 +221,17 @@ public class TorsionDial extends Canvas implements MouseListener, MouseMotionLis
         System.err.println("A" + hitControlA + " B" + hitControlB);
     }
     
+    @Override
     public void mouseReleased(MouseEvent m) {
         String s = String.format("%.0f %.0f %.0f", slice.getAngleStart(), slice.getAngleExtent(), this.getMax());
         System.err.println(s);
         this.unselectHandles();
     }
     
+    @Override
     public void mouseMoved(MouseEvent m) {}
     
+    @Override
     public void mouseDragged(MouseEvent m) {
         if (this.startHandleSelected) {
             double sliceShift = this.calculateSliceShift(m, this.slice.getStartPoint());

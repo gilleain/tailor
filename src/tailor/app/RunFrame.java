@@ -113,6 +113,7 @@ public class RunFrame extends JFrame implements ActionListener, CategoryChangeLi
         this.setVisible(true);
 	}
 	
+	@Override
 	public void actionPerformed(ActionEvent ae) {
         String command = ae.getActionCommand();
         
@@ -334,15 +335,18 @@ public class RunFrame extends JFrame implements ActionListener, CategoryChangeLi
 		}
 	}
 	
+	@Override
 	public void setCategory(Category category) {
 		this.resultTable.assignToCategory(category);
 		this.resultTable.selectRowsInCategory(category);
 	}
 
+	@Override
 	public void selectInCategory(Category category) {
 		this.resultTable.selectRowsInCategory(category);
 	}
 
+	@Override
 	public void clearSelection() {
 		this.resultTable.clearSelection();
 	}

@@ -26,6 +26,8 @@ public class DescriptionList extends JPanel {
 		
 		this.app = app;
 		MouseListener mouseListener = new MouseAdapter() {
+		    
+		     @Override
 		     public void mouseClicked(MouseEvent e) {
 		         if (e.getClickCount() == 2) {
 		             int index = list.locationToIndex(e.getPoint());

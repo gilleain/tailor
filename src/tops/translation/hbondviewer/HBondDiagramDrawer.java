@@ -31,19 +31,19 @@ public class HBondDiagramDrawer {
     public HBondDiagramDrawer(int w, int h) {
         this.w = w;
         this.h = h;
-        this.residueAxis = (new Integer((3 * h) / 4)).doubleValue();
-        this.backboneSegmentUpper = (new Integer((13 * h) / 16)).doubleValue();
-        this.backboneSegmentLower = (new Integer((14 * h) / 16)).doubleValue();
+        this.residueAxis = (3 * h) / 4;
+        this.backboneSegmentUpper = (13 * h) / 16;
+        this.backboneSegmentLower = (14 * h) / 16;
 
         this.colorMap = new HashMap<Integer, Color>();
-        this.colorMap.put(new Integer(2), Color.lightGray);
-        this.colorMap.put(new Integer(3), Color.magenta);
-        this.colorMap.put(new Integer(4), Color.red);
-        this.colorMap.put(new Integer(5), Color.orange);
-        this.colorMap.put(new Integer(-2), Color.lightGray);
-        this.colorMap.put(new Integer(-3), Color.blue);
-        this.colorMap.put(new Integer(-4), Color.green);
-        this.colorMap.put(new Integer(-5), Color.white);
+        this.colorMap.put( 2, Color.lightGray);
+        this.colorMap.put( 3, Color.magenta);
+        this.colorMap.put( 4, Color.red);
+        this.colorMap.put( 5, Color.orange);
+        this.colorMap.put(-2, Color.lightGray);
+        this.colorMap.put(-3, Color.blue);
+        this.colorMap.put(-4, Color.green);
+        this.colorMap.put(-5, Color.white);
 
         this.font = Font.decode("Serif-PLAIN-12");
     }

@@ -180,7 +180,7 @@ public class StructureFinder {
             assignBuffer.append(assignment);
             if (spaceCounter % 10 == 0) { assignBuffer.append(' '); }
 
-            residueAssignments.put(residue, new Character(assignment));
+            residueAssignments.put(residue, assignment);
 
             spaceCounter++;
         }

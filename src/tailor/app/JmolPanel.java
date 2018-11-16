@@ -177,6 +177,7 @@ public class JmolPanel extends JPanel implements ActionListener, ListSelectionLi
 		this.viewer.evalString("zap");
 	}
 	
+	@Override
 	public void actionPerformed(ActionEvent ae) {
 		String command = ae.getActionCommand();
 		String script;
@@ -219,6 +220,7 @@ public class JmolPanel extends JPanel implements ActionListener, ListSelectionLi
 
 	}
 	
+	@Override
 	public void valueChanged(ListSelectionEvent e) {
 		int[] selectedRows = this.resultTable.getSelectedRows();
 		if (selectedRows.length > 0) {

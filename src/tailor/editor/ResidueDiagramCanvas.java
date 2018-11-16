@@ -159,6 +159,7 @@ public class ResidueDiagramCanvas extends JPanel implements MouseListener, Scrol
 		}
 	}
 	
+	@Override
 	public void mouseClicked(MouseEvent e) {
 		double x = (double) e.getX();
 		double y = (double) e.getY();
@@ -169,18 +170,22 @@ public class ResidueDiagramCanvas extends JPanel implements MouseListener, Scrol
 		}
 	}
 	
+	@Override
 	public void mouseReleased(MouseEvent e) {
 		
 	}
 	
+	@Override
 	public void mousePressed(MouseEvent e) {
 		
 	}
 	
+	@Override
 	public void mouseEntered(MouseEvent e) {
 		
 	}
 	
+	@Override
 	public void mouseExited(MouseEvent e) {
 		
 	}
@@ -214,28 +219,34 @@ public class ResidueDiagramCanvas extends JPanel implements MouseListener, Scrol
 		this.scrollRectToVisible(new Rectangle(startX, 0, this.viewportWidth, this.height));
 	}
 	
+	@Override
 	public Dimension getPreferredSize() {
 		return new Dimension(this.width, this.height);
 	}
 	
+	@Override
 	public Dimension getPreferredScrollableViewportSize() {
 		return new Dimension(this.viewportWidth, this.height);
 	}
 	
+	@Override
 	public int getScrollableBlockIncrement(Rectangle visibleRect, int orientation, int direction) {
 		// move by an odd number to alternate between square and circle.
 		// move by an even number to click along the circles.
 		return 3 * (this.diagram.getShapeSizePlusGapSize());
 	}
 	
+	@Override
 	public int getScrollableUnitIncrement(Rectangle visibleRect, int orientation, int direction) {
 		return this.diagram.getShapeSizePlusGapSize();
 	}
 	
+	@Override
 	public boolean getScrollableTracksViewportHeight() {
 		return true;
 	}
 	
+	@Override
 	public boolean getScrollableTracksViewportWidth() {
 		return false;		
 	}

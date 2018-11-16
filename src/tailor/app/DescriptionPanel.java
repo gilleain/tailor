@@ -28,6 +28,7 @@ public class DescriptionPanel extends JPanel {
 		this.repaint();
 	}
 	
+	@Override
 	public void paint(Graphics g) {
 		int w = this.getWidth();
 		int h = this.getHeight();

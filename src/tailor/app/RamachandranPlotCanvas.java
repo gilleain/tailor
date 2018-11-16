@@ -250,7 +250,8 @@ public class RamachandranPlotCanvas extends Canvas {
             currentY += 20;
         }
     }
-		
+	
+    @Override
 	public void paint(Graphics g) {
 		int w = this.displayWidth;
 		int h = this.displayHeight;

@@ -21,9 +21,9 @@ public class ResultProcessor extends DefaultHandler {
     public ResultProcessor(MSDMotifResultsPrinter printer) {
     	this.printer = printer;
         this.resetFlags();
-        this.dbResNum = new String();
-        this.dbResName = new String();
-        this.entityId = new String();
+        this.dbResNum = "";
+        this.dbResName = "";
+        this.entityId = "";
     }
 
     public void resetFlags() {
@@ -49,9 +49,12 @@ public class ResultProcessor extends DefaultHandler {
     	return this.inSegmentType;
     }
     
+    @Override
     public void startDocument() throws SAXException {
+        // nothing to do here
     }
 
+    @Override
     public void startElement(String namespaceURI, String sName, String qName, Attributes attrs) throws SAXException {
         if (qName.equals("entry")) {
         	this.currentResult = new MSDMotifResult();
@@ -85,6 +88,7 @@ public class ResultProcessor extends DefaultHandler {
         }
     }
 
+    @Override
     public void endElement(String namespaceURI, String sName, String qName) throws SAXException {
         if (qName.equals("entry")) {
         	this.printer.printResult(this.currentResult);
@@ -92,6 +96,7 @@ public class ResultProcessor extends DefaultHandler {
         }
     }
 
+    @Override
     public void characters(char[] buf, int offset, int len) throws SAXException {
         if (this.inResolution) {
             this.currentResult.setResolution(new String(buf, offset, len));

@@ -10,7 +10,6 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import tailor.datasource.Result;
 import tops.translation.model.Chain;
 import tops.translation.model.Protein;
 
