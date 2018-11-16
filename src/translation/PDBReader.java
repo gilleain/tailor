@@ -16,20 +16,24 @@ public class PDBReader {
         List<String> atomRecords;
         String pdbID = "Unknown";
 
-        BufferedReader bufferer = new BufferedReader(new FileReader(filename));
-        String line;
-        atomRecords = new ArrayList<String>();
-        while ((line = bufferer.readLine()) != null) {
-            if (line.length() > 4) {
-                String token = line.substring(0, 4);
-                if (token.equals("ATOM")) {
-                    atomRecords.add(line);
-                } else if (token.equals("HEAD")) {
-                    pdbID = line.substring(line.length() - 4, line.length());
+        BufferedReader bufferer = null;
+        try {
+            bufferer = new BufferedReader(new FileReader(filename));
+            String line;
+            atomRecords = new ArrayList<String>();
+            while ((line = bufferer.readLine()) != null) {
+                if (line.length() > 4) {
+                    String token = line.substring(0, 4);
+                    if (token.equals("ATOM")) {
+                        atomRecords.add(line);
+                    } else if (token.equals("HEAD")) {
+                        pdbID = line.substring(line.length() - 4, line.length());
+                    }
                 }
             }
+        } finally {
+            if (bufferer != null) bufferer.close();
         }
-        bufferer.close();
 
         Protein protein = new Protein(pdbID);
 

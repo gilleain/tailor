@@ -178,15 +178,21 @@ public class MSDMotifEngine implements Engine {
     	err.println("Response message : " + responseMessage);
 
     	// read data
-    	InputStream in = connection.getInputStream();
-    	OutputStream fileOut = new FileOutputStream(new File(outputFilename));
-    	int l = 0;
-    	byte[] buf = new byte[4096];
-    	while ((l = in.read(buf, 0, 4096)) > 0) {
-    		fileOut.write(buf, 0, l);
+    	InputStream in = null;
+    	OutputStream fileOut = null;
+    	
+    	try {
+    	    in = connection.getInputStream();
+            fileOut = new FileOutputStream(new File(outputFilename));
+            int l = 0;
+            byte[] buf = new byte[4096];
+            while ((l = in.read(buf, 0, 4096)) > 0) {
+                fileOut.write(buf, 0, l);
+            }
+    	} finally {
+    	    if (in != null) in.close();
+    	    if (fileOut != null) fileOut.close();
     	}
-    	in.close();
-    	fileOut.close();
     	connection.disconnect();
     }
     

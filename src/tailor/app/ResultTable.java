@@ -75,26 +75,32 @@ public class ResultTable extends JPanel {
 	}
     
     public void writeToFile(File file) throws IOException {
-        BufferedWriter writer = new BufferedWriter(new FileWriter(file));
-        RowBasedTableModel model = (RowBasedTableModel) this.table.getModel();
-        String columnSeparator = "\t";
-        int col = model.getColumnCount();
-        int row = model.getRowCount();
-        for (int h = 0; h < col; h++) {
-            writer.write(model.getColumnName(h));
-            writer.write(columnSeparator);
-        }
-        writer.newLine();
-        
-        for (int i = 0; i < row; i++) {
-            for (int j = 0; j < col; j++) {
-                writer.write(String.valueOf(model.getValueAt(i, j)));
-                writer.write(columnSeparator);    
+        BufferedWriter writer = null;
+        try {
+            writer = new BufferedWriter(new FileWriter(file));
+            RowBasedTableModel model = (RowBasedTableModel) this.table.getModel();
+            String columnSeparator = "\t";
+            int col = model.getColumnCount();
+            int row = model.getRowCount();
+            for (int h = 0; h < col; h++) {
+                writer.write(model.getColumnName(h));
+                writer.write(columnSeparator);
             }
             writer.newLine();
+            
+            for (int i = 0; i < row; i++) {
+                for (int j = 0; j < col; j++) {
+                    writer.write(String.valueOf(model.getValueAt(i, j)));
+                    writer.write(columnSeparator);    
+                }
+                writer.newLine();
+            }
+            writer.flush();
+        } finally {
+            if (writer != null) {
+                writer.close();
+            }
         }
-        writer.flush();
-        writer.close();
     }
     
     public void setModel(RowBasedTableModel model) {

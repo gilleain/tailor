@@ -20,27 +20,31 @@ public class CATHDomainFileParser {
         Map<String, ChainDomainMap> pdbChainDomainMap = new HashMap<String, ChainDomainMap>();
 
         String line;
-        BufferedReader bufferer = new BufferedReader(new FileReader(filename));
-        while ((line = bufferer.readLine()) != null) {
-            if (line.substring(0,1).equals("#")) {
-                continue;
+        BufferedReader bufferer = null;
+        try {
+            bufferer = new BufferedReader(new FileReader(filename));
+            while ((line = bufferer.readLine()) != null) {
+                if (line.substring(0,1).equals("#")) {
+                    continue;
+                }
+                // analyze the line
+                String pdbid = line.substring(0, 4);
+                String chain = line.substring(4, 5);
+                List<Domain> domains = CATHDomainFileParser.parseLine(line);
+    
+                // store the result
+                ChainDomainMap chainDomainMap;
+                if (pdbChainDomainMap.containsKey(pdbid)) {
+                	chainDomainMap = pdbChainDomainMap.get(pdbid);
+                } else {
+                    chainDomainMap = new ChainDomainMap();
+                    pdbChainDomainMap.put(pdbid, chainDomainMap);
+                }
+                chainDomainMap.put(chain, domains);
             }
-            // analyze the line
-            String pdbid = line.substring(0, 4);
-            String chain = line.substring(4, 5);
-            List<Domain> domains = CATHDomainFileParser.parseLine(line);
-
-            // store the result
-            ChainDomainMap chainDomainMap;
-            if (pdbChainDomainMap.containsKey(pdbid)) {
-            	chainDomainMap = pdbChainDomainMap.get(pdbid);
-            } else {
-                chainDomainMap = new ChainDomainMap();
-                pdbChainDomainMap.put(pdbid, chainDomainMap);
-            }
-            chainDomainMap.put(chain, domains);
+        } finally {
+            if (bufferer != null) bufferer.close();
         }
-        bufferer.close();
 
         return pdbChainDomainMap;
     }
@@ -49,20 +53,24 @@ public class CATHDomainFileParser {
         ChainDomainMap chainDomainMap = new ChainDomainMap();
 
         String line;
-        BufferedReader bufferer = new BufferedReader(new FileReader(filename));
-        while ((line = bufferer.readLine()) != null) {
-            if (line.substring(0,1).equals("#") || !line.substring(0, 4).equals(pdbid)) {
-                continue;
-            }
-            // analyze the line
-            String chain = line.substring(4, 5);
-            List<Domain> domains = CATHDomainFileParser.parseLine(line);
+        BufferedReader bufferer = null;
+        try {
+            bufferer = new BufferedReader(new FileReader(filename));
+            while ((line = bufferer.readLine()) != null) {
+                if (line.substring(0,1).equals("#") || !line.substring(0, 4).equals(pdbid)) {
+                    continue;
+                }
+                // analyze the line
+                String chain = line.substring(4, 5);
+                List<Domain> domains = CATHDomainFileParser.parseLine(line);
 
-            // store the result
-            chainDomainMap.put(chain, domains);
-            //System.err.println("Storing " + domains.size() + " domains for " + pdbid + chain);
+                // store the result
+                chainDomainMap.put(chain, domains);
+                //System.err.println("Storing " + domains.size() + " domains for " + pdbid + chain);
+            }
+        } finally {
+            if (bufferer != null) bufferer.close();
         }
-        bufferer.close();
 
         return chainDomainMap;
     }

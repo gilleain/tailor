@@ -22,16 +22,21 @@ public class SimpleTableModel extends RowBasedTableModel {
 	}
 
 	public SimpleTableModel(File file) throws IOException {
-		BufferedReader bufferedReader = new BufferedReader(new FileReader(file));
-		String line;
-		line = bufferedReader.readLine();
-		String[] bits = line.split("\t");
-		this.setColumnHeaders(bits);  
-		while ((line = bufferedReader.readLine()) != null) {
-			bits = line.split("\t");
-			this.addRow(bits);
+		BufferedReader bufferedReader = null;
+		try {
+		    bufferedReader = new BufferedReader(new FileReader(file));
+		    String line = bufferedReader.readLine();
+		    String[] bits = line.split("\t");
+		    this.setColumnHeaders(bits);  
+		    while ((line = bufferedReader.readLine()) != null) {
+		        bits = line.split("\t");
+		        this.addRow(bits);
+		    }
+		} finally {
+		    if (bufferedReader != null) {
+		        bufferedReader.close();
+		    }
 		}
-		bufferedReader.close();
 	}
 
 	public void setColumnHeaders(String[] headers) {

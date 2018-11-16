@@ -19,20 +19,23 @@ public class PDBReader {
 	        String pdbID = path.getName().substring(0, 4);	// this is a hack...
 	        String line;
 
-	        BufferedReader bufferer = new BufferedReader(new FileReader(path));
-	        
+	        BufferedReader bufferer = null;
 	        List<String> atomRecords = new ArrayList<String>();
-	        while ((line = bufferer.readLine()) != null) {
-	            if (line.length() > 4) {
-	                String token = line.substring(0, 4);
-	                if (token.equals("ATOM")) {
-	                    atomRecords.add(line);
-	                } else if (token.equals("HEAD")) {
-                        pdbID = line.substring(62, 66);
+	        try {
+	            bufferer = new BufferedReader(new FileReader(path));
+	            while ((line = bufferer.readLine()) != null) {
+	                if (line.length() > 4) {
+	                    String token = line.substring(0, 4);
+	                    if (token.equals("ATOM")) {
+	                        atomRecords.add(line);
+	                    } else if (token.equals("HEAD")) {
+	                        pdbID = line.substring(62, 66);
+	                    }
 	                }
 	            }
+	        } finally {
+	            if (bufferer!= null) bufferer.close();
 	        }
-	        bufferer.close();
 
 	        Protein protein = new Protein(pdbID);
 

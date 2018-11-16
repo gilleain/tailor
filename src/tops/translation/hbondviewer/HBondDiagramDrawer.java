@@ -31,9 +31,9 @@ public class HBondDiagramDrawer {
     public HBondDiagramDrawer(int w, int h) {
         this.w = w;
         this.h = h;
-        this.residueAxis = (3 * h) / 4;
-        this.backboneSegmentUpper = (13 * h) / 16;
-        this.backboneSegmentLower = (14 * h) / 16;
+        this.residueAxis = (3 * h) / 4.0;
+        this.backboneSegmentUpper = (13 * h) / 16.0;
+        this.backboneSegmentLower = (14 * h) / 16.0;
 
         this.colorMap = new HashMap<Integer, Color>();
         this.colorMap.put( 2, Color.lightGray);

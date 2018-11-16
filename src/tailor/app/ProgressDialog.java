@@ -35,6 +35,7 @@ public class ProgressDialog extends JDialog  {
 				Thread.sleep(10);
 			} catch (InterruptedException ie) {
 				System.err.println(ie);
+				Thread.currentThread().interrupt(); // recommended by sonar, but not really what is needed
 			}
 			b.setValue(i);
 		}
