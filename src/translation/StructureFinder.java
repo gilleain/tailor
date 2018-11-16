@@ -275,6 +275,8 @@ public class StructureFinder {
             newSegment = new Strand();
         } else if (sseType == 'H') {
             newSegment = new Helix();
+        } else {
+            newSegment = new UnstructuredSegment();
         }
 
         // fill the new segment with residues
@@ -476,7 +478,7 @@ public class StructureFinder {
                 if (backboneSegmentIterator.hasNext()) {
                     BackboneSegment nextSegment = backboneSegmentIterator.next();
                     //System.err.println("Checking : " + previousSegment + " and " + currentSegment + " and " + nextSegment);
-                    if (previousSegment.continuousWith(nextSegment)) {
+                    if (previousSegment != null && previousSegment.continuousWith(nextSegment)) {
                         this.mergeThreeSegments(backboneSegmentIterator, previousSegment, currentSegment, nextSegment);
                         continue;
                     } else {

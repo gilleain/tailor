@@ -334,10 +334,14 @@ public class Chain implements Iterable<BackboneSegment> {
 
         if (residueIterator.hasNext()) {
             previousResidue = (Residue) residueIterator.next();
+        } else {
+            return;
         }
 
         if (residueIterator.hasNext()) {
             thisResidue = (Residue) residueIterator.next();
+        } else {
+            return;
         }
 
         while (residueIterator.hasNext()) {

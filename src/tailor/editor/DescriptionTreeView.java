@@ -321,7 +321,11 @@ public class DescriptionTreeView extends JPanel  {
                     currentLevel = copy;
                 }
             }
-            System.err.println("returning " + descriptionPathRoot.toPathString());
+            if (descriptionPathRoot == null) {
+                System.err.println("returning null descriptionPathRoot");
+            } else {
+                System.err.println("returning " + descriptionPathRoot.toPathString());
+            }
             return descriptionPathRoot;
         }
     }

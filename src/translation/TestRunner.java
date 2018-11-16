@@ -85,6 +85,11 @@ public class TestRunner {
                 }
             }
         }
+        
+        if (cathPDBIDChainDomainMap == null) {
+            System.err.println("map is null");
+            return;
+        }
 
 
         // translate and match

@@ -162,6 +162,10 @@ public class ResidueDiagram {
 		AtomDescription acceptorAtom = (AtomDescription) h.getAcceptorAtomDescription().getPathEnd();
 		Symbol acceptor = this.reverseLookup(acceptorAtom);
 		
+		if (donor == null || acceptor == null) {
+		    return;   // TODO
+		}
+		
 		if (donor.getResidueIndex() < acceptor.getResidueIndex()) {
 			this.makeBond(donor, acceptor, Symbol.Stroke.DASHED);
 		} else {

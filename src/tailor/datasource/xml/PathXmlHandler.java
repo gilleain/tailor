@@ -46,7 +46,11 @@ public class PathXmlHandler {
         }
         
         // store the path
-        System.err.println("adding path " + name + " " + path.toPathString());
+        if (path == null) {
+            System.err.println("adding path " + name + " null");
+        } else {
+            System.err.println("adding path " + name + " " + path.toPathString());
+        }
         pathMap.put(name, path);
     }
 
