@@ -22,8 +22,8 @@ public class Residue implements Comparable<Residue> {
     private double psi;
 
     public Residue() {
-        atoms = new HashMap<String, Point3d>();
-        hBonds = new ArrayList<HBond>();
+        atoms = new HashMap<>();
+        hBonds = new ArrayList<>();
         this.phi = 0;
         this.psi = 0;
         this.type = "None";
@@ -103,7 +103,7 @@ public class Residue implements Comparable<Residue> {
     }
 
     public List<HBond> getNTerminalHBonds() {
-    	List<HBond> nTerminalHBonds = new ArrayList<HBond>();
+    	List<HBond> nTerminalHBonds = new ArrayList<>();
         for (int i = 0; i < this.hBonds.size(); i++) {
             HBond hBond = this.hBonds.get(i);
             if (hBond.residueIsDonor(this)) {
@@ -115,7 +115,7 @@ public class Residue implements Comparable<Residue> {
     }
 
     public List<HBond> getCTerminalHBonds() {
-    	List<HBond> cTerminalHBonds = new ArrayList<HBond>();
+    	List<HBond> cTerminalHBonds = new ArrayList<>();
         for (int i = 0; i < this.hBonds.size(); i++) {
             HBond hBond = this.hBonds.get(i);
             if (hBond.residueIsAcceptor(this)) {

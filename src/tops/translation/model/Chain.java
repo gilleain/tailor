@@ -258,7 +258,7 @@ public class Chain implements Iterable<BackboneSegment> {
     }
 
     public Axis getAxis() {
-        List<Point3d> centroids = new ArrayList<Point3d>();
+        List<Point3d> centroids = new ArrayList<>();
         for (BackboneSegment nextBackboneSegment : this.backboneSegments) {
             Axis a = nextBackboneSegment.getAxis();
             //System.out.println("Centroid for BS " + nextBackboneSegment + " is " + a.getCentroid());
@@ -409,14 +409,14 @@ public class Chain implements Iterable<BackboneSegment> {
             List<Domain> domains = chainDomainMap.get(this.getCathCompatibleLabel());
             return this.toTopsDomainStrings(domains);
         } else {
-            Map<String, String> h = new HashMap<String, String>();
+            Map<String, String> h = new HashMap<>();
             h.put("0", this.toTopsString(new Domain(0)));
             return h;
         }
     }
 
     public Map<String, String> toTopsDomainStrings(List<Domain> domains) {
-        Map<String, String> domainStrings = new HashMap<String, String>();
+        Map<String, String> domainStrings = new HashMap<>();
 
         for (Domain d : domains) {
             //System.err.println("Getting tops string for domain " + d);
@@ -457,7 +457,7 @@ public class Chain implements Iterable<BackboneSegment> {
         s.append(" ");
         
         //edgestring
-        List<Edge> edges = new ArrayList<Edge>();
+        List<Edge> edges = new ArrayList<>();
         for (Sheet sheet : this.sheets) {
             edges.addAll(sheet.toTopsEdges(domain));
         }

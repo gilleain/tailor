@@ -220,9 +220,9 @@ public class FoldAnalyser {
                         ListIterator<BackboneSegment> inBetweeners = chain.backboneSegmentListIterator(strand, partner);
 
                         // find the average center of these sses
-                        List<Point3d> centroids = new ArrayList<Point3d>();
+                        List<Point3d> centroids = new ArrayList<>();
                         while (inBetweeners.hasNext()) {
-                            BackboneSegment segment = (BackboneSegment) inBetweeners.next();
+                            BackboneSegment segment = inBetweeners.next();
                             centroids.add(segment.getAxis().getCentroid());
                         }
                         Point3d averageCentroid = Geometer.averagePoints(centroids);
@@ -267,7 +267,7 @@ public class FoldAnalyser {
 
             Iterator<String> itr = chainDomainStringMap.keySet().iterator();
             while (itr.hasNext()) {
-                String chainID = (String) itr.next();
+                String chainID = itr.next();
                 Map<String, String> domainStrings = chainDomainStringMap.get(chainID);
                 for (String domainString : domainStrings.keySet()) {
                     System.out.println(protein.getID() + domainString);

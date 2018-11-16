@@ -19,7 +19,7 @@ public class DomainSegment {
     }
 
     public List<BackboneSegment> filter(List<BackboneSegment> backboneSegments) {
-        List<BackboneSegment> subList = new ArrayList<BackboneSegment>();
+        List<BackboneSegment> subList = new ArrayList<>();
 
         for (BackboneSegment backboneSegment : backboneSegments) {
             if (this.contains(backboneSegment)) {

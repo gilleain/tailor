@@ -207,7 +207,7 @@ public class HBondAnalyser {
     	List<HBond> nTerminalHBonds = residue.getNTerminalHBonds();
     	List<HBond> cTerminalHBonds = residue.getCTerminalHBonds();
 
-        List<String> tags = new ArrayList<String>();
+        List<String> tags = new ArrayList<>();
 
         for (int i = 0; i < nTerminalHBonds.size(); i++) {
             int n = nTerminalHBonds.get(i).getResidueSeparation();

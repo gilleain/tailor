@@ -49,7 +49,7 @@ public class ResidueDiagramCanvas extends JPanel implements MouseListener, Scrol
 		this.setBackground(Color.LIGHT_GRAY);
 		
 		this.addMouseListener(this);
-		this.selectionListeners = new ArrayList<SymbolSelectionListener>();
+		this.selectionListeners = new ArrayList<>();
 	}
 	
 	public void toggleLabels() {

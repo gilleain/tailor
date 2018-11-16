@@ -32,8 +32,7 @@ public class TestRunner {
         String[] fileList = structureDirectory.list();
 
         // get the strings from the string file
-        Map<String, Map<String, Map<String, String>>> idchaindomainMap = 
-        		new HashMap<String, Map<String, Map<String, String>>>();
+        Map<String, Map<String, Map<String, String>>> idchaindomainMap = new HashMap<>();
         BufferedReader bufferer = null;
         Map<String, ChainDomainMap> cathPDBIDChainDomainMap = null;
 
@@ -57,13 +56,13 @@ public class TestRunner {
                             domainBodyMap.put(dom, body);
                         }
                     } else {
-                        Map<String, String> newDomainMap = new HashMap<String, String>();
+                        Map<String, String> newDomainMap = new HashMap<>();
                         newDomainMap.put(dom, body);
                         chainMap.put(ch, newDomainMap);
                     }
                 } else {
-                    Map<String, Map<String, String>> newChainMap = new HashMap<String, Map<String, String>>();
-                    Map<String, String> newDomainMap = new HashMap<String, String>();
+                    Map<String, Map<String, String>> newChainMap = new HashMap<>();
+                    Map<String, String> newDomainMap = new HashMap<>();
                     newDomainMap.put(dom, body);
                     newChainMap.put(ch, newDomainMap);
                     idchaindomainMap.put(id, newChainMap);

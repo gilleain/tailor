@@ -64,7 +64,7 @@ public class App implements ActionListener, CategoryChangeListener {
         this.descriptionList = new DescriptionList(border, this);
         motifAndRunPanel.add(this.descriptionList, BorderLayout.NORTH);
         
-        this.runList = new JList<Run>(new DefaultListModel<>());
+        this.runList = new JList<>(new DefaultListModel<>());
         this.runList.setPreferredSize(new Dimension(100, 300));
         motifAndRunPanel.add(new JScrollPane(this.runList), BorderLayout.CENTER);
         

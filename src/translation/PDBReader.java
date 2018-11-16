@@ -20,7 +20,7 @@ public class PDBReader {
         try {
             bufferer = new BufferedReader(new FileReader(filename));
             String line;
-            atomRecords = new ArrayList<String>();
+            atomRecords = new ArrayList<>();
             while ((line = bufferer.readLine()) != null) {
                 if (line.length() > 4) {
                     String token = line.substring(0, 4);

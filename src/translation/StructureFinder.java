@@ -84,7 +84,7 @@ public class StructureFinder {
                         }
 
                         // find the average center of these sses
-                        List<Point3d> centroids = new ArrayList<Point3d>();
+                        List<Point3d> centroids = new ArrayList<>();
                         while (inBetweeners.hasNext()) {
                             BackboneSegment segment = inBetweeners.next();
                             centroids.add(segment.getAxis().getCentroid()); 
@@ -150,7 +150,7 @@ public class StructureFinder {
     public void assignTorsionsAndHBondsToTypes(Chain chain) {
         //run through once, using hbonds and torsions to attempt individual residue assignments
         Iterator<Residue> residueIterator = chain.residueIterator();
-        Map<Residue, Character> residueAssignments = new HashMap<Residue, Character>();
+        Map<Residue, Character> residueAssignments = new HashMap<>();
 
         //temporary buffers to store char assignents
         StringBuffer torsionBuffer = new StringBuffer();
@@ -162,7 +162,7 @@ public class StructureFinder {
 
         int spaceCounter = 1;
         while (residueIterator.hasNext()) {
-            Residue residue = (Residue) residueIterator.next();
+            Residue residue = residueIterator.next();
 
             char typeFromTorsion = this.determineTypeFromTorsion(residue);
             torsionBuffer.append(typeFromTorsion);
@@ -192,7 +192,7 @@ public class StructureFinder {
         int sseStart = 1;
         int sseEnd = -1;
         char currentSSEType = 'U';
-        List<BackboneSegment> backboneSegments = new ArrayList<BackboneSegment>();
+        List<BackboneSegment> backboneSegments = new ArrayList<>();
         for (int i = 0; i < torsionBuffer.length(); i++) {
             char sseChar = torsionBuffer.charAt(i);
             // same type : extend the end of current

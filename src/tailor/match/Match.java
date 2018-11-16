@@ -17,7 +17,7 @@ public class Match {
     public Match(Description description, Structure structure) {
         this.description = description;
         this.structure = structure;
-        this.subMatches = new ArrayList<Match>();
+        this.subMatches = new ArrayList<>();
     }
     
     public void addMatch(Match match) {

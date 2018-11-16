@@ -17,7 +17,7 @@ public class CATHDomainFileParser {
     private static Pattern segmentPattern = Pattern.compile("[\\d\\w]\\s+(\\d+)\\s\\-\\s[\\w\\d]\\s+(\\d+)\\s\\-");
 
     public static Map<String, ChainDomainMap> parseWholeFile(String filename) throws IOException {
-        Map<String, ChainDomainMap> pdbChainDomainMap = new HashMap<String, ChainDomainMap>();
+        Map<String, ChainDomainMap> pdbChainDomainMap = new HashMap<>();
 
         String line;
         BufferedReader bufferer = null;
@@ -76,7 +76,7 @@ public class CATHDomainFileParser {
     }
 
     public static List<Domain> parseLine(String line) {
-    	List<Domain> domains = new ArrayList<Domain>();
+    	List<Domain> domains = new ArrayList<>();
 
         Matcher domainMatcher = domainPattern.matcher(line.substring(14));
         int domainID = 1;

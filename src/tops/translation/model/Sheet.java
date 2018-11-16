@@ -26,7 +26,7 @@ public class Sheet {
 
     public Sheet(int number) {
         this.number = number;
-        this.strandMap = new TreeMap<BackboneSegment, List<BackboneSegment>>();
+        this.strandMap = new TreeMap<>();
         this.axis = null;
     }
 
@@ -48,7 +48,7 @@ public class Sheet {
         if (this.strandMap.containsKey(keyStrand)) {
             values = this.strandMap.get(keyStrand);
         } else {
-            values = new ArrayList<BackboneSegment>();
+            values = new ArrayList<>();
             this.strandMap.put(keyStrand, values);
         }
         values.add(partner);
@@ -79,7 +79,7 @@ public class Sheet {
     }
 
     public Point3d calculateCentroid() {
-        List<Point3d> centers = new ArrayList<Point3d>();
+        List<Point3d> centers = new ArrayList<>();
         for (BackboneSegment strand : this.strandMap.keySet()) {
             centers.add(strand.getAxis().getCentroid());
         }
@@ -98,7 +98,7 @@ public class Sheet {
     public void extend(Sheet other) {
         Iterator<BackboneSegment> keyIterator = other.iterator();
         while (keyIterator.hasNext()) {
-            BackboneSegment key = (BackboneSegment) keyIterator.next();
+            BackboneSegment key = keyIterator.next();
             List<BackboneSegment> otherValues = other.getPartners(key);
 
             if (this.strandMap.containsKey(key)) {
@@ -115,13 +115,13 @@ public class Sheet {
     }
 
     public Iterator<BackboneSegment> chainOrderIterator() {
-        List<BackboneSegment> chainOrder = new ArrayList<BackboneSegment>();
+        List<BackboneSegment> chainOrder = new ArrayList<>();
         chainOrder.addAll(this.strandMap.keySet());
         Iterator<BackboneSegment> iterator = this.iterator();
         while (iterator.hasNext()) {
             List<BackboneSegment> partners = this.strandMap.get(iterator.next());
             for (int i = 0; i < partners.size(); i++) {
-                BackboneSegment partner = (BackboneSegment) partners.get(i);
+                BackboneSegment partner = partners.get(i);
                 if (!chainOrder.contains(partner)) {
                     chainOrder.add(partner);
                 }
@@ -146,11 +146,11 @@ public class Sheet {
     }
 
     public List<List<BackboneSegment>> getSheetPaths() {
-        List<List<BackboneSegment>> paths = new ArrayList<List<BackboneSegment>>();
+        List<List<BackboneSegment>> paths = new ArrayList<>();
         Iterator<BackboneSegment> iterator = this.iterator();
         while (iterator.hasNext()) {
             BackboneSegment key = (BackboneSegment) iterator.next();
-            paths.add(this.traverseSheetPath(key, new ArrayList<BackboneSegment>()));
+            paths.add(this.traverseSheetPath(key, new ArrayList<>()));
         }
         return paths;
     }
@@ -238,7 +238,7 @@ public class Sheet {
     }
 
     public List<Edge> toTopsEdges(Domain domain) {
-        List<Edge> edges = new ArrayList<Edge>();
+        List<Edge> edges = new ArrayList<>();
 
         for (BackboneSegment strand : this.strandMap.keySet()) {
             if (!domain.contains(strand)) {
@@ -279,12 +279,12 @@ public class Sheet {
         Iterator<BackboneSegment> iterator = this.strandMap.keySet().iterator();
 
         while (iterator.hasNext()) {
-            BackboneSegment strand = (BackboneSegment) iterator.next();
+            BackboneSegment strand = iterator.next();
             returnValue.append(strand);
 
             Iterator<BackboneSegment> partnerIterator = this.getPartnerIterator(strand);
             while (partnerIterator.hasNext()) {
-                BackboneSegment partner = (BackboneSegment) partnerIterator.next();
+                BackboneSegment partner = partnerIterator.next();
                 returnValue.append(" -> ").append(partner); 
             }
             returnValue.append("\n");
