@@ -65,8 +65,8 @@ public class Chain implements Iterable<BackboneSegment> {
     // backbone amide hydrogens, it will overwrite them...
     public void addBackboneAmideHydrogens() {
         for (int i = 1; i < this.residues.size(); i++) {
-            Residue lastResidue = (Residue) this.residues.get(i - 1);
-            Residue residue     = (Residue) this.residues.get(i);
+            Residue lastResidue = this.residues.get(i - 1);
+            Residue residue     = this.residues.get(i);
 
             if (residue.isPro()) {
                 continue;
@@ -74,29 +74,29 @@ public class Chain implements Iterable<BackboneSegment> {
 
             Point3d lastC       = lastResidue.getCoordinates("C");
             Point3d lastO       = lastResidue.getCoordinates("O");
-            Point3d N           =     residue.getCoordinates("N");
+            Point3d currN       =     residue.getCoordinates("N");
 
             Vector3d OC = new Vector3d();
             OC.sub(lastC, lastO);
             OC.normalize();
 
-            Point3d H = new Point3d();
-            H.add(N, OC);
+            Point3d hPos = new Point3d();
+            hPos.add(currN, OC);
 
-            residue.setAtom("H", H);
+            residue.setAtom("H", hPos);
         }
     } 
 
     public Residue createResidue(int pdbNumber, String residueType) {
-        Residue r = new Residue(this.residues.size(), pdbNumber, residueType);
-        this.residues.add(r);
-        return r;
+        Residue residue = new Residue(this.residues.size(), pdbNumber, residueType);
+        this.residues.add(residue);
+        return residue;
     }
 
     public void createHelix(int helixStartIndex, int helixEndIndex) {
         BackboneSegment helix = new Helix(this.getResidueByAbsoluteNumbering(helixStartIndex));
-        for (int i = helixStartIndex + 1; i < helixEndIndex + 1; i++) {
-            helix.expandBy(this.getResidueByAbsoluteNumbering(i));
+        for (int index = helixStartIndex + 1; index < helixEndIndex + 1; index++) {
+            helix.expandBy(this.getResidueByAbsoluteNumbering(index));
         }
         //System.err.println("Created " + helix + " from " + helixStartIndex + " " + helixEndIndex);
         this.backboneSegments.add(helix);
@@ -104,8 +104,8 @@ public class Chain implements Iterable<BackboneSegment> {
 
     public void createStrand(int strandStartIndex, int strandEndIndex) {
         BackboneSegment strand = new Strand(this.getResidueByAbsoluteNumbering(strandStartIndex));
-        for (int i = strandStartIndex + 1; i < strandEndIndex + 1; i++) {
-            strand.expandBy(this.getResidueByAbsoluteNumbering(i));
+        for (int index = strandStartIndex + 1; index < strandEndIndex + 1; index++) {
+            strand.expandBy(this.getResidueByAbsoluteNumbering(index));
         }
         //System.err.println("Created " + strand + " from " + strandStartIndex + " " + strandEndIndex);
         this.backboneSegments.add(strand);
@@ -113,8 +113,8 @@ public class Chain implements Iterable<BackboneSegment> {
 
     public void createLoop(int startIndex, int endIndex) {
         BackboneSegment unstructured = new UnstructuredSegment(this.getResidueByAbsoluteNumbering(startIndex));
-        for (int i = startIndex + 1; i < endIndex + 1; i++) {
-            unstructured.expandBy(this.getResidueByAbsoluteNumbering(i));
+        for (int index = startIndex + 1; index < endIndex + 1; index++) {
+            unstructured.expandBy(this.getResidueByAbsoluteNumbering(index));
         }
         this.backboneSegments.add(unstructured);
     }
@@ -122,18 +122,18 @@ public class Chain implements Iterable<BackboneSegment> {
     // firstly, assume that the sses are sorted so that for i < j; i.end < j.end
     // secondly assume that, if two helices overlap, they should be merged
     public void mergeHelices() {
-        for (int i = 0; i < this.backboneSegments.size() - 1; i++) {
-            BackboneSegment sseA = (BackboneSegment) this.backboneSegments.get(i);
+        for (int segmentIndex = 0; segmentIndex < this.backboneSegments.size() - 1; segmentIndex++) {
+            BackboneSegment sseA = this.backboneSegments.get(segmentIndex);
             if (sseA instanceof Helix) {
-                BackboneSegment sseB = (BackboneSegment) this.backboneSegments.get(i + 1);
+                BackboneSegment sseB = this.backboneSegments.get(segmentIndex + 1);
                 if (sseB instanceof Helix) {
                     if (sseA.overlaps(sseB)) {
                         //System.err.println("Merging : " + sseA + " and " + sseB); 
                         sseB.mergeWith(sseA);
 
                         //System.err.println("Removing: " + sseA); 
-                        this.backboneSegments.remove(i);
-                        i--;
+                        this.backboneSegments.remove(segmentIndex);
+                        segmentIndex--;
                     } else {
                         //System.err.println("No overlap : " + sseA + " and " + sseB); 
                     }
@@ -143,7 +143,7 @@ public class Chain implements Iterable<BackboneSegment> {
     }
 
     public void addTerminii() {
-        if (this.backboneSegments.size() == 0) {
+        if (this.backboneSegments.isEmpty()) {
             return;
         }
 
@@ -198,11 +198,11 @@ public class Chain implements Iterable<BackboneSegment> {
         return this.residues.get(this.residues.size() - 1);
     }
 
-    public Residue getNextResidue(int i) {
-        if (i + 1 >= this.residues.size()) {
+    public Residue getNextResidue(int residueIndex) {
+        if (residueIndex + 1 >= this.residues.size()) {
             return null;
         } else {
-            return this.residues.get(i + 1);
+            return this.residues.get(residueIndex + 1);
         }
     }
 
@@ -210,8 +210,8 @@ public class Chain implements Iterable<BackboneSegment> {
         return this.residues.iterator();
     }
 
-    public Iterator<Residue> residueIterator(int i) {
-        return this.residues.subList(i, this.residues.size() - 1).iterator();
+    public Iterator<Residue> residueIterator(int indexFrom) {
+        return this.residues.subList(indexFrom, this.residues.size() - 1).iterator();
     }
 
     public Iterator<HBond> hbondIterator() {
@@ -224,7 +224,7 @@ public class Chain implements Iterable<BackboneSegment> {
     }
 
     public void createSheet(BackboneSegment strand, BackboneSegment otherStrand) {
-        if (this.sheets.size() == 0) {
+        if (this.sheets.isEmpty()) {
             this.sheets.add(new Sheet(1, strand, otherStrand));
         } else {
             int lastSheetNumber = this.sheets.get(this.sheets.size() - 1).getNumber();
@@ -378,7 +378,7 @@ public class Chain implements Iterable<BackboneSegment> {
     }
 
     public String toPymolScript() {
-        StringBuffer script = new StringBuffer();
+        StringBuilder script = new StringBuilder();
 
         int segmentNumber = 1;
         for (BackboneSegment bs : this.backboneSegments) {
@@ -406,21 +406,21 @@ public class Chain implements Iterable<BackboneSegment> {
 
     public Map<String, String> toTopsDomainStrings(ChainDomainMap chainDomainMap) {
         if (chainDomainMap != null && chainDomainMap.containsKey(this.getCathCompatibleLabel())) {
-            List<Domain> domains = chainDomainMap.get(this.getCathCompatibleLabel());
-            return this.toTopsDomainStrings(domains);
+            List<Domain> domainsForChain = chainDomainMap.get(this.getCathCompatibleLabel());
+            return this.toTopsDomainStrings(domainsForChain);
         } else {
-            Map<String, String> h = new HashMap<>();
-            h.put("0", this.toTopsString(new Domain(0)));
-            return h;
+            Map<String, String> map = new HashMap<>();
+            map.put("0", this.toTopsString(new Domain(0)));
+            return map;
         }
     }
 
-    public Map<String, String> toTopsDomainStrings(List<Domain> domains) {
+    public Map<String, String> toTopsDomainStrings(List<Domain> domainsToConvert) {
         Map<String, String> domainStrings = new HashMap<>();
 
-        for (Domain d : domains) {
+        for (Domain domain : domainsToConvert) {
             //System.err.println("Getting tops string for domain " + d);
-            domainStrings.put(d.getID(), this.toTopsString(d));
+            domainStrings.put(domain.getID(), this.toTopsString(domain));
         }
 
         return domainStrings;
@@ -497,7 +497,7 @@ public class Chain implements Iterable<BackboneSegment> {
     }
 
     public String toString() {
-        StringBuffer s = new StringBuffer();
+        StringBuilder s = new StringBuilder();
         s.append("Chain : " + this.getLabel() + " residue " + this.firstResidue().getPDBNumber() + " to " + this.lastResidue().getPDBNumber() + "\n");
 
         for (Residue r : this.residues) {
@@ -514,7 +514,7 @@ public class Chain implements Iterable<BackboneSegment> {
         }
 
         for (Sheet sheet : this.sheets) {
-            System.out.println("Sheet paths " + sheet.getSheetPaths());
+//            System.out.println("Sheet paths " + sheet.getSheetPaths());
             s.append(sheet + "\n");
         }
 
