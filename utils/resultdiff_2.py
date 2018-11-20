@@ -39,5 +39,5 @@ for pdbid in m1:
             else:
                 print(pdbid, motif, "not in", file2)
     else:
-        print pdbid, "not in", file2
+        print(pdbid, "not in", file2)
         continue
