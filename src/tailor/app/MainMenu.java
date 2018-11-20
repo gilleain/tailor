@@ -29,20 +29,11 @@ public class MainMenu extends JMenuBar {
 		openDescriptionItem.addActionListener(listener);
 		fileMenu.add(openDescriptionItem);
 
-//		JMenuItem openTextDataItem = new JMenuItem("Open Text Data...");
-//		openTextDataItem.setActionCommand("Open Text Data");
-//		openTextDataItem.addActionListener(listener);
-//		fileMenu.add(openTextDataItem);
+		// TODO JMenuItem openTextDataItem = new JMenuItem("Open Text Data...");
 
-//		JMenuItem openXMLDataItem = new JMenuItem("Open MSD Data...");
-//		openXMLDataItem.setActionCommand("Open MSD Data");
-//		openXMLDataItem.addActionListener(listener);
-//		fileMenu.add(openXMLDataItem);
-//
-//		JMenuItem openXMLQueryItem = new JMenuItem("Open XML Query...");
-//		openXMLQueryItem.setActionCommand("Open XML Query");
-//		openXMLQueryItem.addActionListener(listener);
-//		fileMenu.add(openXMLQueryItem);
+		// TODO	JMenuItem openXMLDataItem = new JMenuItem("Open MSD Data...");
+		// TODO JMenuItem openXMLQueryItem = new JMenuItem("Open XML Query...");
+
 		
 		JMenuItem saveDescriptionItem = new JMenuItem("Save Description...");
 		saveDescriptionItem.setActionCommand("Save Description");
@@ -86,11 +77,7 @@ public class MainMenu extends JMenuBar {
 		changeWorkingDirectoryItem.addActionListener(listener);
 		editMenu.add(changeWorkingDirectoryItem);
 
-
-//		JMenuItem editCategoryItem = new JMenuItem("Edit Category...");
-//		editCategoryItem.setActionCommand("Edit Category");
-//		editCategoryItem.addActionListener(listener);
-//		editMenu.add(editCategoryItem);
+		// TODO JMenuItem editCategoryItem = new JMenuItem("Edit Category...");
 
 		this.add(editMenu);
 
@@ -103,39 +90,24 @@ public class MainMenu extends JMenuBar {
 		this.runItem.addActionListener(listener);
 		runMenu.add(this.runItem);
 
-//		JMenuItem runFileSystemItem = new JMenuItem("Run File Query...");
-//		runFileSystemItem.setActionCommand("Run File Query");
-//		runFileSystemItem.addActionListener(listener);
-//		runMenu.add(runFileSystemItem);
-//
-//		JMenuItem runMSDItem = new JMenuItem("Run MSD Query...");
-//		runMSDItem.setActionCommand("Run MSD Query");
-//		runMSDItem.addActionListener(listener);
-//		runMenu.add(runMSDItem);
+		// TODO JMenuItem runFileSystemItem = new JMenuItem("Run File Query...");
+		// TODO JMenuItem runMSDItem = new JMenuItem("Run MSD Query...");
+
 
 		this.add(runMenu);
 
 		JMenu plotMenu = new JMenu("Plot");
 
-//		JMenuItem openPlotItem = new JMenuItem("Open Plot Window...");
-//		openPlotItem.setActionCommand("Open Plot Window");
-//		openPlotItem.addActionListener(listener);
-//		plotMenu.add(openPlotItem);
-//
-//	    JMenuItem addColumnsItem = new JMenuItem("Add Columns To Plot");
-//	    addColumnsItem.setActionCommand("Add Columns To Plot");
-//	    addColumnsItem.addActionListener(listener);
-//	    plotMenu.add(addColumnsItem);
-//	
+		// TODO JMenuItem openPlotItem = new JMenuItem("Open Plot Window...");
+		// TODO JMenuItem addColumnsItem = new JMenuItem("Add Columns To Plot");
+		
 	    JMenuItem saveImageItem = new JMenuItem("Save Plot Image");
 	    saveImageItem.setActionCommand("Save Plot Image");
 	    saveImageItem.addActionListener(listener);
 	    plotMenu.add(saveImageItem);
 	
-//	    JMenuItem clearPlotItem = new JMenuItem("Clear Plot");
-//	    clearPlotItem.setActionCommand("Clear Plot");
-//	    clearPlotItem.addActionListener(listener);
-//	    plotMenu.add(clearPlotItem);
+	    // TODO JMenuItem clearPlotItem = new JMenuItem("Clear Plot");
+
 
 		this.add(plotMenu);
 	}
