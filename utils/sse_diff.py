@@ -17,7 +17,7 @@ for line in open(sys.argv[1]):
         #if absdiff in hist: hist[absdiff] += 1
         #else: hist[absdiff] = 1
 
-        print pair_diff, id, target_type, obs_type, t_start, t_end, start, end
+        print(pair_diff, id, target_type, obs_type, t_start, t_end, start, end)
         if pair_diff in hist: hist[pair_diff] += 1
         else: hist[pair_diff] = 1
 #for k, v in hist.iteritems(): print v, k

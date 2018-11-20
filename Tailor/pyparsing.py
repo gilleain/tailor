@@ -2613,7 +2613,7 @@ if __name__ == "__main__":
             print(err.line)
             print(" "*(err.column-1) + "^")
             print(err)
-        print
+        print()
 
     selectToken    = CaselessLiteral( "select" )
     fromToken      = CaselessLiteral( "from" )

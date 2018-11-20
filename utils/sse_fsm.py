@@ -1,23 +1,23 @@
 from fsm import FSM, Error
 
 def startHelix(fsm):
-    print "startHelix"
+    print("startHelix")
     helices.append([fsm.input_symbol])
 
 def continueHelix(fsm):
-    print "continueHelix"
+    print("continueHelix")
     helices[-1].append(fsm.input_symbol)
 
 def finishThreeTen(fsm):
-    print "finishThreeTen"
-    print "310 :", helices[-1]
+    print("finishThreeTen")
+    print("310 :", helices[-1])
 
 def finishAlpha(fsm):
-    print "finishAlpha"
-    print "Alpha :", helices[-1]
+    print("finishAlpha")
+    print("Alpha :", helices[-1])
 
 def anyTransition(fsm):
-    print "anyTransition"
+    print("anyTransition")
 
 helices = []
 non_helix_symbols = " BTSE"
@@ -36,4 +36,4 @@ f.add_transition_list(non_helix_symbols, 'ALPHA_HELIX', finishAlpha, 'NON_HELIX'
 seq = " HHHGG TTHHHHH GGHH GGGG "
 for s in seq:
     f.process(s)
-    print s, f.current_state
+    print(s, f.current_state)

@@ -131,7 +131,7 @@ resultsB = ResultList(pathB)
 
 intersection, aMinusB = resultsA.overlap(resultsB)
 intersection, bMinusA = resultsB.overlap(resultsA)
-print len(intersection), len(aMinusB), len(bMinusA)
+print(len(intersection), len(aMinusB), len(bMinusA))
 
 intersectionFP = open(intersectionPath, 'w')
 for result in intersection:

@@ -58,7 +58,7 @@ class TransitionTable(object):
         return "\n".join([str(t) for t in self.transitions])
 
 def printArgs(*args):
-    print args
+    print(args)
 
 class Counter(object):
 
@@ -85,7 +85,7 @@ class Emitter(object):
         self.emitSymbol = emitSymbol
 
     def __call__(self, startStateName, endStateName, *args):
-        print endStateName, self.emitSymbol
+        print(endStateName, self.emitSymbol)
 
     def __repr__(self):
         return "[%s]" % self.emitSymbol
@@ -100,7 +100,7 @@ class HelixBuilder(object):
 
     def __call__(self, startStateName, endStateName, *args):
         if endStateName == " ":
-            print "Helix", self.start, self.start + self.length    
+            print("Helix", self.start, self.start + self.length    )
         elif endStateName == 'H':
             self.length += 1
             self.hCount += 1
@@ -142,4 +142,4 @@ if __name__ == "__main__":
     for i, stateName in enumerate(seq):
         machine.handle(last, stateName, *[i])
         last = stateName 
-    print machine.table
+    print(machine.table)

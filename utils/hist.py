@@ -18,7 +18,7 @@ def printBins(bins):
     keys.sort()
     for k in keys:
         mid = (k[1] + k[0]) / 2.0
-        print "%0.2f %3i" % (mid, len(bins[k]))
+        print("%0.2f %3i" % (mid, len(bins[k])))
 
 def chartBins(bins, filename):
     data = []

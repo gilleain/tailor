@@ -48,7 +48,7 @@ def compare(id, oldvstr, vstr, oldestr, estr):
     else:
         verdicts.append("missingedges")
 
-    print verdicts, id, oldvstr, vstr, oldestr, estr, missing_verts, missing_edges
+    print(verdicts, id, oldvstr, vstr, oldestr, estr, missing_verts, missing_edges)
 
 linepatt = re.compile("(.+)\s(.+)\s+pattern:\s+(.+)\s+(.*)\s+for\s.+\s(.+)\s(.+)\s\<\=\>\s.+\s(.+)\s(.+)")
 for line in open(sys.argv[1]):

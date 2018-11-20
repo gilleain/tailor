@@ -40,7 +40,7 @@ for pdbid in m1:
                     #print "%s\th %s\t%s" % (pdbid, mstr, astr)
                     #print "%s\th %s\t%s" % (pdbid, mstr2, astr2)
                     overlap = s2 - s1
-                    print overlap, pdbid, mstr, mstr2
+                    print(overlap, pdbid, mstr, mstr2)
                     if overlap in overlaps:
                         overlaps[overlap] += 1
                     else:

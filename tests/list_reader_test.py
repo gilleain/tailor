@@ -25,4 +25,4 @@ measures = [DistanceMeasure(o, n)]
 for e in generateExamples(filename, pdbdir, parse):
     for measure in measures:
         # XXX hack!
-        print measure.measure(e)
+        print(measure.measure(e))

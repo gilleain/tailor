@@ -50,6 +50,6 @@ for c1, c1count, c2, c2count, offsets in overlapCounts:
     for offset in offsets:
         count += offsets[offset]
     if count > 0:
-        print count, c1, c1count, c2, c2count, offsets
+        print(count, c1, c1count, c2, c2count, offsets)
 #categorySet.printResults()
 #print "total", categorySet.total

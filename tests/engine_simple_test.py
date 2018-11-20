@@ -22,5 +22,5 @@ distanceMeasure = DistanceMeasure(o, n)
 # match and measure
 matcher = Matcher(description)
 for fragment in matcher.findAll(structure):
-    print fragment.chainID, "".join([str(r) for r in fragment]), distanceMeasure.measure(fragment)
+    print(fragment.chainID, "".join([str(r) for r in fragment]), distanceMeasure.measure(fragment))
 

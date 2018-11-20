@@ -18,4 +18,4 @@ for line in open(sys.argv[1]):
         freq_maps[index][residue_name] += 1
 
 for position, map in enumerate(freq_maps):
-    print position, " ".join(["%s %3s" % (k, v) for k, v  in sorted(map.items(), key=itemgetter(1), reverse=True)])
+    print(position, " ".join(["%s %3s" % (k, v) for k, v  in sorted(map.items(), key=itemgetter(1), reverse=True)]))

@@ -121,4 +121,4 @@ for id in results:
 
 # write out the merged results
 for m in merged_results:
-    print len(m), m
+    print(len(m), m)

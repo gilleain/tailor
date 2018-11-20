@@ -6,6 +6,6 @@ for line in open(sys.argv[1]):
         id, typ, start, end = bits[0], bits[1], bits[4], bits[7]
         try:
             len = int(end) - int(start)
-            print len, id, typ, start, end
+            print(len, id, typ, start, end)
         except Exception:
             pass

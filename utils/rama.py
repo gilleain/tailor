@@ -153,7 +153,7 @@ if __name__ == "__main__":
             try:
                 data[i].append((angles[idx], angles[idx+1]))
             except IndexError, ide:
-                print "index error in", line.rstrip("\n")
+                print("index error in", line.rstrip("\n"))
     r = RamachandranPlot()
     r.x = 30
     r.y = 30
