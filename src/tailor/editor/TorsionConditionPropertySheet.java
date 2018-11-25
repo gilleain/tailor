@@ -6,11 +6,11 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.BorderFactory;
-import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import tailor.api.Torsion;
 import tailor.condition.TorsionBoundCondition;
 import tailor.description.DescriptionFactory;
 
@@ -24,10 +24,7 @@ public class TorsionConditionPropertySheet extends JPanel implements ActionListe
 	private JLabel atomBLabel;
 	private JLabel atomCLabel;
 	private JLabel atomDLabel;
-	
-	private JButton updateButton;
-	private JButton revertButton;
-	
+
 	private DescriptionFactory descriptionFactory;
 	
 	public TorsionConditionPropertySheet(DescriptionFactory descriptionFactory) {
@@ -73,38 +70,24 @@ public class TorsionConditionPropertySheet extends JPanel implements ActionListe
 		this.atomDLabel.setHorizontalAlignment(JLabel.CENTER);
         
         this.add(mainPanel, BorderLayout.CENTER);
-        
-//        JPanel buttonPanel = new JPanel();
-//        
-//		this.updateButton = new JButton("Update");
-//		this.updateButton.setActionCommand("Update");
-//		this.updateButton.addActionListener(this);
-//		buttonPanel.add(this.updateButton);
-//
-//		this.revertButton = new JButton("Revert");
-//		this.revertButton.setActionCommand("Revert");
-//		this.revertButton.addActionListener(this);
-//		buttonPanel.add(this.revertButton);
-//
-//		this.add(buttonPanel, BorderLayout.SOUTH);
 	}
 	
-	public void setToUnknownValues(String torsionName) {
+	public void setToUnknownValues(Torsion torsion) {
 		this.minValue.setText("-180");
 		this.maxValue.setText("180");
-		if (torsionName.equals("phi")) {
+		if (torsion == Torsion.PHI) {
 			this.nameField.setText("phi(i)");
 			this.atomALabel.setText("i - 1.C");
 			this.atomBLabel.setText("i.N");
 			this.atomCLabel.setText("i.CA");
 			this.atomDLabel.setText("i.C");
-		} else if (torsionName.equals("psi")) {
+		} else if (torsion == Torsion.PSI) {
 			this.nameField.setText("psi(i)");
 			this.atomALabel.setText("i.N");
 			this.atomBLabel.setText("i.CA");
 			this.atomCLabel.setText("i.C");
 			this.atomDLabel.setText("i + 1.N");
-		} else if (torsionName.equals("omega")) {
+		} else if (torsion == Torsion.OMEGA) {
 			this.nameField.setText("omega(i/i + 1)");
 			this.atomALabel.setText("i.CA");
 			this.atomBLabel.setText("i.C");
@@ -113,20 +96,20 @@ public class TorsionConditionPropertySheet extends JPanel implements ActionListe
 		}
 	}
 	
-	public void setValues(String torsionName, int startResidueNumber, int endResidueNumber) {
-		if (torsionName.equals("phi")) {
+	public void setValues(Torsion torsion, int startResidueNumber, int endResidueNumber) {
+	    if (torsion == Torsion.PHI) {
 			this.nameField.setText("phi(" + endResidueNumber + ")");
 			this.atomALabel.setText(startResidueNumber + ".C");
 			this.atomBLabel.setText(endResidueNumber + ".N");
 			this.atomCLabel.setText(endResidueNumber + ".CA");
 			this.atomDLabel.setText(endResidueNumber + ".C");
-		} else if (torsionName.equals("psi")) {
+	    } else if (torsion == Torsion.PSI) {
 			this.nameField.setText("psi(" + startResidueNumber + ")");
 			this.atomALabel.setText(startResidueNumber + ".N");
 			this.atomBLabel.setText(startResidueNumber + ".CA");
 			this.atomCLabel.setText(startResidueNumber + ".C");
 			this.atomDLabel.setText(endResidueNumber + ".N");
-		} else if (torsionName.equals("omega")) {
+	    } else if (torsion == Torsion.OMEGA) {
 			this.nameField.setText("omega(" + startResidueNumber + "/" + endResidueNumber + ")");
 			this.atomALabel.setText(startResidueNumber + ".CA");
 			this.atomBLabel.setText(startResidueNumber + ".C");

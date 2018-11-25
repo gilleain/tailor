@@ -4,6 +4,7 @@ import java.awt.CardLayout;
 
 import javax.swing.JPanel;
 
+import tailor.api.Torsion;
 import tailor.description.DescriptionFactory;
 import tailor.measurement.HBondMeasure;
 import tailor.measurement.TorsionMeasure;
@@ -36,12 +37,12 @@ public class MeasurePropertySheetPanel extends JPanel {
 		this.hBondSheet.setHBondResidues(donorResidueNumber, acceptorResidueNumber);
 	}
 	
-	public void initialiseTorsionSheet(String name) {
-		this.torsionSheet.setToUnknownValues(name);
+	public void initialiseTorsionSheet(Torsion torsion) {
+		this.torsionSheet.setToUnknownValues(torsion);
 	}
 	
-	public void setTorsionSheetResidue(String name, int start, int end) {
-		this.torsionSheet.setValues(name, start, end);
+	public void setTorsionSheetResidue(Torsion torsion, int start, int end) {
+		this.torsionSheet.setValues(torsion, start, end);
 	}
 	
 	public TorsionMeasure getTorsionMeasure(int residueNumber) {

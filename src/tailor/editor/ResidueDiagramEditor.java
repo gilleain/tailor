@@ -17,6 +17,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
+import tailor.api.Torsion;
 import tailor.condition.Condition;
 import tailor.condition.HBondCondition;
 import tailor.condition.TorsionBoundCondition;
@@ -116,7 +117,7 @@ public class ResidueDiagramEditor extends JPanel implements SymbolSelectionListe
 		this.add(bottomPanel, BorderLayout.SOUTH);
 		
 		this.state = State.MAKING_PHI_TORSION_CONDITION;
-		this.conditionPropertySheetPanel.initialiseTorsionSheet("phi");
+		this.conditionPropertySheetPanel.initialiseTorsionSheet(Torsion.PHI);
 	}
 	
 	private ChainDescription makeChain(int numberOfResidues) {
@@ -309,7 +310,7 @@ public class ResidueDiagramEditor extends JPanel implements SymbolSelectionListe
 	
 	public void makePhiCondition(Symbol newlySelectedSymbol) {
 		int residueNumber = newlySelectedSymbol.getResidueIndex();
-		this.conditionPropertySheetPanel.setTorsionSheetResidue("phi", residueNumber, residueNumber + 1);
+		this.conditionPropertySheetPanel.setTorsionSheetResidue(Torsion.PHI, residueNumber, residueNumber + 1);
 		
 		TorsionBoundCondition torsionCondition = this.conditionPropertySheetPanel.getTorsionCondition(residueNumber);
 		factory.addPhiConditionToChain(torsionCondition, "A");
@@ -322,7 +323,7 @@ public class ResidueDiagramEditor extends JPanel implements SymbolSelectionListe
 	
 	public void makePhiMeasure(Symbol newlySelectedSymbol) {
 		int residueNumber = newlySelectedSymbol.getResidueIndex();
-		this.measurePropertySheetPanel.setTorsionSheetResidue("phi", residueNumber, residueNumber + 1);
+		this.measurePropertySheetPanel.setTorsionSheetResidue(Torsion.PHI, residueNumber, residueNumber + 1);
 		
 		TorsionMeasure torsionMeasure = this.measurePropertySheetPanel.getTorsionMeasure(residueNumber);
 		factory.addTorsionMeasureToChain(torsionMeasure, "A");
@@ -333,7 +334,7 @@ public class ResidueDiagramEditor extends JPanel implements SymbolSelectionListe
 	
 	public void makePsiCondition(Symbol newlySelectedSymbol) {
 		int residueNumber = newlySelectedSymbol.getResidueIndex();
-		this.conditionPropertySheetPanel.setTorsionSheetResidue("psi", residueNumber + 1, residueNumber + 2);
+		this.conditionPropertySheetPanel.setTorsionSheetResidue(Torsion.PSI, residueNumber + 1, residueNumber + 2);
 		
 		TorsionBoundCondition torsionCondition = 
 		        this.conditionPropertySheetPanel.getTorsionCondition(residueNumber);
@@ -347,7 +348,7 @@ public class ResidueDiagramEditor extends JPanel implements SymbolSelectionListe
 	
 	public void makePsiMeasure(Symbol newlySelectedSymbol) {
 		int residueNumber = newlySelectedSymbol.getResidueIndex();
-		this.measurePropertySheetPanel.setTorsionSheetResidue("psi", residueNumber + 1, residueNumber + 2);
+		this.measurePropertySheetPanel.setTorsionSheetResidue(Torsion.PSI, residueNumber + 1, residueNumber + 2);
 		
 		TorsionMeasure torsionMeasure = this.measurePropertySheetPanel.getTorsionMeasure(residueNumber);
 		factory.addTorsionMeasureToChain(torsionMeasure, "A");
@@ -391,13 +392,13 @@ public class ResidueDiagramEditor extends JPanel implements SymbolSelectionListe
 	public void startMakingPhiTorsionCondition() {
 		this.setState(ResidueDiagramEditor.State.MAKING_PHI_TORSION_CONDITION);
 		this.conditionPropertySheetPanel.showSheet(ConditionPropertySheetPanel.TORSION_TAG);
-		this.conditionPropertySheetPanel.initialiseTorsionSheet("phi");
+		this.conditionPropertySheetPanel.initialiseTorsionSheet(Torsion.PHI);
 	}
 	
 	public void startMakingPsiTorsionCondition() {
 		this.setState(ResidueDiagramEditor.State.MAKING_PSI_TORSION_CONDITION);
         this.conditionPropertySheetPanel.showSheet(ConditionPropertySheetPanel.TORSION_TAG);
-        this.conditionPropertySheetPanel.initialiseTorsionSheet("psi");
+        this.conditionPropertySheetPanel.initialiseTorsionSheet(Torsion.PSI);
 	}
 	
 	public void startMakingHBondCondition() {
@@ -408,13 +409,13 @@ public class ResidueDiagramEditor extends JPanel implements SymbolSelectionListe
 	public void startMakingPhiTorsionMeasure() {
 		this.setState(ResidueDiagramEditor.State.MAKING_PHI_TORSION_MEASURE);
         this.measurePropertySheetPanel.showSheet(ConditionPropertySheetPanel.TORSION_TAG);
-        this.measurePropertySheetPanel.initialiseTorsionSheet("phi");
+        this.measurePropertySheetPanel.initialiseTorsionSheet(Torsion.PHI);
 	}
 	
 	public void startMakingPsiTorsionMeasure() {
 		this.setState(ResidueDiagramEditor.State.MAKING_PSI_TORSION_MEASURE);
 		this.measurePropertySheetPanel.showSheet(ConditionPropertySheetPanel.TORSION_TAG);
-		this.measurePropertySheetPanel.initialiseTorsionSheet("psi");
+		this.measurePropertySheetPanel.initialiseTorsionSheet(Torsion.PSI);
 	}
 	
 	public void startMakingHBondMeasure() {

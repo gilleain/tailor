@@ -23,13 +23,13 @@ import tailor.editor.symbol.Symbol;
 
 public class ResidueDiagramCanvas extends JPanel implements MouseListener, Scrollable {
 	
-	public static int MIN_WIDTH = 920;
-	public static int MIN_HEIGHT = 300;
+	public static final int MIN_WIDTH = 920;
+	public static final int MIN_HEIGHT = 300;
 	
 	private int numberOfResiduesInView;
 	
-	private int width;
-	private int height;
+	private int canvasWidth;
+	private int canvasHeight;
 	
 	private int viewportWidth;
 	
@@ -106,7 +106,7 @@ public class ResidueDiagramCanvas extends JPanel implements MouseListener, Scrol
 	}
 	
 	public void center() {
-		this.diagram.relayout(this.width / 2, this.height / 2);
+		this.diagram.relayout(this.canvasWidth / 2, this.canvasHeight / 2);
 	}
  	
 	public Map<Symbol, AtomDescription> createMap(DescriptionFactory factory) {
@@ -173,29 +173,29 @@ public class ResidueDiagramCanvas extends JPanel implements MouseListener, Scrol
 	
 	@Override
 	public void mouseReleased(MouseEvent e) {
-		
+		// no action
 	}
 	
 	@Override
 	public void mousePressed(MouseEvent e) {
-		
+        // no action		
 	}
 	
 	@Override
 	public void mouseEntered(MouseEvent e) {
-		
+	      // no action
 	}
 	
 	@Override
 	public void mouseExited(MouseEvent e) {
-		
+	      // no action
 	}
 	
 	public void calculateDimensions(int numberOfResiduesInView) {
 		int dw = this.diagram.getWidth();
 		int dh = this.diagram.getHeight();
-		this.width = Math.max(ResidueDiagramCanvas.MIN_WIDTH, dw);
-		this.height = Math.max(ResidueDiagramCanvas.MIN_HEIGHT, dh);
+		this.canvasWidth = Math.max(ResidueDiagramCanvas.MIN_WIDTH, dw);
+		this.canvasHeight = Math.max(ResidueDiagramCanvas.MIN_HEIGHT, dh);
 		
 		int twoN = 2 * numberOfResiduesInView;
 		this.viewportWidth = twoN * (this.diagram.getShapeSizePlusGapSize());
@@ -217,17 +217,17 @@ public class ResidueDiagramCanvas extends JPanel implements MouseListener, Scrol
 	 */
 	public void scrollToResidue(int index) {
 		int startX = this.diagram.getBackboneSymbolCenterX(index);
-		this.scrollRectToVisible(new Rectangle(startX, 0, this.viewportWidth, this.height));
+		this.scrollRectToVisible(new Rectangle(startX, 0, this.viewportWidth, this.canvasHeight));
 	}
 	
 	@Override
 	public Dimension getPreferredSize() {
-		return new Dimension(this.width, this.height);
+		return new Dimension(this.canvasWidth, this.canvasHeight);
 	}
 	
 	@Override
 	public Dimension getPreferredScrollableViewportSize() {
-		return new Dimension(this.viewportWidth, this.height);
+		return new Dimension(this.viewportWidth, this.canvasHeight);
 	}
 	
 	@Override

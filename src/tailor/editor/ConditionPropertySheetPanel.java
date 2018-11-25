@@ -4,6 +4,7 @@ import java.awt.CardLayout;
 
 import javax.swing.JPanel;
 
+import tailor.api.Torsion;
 import tailor.condition.HBondCondition;
 import tailor.condition.TorsionBoundCondition;
 import tailor.description.DescriptionFactory;
@@ -37,12 +38,12 @@ public class ConditionPropertySheetPanel extends JPanel {
 		this.hBondSheet.setHBondResidues(donorResidueNumber, acceptorResidueNumber);
 	}
 	
-	public void initialiseTorsionSheet(String name) {
-		this.torsionSheet.setToUnknownValues(name);
+	public void initialiseTorsionSheet(Torsion torsion) {
+		this.torsionSheet.setToUnknownValues(torsion);
 	}
 	
-	public void setTorsionSheetResidue(String name, int start, int end) {
-		this.torsionSheet.setValues(name, start, end);
+	public void setTorsionSheetResidue(Torsion torsion, int start, int end) {
+		this.torsionSheet.setValues(torsion, start, end);
 	}
 	
 	public TorsionBoundCondition getTorsionCondition(int residueStart) {
