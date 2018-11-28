@@ -36,7 +36,7 @@ public interface Engine {
 	 * @param description
 	 * @param measures
 	 */
-	public void run(Description description);
+	public void runDescription(Description description);
 
     /**
      * Match the description to the structure source and apply the list of 

@@ -54,10 +54,12 @@ public class MSDMotifEngine implements Engine {
     }
 
     public void run(Run run) {
-		this.run(run.getDescription());
+        for (Description description : run.getDescriptions()) {
+            this.runDescription(description);
+        }
 	}
 	
-	public void run(ProteinDescription description, ArrayList<Measure> measures) {
+	public void run(ProteinDescription description, List<Measure> measures) {
 		String outfileName = "tmp.out";	//FIXME
 		
 		String xmlQuery = DescriptionToXmlQueryTranslator.translate(description);
@@ -72,7 +74,7 @@ public class MSDMotifEngine implements Engine {
     }
 
     @Override
-    public void run(Description description) {
+    public void runDescription(Description description) {
         // TODO Auto-generated method stub
         
     }

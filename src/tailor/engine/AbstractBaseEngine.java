@@ -81,20 +81,22 @@ public abstract class AbstractBaseEngine implements Engine {
         if (this.structureSource == null) {
             this.structureSource = run.getStructureSource();
         }
-        this.run(run.getDescription());
+        for (Description description : run.getDescriptions()) {
+            this.runDescription(description);
+        }
     }
 
     @Override
     public void run(Description description, StructureSource structureSource) {
         this.structureSource = structureSource;
-        run(description);
+        runDescription(description);
     }
 
     public abstract List<Match> match(
             Description description, Structure structure); 
     
     @Override
-    public void run(Description description) {
+    public void runDescription(Description description) {
         List<Measure> measures = description.getMeasures();
         printer.printHeader(measures);
         

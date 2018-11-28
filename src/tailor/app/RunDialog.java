@@ -113,7 +113,7 @@ public class RunDialog extends JDialog implements ActionListener, TreeSelectionL
         this.setLocation(200, 200);
         
         this.run = new Run();
-        this.run.setDescription((ProteinDescription) description);
+        this.run.addDescription((ProteinDescription) description);
         
         this.setIsOkay(true);
     }
@@ -127,7 +127,10 @@ public class RunDialog extends JDialog implements ActionListener, TreeSelectionL
         DefaultListModel<Measure> model = (DefaultListModel<Measure>) this.measureList.getModel();
         for (int i = 0; i < model.size(); i++) {
             Measure measure = model.get(i);
-            this.run.getDescription().addMeasure(measure);
+            // TODO : how do we know which description to add measures to?
+            for (Description description : run.getDescriptions()) {
+                description.addMeasure(measure);
+            }
         }
         
         // get the directory

@@ -230,8 +230,8 @@ public class RunFrame extends JFrame implements ActionListener, CategoryChangeLi
 				Run run = new Run((ProteinDescription)description,
 						          currentRunDirectory.getText());
 			
-				int m = run.getDescription().getMeasures().size();
-				FileDataTableModel fileDataTableModel = new FileDataTableModel(m + 2);
+				int measureCount = run.getMeasureCount();
+				FileDataTableModel fileDataTableModel = new FileDataTableModel(measureCount + 2);
 				this.resultTable.setModel(fileDataTableModel);
 
 				StructureSource source = run.getStructureSource();

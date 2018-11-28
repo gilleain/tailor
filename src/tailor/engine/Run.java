@@ -2,48 +2,49 @@ package tailor.engine;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import tailor.datasource.PDBFileList;
 import tailor.datasource.StructureSource;
 import tailor.description.Description;
 import tailor.description.ProteinDescription;
-import tailor.measurement.Measure;
 
 public class Run {
 
-	private Description description;
+	private List<Description> descriptions;
+	
 	private StructureSource structureSource;
     
     public Run() {
-        // TODO : check this before running! - perhaps the empty constructor is a bad idea
-        this.description = null;
+        this.descriptions = new ArrayList<>();
         this.structureSource = null;
     }
     
     public Run(String path) {
     	this();
     	try {
-    		this.structureSource = new PDBFileList(path, null);
+    		this.structureSource = new PDBFileList(path);
     	} catch (IOException e) {
     		// FIXME!
     	}
     }
 	
 	public Run(ProteinDescription description, String path) throws IOException {
-		this.description = description;
-		String[] filenames = {};
-		this.structureSource = new PDBFileList(path, filenames);
+		this(description, new PDBFileList(path));
 	}
 	
 	public Run(Description description, StructureSource structureSource) throws IOException {
-	    this.description = description;
+	    this.descriptions.add(description);
 	    this.structureSource = structureSource;
 	}
 	
-	public Run(Description description, List<Measure> measures, String path, String[] filenames) throws IOException {
-		this.description = description;
-		this.structureSource = new PDBFileList(path, filenames);
+	public int getMeasureCount() {
+	    int count = 0;
+	    for (Description description : this.descriptions) {
+	        count += description.getMeasures().size();
+	    }
+	    return count;
 	}
 	
 	public StructureSource getStructureSource() {
@@ -51,24 +52,18 @@ public class Run {
 	}
     
     public void addDescription(ProteinDescription description) {
-    	this.description = description;	// TODO : convert to adding to a list...
+    	this.descriptions.add(description);
     }
     
-    public Description getDescription() {
-    	return this.description;		// TODO : convert to getting from a list
-    }
-    
-    public void setDescription(ProteinDescription description) {
-        this.description = description;
+    public List<Description> getDescriptions() {
+    	return this.descriptions;
     }
 
     public void setPath(File path) throws IOException {
-        String[] filenames = {};
-        // FIXME : give PDBFileList some constructors for handling File s
-        this.structureSource = new PDBFileList(path.toString(), filenames);
+        this.structureSource = new PDBFileList(path);
     }
  
     public String toString() {
-        return String.format("Description '%s' vs %s structures", this.description.toString(), this.structureSource.size());
+        return String.format("Description '%s' vs %s structures", this.descriptions.toString(), this.structureSource.size());
     }
 }

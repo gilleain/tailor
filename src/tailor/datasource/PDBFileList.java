@@ -12,6 +12,14 @@ public class PDBFileList implements StructureSource {
 	private List<File> structurePaths;
     private int currentIndex;
 
+    public PDBFileList(String path) throws IOException {
+        this(path, null);
+    }
+    
+    public PDBFileList(File file) throws IOException {
+        this(file, null);
+    }
+    
     public PDBFileList(File file, String[] filenames) throws IOException {
     	this(file.toString(), filenames);
     }
