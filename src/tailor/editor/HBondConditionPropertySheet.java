@@ -6,7 +6,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.BorderFactory;
-import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
@@ -24,9 +23,6 @@ public class HBondConditionPropertySheet extends JPanel implements ActionListene
 	private JLabel atomBLabel;
 	private JLabel atomCLabel;
 	private JLabel atomDLabel;
-	
-	private JButton updateButton;
-	private JButton revertButton;
 	
 	private DescriptionFactory descriptionFactory;
 	
@@ -73,20 +69,6 @@ public class HBondConditionPropertySheet extends JPanel implements ActionListene
 		this.atomDLabel.setHorizontalAlignment(JLabel.CENTER);
         
         this.add(mainPanel, BorderLayout.CENTER);
-        
-//        JPanel buttonPanel = new JPanel();
-//        
-//		this.updateButton = new JButton("Update");
-//		this.updateButton.setActionCommand("Update");
-//		this.updateButton.addActionListener(this);
-//		buttonPanel.add(this.updateButton);
-//
-//		this.revertButton = new JButton("Revert");
-//		this.revertButton.setActionCommand("Revert");
-//		this.revertButton.addActionListener(this);
-//		buttonPanel.add(this.revertButton);
-//
-//		this.add(buttonPanel, BorderLayout.SOUTH);
 	}
 	
 	public void setToDefaultValues() {

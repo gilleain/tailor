@@ -6,7 +6,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.BorderFactory;
-import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
@@ -19,10 +18,7 @@ public class HBondMeasurePropertySheet extends JPanel implements ActionListener 
 	private JLabel atomBLabel;
 	private JLabel atomCLabel;
 	private JLabel atomDLabel;
-	
-	private JButton updateButton;
-	private JButton revertButton;
-	
+
 	private DescriptionFactory descriptionFactory;
 	
 	public HBondMeasurePropertySheet(DescriptionFactory descriptionFactory) {
@@ -57,24 +53,6 @@ public class HBondMeasurePropertySheet extends JPanel implements ActionListener 
 		this.atomDLabel.setHorizontalAlignment(JLabel.CENTER);
         
         this.add(mainPanel, BorderLayout.CENTER);
-        
-//        JPanel buttonPanel = new JPanel();
-//        
-//		this.updateButton = new JButton("Update");
-//		this.updateButton.setActionCommand("Update");
-//		this.updateButton.addActionListener(this);
-//		buttonPanel.add(this.updateButton);
-//
-//		this.revertButton = new JButton("Revert");
-//		this.revertButton.setActionCommand("Revert");
-//		this.revertButton.addActionListener(this);
-//		buttonPanel.add(this.revertButton);
-//
-//		this.add(buttonPanel, BorderLayout.SOUTH);
-	}
-	
-	public void setToDefaultValues() {
-		// TODO : remove!
 	}
 	
 	public void setHBondResidues(int donorResidueNumber, int acceptorResidueNumber) {
