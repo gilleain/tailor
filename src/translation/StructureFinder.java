@@ -7,6 +7,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Map;
+import java.util.logging.Logger;
 
 import javax.vecmath.Point3d;
 import javax.vecmath.Vector3d;
@@ -23,7 +24,10 @@ import tops.translation.model.Terminus;
 import tops.translation.model.UnstructuredSegment;
 
 public class StructureFinder {
+    
     private Protein protein;
+    
+    private final Logger LOG = Logger.getLogger(StructureFinder.class.getName());
 
     public StructureFinder(String filename) throws IOException {
         this.protein = PDBReader.read(filename);
@@ -90,7 +94,7 @@ public class StructureFinder {
                             centroids.add(segment.getAxis().getCentroid()); 
                         }
                         Point3d averageCentroid = Geometer.averagePoints(centroids);
-                        //System.out.println("InBetweener centroid = " + averageCentroid);
+                        LOG.info("InBetweener centroid = " + averageCentroid);
 
                         //finally, do the calculation
                         char chirality;
@@ -153,12 +157,12 @@ public class StructureFinder {
         Map<Residue, Character> residueAssignments = new HashMap<>();
 
         //temporary buffers to store char assignents
-        StringBuffer torsionBuffer = new StringBuffer();
-        StringBuffer hbondBuffer = new StringBuffer();
-        StringBuffer assignBuffer = new StringBuffer();
+        StringBuilder torsionBuffer = new StringBuilder();
+        StringBuilder hbondBuffer = new StringBuilder();
+        StringBuilder assignBuffer = new StringBuilder();
 
-        StringBuffer tmpTorsion = new StringBuffer();
-        StringBuffer tmpHBond = new StringBuffer();
+        StringBuilder tmpTorsion = new StringBuilder();
+        StringBuilder tmpHBond = new StringBuilder();
 
         int spaceCounter = 1;
         while (residueIterator.hasNext()) {
@@ -184,50 +188,38 @@ public class StructureFinder {
 
             spaceCounter++;
         }
-        //System.out.println("torsions : " + tmpTorsion);
-        //System.out.println("hbonds   : " + tmpHBond);
-        //System.out.println("final    : " + assignBuffer);
 
         //now, run through the assignments, merging into sses
         int sseStart = 1;
         int sseEnd = -1;
         char currentSSEType = 'U';
         List<BackboneSegment> backboneSegments = new ArrayList<>();
-        for (int i = 0; i < torsionBuffer.length(); i++) {
-            char sseChar = torsionBuffer.charAt(i);
+        for (int index = 0; index < torsionBuffer.length(); index++) {
+            char sseChar = torsionBuffer.charAt(index);
             // same type : extend the end of current
             if (sseChar == currentSSEType) {
-                sseEnd = i + 1;
+                sseEnd = index + 1;
             // change of type : finish previous and start new
             } else {
-                //System.out.println("SSE : " + currentSSEType + " from " + sseStart + " to " + sseEnd);
+                LOG.info("SSE : " + currentSSEType + " from " + sseStart + " to " + sseEnd);
                 backboneSegments.add(this.createSegment(sseStart, sseEnd, currentSSEType, chain));
-                sseStart = i + 1;
-                sseEnd = i + 1;
+                sseStart = index + 1;
+                sseEnd = index + 1;
             } 
             currentSSEType = sseChar;
         }
-        //System.out.println("SSE : " + currentSSEType + " from " + sseStart + " to " + sseEnd);
-//        Iterator itr = backboneSegments.iterator();
-//        while (itr.hasNext()) {
-//            BackboneSegment segment = (BackboneSegment) itr.next();
-//            System.out.println(segment);
-//        }
+        LOG.info("SSE : " + currentSSEType + " from " + sseStart + " to " + sseEnd);
+
         this.trimByHBonds(backboneSegments, hbondBuffer); 
-//        itr = backboneSegments.iterator();
-//        while (itr.hasNext()) {
-//            BackboneSegment segment = (BackboneSegment) itr.next();
-//            System.out.println(segment);
-//        }
     }
     
-    public void trimByHBonds(List<BackboneSegment> backboneSegments, StringBuffer hbondBuffer) {
+    public void trimByHBonds(List<BackboneSegment> backboneSegments, StringBuilder hbondBuffer) {
         ListIterator<BackboneSegment> itr = backboneSegments.listIterator();
         BackboneSegment previousSegment = null;
 
         while (itr.hasNext()) {
             // get the current and the next segments in the list
-            BackboneSegment currentSegment = (BackboneSegment) itr.next();
+            BackboneSegment currentSegment = itr.next();
             BackboneSegment nextSegment = null;
             if (itr.hasNext()) {
                 nextSegment = (BackboneSegment) itr.next();
@@ -262,7 +254,7 @@ public class StructureFinder {
             // strands
     
             previousSegment = currentSegment;
-            //System.out.println("Setting previous segment to : " + previousSegment);
+            LOG.info("Setting previous segment to : " + previousSegment);
         }
     }
 
@@ -280,8 +272,8 @@ public class StructureFinder {
         }
 
         // fill the new segment with residues
-        for (int i = start; i <= end; i++) {
-            Residue residue = chain.getResidueByAbsoluteNumbering(i);
+        for (int index = start; index <= end; index++) {
+            Residue residue = chain.getResidueByAbsoluteNumbering(index);
             newSegment.expandBy(residue);
         }
 
@@ -349,15 +341,14 @@ public class StructureFinder {
             // get the segments after the current one
             ListIterator<BackboneSegment> secondSegments = chain.backboneSegmentListIterator(firstSegment);
             while (secondSegments.hasNext()) {
-                BackboneSegment secondSegment = (BackboneSegment) secondSegments.next();
-                if ((secondSegment != firstSegment) && (secondSegment instanceof Strand)) {
+                BackboneSegment secondSegment = secondSegments.next();
+                if ((secondSegment != firstSegment && secondSegment instanceof Strand)
                     //make a crude distance check
-                    if (this.closeApproach(firstSegment, secondSegment)) {
+                    && closeApproach(firstSegment, secondSegment) 
                         //if this passes, make a finer bonding check
-                        if (this.bonded(firstSegment, secondSegment)) {
+                    && bonded(firstSegment, secondSegment)
+                ) {
                             //this.addStrandPair(firstSegment, secondSegment, chain);
-                        }
-                    }
                 }
             }
         }
@@ -447,7 +438,7 @@ public class StructureFinder {
         if (numberOfHBonds > 1) { //?is two enough?
             return true;
         } else {
-            //System.out.println(strand + " not bonded to " + otherStrand);
+            LOG.info(strand + " not bonded to " + otherStrand);
             return false;
         }
     }
@@ -477,7 +468,7 @@ public class StructureFinder {
                 //check the segments 'fore and 'aft - are they continuous?
                 if (backboneSegmentIterator.hasNext()) {
                     BackboneSegment nextSegment = backboneSegmentIterator.next();
-                    //System.err.println("Checking : " + previousSegment + " and " + currentSegment + " and " + nextSegment);
+                    LOG.info("Checking : " + previousSegment + " and " + currentSegment + " and " + nextSegment);
                     if (previousSegment != null && previousSegment.continuousWith(nextSegment)) {
                         this.mergeThreeSegments(backboneSegmentIterator, previousSegment, currentSegment, nextSegment);
                         continue;
@@ -495,11 +486,10 @@ public class StructureFinder {
                 //check the segments 'fore and 'aft - are they unstructured?
                 if (backboneSegmentIterator.hasNext()) {
                     BackboneSegment nextSegment = backboneSegmentIterator.next();
-                    //System.err.println("Checking : " + previousSegment + " and " + currentSegment + " and " + nextSegment);
+                    LOG.info("Checking : " + previousSegment + " and " + currentSegment + " and " + nextSegment);
                     if (previousSegment instanceof UnstructuredSegment && nextSegment instanceof UnstructuredSegment) {
                         this.mergeThreeSegments(backboneSegmentIterator, previousSegment, currentSegment, nextSegment);
                         continue;
-                    //} else if (previousSegment.getClass() == ){
                     } else {
                         backboneSegmentIterator.previous();
                     }
@@ -513,7 +503,7 @@ public class StructureFinder {
     							   BackboneSegment previousSegment, 
     							   BackboneSegment currentSegment, 
     							   BackboneSegment nextSegment) {
-        //System.err.println("Merging : " + previousSegment + " and " + currentSegment + " and " + nextSegment);
+        LOG.info("Merging : " + previousSegment + " and " + currentSegment + " and " + nextSegment);
         //merge the previous segment with the current segment and the next segment
         previousSegment.mergeWith(currentSegment);
         previousSegment.mergeWith(nextSegment);
@@ -562,7 +552,7 @@ public class StructureFinder {
         BackboneSegment currentBackboneSegment = new UnstructuredSegment();
 
         while (residueIterator.hasNext()) {
-            Residue residue = (Residue) residueIterator.next();
+            Residue residue = residueIterator.next();
             BackboneSegment nextBackboneSegment = this.fitNextResidue(residue, currentBackboneSegment);
             if (nextBackboneSegment != currentBackboneSegment) {
                 chain.addBackboneSegment(currentBackboneSegment);   //store the previous segment
@@ -612,7 +602,7 @@ public class StructureFinder {
         // now, compare the first residue to the residues further on in the chain
         Iterator<Residue> itr = c.residueIterator(nextPosition);
         while (itr.hasNext()) {
-            int secondPosition = ((Residue) itr.next()).getAbsoluteNumber();
+            int secondPosition = itr.next().getAbsoluteNumber();
             if (secondPosition < (position + 3)) {
                 continue;
             }
@@ -654,7 +644,7 @@ public class StructureFinder {
                     second.addHBond(secondFirstBond);
                 }
             } catch (NullPointerException npe) {
-                System.err.println(npe + " for " + first + " and " + second);
+                LOG.severe(npe + " for " + first + " and " + second);
                 continue;
             }
         }
@@ -680,21 +670,21 @@ public class StructureFinder {
         int numberOfNTerminalHBonds = nTerminalHBonds.size();
         int numberOfCTerminalHBonds = cTerminalHBonds.size();
 
-        //System.err.println(numberOfNTerminalHBonds + ", " + numberOfCTerminalHBonds + " for " + residue);
+        LOG.info(numberOfNTerminalHBonds + ", " + numberOfCTerminalHBonds + " for " + residue);
 
         if (numberOfNTerminalHBonds == 0 && numberOfCTerminalHBonds == 0) {
             residue.setEnvironment("Loop");
         } else if (numberOfNTerminalHBonds == 1 && numberOfCTerminalHBonds == 0) {
-            if (((HBond) nTerminalHBonds.get(0)).hasHelixResidueSeparation()) {
+            if (nTerminalHBonds.get(0).hasHelixResidueSeparation()) {
                 residue.setEnvironment("End of a Helix");
             }
         } else if (numberOfNTerminalHBonds == 0 && numberOfCTerminalHBonds == 1) {
-            if (((HBond) cTerminalHBonds.get(0)).hasHelixResidueSeparation()) {
+            if (cTerminalHBonds.get(0).hasHelixResidueSeparation()) {
                 residue.setEnvironment("Start of a Helix");
             }
         } else if (numberOfNTerminalHBonds == 1 && numberOfCTerminalHBonds == 1) {
-            int n = ((HBond) nTerminalHBonds.get(0)).getResidueSeparation();
-            int c = ((HBond) cTerminalHBonds.get(0)).getResidueSeparation();
+            int n = nTerminalHBonds.get(0).getResidueSeparation();
+            int c = cTerminalHBonds.get(0).getResidueSeparation();
             //System.err.println(n + ", " + c + " for " + residue);
 
             if (n == 4 && c == 4) {
@@ -726,7 +716,7 @@ public class StructureFinder {
         int helixStartIndex = -1;
         int helixEndIndex = -1;
         while (residueIterator.hasNext()) {
-            Residue residue = (Residue) residueIterator.next();
+            Residue residue = residueIterator.next();
             int residueAbsoluteNumber = residue.getAbsoluteNumber();
 
             if (residue.getEnvironment().equals("Middle of a Helix")) {
@@ -757,7 +747,7 @@ public class StructureFinder {
         boolean lastResidueWasStrand = false;
         BackboneSegment currentStrand = new Strand();
         while (residueIterator.hasNext()) {
-            Residue residue = (Residue) residueIterator.next();
+            Residue residue = residueIterator.next();
             String residueEnvironment = residue.getEnvironment();
             if (residueEnvironment.equals("Parallel Strand") || residueEnvironment.equals("AntiParallel Strand")) {
                 lastResidueWasStrand = true;
@@ -786,13 +776,13 @@ public class StructureFinder {
         ListIterator<BackboneSegment> itr = chain.backboneSegmentListIterator();
 
         while (itr.hasNext()) {
-            BackboneSegment backboneSegment = (BackboneSegment) itr.next();
+            BackboneSegment backboneSegment = itr.next();
             if (backboneSegment.length() < 2) {
                 continue;
             }
 
             if (itr.hasNext()) {
-                BackboneSegment nextSegment = (BackboneSegment) itr.next();
+                BackboneSegment nextSegment = itr.next();
                 int startOfLoop = backboneSegment.lastResidue().getAbsoluteNumber() + 1;
                 int endOfLoop = nextSegment.firstResidue().getAbsoluteNumber() - 1;
                 chain.createLoop(startOfLoop, endOfLoop);

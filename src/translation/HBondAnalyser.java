@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
+import java.util.logging.Logger;
 
 import javax.vecmath.Point3d;
 
@@ -17,6 +18,8 @@ import tops.translation.model.Protein;
 import tops.translation.model.Residue;
 
 public class HBondAnalyser {
+    
+    private final Logger LOG = Logger.getLogger(HBondAnalyser.class.getName());
 
     private Properties properties;
 
@@ -31,6 +34,20 @@ public class HBondAnalyser {
 
     private int strandStart;
     private int strandEnd;
+    
+    private enum Tag {
+        LOOP, 
+        HELIX_THREE_TEN_END,
+        HELIX_ALPHA_END,
+        HELIX_PI_END, 
+        SINGLE_STRAND_BOND,
+        HELIX_THREE_TEN_START,
+        HELIX_ALPHA_START, 
+        HELIX_PI_START,
+        HELIX_ALPHA_MIDDLE,
+        STRAND_PARALLEL,
+        STRAND_ANTIPARALLEL;
+    }
 
     public HBondAnalyser() {
         this.properties = new Properties();
@@ -61,11 +78,6 @@ public class HBondAnalyser {
         this.strandEnd          = -1;
     }
 
-    public String endpoints() {
-        //return String.format("%d %d %d %d %d %d %d %d", threeTenHelixStart, threeTenHelixEnd, alphaHelixStart, alphaHelixEnd, piHelixStart, piHelixEnd, strandStart, strandEnd);
-        return "";
-    }
-
     public void setProperty(String key, String value) {
         this.properties.setProperty(key, value);
     }
@@ -82,15 +94,15 @@ public class HBondAnalyser {
     }
 
     public void analyse(Chain chain) throws PropertyException {
-        double MAX_HO_DISTANCE = 0.0;
-        double MIN_NHO_ANGLE   = 0.0;
-        double MIN_HOC_ANGLE   = 0.0;
+        double maxHODistance = 0.0;
+        double minNHOAngle   = 0.0;
+        double minHOCAngle   = 0.0;
 
         try {
-            MAX_HO_DISTANCE = Double.parseDouble(this.properties.getProperty("MAX_HO_DISTANCE"));
-            MIN_NHO_ANGLE   = Double.parseDouble(this.properties.getProperty("MIN_NHO_ANGLE"));
-            MIN_HOC_ANGLE   = Double.parseDouble(this.properties.getProperty("MIN_HOC_ANGLE"));
-            //System.out.println("HO " + MIN_HO_DISTANCE + " NHO " + MIN_NHO_ANGLE + " HOC " + MIN_HOC_ANGLE);
+            maxHODistance = Double.parseDouble(this.properties.getProperty("MAX_HO_DISTANCE"));
+            minNHOAngle   = Double.parseDouble(this.properties.getProperty("MIN_NHO_ANGLE"));
+            minHOCAngle   = Double.parseDouble(this.properties.getProperty("MIN_HOC_ANGLE"));
+            LOG.info("HO " + maxHODistance + " NHO " + minNHOAngle + " HOC " + minHOCAngle);
         } catch (NumberFormatException nfe) {
             throw new PropertyException("Error in properties!");
         }
@@ -161,7 +173,7 @@ public class HBondAnalyser {
                 double firstHOCAngle = Geometer.angle(firstH, secondO, secondC);
             
                 HBond firstSecondBond = null;
-                if (firstHODistance < MAX_HO_DISTANCE && firstNHOAngle > MIN_NHO_ANGLE && firstHOCAngle > MIN_HOC_ANGLE) {
+                if (firstHODistance < maxHODistance && firstNHOAngle > minNHOAngle && firstHOCAngle > minHOCAngle) {
                     firstSecondBond = new HBond(first, second, firstHODistance, firstNHOAngle, firstHOCAngle);
                 }
 
@@ -177,7 +189,7 @@ public class HBondAnalyser {
                 double secondHOCAngle = Geometer.angle(secondH, firstO, firstC);
 
                 HBond secondFirstBond = null;
-                if (secondHODistance < MAX_HO_DISTANCE && secondNHOAngle > MIN_NHO_ANGLE && secondHOCAngle > MIN_HOC_ANGLE) {
+                if (secondHODistance < maxHODistance && secondNHOAngle > minNHOAngle && secondHOCAngle > minHOCAngle) {
                     secondFirstBond = new HBond(second, first, secondHODistance, secondNHOAngle, secondHOCAngle);
                 }
 
@@ -189,11 +201,10 @@ public class HBondAnalyser {
             }
             
             // now, use these hbond assignments to determine the residue's environment
-            List<String> tags = this.convertBondsToTags(first);
-            //System.out.println(first.toFullString() + " " + tags);
+            List<Tag> tags = this.convertBondsToTags(first);
+            LOG.info(first.toFullString() + " " + tags);
 
             this.updateSSEEndpoints(index, tags, chain);
-            //System.out.println(index + " " + first + " " + this.endpoints() + " " + tags);
         }
 
         // finally, finish off the SSEs
@@ -203,35 +214,35 @@ public class HBondAnalyser {
         chain.addTerminii();
     }
 
-    public List<String> convertBondsToTags(Residue residue) {
+    public List<Tag> convertBondsToTags(Residue residue) {
     	List<HBond> nTerminalHBonds = residue.getNTerminalHBonds();
     	List<HBond> cTerminalHBonds = residue.getCTerminalHBonds();
 
-        List<String> tags = new ArrayList<>();
+        List<Tag> tags = new ArrayList<>();
 
-        for (int i = 0; i < nTerminalHBonds.size(); i++) {
-            int n = nTerminalHBonds.get(i).getResidueSeparation();
-            String nTag = this.convertBondsToTag(n, 0);
+        for (int nIndex = 0; nIndex < nTerminalHBonds.size(); nIndex++) {
+            int nSeparation = nTerminalHBonds.get(nIndex).getResidueSeparation();
+            Tag nTag = this.convertBondsToTag(nSeparation, 0);
             if (nTag != null) {
                 tags.add(nTag);
             }
         }
 
-        for (int j = 0; j < cTerminalHBonds.size(); j++) {
-            int c = cTerminalHBonds.get(j).getResidueSeparation();
-            String cTag = this.convertBondsToTag(0, c);
+        for (int cIndex = 0; cIndex < cTerminalHBonds.size(); cIndex++) {
+            int cSeparation = cTerminalHBonds.get(cIndex).getResidueSeparation();
+            Tag cTag = this.convertBondsToTag(0, cSeparation);
             if (cTag != null) {
                 tags.add(cTag);
             }
         }
 
-        for (int i = 0; i < nTerminalHBonds.size(); i++) {
-            int n = nTerminalHBonds.get(i).getResidueSeparation();
+        for (int nIndex = 0; nIndex < nTerminalHBonds.size(); nIndex++) {
+            int nSeparation = nTerminalHBonds.get(nIndex).getResidueSeparation();
 
-            for (int j = 0; j < cTerminalHBonds.size(); j++) {
-                int c = cTerminalHBonds.get(j).getResidueSeparation();
+            for (int cIndex = 0; cIndex < cTerminalHBonds.size(); cIndex++) {
+                int cSeparation = cTerminalHBonds.get(cIndex).getResidueSeparation();
 
-                String ncTag = this.convertBondsToTag(n, c);
+                Tag ncTag = this.convertBondsToTag(nSeparation, cSeparation);
                 if (ncTag != null) {
                     tags.add(ncTag);
                 }
@@ -241,57 +252,57 @@ public class HBondAnalyser {
         return tags;
     }
 
-    public String convertBondsToTag(int n, int c) {
+    public Tag convertBondsToTag(int nSeparation, int cSeparation) {
 
         // neither has a bond
-        if (n == 0 && c == 0) {
-            return "Loop";
+        if (nSeparation == 0 && cSeparation == 0) {
+            return Tag.LOOP;
         }
 
         // one or the other has a bond
-        else if (n != 0 && c == 0) {
-            if (n == 3) {
-                return "End of a 310 helix";
-            } else if (n == 4) {
-                return "End of an alpha helix";
-            } else if (n == 5) {
-                return "End of a pi helix";
-            } else if (n < -5 || n > 5) {
-                return "Single Strand Bond";
+        else if (nSeparation != 0 && cSeparation == 0) {
+            if (nSeparation == 3) {
+                return Tag.HELIX_THREE_TEN_END;
+            } else if (nSeparation == 4) {
+                return Tag.HELIX_ALPHA_END;
+            } else if (nSeparation == 5) {
+                return Tag.HELIX_PI_END;
+            } else if (nSeparation < -5 || nSeparation > 5) {
+                return Tag.SINGLE_STRAND_BOND;
             }
         }
 
-        else if (n == 0 && c != 0) {
-            if (c == 3) {
-                return "Start of a 310 helix";
-            } else if (c == 4) {
-                return "Start of an alpha helix";
-            } else if (c == 5) {
-                return "Start of a pi helix";
-            } else if (c < -5 || c > 5) {
-                return "Single Strand Bond";
+        else if (nSeparation == 0 && cSeparation != 0) {
+            if (cSeparation == 3) {
+                return Tag.HELIX_THREE_TEN_START;
+            } else if (cSeparation == 4) {
+                return Tag.HELIX_ALPHA_START;
+            } else if (cSeparation == 5) {
+                return Tag.HELIX_PI_START;
+            } else if (cSeparation < -5 || cSeparation > 5) {
+                return Tag.SINGLE_STRAND_BOND;
             }
         }
 
         // both have one bond
-        else if (n != 0 && c != 0) {
+        else if (nSeparation != 0 && cSeparation != 0) {
 
             // a standard : middle of a helix
-            if (n == 4 && c == 4) {
-                return "Middle of an alpha helix";
+            if (nSeparation == 4 && cSeparation == 4) {
+                return Tag.HELIX_ALPHA_MIDDLE;
             // we counter-intuitively take the SUM here, because one will always be negative, and the other positive 
-            } else if ((Math.abs(n - c) == 2) && (n > 5 || n < -5)) {
-                return "Parallel Strand";
-            } else if ((n == c)  && (n > 5 || n < -5)) {
-                return "Antiparallel Strand";
+            } else if ((Math.abs(nSeparation - cSeparation) == 2) && (nSeparation > 5 || nSeparation < -5)) {
+                return Tag.STRAND_PARALLEL;
+            } else if ((nSeparation == cSeparation)  && (nSeparation > 5 || nSeparation < -5)) {
+                return Tag.STRAND_ANTIPARALLEL;
             }
         }
 
         return null;
     }
 
-    public void updateSSEEndpoints(int index, List<String> tags, Chain chain) {
-        if (tags.contains("Start of a 310 helix")) {
+    public void updateSSEEndpoints(int index, List<Tag> tags, Chain chain) {
+        if (tags.contains(Tag.HELIX_THREE_TEN_START)) {
 
             // not seen any three ten bond before
             if (this.threeTenHelixStart == -1) {
@@ -303,7 +314,7 @@ public class HBondAnalyser {
                 // only create three-ten helices with more than one bond
                 if (this.threeTenHelixEnd - this.threeTenHelixStart > 3) {
                     chain.createHelix(this.threeTenHelixStart + 1, this.threeTenHelixEnd - 1); 
-                    //System.err.println("310 : " + this.threeTenHelixStart + ":" +  this.threeTenHelixEnd); 
+                    LOG.info("310 : " + this.threeTenHelixStart + ":" +  this.threeTenHelixEnd); 
                 }
 
                 // start a potential new helix with this bond
@@ -314,7 +325,7 @@ public class HBondAnalyser {
             this.threeTenHelixEnd = index + 3;
         }
 
-        if (tags.contains("Start of an alpha helix")) {
+        if (tags.contains(Tag.HELIX_ALPHA_START)) {
 
             // not seen any alpha bonds before
             if (this.alphaHelixStart == -1) {
@@ -326,7 +337,7 @@ public class HBondAnalyser {
                 // only create three-ten helices with more than one bond
                 if (this.alphaHelixEnd - this.alphaHelixStart > 4) {
                     chain.createHelix(this.alphaHelixStart + 1, this.alphaHelixEnd - 1); 
-                    //System.err.println("Alpha: " + this.alphaHelixStart + ":" +  this.alphaHelixEnd); 
+                    LOG.info("Alpha: " + this.alphaHelixStart + ":" +  this.alphaHelixEnd); 
                 }
 
                 // start a potential new helix with this bond
@@ -337,7 +348,7 @@ public class HBondAnalyser {
             this.alphaHelixEnd = index + 4;
         }
 
-        if (tags.contains("Start of a pi helix")) {
+        if (tags.contains(Tag.HELIX_PI_START)) {
 
             // not seen any three ten bond before
             if (this.piHelixStart == -1) {
@@ -349,7 +360,7 @@ public class HBondAnalyser {
                 // only create three-ten helices with more than one bond
                 if (this.piHelixEnd - this.piHelixStart > 5) {
                     chain.createHelix(this.piHelixStart + 1, this.piHelixEnd - 1); 
-                    //System.err.println("Pi: " + this.piHelixStart + ":" +  this.piHelixEnd); 
+                    LOG.info("Pi: " + this.piHelixStart + ":" +  this.piHelixEnd); 
                 }
 
                 // start a potential new helix with this bond
@@ -360,8 +371,10 @@ public class HBondAnalyser {
             this.piHelixEnd = index + 5;
         }
         
-        if (tags.contains("Antiparallel Strand") || tags.contains("Parallel Strand") || tags.contains("Single Strand Bond")) {
-            // System.err.println("Strand like bond at residue " + chain.getResidueByAbsoluteNumbering(index) + " indices = " + this.endpoints() + " tags = " + tags);
+        if (tags.contains(Tag.STRAND_ANTIPARALLEL) || 
+                tags.contains(Tag.STRAND_PARALLEL) || 
+                tags.contains(Tag.SINGLE_STRAND_BOND)) {
+            LOG.info("Strand like bond at residue " + chain.getResidueByAbsoluteNumbering(index) + " indices = " + "" + " tags = " + tags);
             if (this.strandStart == -1) {
                 this.strandStart = index;
                 this.strandEnd = index;
@@ -422,17 +435,17 @@ public class HBondAnalyser {
 
     public void finishSSES(Chain chain) {
         if (this.threeTenHelixEnd != -1 && this.threeTenHelixEnd - this.threeTenHelixStart > 3) {
-            //System.err.println("Last 310 : " + this.threeTenHelixStart + ":" +  this.threeTenHelixEnd); 
+            LOG.info("Last 310 : " + this.threeTenHelixStart + ":" +  this.threeTenHelixEnd); 
             chain.createHelix(this.threeTenHelixStart + 1, this.threeTenHelixEnd - 1);
         }
 
         if (this.alphaHelixEnd != -1 && this.alphaHelixEnd - this.alphaHelixStart > 4) {
-            //System.err.println("Last Alpha: " + this.alphaHelixStart + ":" +  this.alphaHelixEnd); 
+            LOG.info("Last Alpha: " + this.alphaHelixStart + ":" +  this.alphaHelixEnd); 
             chain.createHelix(this.alphaHelixStart + 1, this.alphaHelixEnd - 1);
         }
 
         if (this.piHelixEnd != -1 && this.piHelixEnd - this.piHelixStart > 5) {
-            //System.err.println("Last Pi: " + this.piHelixStart + ":" +  this.piHelixEnd); 
+            LOG.info("Last Pi: " + this.piHelixStart + ":" +  this.piHelixEnd); 
             chain.createHelix(this.piHelixStart + 1, this.piHelixEnd - 1);
         }
 
