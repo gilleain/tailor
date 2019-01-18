@@ -97,7 +97,7 @@ public abstract class AbstractBaseEngine implements Engine {
     
     @Override
     public void runDescription(Description description) {
-        List<Measure> measures = description.getMeasures();
+        List<Measure<? extends Measurement>> measures = description.getMeasures();
         printer.printHeader(measures);
         
         while (structureSource.hasNext()) {
@@ -110,7 +110,7 @@ public abstract class AbstractBaseEngine implements Engine {
                     int i = 0;
                     int n = measures.size();
                     Measurement[] measurements = new Measurement[n];
-                    for (Measure measure : measures) {
+                    for (Measure<? extends Measurement> measure : measures) {
                         // XXX refactor to switch Match object types
 //                        Measurement measurement = measure.measure(match);
 //                        measurements[i++] = measurement;

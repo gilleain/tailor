@@ -7,6 +7,7 @@ import tailor.condition.Condition;
 import tailor.condition.PropertyCondition;
 import tailor.datasource.Structure;
 import tailor.measurement.Measure;
+import tailor.measurement.Measurement;
 import tailor.structure.Level;
 
 
@@ -97,11 +98,11 @@ public class AtomDescription implements Description {
         return this.conditions;
     }
     
-    public void addMeasure(Measure measure) {
+    public void addMeasure(Measure<? extends Measurement> measure) {
         // TODO
     }
     
-    public List<Measure> getMeasures() {
+    public List<Measure<? extends Measurement>> getMeasures() {
         // TODO 
         return new ArrayList<>();
     }

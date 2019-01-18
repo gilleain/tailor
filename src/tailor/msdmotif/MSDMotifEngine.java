@@ -10,7 +10,6 @@ import java.io.OutputStream;
 import java.io.PrintStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.zip.GZIPOutputStream;
 
@@ -28,6 +27,7 @@ import tailor.engine.Engine;
 import tailor.engine.Match;
 import tailor.engine.Run;
 import tailor.measurement.Measure;
+import tailor.measurement.Measurement;
 
 public class MSDMotifEngine implements Engine {
 	
@@ -59,7 +59,7 @@ public class MSDMotifEngine implements Engine {
         }
 	}
 	
-	public void run(ProteinDescription description, List<Measure> measures) {
+	public void run(ProteinDescription description, List<Measure<? extends Measurement>> measures) {
 		String outfileName = "tmp.out";	//FIXME
 		
 		String xmlQuery = DescriptionToXmlQueryTranslator.translate(description);

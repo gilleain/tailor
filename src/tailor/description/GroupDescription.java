@@ -10,6 +10,7 @@ import tailor.condition.Condition;
 import tailor.condition.TorsionBoundCondition;
 import tailor.datasource.Structure;
 import tailor.measurement.Measure;
+import tailor.measurement.Measurement;
 import tailor.structure.Level;
 
 
@@ -29,7 +30,7 @@ public class GroupDescription implements Description, Iterable<AtomDescription> 
     
     private List<Condition> atomConditions;
     
-    private List<Measure> atomMeasures;
+    private List<Measure<? extends Measurement>> atomMeasures;
     
     private Map<Integer, Description> descriptionLookup;
     
@@ -206,11 +207,11 @@ public class GroupDescription implements Description, Iterable<AtomDescription> 
         return this.atomConditions;
     }
 
-    public void addMeasure(Measure measure) {
+    public void addMeasure(Measure<? extends Measurement> measure) {
         atomMeasures.add(measure);
     }
 
-    public List<Measure> getMeasures() {
+    public List<Measure<? extends Measurement>> getMeasures() {
         return this.atomMeasures;
     }
 

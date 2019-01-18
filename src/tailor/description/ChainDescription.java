@@ -9,6 +9,7 @@ import java.util.Map;
 import tailor.condition.Condition;
 import tailor.datasource.Structure;
 import tailor.measurement.Measure;
+import tailor.measurement.Measurement;
 import tailor.structure.Level;
 
 
@@ -26,7 +27,7 @@ public class ChainDescription implements Description, Iterable<GroupDescription>
     
     private List<Condition> groupConditions;
     
-    private List<Measure> groupMeasures;
+    private List<Measure<? extends Measurement>> groupMeasures;
     
     private Map<Integer, Description> descriptionLookup;
     
@@ -231,11 +232,11 @@ public class ChainDescription implements Description, Iterable<GroupDescription>
         return this.groupConditions;
     }
 
-    public void addMeasure(Measure measure) {
+    public void addMeasure(Measure<? extends Measurement> measure) {
         groupMeasures.add(measure);
     }
 
-    public List<Measure> getMeasures() {
+    public List<Measure<? extends Measurement>> getMeasures() {
         return groupMeasures;
     }
 

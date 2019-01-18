@@ -7,6 +7,7 @@ import java.util.Map;
 
 import tailor.condition.Condition;
 import tailor.measurement.Measure;
+import tailor.measurement.Measurement;
 import tailor.structure.Level;
 
 
@@ -24,7 +25,7 @@ public class ProteinDescription implements Description {
     
     private List<Condition> chainConditions;
     
-    private List<Measure> chainMeasures;
+    private List<Measure<? extends Measurement>> chainMeasures;
     
     private Map<Integer, Description> descriptionLookup;
     
@@ -189,7 +190,7 @@ public class ProteinDescription implements Description {
     	return this.name;
     }
     
-    public void addMeasure(Measure measure) {
+    public void addMeasure(Measure<? extends Measurement> measure) {
         chainMeasures.add(measure);
     }
 
@@ -197,7 +198,7 @@ public class ProteinDescription implements Description {
         return this.chainConditions;
     }
 
-    public List<Measure> getMeasures() {
+    public List<Measure<? extends Measurement>> getMeasures() {
         return this.chainMeasures;
     }
 

@@ -28,6 +28,7 @@ import tailor.editor.SelectionDialog;
 import tailor.engine.Run;
 import tailor.measurement.AngleMeasure;
 import tailor.measurement.Measure;
+import tailor.measurement.Measurement;
 import tailor.measurement.TorsionMeasure;
 
 
@@ -35,7 +36,7 @@ public class RunDialog extends JDialog implements ActionListener, TreeSelectionL
     
     private DescriptionTreeView treeView;
     
-    private JList<Measure> measureList;
+    private JList<Measure<? extends Measurement>> measureList;
     
     private JTextField directoryField; 
     
@@ -124,9 +125,10 @@ public class RunDialog extends JDialog implements ActionListener, TreeSelectionL
     
     public Run getRun() {
         // get the measures from the list and add to the Run
-        DefaultListModel<Measure> model = (DefaultListModel<Measure>) this.measureList.getModel();
+        DefaultListModel<Measure<? extends Measurement>> model = 
+                (DefaultListModel<Measure<? extends Measurement>>) this.measureList.getModel();
         for (int i = 0; i < model.size(); i++) {
-            Measure measure = model.get(i);
+            Measure<? extends Measurement> measure = model.get(i);
             // TODO : how do we know which description to add measures to?
             for (Description description : run.getDescriptions()) {
                 description.addMeasure(measure);
@@ -167,7 +169,7 @@ public class RunDialog extends JDialog implements ActionListener, TreeSelectionL
             if (selectionDialog.isComplete()) {
                 List<Description> paths = selectionDialog.getDescriptions();
                 String type = selectionDialog.getCurrentlySelectedType();
-                Measure measure;
+                Measure<? extends Measurement> measure;
                 if (type.equals("Distance")) {
                     // TODO
                     measure = null;
@@ -179,7 +181,7 @@ public class RunDialog extends JDialog implements ActionListener, TreeSelectionL
                 } else {
                     return; // just in case
                 }
-                ((DefaultListModel<Measure>) this.measureList.getModel()).addElement(measure);
+                ((DefaultListModel<Measure<? extends Measurement>>) this.measureList.getModel()).addElement(measure);
             }
             
         } else if (command.equals("Remove")) {

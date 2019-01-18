@@ -4,6 +4,7 @@ import java.io.PrintStream;
 import java.util.List;
 
 import tailor.measurement.Measure;
+import tailor.measurement.Measurement;
 
 public class StreamResultsPrinter implements ResultsPrinter {
 	
@@ -15,8 +16,8 @@ public class StreamResultsPrinter implements ResultsPrinter {
 		this.columnSeparator = "\t";
 	}
 	
-	public void printHeader(List<Measure> measures) {
-		for (Measure m : measures) {
+	public void printHeader(List<Measure<? extends Measurement>> measures) {
+		for (Measure<? extends Measurement> m : measures) {
 			this.out.print(m);
 			this.out.print(this.columnSeparator);
 		}

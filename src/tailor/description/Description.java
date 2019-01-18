@@ -4,6 +4,7 @@ import java.util.List;
 
 import tailor.condition.Condition;
 import tailor.measurement.Measure;
+import tailor.measurement.Measurement;
 import tailor.structure.Level;
 
 
@@ -29,9 +30,9 @@ public interface Description extends Cloneable {
     
     public List<Condition> getConditions();
     
-    public void addMeasure(Measure measure);
+    public void addMeasure(Measure<? extends Measurement> measure);
     
-    public List<Measure> getMeasures();
+    public List<Measure<? extends Measurement>> getMeasures();
     
     public List<? extends Description> getSubDescriptions();
     
