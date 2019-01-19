@@ -36,8 +36,8 @@ public class SingleChainTest {
         SingleChainEngine engine = new SingleChainEngine();
         StructureSource structureSource = new PDBFileList(filename, null);
         while (structureSource.hasNext()) {
-            Structure structure = structureSource.next();
-            for (Structure chain : structure.getSubstructures()) {
+            Structure protein = structureSource.next();
+            for (Structure chain : protein.getSubstructures()) {
                 for (Match match : engine.match(chainD, chain)) {
                     System.out.print(match + " ");
                     for (Measure<? extends Measurement> measure : chainD.getMeasures()) {

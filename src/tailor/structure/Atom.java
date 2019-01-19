@@ -63,8 +63,11 @@ public class Atom implements Structure {
     }
 
     @Override
-    public boolean hasPropertyEqualTo(String string, String name) {
+    public boolean hasPropertyEqualTo(String key, String value) {
         // TODO Auto-generated method stub
+        if (key.equals("Name")) {
+            return name.equals(value);
+        }
         return false;
     }
 

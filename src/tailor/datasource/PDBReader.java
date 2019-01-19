@@ -44,7 +44,7 @@ public class PDBReader {
 
 	        for (String atomRecord : atomRecords) {	        	
 	            Chain newChain = PDBReader.parseRecord(atomRecord, currentChain);
-	            if (currentChain == null || !newChain.getProperty("Name").equals(currentChain.getProperty("Name"))) {
+	            if (currentChain == null || !newChain.getName().equals(currentChain.getName())) {
 	                protein.addChain(newChain);
 	                currentChain = newChain;
 	            } 

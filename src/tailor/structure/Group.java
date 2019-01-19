@@ -93,8 +93,9 @@ public class Group implements Structure {
 
     @Override
     public List<Structure> getSubstructures() {
-        // TODO Auto-generated method stub
-        return null;
+        List<Structure> substructures = new ArrayList<>();
+        substructures.addAll(getAtoms());
+        return substructures;
     }
 
     @Override
