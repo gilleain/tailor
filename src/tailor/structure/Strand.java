@@ -1,14 +1,11 @@
 package tailor.structure;
 
 import java.util.ArrayList;
-import java.util.List;
 
-public class Strand implements Structure, SSE {
-    
-    private final List<Group> groups;
+public class Strand extends Segment implements Structure, SSE {
     
     public Strand() {
-        this.groups = new ArrayList<>();
+        super(new ArrayList<>());
     }
 
     @Override
@@ -30,17 +27,17 @@ public class Strand implements Structure, SSE {
     
     @Override
     public void addGroup(Group group) {
-        groups.add(group);
+        super.addGroup(group);
     }
 
     @Override
     public Group getFirst() {
-        return groups.get(0);
+        return super.getFirst();
     }
 
     @Override
     public Group getLast() {
-        return groups.get(groups.size() - 1);
+        return super.getLast();
     }
 
     @Override
@@ -52,16 +49,10 @@ public class Strand implements Structure, SSE {
     @Override
     public void addSubStructure(Structure structure) {
         if (structure instanceof Group) {
-            groups.add((Group) structure);
+            addGroup((Group) structure);
         } else {
             throw new IllegalArgumentException("Can only add instances of " + Group.class.getName());
         }
-    }
-
-    @Override
-    public List<Structure> getSubstructures() {
-        // TODO Auto-generated method stub
-        return null;
     }
 
     @Override

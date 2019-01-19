@@ -3,11 +3,9 @@ package tailor.structure;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Chain implements Structure {
+public class Chain extends Segment implements Structure {
     
     private final Level level = Level.CHAIN;
-    
-    private final List<Group> groups;
     
     private final List<SSE> sses;
     
@@ -18,8 +16,8 @@ public class Chain implements Structure {
     }
     
     public Chain(String name) {
+        super(new ArrayList<>());
         this.name = name;
-        this.groups = new ArrayList<>();
         this.sses = new ArrayList<>();
     }
     
@@ -32,24 +30,17 @@ public class Chain implements Structure {
     }
     
     public void addGroup(Group group) {
-        this.groups.add(group);
+        super.addGroup(group);
     }
 
     @Override
     public void accept(StructureVisitor visitor) {
-        visitor.visit(this);
-        for (Group group : groups) {
-            group.accept(visitor);
-        }
+        super.accept(visitor);
     }
     
     @Override
     public void accept(HierarchyVisitor visitor) {
-        visitor.enter(this);
-        for (Group group : groups) {
-            group.accept(visitor);
-        }
-        visitor.exit(this);
+       super.accept(visitor);
     }
 
     @Override
@@ -62,24 +53,14 @@ public class Chain implements Structure {
         return name;
     }
 
-    public List<Group> getGroups() {
-        return this.groups;
-    }
 
     @Override
     public void addSubStructure(Structure structure) {
         if (structure instanceof Group) {
-            groups.add((Group) structure);
+            super.addGroup((Group) structure);
         } else {
             throw new IllegalArgumentException("Can only add instances of " + Group.class.getName());
         }
-    }
-
-    @Override
-    public List<Structure> getSubstructures() {
-        List<Structure> substructures = new ArrayList<>();
-        substructures.addAll(groups);
-        return substructures;
     }
 
     @Override
