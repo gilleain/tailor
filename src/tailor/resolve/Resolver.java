@@ -1,9 +1,9 @@
 package tailor.resolve;
 
-import tailor.datasource.Structure;
 import tailor.description.Description;
 import tailor.description.ProteinDescription;
 import tailor.match.Match;
+import tailor.structure.Structure;
 
 /**
  * Resolves descriptions in measures to the descriptions in a match - in other

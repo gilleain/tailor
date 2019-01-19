@@ -7,10 +7,10 @@ import java.util.List;
 import java.util.Map;
 
 import tailor.condition.Condition;
-import tailor.datasource.Structure;
 import tailor.measurement.Measure;
 import tailor.measurement.Measurement;
 import tailor.structure.Level;
+import tailor.structure.Structure;
 
 
 /**

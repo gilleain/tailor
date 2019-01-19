@@ -5,10 +5,10 @@ import java.util.List;
 
 import tailor.condition.Condition;
 import tailor.condition.PropertyCondition;
-import tailor.datasource.Structure;
 import tailor.measurement.Measure;
 import tailor.measurement.Measurement;
 import tailor.structure.Level;
+import tailor.structure.Structure;
 
 
 /**
