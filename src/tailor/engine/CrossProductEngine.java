@@ -3,8 +3,9 @@ package tailor.engine;
 import java.util.ArrayList;
 import java.util.List;
 
-import tailor.datasource.Structure;
 import tailor.description.Description;
+import tailor.match.Match;
+import tailor.structure.Structure;
 
 public class CrossProductEngine extends AbstractBaseEngine {
 

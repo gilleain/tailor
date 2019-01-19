@@ -7,10 +7,13 @@ import java.util.List;
 import tailor.condition.Condition;
 import tailor.condition.PropertyCondition;
 import tailor.datasource.ResultsPrinter;
-import tailor.datasource.Structure;
 import tailor.datasource.StructureSource;
 import tailor.description.Description;
+import tailor.match.Match;
+import tailor.structure.Chain;
+import tailor.structure.Group;
 import tailor.structure.Level;
+import tailor.structure.Structure;
 
 /**
  * Matches descriptions that only cover a single chain. If the structure has
@@ -41,13 +44,13 @@ public class SingleChainEngine extends AbstractBaseEngine implements Engine {
 
         int span = description.size();
 
-        List<Structure> groups = structure.getSubStructures();
+        List<Structure> groups = structure.getSubstructures();
         int lastPossibleStart = groups.size() - span;
         for (int start = 0; start < lastPossibleStart; start++) {
             // starting at this position, scan the groups 
             Match chainMatch = scan(description, groups, start);
 
-            if (chainMatch != null && chainMatch.size() == span
+            if (chainMatch != null && chainMatch.getSize() == span
 //                    ){
                     && chainMatch.satisfiesConditions(description)) {
                 Structure matchedChain = chainMatch.getStructure();
@@ -70,8 +73,8 @@ public class SingleChainEngine extends AbstractBaseEngine implements Engine {
      * @return
      */
     public Match scan(Description description, List<Structure> groups, int start) {
-        Structure chain = new Structure(Level.CHAIN);
-        Match match = new Match(description, chain);
+        Chain chain = new Chain();
+        Match match = new Match(description, chain, Level.CHAIN);
         for (int index = 0; index < description.size(); index++) {
             boolean hasMatched = false;
             Description subDescription = 
@@ -88,19 +91,19 @@ public class SingleChainEngine extends AbstractBaseEngine implements Engine {
                     Level level = Level.RESIDUE;
                     // a copy is made, so that 
                     // only the matching atoms are stored
-                    Structure matchingCopy = new Structure(level);
+                    Group matchingCopy = new Group();
                     matchingCopy.copyProperty(group, "Name");
                     //   XXX groups only!
                     matchingCopy.copyProperty(group, "Number");
 
-                    Match subMatch = new Match(subDescription, matchingCopy);
+                    Match subMatch = new Match(subDescription, matchingCopy, Level.RESIDUE);
                     for (Match atomMatch : atomMatches) {
-                        subMatch.addSubMatch(atomMatch);
+                        subMatch.addMatch(atomMatch);
                         subMatch.completeMatch(atomMatch);
                     }
                     if (subMatch.satisfiesConditions(subDescription)) {
-                        chain.addSubStructure(matchingCopy);
-                        match.addSubMatch(subMatch);
+                        chain.addGroup(matchingCopy);
+                        match.addMatch(subMatch);
                         hasMatched = true;
                     } 
                 } 

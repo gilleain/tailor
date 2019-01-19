@@ -49,4 +49,43 @@ public class Helix implements Structure, SSE {
         return null;
     }
 
+    @Override
+    public void addSubStructure(Structure structure) {
+        if (structure instanceof Group) {
+            groups.add((Group) structure);
+        } else {
+            throw new IllegalArgumentException("Can only add instances of " + Group.class.getName());
+        }
+    }
+
+    @Override
+    public List<Structure> getSubstructures() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public String getProperty(String key) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public void copyProperty(Structure other, String key) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public boolean hasPropertyEqualTo(String string, String name) {
+        // TODO Auto-generated method stub
+        return false;
+    }
+
+    @Override
+    public void setProperty(String string, String string2) {
+        // TODO Auto-generated method stub
+        
+    }
+
 }

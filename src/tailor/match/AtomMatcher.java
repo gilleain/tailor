@@ -7,6 +7,7 @@ import tailor.description.AtomDescription;
 import tailor.description.GroupDescription;
 import tailor.structure.Atom;
 import tailor.structure.Group;
+import tailor.structure.Level;
 
 /**
  * Compare a group description to a group, to find the matching atoms.
@@ -21,7 +22,7 @@ public class AtomMatcher {
         for (AtomDescription atomDescription : description) {
             for (Atom atom : group.getAtoms()) {    // TODO - more efficient to do hashmap lookup
                 if (atom.getName().equals(atomDescription.getName())) {
-                    matches.add(new Match(atomDescription, atom));
+                    matches.add(new Match(atomDescription, atom, Level.ATOM));
                 }
             }
         }

@@ -4,10 +4,11 @@ import java.util.List;
 
 import org.junit.Test;
 
-import tailor.datasource.Structure;
 import tailor.description.ChainDescription;
 import tailor.description.GroupDescription;
 import tailor.description.RangedGroupDescription;
+import tailor.match.Match;
+import tailor.structure.Structure;
 
 public class RangedChainSingleEngineTest {
     

@@ -1,5 +1,7 @@
 package tailor.structure;
 
+import java.util.List;
+
 /**
  * Structures are hierarchical elements with substructures.
  * 
@@ -34,7 +36,25 @@ public interface Structure {
      */
     public String getName();
 
-    // TODO - allow external iteration?
-//    public List<Structure> getSubstructures();
+
+    // TODO XXX  should we allow external iteration?
+    public List<Structure> getSubstructures();
+    
+    public void addSubStructure(Structure structure);
+    
+    /**
+     * Get a property for a key.
+     * 
+     * @param string
+     * @return
+     */
+    public String getProperty(String key);
+    
+    public void copyProperty(Structure other, String key);
+
+    public boolean hasPropertyEqualTo(String string, String name);
+
+    public void setProperty(String string, String string2);
+
 
 }

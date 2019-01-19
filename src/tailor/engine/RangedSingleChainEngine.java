@@ -5,10 +5,13 @@ import java.util.List;
 
 import tailor.condition.Condition;
 import tailor.condition.PropertyCondition;
-import tailor.datasource.Structure;
 import tailor.description.Description;
 import tailor.description.RangedGroupDescription;
+import tailor.match.Match;
+import tailor.structure.Chain;
+import tailor.structure.Group;
 import tailor.structure.Level;
+import tailor.structure.Structure;
 
 /**
  * Engine that can match GroupDescriptions with ranges. For efficiency reasons,
@@ -37,7 +40,7 @@ public class RangedSingleChainEngine extends AbstractBaseEngine {
         Description firstDescription = description.getSubDescriptions().get(0);
         
         int descriptionLength = getLength(description);
-        for (Structure subStructure : structure) {
+        for (Structure subStructure : structure.getSubstructures()) {
             
             // check for extensions of the partial matches
             int partialsIndex = 0; 
@@ -56,10 +59,10 @@ public class RangedSingleChainEngine extends AbstractBaseEngine {
                         subEngine.match(subDescription, subStructure);
                     if (atomMatches.size() == subDescription.size()) {
                         Level subLevel = subStructure.getLevel();
-                        Structure matchingCopy = new Structure(subLevel);
+                        Structure matchingCopy = new Group();
                         matchingCopy.copyProperty(subStructure, "Name");
                         matchingCopy.copyProperty(subStructure, "Number");
-                        Match subMatch = new Match(subDescription, matchingCopy);
+                        Match subMatch = new Match(subDescription, matchingCopy, Level.RESIDUE);
                         partial.completeMatch(subMatch);
                         partialLength++;
                         extended = true;
@@ -86,17 +89,17 @@ public class RangedSingleChainEngine extends AbstractBaseEngine {
                 List<Match> atomMatches = 
                     subEngine.match(firstDescription, subStructure);
                 if (atomMatches.size() == firstDescription.size()) {
-                    Structure partialStructure = new Structure(level);
+                    Structure partialStructure = new Chain();
                     
                     // TODO : chain specific!
                     partialStructure.setProperty("Name", "A");
                     
-                    Match partial = new Match(description, partialStructure);
+                    Match partial = new Match(description, partialStructure, Level.CHAIN);
                     Level subLevel = subStructure.getLevel();
-                    Structure matchingCopy = new Structure(subLevel);
+                    Structure matchingCopy = new Group();
                     matchingCopy.copyProperty(subStructure, "Name");
                     matchingCopy.copyProperty(subStructure, "Number");
-                    Match subMatch = new Match(firstDescription, matchingCopy);
+                    Match subMatch = new Match(firstDescription, matchingCopy, Level.RESIDUE);
                     partial.completeMatch(subMatch);
                     partialMatches.add(partial);
                 }
@@ -138,7 +141,7 @@ public class RangedSingleChainEngine extends AbstractBaseEngine {
     }
     
     private int getLength(Match partial) {
-        return partial.size();
+        return partial.getSize();
     }
 
 }

@@ -1,4 +1,4 @@
-package tailor.engine;
+package tailor.deprecated;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -16,6 +16,7 @@ import tailor.structure.Level;
  * @author maclean
  *
  */
+@Deprecated
 public class Match implements Iterable<Match> {
     
     private Level level;

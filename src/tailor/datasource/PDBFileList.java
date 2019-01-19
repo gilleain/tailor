@@ -65,8 +65,8 @@ public class PDBFileList implements StructureSource {
 		return this.structurePaths;
 	}
     
-    public Structure next() throws IOException {
-        Structure next = PDBReader.read(this.structurePaths.get(this.currentIndex));
+    public tailor.structure.Structure next() throws IOException {
+        tailor.structure.Structure next = PDBReader.read(this.structurePaths.get(this.currentIndex));
         this.currentIndex++;
         return next;
     }

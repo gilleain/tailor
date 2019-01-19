@@ -51,4 +51,43 @@ public class Protein implements Structure {
         return this.chains;
     }
 
+    @Override
+    public void addSubStructure(Structure structure) {
+        if (structure instanceof Chain) {
+            chains.add((Chain) structure);
+        } else {
+            throw new IllegalArgumentException("Can only add instances of " + Chain.class.getName());
+        }
+    }
+
+    @Override
+    public List<Structure> getSubstructures() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public String getProperty(String key) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public void copyProperty(Structure other, String key) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public boolean hasPropertyEqualTo(String string, String name) {
+        // TODO Auto-generated method stub
+        return false;
+    }
+
+    @Override
+    public void setProperty(String string, String string2) {
+        // TODO Auto-generated method stub
+        
+    }
+
 }

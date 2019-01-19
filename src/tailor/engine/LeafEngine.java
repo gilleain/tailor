@@ -5,8 +5,10 @@ import java.util.List;
 
 import tailor.condition.Condition;
 import tailor.condition.PropertyCondition;
-import tailor.datasource.Structure;
 import tailor.description.Description;
+import tailor.match.Match;
+import tailor.structure.Level;
+import tailor.structure.Structure;
 
 /**
  * Match a group description to a structure and return a list of matches to
@@ -24,7 +26,7 @@ public class LeafEngine extends AbstractBaseEngine {
             Structure atom = getMatchingSubstructure(atomDescription, structure);
             if (nameMatches(atomDescription, atom)) {
                 // we don't clone the atom, as it is immutable
-                matches.add(new Match(atomDescription, atom));
+                matches.add(new Match(atomDescription, atom, Level.ATOM));
             }
         }
         return matches;
@@ -33,7 +35,7 @@ public class LeafEngine extends AbstractBaseEngine {
     // TODO : this is expensive!
     private Structure getMatchingSubstructure(
             Description description, Structure structure) {
-        for (Structure subStructure : structure) {
+        for (Structure subStructure : structure.getSubstructures()) {
             if (nameMatches(description, subStructure)) {
                 return subStructure;
             }
@@ -61,5 +63,6 @@ public class LeafEngine extends AbstractBaseEngine {
         }
         return false;
     }
+
 
 }

@@ -3,7 +3,7 @@ package tailor.resolve;
 import tailor.datasource.Structure;
 import tailor.description.Description;
 import tailor.description.ProteinDescription;
-import tailor.engine.Match;
+import tailor.match.Match;
 
 /**
  * Resolves descriptions in measures to the descriptions in a match - in other
@@ -18,7 +18,7 @@ public class Resolver {
     public static Structure resolve(Description description, Match match) {
         // TODO : check levels
         if (description instanceof ProteinDescription) {
-            return resolve(description.getSubDescriptionAt(0), match.getSubMatch(0));
+            return resolve(description.getSubDescriptionAt(0), match.getMatch(0));
         }
         return null;
     }

@@ -19,15 +19,15 @@ import javax.xml.parsers.SAXParserFactory;
 
 import org.xml.sax.SAXException;
 
-import tailor.datasource.Structure;
 import tailor.datasource.StructureSource;
 import tailor.description.Description;
 import tailor.description.ProteinDescription;
 import tailor.engine.Engine;
-import tailor.engine.Match;
 import tailor.engine.Run;
+import tailor.match.Match;
 import tailor.measurement.Measure;
 import tailor.measurement.Measurement;
+import tailor.structure.Structure;
 
 public class MSDMotifEngine implements Engine {
 	

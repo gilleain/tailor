@@ -6,14 +6,16 @@ import org.junit.Test;
 
 import tailor.condition.DistanceBoundCondition;
 import tailor.datasource.PDBFileList;
-import tailor.datasource.Structure;
 import tailor.datasource.StructureSource;
 import tailor.description.ChainDescription;
 import tailor.description.Description;
 import tailor.description.DescriptionException;
 import tailor.description.DescriptionFactory;
 import tailor.description.ProteinDescription;
+import tailor.match.Match;
 import tailor.measurement.Measure;
+import tailor.measurement.Measurement;
+import tailor.structure.Structure;
 
 public class SingleChainTest {
     
@@ -35,13 +37,12 @@ public class SingleChainTest {
         StructureSource structureSource = new PDBFileList(filename, null);
         while (structureSource.hasNext()) {
             Structure structure = structureSource.next();
-            for (Structure chain : structure) {
+            for (Structure chain : structure.getSubstructures()) {
                 for (Match match : engine.match(chainD, chain)) {
                     System.out.print(match + " ");
-                    for (Measure measure : chainD.getMeasures()) {
-                        // XXX refactor of Match objects
-//                        Measurement measurement = measure.measure(match);
-//                        System.out.print(measurement + ", ");
+                    for (Measure<? extends Measurement> measure : chainD.getMeasures()) {
+                        Measurement measurement = measure.measure(match);
+                        System.out.print(measurement + ", ");
                     }
                     System.out.println();
                 }

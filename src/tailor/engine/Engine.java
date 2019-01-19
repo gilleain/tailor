@@ -2,9 +2,10 @@ package tailor.engine;
 
 import java.util.List;
 
-import tailor.datasource.Structure;
 import tailor.datasource.StructureSource;
 import tailor.description.Description;
+import tailor.match.Match;
+import tailor.structure.Structure;
 
 /**
  * An engine matches a description to a structure source, and applies a list 

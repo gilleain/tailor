@@ -8,6 +8,7 @@ import tailor.description.ChainDescription;
 import tailor.description.GroupDescription;
 import tailor.structure.Chain;
 import tailor.structure.Group;
+import tailor.structure.Level;
 
 /**
  * Match a chain description to a chain. 
@@ -63,7 +64,7 @@ public class GroupMatcher {
     }
     
     private GroupDescription getCurrentGroupDescription(ChainDescription description, Match partial) {
-        int partialLength = partial.getLevelSize();
+        int partialLength = partial.getSize();
         if (partialLength < description.getGroupDescriptions().size()) {
             return description.getGroupDescriptions().get(partialLength);
         } else {
@@ -76,8 +77,8 @@ public class GroupMatcher {
         Match match = null;
         if (groupDescription.getName() == null
                 || groupDescription.nameMatches(currentGroup.getName())) {
-            match = new Match(chainDescription, chain);
-            match.addMatch(new Match(groupDescription, currentGroup));
+            match = new Match(chainDescription, chain, Level.CHAIN);
+            match.addMatch(new Match(groupDescription, currentGroup, Level.RESIDUE));
         }
         return match;
     }
@@ -87,7 +88,7 @@ public class GroupMatcher {
     }
     
     private void addTo(Match partial, GroupDescription groupDescription, Group group) {
-        partial.addMatch(new Match(groupDescription, group));
+        partial.addMatch(new Match(groupDescription, group, Level.RESIDUE));
     }
 
     private boolean isComplete(ChainDescription description, Match partial) {
@@ -98,7 +99,7 @@ public class GroupMatcher {
 //            condition.satisfiedBy(partial); XXX argh!
         }
         
-        return partial.getLevelSize() == expectedSize;
+        return partial.getSize() == expectedSize;
     }
 
 }

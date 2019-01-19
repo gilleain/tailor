@@ -80,5 +80,46 @@ public class Group implements Structure {
     public List<Atom> getAtoms() {
         return new ArrayList<>(this.atomMap.values());
     }
+    
+
+    @Override
+    public void addSubStructure(Structure structure) {
+        if (structure instanceof Atom) {
+            addAtom((Atom) structure);
+        } else {
+            throw new IllegalArgumentException("Can only add instances of " + Atom.class.getName());
+        }
+    }
+
+    @Override
+    public List<Structure> getSubstructures() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public String getProperty(String key) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public void copyProperty(Structure other, String key) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public boolean hasPropertyEqualTo(String string, String name) {
+        // TODO Auto-generated method stub
+        return false;
+    }
+
+    @Override
+    public void setProperty(String string, String string2) {
+        // TODO Auto-generated method stub
+        
+    }
+
 
 }

@@ -1,6 +1,6 @@
 package tailor.datasource;
 
-import tailor.engine.Match;
+import tailor.match.Match;
 import tailor.measurement.Measurement;
 
 

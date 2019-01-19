@@ -1,22 +1,22 @@
 package tailor.engine;
 
+import static org.junit.Assert.assertEquals;
+
 import java.util.List;
 
-import org.junit.Assert;
 import org.junit.Test;
 
-import tailor.datasource.Structure;
 import tailor.description.AtomDescription;
 import tailor.description.Description;
 import tailor.description.GroupDescription;
-import tailor.structure.Level;
+import tailor.match.Match;
+import tailor.structure.Atom;
+import tailor.structure.Group;
 
 public class LeafEngineTest {
     
-    public void addAtom(Structure group, String name) {
-        Structure atom = new Structure(Level.ATOM);
-        atom.setProperty("Name", name);
-        group.addSubStructure(atom);
+    public void addAtom(Group group, String name) {
+        group.addAtom(new Atom(name));
     }
     
     @Test
@@ -26,7 +26,7 @@ public class LeafEngineTest {
         groupDescription.addSubDescription(new AtomDescription("CA"));
         groupDescription.addSubDescription(new AtomDescription("O"));
         
-        Structure group = new Structure();
+        Group group = new Group();
         addAtom(group, "N");
         addAtom(group, "CA");
         addAtom(group, "O");
@@ -37,7 +37,7 @@ public class LeafEngineTest {
             System.out.println(match);
         }
         
-        Assert.assertEquals(groupDescription.size(), matches.size());
+        assertEquals(groupDescription.size(), matches.size());
     }
 
 }

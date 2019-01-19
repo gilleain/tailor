@@ -1,7 +1,8 @@
 package tailor.engine;
 
-import tailor.datasource.Structure;
-import tailor.structure.Level;
+import tailor.structure.Chain;
+import tailor.structure.Group;
+import tailor.structure.Structure;
 
 public class StructureFactory {
     
@@ -32,14 +33,13 @@ public class StructureFactory {
     }
     
     public static Structure makeChain(String seq) {
-        Structure chain = new Structure(Level.CHAIN);
-        chain.setProperty("Name", "A");
+        Chain chain = new Chain("A");
         for (int i = 0; i < seq.length(); i++) {
             String name = oneToThree(seq.charAt(i));
-            Structure residue = new Structure(Level.RESIDUE);
+            Group residue = new Group();
             residue.setProperty("Name", name);
             residue.setProperty("Number", String.valueOf(i));
-            chain.addSubStructure(residue);
+            chain.addGroup(residue);
         }
         return chain;
     }

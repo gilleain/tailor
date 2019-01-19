@@ -3,10 +3,11 @@ package tailor.engine;
 import java.util.ArrayList;
 import java.util.List;
 
-import tailor.datasource.Structure;
 import tailor.description.ChainDescription;
 import tailor.description.Description;
 import tailor.description.ProteinDescription;
+import tailor.match.Match;
+import tailor.structure.Structure;
 
 /**
  * Matches descriptions that have multiple chains.

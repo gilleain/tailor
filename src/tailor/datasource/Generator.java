@@ -12,7 +12,7 @@ public class Generator implements StructureSource {
         return false;
     }
     
-    public Structure next() {
+    public tailor.structure.Structure next() {
         return null;
     }
     

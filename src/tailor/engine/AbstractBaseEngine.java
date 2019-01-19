@@ -8,11 +8,12 @@ import tailor.datasource.PDBFileList;
 import tailor.datasource.Result;
 import tailor.datasource.ResultsPrinter;
 import tailor.datasource.StreamResultsPrinter;
-import tailor.datasource.Structure;
 import tailor.datasource.StructureSource;
 import tailor.description.Description;
+import tailor.match.Match;
 import tailor.measurement.Measure;
 import tailor.measurement.Measurement;
+import tailor.structure.Structure;
 
 public abstract class AbstractBaseEngine implements Engine {
     
@@ -92,8 +93,7 @@ public abstract class AbstractBaseEngine implements Engine {
         runDescription(description);
     }
 
-    public abstract List<Match> match(
-            Description description, Structure structure); 
+    public abstract List<Match> match(Description description, Structure structure); 
     
     @Override
     public void runDescription(Description description) {
@@ -111,9 +111,8 @@ public abstract class AbstractBaseEngine implements Engine {
                     int n = measures.size();
                     Measurement[] measurements = new Measurement[n];
                     for (Measure<? extends Measurement> measure : measures) {
-                        // XXX refactor to switch Match object types
-//                        Measurement measurement = measure.measure(match);
-//                        measurements[i++] = measurement;
+                        Measurement measurement = measure.measure(match);
+                        measurements[i++] = measurement;
                     }
                     
                     printer.printResult(new Result(match, measurements));

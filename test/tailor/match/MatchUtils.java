@@ -15,7 +15,7 @@ public class MatchUtils {
      * @return
      */
     public Match zip(Description description, Structure structure) {
-        Match match = new Match(description, structure);
+        Match match = new Match(description, structure, description.getLevel());
         // TODO - use a visitor? or allow external iteration?
         List<? extends Description> subDescriptions = description.getSubDescriptions();
 //        List<Structure> subStructures = structure.getSubstructures();
