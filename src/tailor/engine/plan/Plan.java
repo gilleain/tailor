@@ -1,25 +1,41 @@
 package tailor.engine.plan;
 
-import java.util.List;
-
 import tailor.description.Description;
 
 public class Plan {
     
-    private List<PlanElement> elements; // TODO - don't need both this and root...
-    
     private PlanElement root;
-
-    public List<PlanElement> getElements() {
-        return elements;
-    }
 
     public void setRoot(PlanElement planElement) {
         this.root = planElement;
     }
+    
+    public PlanElement getRoot() {
+        return this.root;
+    }
 
-    public PlanElement getFor(Description parent) {
-        // TODO Auto-generated method stub
+    /**
+     * Get the plan element corresponding to this description.
+     * 
+     * @param description
+     * @return
+     */
+    public PlanElement getFor(Description description) {
+        return find(description, root);
+    }
+    
+    private PlanElement find(Description description, PlanElement current) {
+        if (current.getDescription() != null && 
+                current.getDescription().equals(description)) {
+            return current;
+        } else {
+            for (PlanElement child : current.getChildren()) {
+                PlanElement foundElement = find(description, child);
+                if (foundElement != null) {
+                    return foundElement;
+                }
+            }
+        }
         return null;
     }
 

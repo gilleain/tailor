@@ -1,6 +1,7 @@
 package tailor.engine.compile;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 import org.junit.Test;
 
@@ -8,6 +9,7 @@ import tailor.description.ChainDescription;
 import tailor.description.Description;
 import tailor.description.GroupDescription;
 import tailor.engine.plan.Plan;
+import tailor.engine.plan.PlanElement;
 
 public class TestCompiler {
 
@@ -22,6 +24,19 @@ public class TestCompiler {
         
         Compiler compiler = new Compiler();
         Plan plan = compiler.compile(chainDescription);
-        assertEquals("Single plan element", 1, plan.getElements().size());
+        PlanElement root = plan.getRoot();
+        assertNotNull(root);
+        dump(root, 0);
+    }
+    
+    private void dump(PlanElement el, int indent) {
+        String indentString = "";
+        for (int i = 0; i < indent; i++) {
+            indentString += "\t";
+        }
+        System.out.println(indentString + el.getLevel() + " " + el.getType());
+        for (PlanElement child : el.getChildren()) {
+            dump(child, indent + 1);
+        }
     }
 }

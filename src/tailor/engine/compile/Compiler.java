@@ -49,29 +49,31 @@ public class Compiler {
         }
     }
     
-    private void handleChainDescription(Description parent, ChainDescription description, Plan plan) {
+    private void handleChainDescription(Description parent, ChainDescription chainDescription, Plan plan) {
         PlanElement parentElement;
         if (parent == null) {
-            parentElement = new PlanElement(PlanElement.Type.SELECTOR, Level.PROTEIN);
+            // TODO - rather than pass a null description, create one
+            parentElement = new PlanElement(null, PlanElement.Type.SELECTOR, Level.PROTEIN);
             plan.setRoot(parentElement);
         } else {
             parentElement = plan.getFor(parent);
         }
         
-        PlanElement childElement = new PlanElement(Type.SCANNER, Level.CHAIN);
+        PlanElement childElement = new PlanElement(chainDescription, Type.SCANNER, Level.CHAIN);
         parentElement.addChild(childElement);
     }
     
     private void handleGroupDescription(Description parent, GroupDescription groupDescription, Plan plan) {
         PlanElement parentElement;
         if (parent == null) {
-            parentElement = new PlanElement(PlanElement.Type.SCANNER, Level.CHAIN);
+            // TODO - rather than pass a null description, create one
+            parentElement = new PlanElement(null, PlanElement.Type.SCANNER, Level.CHAIN);
             plan.setRoot(parentElement);
         } else {
             parentElement = plan.getFor(parent);
         }
         
-        PlanElement childElement = new PlanElement(Type.SCANNER, Level.RESIDUE);
+        PlanElement childElement = new PlanElement(groupDescription, Type.SCANNER, Level.RESIDUE);
         parentElement.addChild(childElement);
     }
     
