@@ -88,9 +88,7 @@ public class SingleChainEngine extends AbstractBaseEngine implements Engine {
                 // only if we get a match of sufficient size
                 // is it worthwhile to consider any conditions
                 if (atomMatches.size() == subDescription.size()) {
-                    Level level = Level.RESIDUE;
-                    // a copy is made, so that 
-                    // only the matching atoms are stored
+                    // a copy is made, so that only the matching atoms are stored
                     Group matchingCopy = new Group();
                     matchingCopy.copyProperty(group, "Name");
                     //   XXX groups only!
