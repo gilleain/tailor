@@ -10,7 +10,8 @@ import tailor.structure.Structure;
 
 public class Match {
     
-    private final Level level;
+    // TODO : why do we need this, exactly?
+    private final Level level;  
     
     private final Description description;
     
@@ -55,6 +56,10 @@ public class Match {
     
     public Match getMatch(int i) {
         return subMatches.get(i);
+    }
+    
+    public List<Match> getSubmatches() {
+        return subMatches;
     }
     
     public Match associate(Description description, Structure structure) {
