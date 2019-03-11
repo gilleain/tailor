@@ -9,6 +9,12 @@ import tailor.structure.Chain;
 import tailor.structure.Group;
 import tailor.structure.Level;
 
+/**
+ * Scan a chain for contiguous segments of groups.
+ * 
+ * @author gilleain
+ *
+ */
 public class GroupScanner {
     
     /**

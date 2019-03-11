@@ -1,4 +1,4 @@
-package tailor.engine.executor;
+package tailor.engine.execute;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
