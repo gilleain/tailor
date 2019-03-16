@@ -3,7 +3,7 @@ package tailor.condition.alt;
 import tailor.description.Description;
 import tailor.structure.Group;
 
-public class DistanceBetween implements Condition<Group> {
+public class DistanceBetween implements UniformCondition<Group> {
     
     private final Description firstGroupDescription;
     

@@ -3,8 +3,7 @@ package tailor.engine.execute;
 import java.util.ArrayList;
 import java.util.List;
 
-import tailor.condition.alt.GeometricCondition;
-import tailor.structure.Chain;
+import tailor.condition.alt.UniformCondition;
 import tailor.structure.Group;
 
 /**
@@ -13,17 +12,19 @@ import tailor.structure.Group;
  * @author gilleain
  *
  */
-public class GeometricScanner {
+public class UniformFilter implements Filter<Group, Group> {
     
-    private final GeometricCondition<Group> condition;
+    private final UniformCondition<Group> condition;
     
-    public GeometricScanner(GeometricCondition<Group> condition) {
+    public UniformFilter(UniformCondition<Group> condition) {
         this.condition = condition;
     }
     
-    public List<Group> scan(Chain chain) {
+
+    @Override
+    public List<Group> filter(Iterable<Group> iterable) {
         List<Group> filtered = new ArrayList<>();
-        for (Group group : chain.getGroups()) {
+        for (Group group : iterable) {
             if (condition.allows(group)) {
                 filtered.add(group);
             }

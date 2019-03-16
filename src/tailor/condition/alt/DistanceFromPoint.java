@@ -6,7 +6,7 @@ import tailor.geometry.Geometry;
 import tailor.geometry.Vector;
 import tailor.structure.Group;
 
-public class DistanceFromPoint implements Condition<Group> {
+public class DistanceFromPoint implements UniformCondition<Group> {
     
     private final double minDistance;
     

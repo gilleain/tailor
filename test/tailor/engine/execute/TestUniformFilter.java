@@ -5,26 +5,26 @@ import java.util.List;
 
 import org.junit.Test;
 
-import tailor.condition.alt.Condition;
 import tailor.condition.alt.DistanceFromPoint;
+import tailor.condition.alt.UniformCondition;
 import tailor.description.AtomDescription;
 import tailor.description.GroupDescription;
 import tailor.geometry.Vector;
 import tailor.structure.Atom;
 import tailor.structure.Group;
 
-public class TestSingletonFilter {
+public class TestUniformFilter {
     
     @Test
     public void testFixedPoint() {
-        SingletonFilter filter = new SingletonFilter(makeCondition());
+        UniformFilter filter = new UniformFilter(makeCondition());
         
         List<Group> unfiltered = new ArrayList<>();
         
         List<Group> filtered = filter.filter(unfiltered);
     }
     
-    private Condition<Group> makeCondition() {
+    private UniformCondition<Group> makeCondition() {
         Group fixedGroup = new Group();
         fixedGroup.addAtom(new Atom("C"));
         

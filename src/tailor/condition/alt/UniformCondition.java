@@ -1,6 +1,6 @@
 package tailor.condition.alt;
 
-public interface Condition<T> {
+public interface UniformCondition<T> {
     
     @SuppressWarnings("unchecked")
     boolean allows(T... entities);
