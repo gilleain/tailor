@@ -11,6 +11,10 @@ public class Vector {
         this.y = 0;
         this.z = 0;
     }
+	
+	public Vector(Vector other) {
+	    this.set(other);
+	}
     
 	public Vector(String coords) {
 		String[] bits = coords.split("\\s+");
@@ -88,6 +92,12 @@ public class Vector {
 		return new Vector(this.y * other.z - this.z * other.y,
 						  this.z * other.x - this.x * other.z,
 						  this.x * other.y - this.y * other.x);
+	}
+	
+	public void set(Vector position) {
+	    this.x = position.x;
+	    this.y = position.y;
+	    this.z = position.z;
 	}
 	
 	public String toString() {

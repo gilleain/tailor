@@ -121,6 +121,10 @@ public class Group implements Structure {
         // TODO Auto-generated method stub
         
     }
+    
+    public String toString() {
+        return id + atomMap;
+    }
 
 
 }

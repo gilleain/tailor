@@ -26,8 +26,12 @@ public class DistanceFromPoint implements UniformCondition<Group> {
         
         Vector p1 = fixedPoint.get();
         Vector p2 = variablePoint.get(group);
-        double d = Geometry.distance(p1, p2);
-        
-        return d < minDistance;
+        if (p2 == null) {
+            return false;
+        } else {
+            double d = Geometry.distance(p1, p2);
+            System.err.println(group + " = " + d);
+            return d < minDistance;
+        }
     }
 }

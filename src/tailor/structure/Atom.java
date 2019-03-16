@@ -82,4 +82,12 @@ public class Atom implements Structure {
         // can never add any substructure to an atom
         throw new UnsupportedOperationException();
     }
+
+    public void setPosition(Vector position) {
+        this.center.set(position);
+    }
+    
+    public String toString() {
+        return name + " " + center;
+    }
 }
