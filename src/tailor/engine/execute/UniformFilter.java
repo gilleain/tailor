@@ -18,6 +18,7 @@ public class UniformFilter implements Filter<Group, Group> {
     
     public UniformFilter(UniformCondition<Group> condition) {
         this.condition = condition;
+        // TODO - check that arity == 1?
     }
     
 

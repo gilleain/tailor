@@ -34,4 +34,9 @@ public class DistanceFromPoint implements UniformCondition<Group> {
             return d < minDistance;
         }
     }
+
+    @Override
+    public int arity() {
+        return 1;
+    }
 }

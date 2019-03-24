@@ -27,7 +27,16 @@ public class DistanceBetween implements UniformCondition<Group> {
         Vector p1 = pointA.get(groupA);
         Vector p2 = pointB.get(groupB);
         
-        return Geometry.distance(p1, p2) < minDistance;
+        if (p1 == null || p2 == null) {
+            return false;
+        } else {
+            return Geometry.distance(p1, p2) < minDistance;
+        }
+    }
+
+    @Override
+    public int arity() {
+        return 2;
     }
 
 }
