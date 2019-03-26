@@ -1,17 +1,15 @@
 package tailor.engine.execute;
 
 import static org.junit.Assert.assertEquals;
+import static tailor.description.DescriptionBuilder.makeDescription;
 import static tailor.engine.execute.StructureBuilder.makeStructure;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.junit.Test;
 
 import tailor.condition.alt.DistanceBetween;
 import tailor.condition.alt.UniformCondition;
-import tailor.description.AtomDescription;
-import tailor.description.GroupDescription;
 import tailor.geometry.Vector;
 import tailor.structure.Group;
 
@@ -21,7 +19,7 @@ public class TestMultiEntityUniformFilter {
     public void testVariablePoints() {
         List<Group> unfiltered = getStructure();
         LinearLayout.layout(unfiltered);
-        System.out.println(unfiltered.stream().map(Object::toString).collect(Collectors.joining("\n")));
+        unfiltered.stream().forEach(System.out::println);
         MultiEntityUniformFilter filter = 
                 new MultiEntityUniformFilter(makeVariableCondition());
         
@@ -35,14 +33,8 @@ public class TestMultiEntityUniformFilter {
     private UniformCondition<Group> makeVariableCondition() {
         double minDistance = 6;
         
-        GroupDescription varDescriptionA = new GroupDescription("ALA");
-        varDescriptionA.addAtomDescription(new AtomDescription("N"));
-        
-        GroupDescription varDescriptionB = new GroupDescription("TYR");
-        varDescriptionB.addAtomDescription(new AtomDescription("C"));
-        
-        Selector<Vector, Group> varPointA = new AtomCenterPointSelector(varDescriptionA);
-        Selector<Vector, Group> varPointB = new AtomCenterPointSelector(varDescriptionB);
+        Selector<Vector, Group> varPointA = new AtomCenterPointSelector(makeDescription().group("ALA").atoms("N").getGroup());
+        Selector<Vector, Group> varPointB = new AtomCenterPointSelector(makeDescription().group("TYR").atoms("C").getGroup());
        
         return new DistanceBetween(minDistance, varPointA, varPointB);
     }
