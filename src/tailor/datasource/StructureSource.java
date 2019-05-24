@@ -2,6 +2,8 @@ package tailor.datasource;
 
 import java.io.IOException;
 
+import tailor.structure.Structure;
+
 
 
 /**
@@ -17,7 +19,7 @@ public interface StructureSource {
      * @return a Structure
      * @throws IOException if there is a problem with the Structure
      */
-    public tailor.structure.Structure next() throws IOException;
+    public Structure next() throws IOException;
     //TODO : could this throw a more general exception? Rather than Generator
     //throwing an IOException which doesn't make much sense...
     

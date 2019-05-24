@@ -9,17 +9,20 @@ import java.util.List;
 
 import tailor.structure.Atom;
 import tailor.structure.Chain;
+import tailor.structure.ChainType;
 import tailor.structure.Group;
 import tailor.structure.Protein;
+import tailor.structure.Structure;
 
 public class PDBReader {
 	
-	  public static tailor.structure.Structure read(File path) throws IOException {
+	  public static Structure read(File path) throws IOException {
 	        String pdbID = path.getName().substring(0, 4);	// this is a hack...
 	        String line;
 
 	        BufferedReader bufferer = null;
 	        List<String> atomRecords = new ArrayList<>();
+	        List<String> hetatmRecords = new ArrayList<>();
 	        
 	        try {
     	        bufferer = new BufferedReader(new FileReader(path));
@@ -31,12 +34,15 @@ public class PDBReader {
     	                    atomRecords.add(line);
     	                } else if (token.equals("HEAD")) {
                             pdbID = line.substring(62, 66);
+    	                } else if (token.equals("HETA")) { // XXX
+    	                    hetatmRecords.add(line);
     	                }
     	            }
     	        }
 	        } finally {
 	            if (bufferer!= null) bufferer.close();
 	        }
+	        System.out.println(atomRecords.size() + " atoms and " + hetatmRecords.size() + " hetatoms");
 
 	        Protein protein = new Protein(pdbID);
 
@@ -45,9 +51,21 @@ public class PDBReader {
 	        for (String atomRecord : atomRecords) {	        	
 	            Chain newChain = PDBReader.parseRecord(atomRecord, currentChain);
 	            if (currentChain == null || !newChain.getName().equals(currentChain.getName())) {
+	                newChain.setType(ChainType.PEPTIDE);
 	                protein.addChain(newChain);
 	                currentChain = newChain;
 	            } 
+	        }
+	        
+	        currentChain = null;
+	        
+	        for (String hetatmRecord : hetatmRecords) {
+	            Chain newChain = PDBReader.parseRecord(hetatmRecord, currentChain);
+                if (currentChain == null || !newChain.getName().equals(currentChain.getName())) {
+                    newChain.setType(ChainType.WATER);
+                    protein.addChain(newChain);
+                    currentChain = newChain;
+                } 
 	        }
 
 	        return protein;

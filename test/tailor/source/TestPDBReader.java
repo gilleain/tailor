@@ -18,10 +18,11 @@ public class TestPDBReader {
     
     @Test
     public void testRead() throws IOException {
-        Protein structure = PDBReader.read(new File(DIR, "test.pdb"));
+        File file = new File(DIR, "test.pdb");
+        Protein structure = (Protein) tailor.datasource.PDBReader.read(file);
         
         List<Chain> chains = structure.getChains();
-        assertEquals(1, chains.size());
+        assertEquals(2, chains.size());
         
         Chain chain = chains.get(0);
         assertEquals("A", chain.getName());

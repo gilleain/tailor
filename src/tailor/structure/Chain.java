@@ -11,6 +11,8 @@ public class Chain extends Segment implements Structure {
     
     private final String name;
     
+    private ChainType type;
+    
     public Chain() {
         this("A");  // XXX is this a sensible default?
     }
@@ -19,6 +21,14 @@ public class Chain extends Segment implements Structure {
         super(new ArrayList<>());
         this.name = name;
         this.sses = new ArrayList<>();
+    }
+    
+    public ChainType getType() {
+        return this.type;
+    }
+    
+    public void setType(ChainType type) {
+        this.type = type;
     }
     
     public void addSSE(SSE sse) {
