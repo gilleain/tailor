@@ -41,20 +41,5 @@ public interface Structure {
     public List<Structure> getSubstructures();
     
     public void addSubStructure(Structure structure);
-    
-    /**
-     * Get a property for a key.
-     * 
-     * @param string
-     * @return
-     */
-    public String getProperty(String key);
-    
-    public void copyProperty(Structure other, String key);
-
-    public boolean hasPropertyEqualTo(String string, String name);
-
-    public void setProperty(String string, String string2);
-
 
 }

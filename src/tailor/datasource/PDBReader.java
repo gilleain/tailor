@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import tailor.geometry.Vector;
 import tailor.structure.Atom;
 import tailor.structure.Chain;
 import tailor.structure.ChainType;
@@ -101,10 +102,7 @@ public class PDBReader {
                 chain.addSubStructure(residue);
             }
 
-            Atom atom = new Atom(atomName);
-            atom.setProperty("Name", atomName);
-            atom.setProperty("Coords", coordinates);
-            residue.addAtom(atom);
+            residue.addAtom(new Atom(atomName, new Vector(coordinates)));
 	        
 	        return chain;
 	    }

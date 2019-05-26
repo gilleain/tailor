@@ -2,6 +2,7 @@ package tailor.datasource;
 
 import tailor.match.Match;
 import tailor.measurement.Measurement;
+import tailor.structure.Protein;
 
 
 /**
@@ -26,7 +27,8 @@ public class Result {
         this.measurements = measurements;
         
         // XXX this only works if the match is at the protein level, I guess 
-        this.structureID = match.getStructure().getProperty("Name");
+        Protein p = ((Protein)match.getStructure());
+        this.structureID = p.getName();
         this.motifData = match.getStructure().toString();
     }
     

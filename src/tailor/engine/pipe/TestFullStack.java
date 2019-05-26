@@ -10,6 +10,7 @@ import tailor.datasource.PDBFileList;
 import tailor.datasource.StructureSource;
 import tailor.engine.execute.Filter;
 import tailor.structure.Chain;
+import tailor.structure.ChainType;
 import tailor.structure.Protein;
 
 /**
@@ -48,7 +49,7 @@ public class TestFullStack {
                 List<Chain> chains = new ArrayList<>();
                 Protein protein = proteins.iterator().next();
                 for (Chain chain : protein.getChains()) {
-                    if (chain.getProperty("type").equals("peptide")) {  // XXX TODO
+                    if (chain.getType() == ChainType.PEPTIDE) {
                         chains.add(chain);
                     }
                 }

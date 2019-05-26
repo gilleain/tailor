@@ -54,29 +54,4 @@ public class Strand extends Segment implements Structure, SSE {
             throw new IllegalArgumentException("Can only add instances of " + Group.class.getName());
         }
     }
-
-    @Override
-    public String getProperty(String key) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public void copyProperty(Structure other, String key) {
-        // TODO Auto-generated method stub
-        
-    }
-
-    @Override
-    public boolean hasPropertyEqualTo(String string, String name) {
-        // TODO Auto-generated method stub
-        return false;
-    }
-
-    @Override
-    public void setProperty(String string, String string2) {
-        // TODO Auto-generated method stub
-        
-    }
-
 }

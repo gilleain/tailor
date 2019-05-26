@@ -37,8 +37,8 @@ public class StructureFactory {
         for (int i = 0; i < seq.length(); i++) {
             String name = oneToThree(seq.charAt(i));
             Group residue = new Group();
-            residue.setProperty("Name", name);
-            residue.setProperty("Number", String.valueOf(i));
+            residue.setId(name);
+            residue.setNumber(i);
             chain.addGroup(residue);
         }
         return chain;

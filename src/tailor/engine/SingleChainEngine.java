@@ -53,8 +53,8 @@ public class SingleChainEngine extends AbstractBaseEngine implements Engine {
             if (chainMatch != null && chainMatch.getSize() == span
 //                    ){
                     && chainMatch.satisfiesConditions(description)) {
-                Structure matchedChain = chainMatch.getStructure();
-                matchedChain.setProperty("Name", structure.getProperty("Name"));
+                Chain matchedChain = (Chain) chainMatch.getStructure();
+                matchedChain.setName(((Chain)structure).getName());
                 matches.add(chainMatch);
             }
         }
@@ -90,9 +90,8 @@ public class SingleChainEngine extends AbstractBaseEngine implements Engine {
                 if (atomMatches.size() == subDescription.size()) {
                     // a copy is made, so that only the matching atoms are stored
                     Group matchingCopy = new Group();
-                    matchingCopy.copyProperty(group, "Name");
-                    //   XXX groups only!
-                    matchingCopy.copyProperty(group, "Number");
+                    matchingCopy.setId(((Group)group).getId());
+                    matchingCopy.setNumber(((Group)group).getNumber());
 
                     Match subMatch = new Match(subDescription, matchingCopy, Level.RESIDUE);
                     for (Match atomMatch : atomMatches) {
@@ -119,7 +118,7 @@ public class SingleChainEngine extends AbstractBaseEngine implements Engine {
             if (condition instanceof PropertyCondition) {
                 PropertyCondition prop = (PropertyCondition) condition;
                 if (prop.keyEquals("Name") && 
-                        prop.valueEquals(structure.getProperty("Name"))) {
+                        prop.valueEquals(((Group)structure).getName())) {
                     return true;
                 } else {
                     // there is a Name condition, but it doesn't match

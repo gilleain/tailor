@@ -10,6 +10,7 @@ import tailor.condition.Condition;
 import tailor.condition.TorsionBoundCondition;
 import tailor.measurement.Measure;
 import tailor.measurement.Measurement;
+import tailor.structure.Group;
 import tailor.structure.Level;
 import tailor.structure.Structure;
 
@@ -110,7 +111,8 @@ public class GroupDescription implements Description, Iterable<AtomDescription> 
      */
     public boolean nameMatches(Structure residue) {
         return this.groupName == null 
-            || this.groupName.equals(residue.getProperty("Name"));
+            || (residue instanceof Group
+                    && this.groupName.equals(((Group)residue).getName()));
     }
 
     public boolean nameMatches(String groupName) {

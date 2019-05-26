@@ -7,6 +7,7 @@ import tailor.condition.Condition;
 import tailor.condition.PropertyCondition;
 import tailor.description.Description;
 import tailor.match.Match;
+import tailor.structure.Atom;
 import tailor.structure.Level;
 import tailor.structure.Structure;
 
@@ -59,7 +60,7 @@ public class LeafEngine extends AbstractBaseEngine {
         }
         
         if (name != null) {
-            return structure.hasPropertyEqualTo("Name", name);
+            return ((Atom)structure).getName().equals(name);
         }
         return false;
     }

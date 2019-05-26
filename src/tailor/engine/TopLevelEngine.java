@@ -30,8 +30,7 @@ public class TopLevelEngine extends AbstractBaseEngine {
                 for (Match subMatch : subMatches) {
                     // TODO - could this be changed to a factory?
                     // XXX has now been fixed to one particular level!!
-                    Structure topLevel = new Protein("");
-                    topLevel.copyProperty(structure, "Name");
+                    Protein topLevel = new Protein(((Protein)structure).getName());
                     Match match = new Match(description, topLevel, Level.PROTEIN);
                     match.completeMatch(subMatch);
                     match.addMatch(subMatch);

@@ -59,9 +59,9 @@ public class RangedSingleChainEngine extends AbstractBaseEngine {
                         subEngine.match(subDescription, subStructure);
                     if (atomMatches.size() == subDescription.size()) {
                         Level subLevel = subStructure.getLevel();
-                        Structure matchingCopy = new Group();
-                        matchingCopy.copyProperty(subStructure, "Name");
-                        matchingCopy.copyProperty(subStructure, "Number");
+                        Group matchingCopy = new Group();
+                        matchingCopy.setId(subStructure.getName());
+//                        matchingCopy.setNumber(); // XXX - fix?
                         Match subMatch = new Match(subDescription, matchingCopy, Level.RESIDUE);
                         partial.completeMatch(subMatch);
                         partialLength++;
@@ -89,16 +89,14 @@ public class RangedSingleChainEngine extends AbstractBaseEngine {
                 List<Match> atomMatches = 
                     subEngine.match(firstDescription, subStructure);
                 if (atomMatches.size() == firstDescription.size()) {
-                    Structure partialStructure = new Chain();
-                    
-                    // TODO : chain specific!
-                    partialStructure.setProperty("Name", "A");
+                    Chain partialStructure = new Chain("A");
                     
                     Match partial = new Match(description, partialStructure, Level.CHAIN);
                     Level subLevel = subStructure.getLevel();
-                    Structure matchingCopy = new Group();
-                    matchingCopy.copyProperty(subStructure, "Name");
-                    matchingCopy.copyProperty(subStructure, "Number");
+                    Group matchingCopy = new Group();
+                    matchingCopy.setId(((Group)subStructure).getId());
+                    matchingCopy.setNumber(((Group)subStructure).getNumber());
+                   
                     Match subMatch = new Match(firstDescription, matchingCopy, Level.RESIDUE);
                     partial.completeMatch(subMatch);
                     partialMatches.add(partial);
@@ -120,7 +118,7 @@ public class RangedSingleChainEngine extends AbstractBaseEngine {
             }
         }
         if (name != null) {
-            return structure.hasPropertyEqualTo("Name", name);
+            return ((Group)structure).getName().equals(name);   // XXX is this a group?
         }
         return true;
     }

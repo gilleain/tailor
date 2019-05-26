@@ -9,6 +9,7 @@ import java.util.Map;
 import tailor.condition.Condition;
 import tailor.measurement.Measure;
 import tailor.measurement.Measurement;
+import tailor.structure.Chain;
 import tailor.structure.Level;
 import tailor.structure.Structure;
 
@@ -165,7 +166,8 @@ public class ChainDescription implements Description, Iterable<GroupDescription>
      */
     public boolean nameMatches(Structure chain) {
         return this.chainName == null 
-            || this.chainName.equals(chain.getProperty("Name"));
+            || (chain instanceof Chain
+                    && this.chainName.equals(((Chain)chain).getName()));
     }
     
     public int getID() {

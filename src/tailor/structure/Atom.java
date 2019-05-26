@@ -51,33 +51,6 @@ public class Atom implements Structure {
     }
 
     @Override
-    public String getProperty(String key) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public void copyProperty(Structure other, String key) {
-        // TODO Auto-generated method stub
-        
-    }
-
-    @Override
-    public boolean hasPropertyEqualTo(String key, String value) {
-        // TODO Auto-generated method stub
-        if (key.equals("Name")) {
-            return name.equals(value);
-        }
-        return false;
-    }
-
-    @Override
-    public void setProperty(String string, String string2) {
-        // TODO Auto-generated method stub
-        
-    }
-
-    @Override
     public void addSubStructure(Structure structure) {
         // can never add any substructure to an atom
         throw new UnsupportedOperationException();

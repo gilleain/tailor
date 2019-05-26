@@ -22,10 +22,4 @@ public class Resolver {
         }
         return null;
     }
-    
-    public static boolean nameMatch(Description description, Structure structure) {
-        String name = description.getName();
-        return name == null || structure.getProperty("Name").equals(name);
-    }
-    
 }

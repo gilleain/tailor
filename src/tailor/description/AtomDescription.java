@@ -7,6 +7,7 @@ import tailor.condition.Condition;
 import tailor.condition.PropertyCondition;
 import tailor.measurement.Measure;
 import tailor.measurement.Measurement;
+import tailor.structure.Atom;
 import tailor.structure.Level;
 import tailor.structure.Structure;
 
@@ -51,7 +52,8 @@ public class AtomDescription implements Description {
     }
 
     public boolean matches(Structure atom) {
-        return this.getName().equals(atom.getProperty("Name"));
+        return atom instanceof Atom &&
+                this.getName().equals(((Atom)atom).getName());
     }
     
     public int getID() {
