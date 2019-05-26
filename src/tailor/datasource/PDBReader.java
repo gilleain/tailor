@@ -76,7 +76,7 @@ public class PDBReader {
 	        String atomName = atomRecord.substring(11, 16).trim();
 	        String residueName = atomRecord.substring(17, 20);
 	        String chainLabel = atomRecord.substring(20, 22).trim();
-	        String residueNumber = atomRecord.substring(22, 26).trim();
+	        int residueNumber = Integer.valueOf(atomRecord.substring(22, 26).trim());
 	        String coordinates = atomRecord.substring(27, 54).trim();
 
 	        if (chainLabel.equals("")) {
@@ -85,16 +85,15 @@ public class PDBReader {
 	        
             Group residue = null;
             int chainIndex;
-            if (chain == null || (!chainLabel.equals(chain.getProperty("Name")))) {
+            if (chain == null || (!chainLabel.equals(chain.getName()))) {
 	            chain = new Chain(chainLabel);
-	            chain.setProperty("Name", chainLabel);
                 chainIndex = 0; 
 	        } else {
                 residue = chain.getGroups().get(chain.getGroups().size() - 1);
-                chainIndex = Integer.valueOf(residue.getProperty("Index"));
+                chainIndex = Integer.valueOf(residue.getIndex());
             }
 
-            if (residue == null || !residue.hasPropertyEqualTo("Number", residueNumber)) {
+            if (residue == null || residue.getNumber() != residueNumber) {
                 if (residue != null) {
                     chainIndex++;
                 }
@@ -110,12 +109,12 @@ public class PDBReader {
 	        return chain;
 	    }
 	    
-	    public static Group createResidue(String residueNumber, String residueName, int chainIndex) {
+	    public static Group createResidue(int residueNumber, String residueName, int chainIndex) {
 //            System.out.println("residue " + residueNumber + " " + residueName + " " + chainIndex);
 	    	Group residue = new Group();
-            residue.setProperty("Index", String.valueOf(chainIndex));
-	    	residue.setProperty("Number", residueNumber);
-	    	residue.setProperty("Name", residueName);
+            residue.setIndex(chainIndex);
+	    	residue.setNumber(residueNumber);
+	    	residue.setId(residueName);
 	    	return residue;
 	    }
 }
