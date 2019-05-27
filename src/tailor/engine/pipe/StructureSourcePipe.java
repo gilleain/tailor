@@ -8,19 +8,19 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import tailor.datasource.StructureSource;
-import tailor.engine.execute.Filter;
+import tailor.engine.filter.Filter;
 import tailor.structure.Chain;
 import tailor.structure.Protein;
 import tailor.structure.Structure;
 
 public class StructureSourcePipe {
     
-    private final StructureSource ss;   // TODO : use 'ProteinSource'?
+    private final StructureSource structureSource;   // TODO : use 'ProteinSource'?
     
     private final Map<Filter<Chain, Protein>, Output<List<Chain>>> chainFilterMap; 
     
     public StructureSourcePipe(StructureSource ss) {
-        this.ss = ss;
+        this.structureSource = ss;
         this.chainFilterMap = new HashMap<>();
     }
     
@@ -29,8 +29,8 @@ public class StructureSourcePipe {
     }
     
     public void run() throws IOException {
-        while (ss.hasNext()) {
-            Structure structure = ss.next();
+        while (structureSource.hasNext()) {
+            Structure structure = structureSource.next();
             Protein protein = (Protein) structure;  // XXX
             List<Protein> proteins = new ArrayList<>();
             proteins.add(protein);  // XXX TODO ugh

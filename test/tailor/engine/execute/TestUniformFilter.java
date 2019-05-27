@@ -12,6 +12,7 @@ import tailor.condition.alt.DistanceFromPoint;
 import tailor.condition.alt.UniformCondition;
 import tailor.description.AtomDescription;
 import tailor.description.GroupDescription;
+import tailor.engine.filter.UniformFilter;
 import tailor.geometry.Vector;
 import tailor.structure.Atom;
 import tailor.structure.Group;

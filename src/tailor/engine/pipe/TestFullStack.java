@@ -1,5 +1,6 @@
 package tailor.engine.pipe;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -8,7 +9,8 @@ import org.junit.Test;
 
 import tailor.datasource.PDBFileList;
 import tailor.datasource.StructureSource;
-import tailor.engine.execute.Filter;
+import tailor.engine.filter.ChainTypeFilter;
+import tailor.engine.filter.Filter;
 import tailor.structure.Chain;
 import tailor.structure.ChainType;
 import tailor.structure.Protein;
@@ -21,13 +23,15 @@ import tailor.structure.Protein;
  */
 public class TestFullStack {
     
+    private static final String DIR = "data";
+    
     @Test
     public void test1() throws IOException {
-        String path = "";    // TODO
-        StructureSource ss = new PDBFileList(path);
+        File file = new File(DIR, "test.pdb");
+        StructureSource ss = new PDBFileList(file);
         
         StructureSourcePipe input = new StructureSourcePipe(ss);
-        input.addChainFilterMapping(getFilter(), getOutput());
+        input.addChainFilterMapping(new ChainTypeFilter(ChainType.PEPTIDE), getOutput());
         input.run();
     }
     
@@ -36,24 +40,7 @@ public class TestFullStack {
             
             @Override
             public void accept(List<Chain> chains) {
-                chains.forEach(System.out::println);
-            }
-        };
-    }
-    
-    private Filter<Chain, Protein> getFilter() {
-        return new Filter<Chain, Protein>() {
-
-            @Override
-            public List<Chain> filter(Iterable<Protein> proteins) {
-                List<Chain> chains = new ArrayList<>();
-                Protein protein = proteins.iterator().next();
-                for (Chain chain : protein.getChains()) {
-                    if (chain.getType() == ChainType.PEPTIDE) {
-                        chains.add(chain);
-                    }
-                }
-                return chains;
+                chains.forEach(c -> System.out.println(c.getName()));
             }
         };
     }

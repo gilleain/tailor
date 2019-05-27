@@ -1,6 +1,6 @@
 package tailor.engine.pipe;
 
-import tailor.engine.execute.Filter;
+import tailor.engine.filter.Filter;
 
 public class Pipeable {
     

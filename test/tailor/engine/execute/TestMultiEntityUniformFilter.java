@@ -10,6 +10,7 @@ import org.junit.Test;
 
 import tailor.condition.alt.DistanceBetween;
 import tailor.condition.alt.UniformCondition;
+import tailor.engine.filter.MultiEntityUniformFilter;
 import tailor.geometry.Vector;
 import tailor.structure.Group;
 
