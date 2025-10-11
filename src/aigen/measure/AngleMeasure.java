@@ -1,6 +1,8 @@
 package aigen.measure;
 
-import tailor.engine.Engine;
+import aigen.engine.Engine;
+import aigen.feature.Atom;
+import aigen.feature.Vector;
 import tailor.geometry.Geometry;
 
 class AngleMeasure extends Measure {
@@ -17,9 +19,9 @@ class AngleMeasure extends Measure {
 	@Override
 	public Double measure(Object structure) {
 		try {
-			Point3D a = Engine.lookup(this.descriptionA, structure).getCenter();
-			Point3D b = Engine.lookup(this.descriptionB, structure).getCenter();
-			Point3D c = Engine.lookup(this.descriptionC, structure).getCenter();
+			Vector a = Engine.lookup(this.descriptionA, structure).getCenter();
+			Vector b = Engine.lookup(this.descriptionB, structure).getCenter();
+			Vector c = Engine.lookup(this.descriptionC, structure).getCenter();
 			return Geometry.angle(a, b, c);
 		} catch (Exception e) {
 			System.out.println(

@@ -11,7 +11,7 @@ import aigen.feature.Feature;
 public abstract class Description implements Iterable<Description> {
 	
 	 protected List<Description> children;
-	 protected List<Object> conditions; // Would be Condition interface in full implementation
+	 protected List<Object> conditions; // TODO Would be Condition interface in full implementation
 	 protected Map<String, Object> properties;
 	
 	
@@ -28,7 +28,9 @@ public abstract class Description implements Iterable<Description> {
     public abstract boolean describes(Feature feature);
     public abstract Class<? extends Feature> getFeatureType();
     
-   
+    public List<Object> getConditions() {
+    	return this.conditions;
+    }
     
     protected void addPropertyConditions(Map<String, Object> propertyConditions) {
         if (propertyConditions != null) {
@@ -95,5 +97,9 @@ public abstract class Description implements Iterable<Description> {
     public String toStr() {
         return toString() + " " + children.toString();
     }
+
+	public List<Description> getChildren() {
+		return this.children;
+	}
 }
 

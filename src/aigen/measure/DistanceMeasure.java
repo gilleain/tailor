@@ -1,6 +1,7 @@
 package aigen.measure;
 
-import tailor.engine.Engine;
+import aigen.engine.Engine;
+import aigen.feature.Vector;
 import tailor.geometry.Geometry;
 
 class DistanceMeasure extends Measure {
@@ -15,8 +16,8 @@ class DistanceMeasure extends Measure {
 	@Override
 	public Double measure(Object structure) {
 		try {
-			Point3D a = Engine.lookup(this.descriptionA, structure).getCenter();
-			Point3D b = Engine.lookup(this.descriptionB, structure).getCenter();
+			Vector a = Engine.lookup(this.descriptionA, structure).getCenter();
+			Vector b = Engine.lookup(this.descriptionB, structure).getCenter();
 			return Geometry.distance(a, b);
 		} catch (Exception e) {
 			System.out.println(

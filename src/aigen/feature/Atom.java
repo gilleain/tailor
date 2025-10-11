@@ -30,7 +30,7 @@ public class Atom extends Feature {
     }
 
     @Override
-    protected Vector getAtomCenter() {
+    public Vector getAtomCenter() {
         return coord;
     }
 

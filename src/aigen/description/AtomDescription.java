@@ -4,7 +4,7 @@ import java.util.Map;
 
 import aigen.feature.Feature;
 
-class AtomDescription extends Description {
+public class AtomDescription extends Description {
 	private String levelCode;
 
 	public AtomDescription(Map<String, Object> propertyConditions) {

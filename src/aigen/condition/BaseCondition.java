@@ -22,4 +22,12 @@ abstract class BaseCondition implements Condition {
 	public void setName(String name) {
 		this.name = name;
 	}
+	
+	public boolean hasProperty(String key) {
+		return false;	// TODO
+	}
+
+	public Object getProperty(String key) {
+		return null;	// TODO
+	}
 }

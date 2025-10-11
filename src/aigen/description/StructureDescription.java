@@ -1,10 +1,12 @@
 package aigen.description;
 
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import aigen.feature.Feature;
 
-class StructureDescription extends Description {
+public class StructureDescription extends Description {
 	private String name;
 	private String levelCode;
 
@@ -36,6 +38,10 @@ class StructureDescription extends Description {
 			}
 		}
 		return null;
+	}
+	
+	public List<ChainDescription> getChainDescriptions() {
+		return children.stream().map(c -> (ChainDescription)c).collect(Collectors.toList());
 	}
 
 	@Override

@@ -1,5 +1,8 @@
 package aigen.measure;
 
+import aigen.description.DescriptionException;
+import aigen.feature.Feature;
+
 class PropertyMeasure extends Measure {
 	 private String description;
 	 private String propertyName;

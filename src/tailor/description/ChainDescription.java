@@ -34,6 +34,8 @@ public class ChainDescription implements Description, Iterable<GroupDescription>
     
     private int id;
     
+    private String chainType;	// TODO - enum
+    
     public ChainDescription() {
         this.chainName = null;
         this.groupDescriptions = new ArrayList<>();
@@ -56,6 +58,10 @@ public class ChainDescription implements Description, Iterable<GroupDescription>
     	    // TODO ?
 //    		this.groupConditions.add((Condition) condition.clone());
     	}
+    }
+    
+    public String getChainType() {
+    	return chainType;
     }
     
     public boolean hasName(String name) {

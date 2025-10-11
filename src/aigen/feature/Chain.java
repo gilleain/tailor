@@ -55,4 +55,8 @@ public class Chain extends Feature {
     public String toString() {
         return String.format("%s %s %s", chainType, chainID, getResidueRange());
     }
+
+	public Residue getResidue(int i) {
+		return (Residue) subFeatures.get(i);
+	}
 }

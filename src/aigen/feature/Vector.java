@@ -1,7 +1,7 @@
 package aigen.feature;
 
 //Vector class (placeholder - implement based on your Geometry module)
-class Vector {
+public class Vector {
  private double x, y, z;
 
  public Vector(double x, double y, double z) {

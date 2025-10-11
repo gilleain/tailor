@@ -4,11 +4,13 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import aigen.feature.Feature;
 
-class ChainDescription extends Description {
+public class ChainDescription extends Description {
 	private String levelCode;
+	private String chainType;	// TODO
 
 	public ChainDescription(Map<String, Object> propertyConditions) {
 		super(propertyConditions);
@@ -20,6 +22,10 @@ class ChainDescription extends Description {
 		copy.children = new ArrayList<>(this.children);
 		copy.conditions = new ArrayList<>(this.conditions);
 		return copy;
+	}
+	
+	public String getChainType() {
+		return chainType;	// TODO - enum
 	}
 
 	public void createResidues(int n) {
@@ -49,6 +55,10 @@ class ChainDescription extends Description {
 
 	public ResidueDescription getResidue(int i) {
 		return (ResidueDescription) children.get(i - 1);
+	}
+	
+	public List<ResidueDescription> getResidueDescriptions() {
+		return this.children.stream().map(r -> (ResidueDescription)r).collect(Collectors.toList());
 	}
 
 	public ResidueDescription selectResidue(int i) {

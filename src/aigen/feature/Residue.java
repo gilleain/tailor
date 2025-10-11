@@ -1,5 +1,8 @@
 package aigen.feature;
 
+import java.util.List;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 public class Residue extends Feature {
     private ResidueID residueID;
@@ -62,4 +65,9 @@ public class Residue extends Feature {
             this.insertionCode = insertionCode;
         }
     }
+
+	public List<Atom> getAtoms() {
+		return this.subFeatures.stream()
+				.filter(f -> f instanceof Atom).map(x -> (Atom)x).collect(Collectors.toList());
+	}
 }

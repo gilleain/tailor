@@ -2,11 +2,12 @@ package aigen.description;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import aigen.feature.Feature;
 
-class ResidueDescription extends Description {
+public class ResidueDescription extends Description {
 	private String levelCode;
 
 	public ResidueDescription(Map<String, Object> propertyConditions) {
@@ -47,8 +48,13 @@ class ResidueDescription extends Description {
 		Object name = getProperty("name");
 		return name != null ? name.toString() : "Any";
 	}
+	
+	public int getPosition() {
+		Integer p = (Integer) getProperty("position");
+		return p == null? -1 : p;	// TODO
+	}
 
-	public String getPosition() {
+	public String getPositionString() {
 		Integer p = (Integer) getProperty("position");
 		if (p == null)
 			return "?";
@@ -64,7 +70,7 @@ class ResidueDescription extends Description {
 
 	@Override
 	public String toString() {
-		return getPosition() + " " + children.toString();
+		return getPositionString() + " " + children.toString();
 	}
 
 	@Override
@@ -94,5 +100,9 @@ class ResidueDescription extends Description {
 	public Class<? extends Feature> getFeatureType() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+	
+	public List<AtomDescription> getAtomDescriptions() {
+		return null;	// TODO
 	}
 }

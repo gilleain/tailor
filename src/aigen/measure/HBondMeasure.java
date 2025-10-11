@@ -2,7 +2,7 @@ package aigen.measure;
 
 import aigen.description.DescriptionException;
 import aigen.feature.Atom;
-import tailor.engine.Engine;
+import aigen.engine.Engine;
 import tailor.geometry.Geometry;
 
 class HBondMeasure extends Measure {

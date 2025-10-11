@@ -54,7 +54,7 @@ class PDBParser {
                 if (recordType.equals("HETATM")) {
                     if (resname.equals("HOH") || resname.equals("DOD")) {
                         chainID = "Water";
-                        chainType = "Water";
+                        chainType = "Water";	// TODO - enum
                     } else {
                         chainID = "Ligand";
                         chainType = "Ligand";
