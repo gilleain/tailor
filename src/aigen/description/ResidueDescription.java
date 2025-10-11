@@ -1,8 +1,10 @@
-package aigen;
+package aigen.description;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+
+import aigen.feature.Feature;
 
 class ResidueDescription extends Description {
 	private String levelCode;

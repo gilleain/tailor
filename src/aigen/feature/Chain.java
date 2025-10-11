@@ -1,4 +1,4 @@
-package aigen;
+package aigen.feature;
 
 class Chain extends Feature {
     private String chainID;

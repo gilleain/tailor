@@ -1,4 +1,4 @@
-package aigen;
+package aigen.feature;
 
 
 class Residue extends Feature {

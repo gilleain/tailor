@@ -1,6 +1,6 @@
-package aigen;
+package aigen.description;
 
-class DescriptionException extends Exception {
+public class DescriptionException extends Exception {
     public DescriptionException(String message) {
         super(message);
     }

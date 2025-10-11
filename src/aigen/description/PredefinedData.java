@@ -1,4 +1,4 @@
-package aigen;
+package aigen.description;
 
 import java.util.HashMap;
 import java.util.Map;

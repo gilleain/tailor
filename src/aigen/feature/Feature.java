@@ -1,8 +1,11 @@
-package aigen;
+package aigen.feature;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+
+import aigen.description.Description;
+import aigen.description.DescriptionException;
 
 public class Feature implements Iterable<Feature> {
  protected List<Feature> subFeatures;

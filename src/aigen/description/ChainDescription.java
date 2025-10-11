@@ -1,9 +1,11 @@
-package aigen;
+package aigen.description;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import aigen.feature.Feature;
 
 class ChainDescription extends Description {
 	private String levelCode;

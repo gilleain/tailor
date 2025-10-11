@@ -1,4 +1,4 @@
-package aigen;
+package aigen.feature;
 
 //Vector class (placeholder - implement based on your Geometry module)
 class Vector {

@@ -1,6 +1,8 @@
-package aigen;
+package aigen.description;
 
 import java.util.Map;
+
+import aigen.feature.Feature;
 
 class AtomDescription extends Description {
 	private String levelCode;

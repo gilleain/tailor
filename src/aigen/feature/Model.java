@@ -1,4 +1,4 @@
-package aigen;
+package aigen.feature;
 
 //Model class
 class Model extends Feature {

@@ -1,4 +1,4 @@
-package aigen;
+package aigen.feature;
 
 class Atom extends Feature {
     private String name;

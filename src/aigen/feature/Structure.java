@@ -1,4 +1,4 @@
-package aigen;
+package aigen.feature;
 
 import java.util.ArrayList;
 import java.util.List;

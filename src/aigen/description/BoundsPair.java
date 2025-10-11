@@ -1,6 +1,6 @@
-package aigen;
+package aigen.description;
 
-class BoundsPair {
+class BoundsPair { // TODO - unused?
 	double[][] bounds;
 
 	public BoundsPair(double[][] bounds) {

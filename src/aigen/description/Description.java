@@ -1,4 +1,4 @@
-package aigen;
+package aigen.description;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -6,7 +6,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-abstract class Description implements Iterable<Description> {
+import aigen.feature.Feature;
+
+public abstract class Description implements Iterable<Description> {
 	
 	 protected List<Description> children;
 	 protected List<Object> conditions; // Would be Condition interface in full implementation
