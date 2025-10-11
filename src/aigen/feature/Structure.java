@@ -3,7 +3,7 @@ package aigen.feature;
 import java.util.ArrayList;
 import java.util.List;
 
-class Structure extends Feature {
+public class Structure extends Feature {
  private String id;
 
  public Structure(String id) {

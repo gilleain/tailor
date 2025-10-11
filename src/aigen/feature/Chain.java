@@ -1,6 +1,6 @@
 package aigen.feature;
 
-class Chain extends Feature {
+public class Chain extends Feature {
     private String chainID;
     private String chainType;
 

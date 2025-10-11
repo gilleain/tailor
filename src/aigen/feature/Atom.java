@@ -1,6 +1,6 @@
 package aigen.feature;
 
-class Atom extends Feature {
+public class Atom extends Feature {
     private String name;
     private Vector coord;
     private Double bFactor;
@@ -9,6 +9,10 @@ class Atom extends Feature {
 
     public Atom(String name, Vector coord) {
         this(name, coord, null, 1.0, null);
+    }
+    
+    public Atom(String name, double[] coord, Double bFactor, double occupancy, String altloc) {
+    	// TODO
     }
 
     public Atom(String name, Vector coord, Double bFactor, double occupancy, String altloc) {

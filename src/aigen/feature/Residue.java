@@ -1,7 +1,7 @@
 package aigen.feature;
 
 
-class Residue extends Feature {
+public class Residue extends Feature {
     private ResidueID residueID;
     private String resname;
     private String segID;

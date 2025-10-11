@@ -1,7 +1,7 @@
 package aigen.feature;
 
 //Model class
-class Model extends Feature {
+public class Model extends Feature {
  private int number;
 
  public Model(int number) {
