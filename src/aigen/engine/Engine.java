@@ -36,7 +36,7 @@ public class Engine {
     	}
     }
 
-    public static Atom lookup(String descriptionA, Object structure) {
+    public static Atom lookup(String descriptionA, Object structure) throws DescriptionException {
 		// TODO remove this when types align
 		return null;
 	}

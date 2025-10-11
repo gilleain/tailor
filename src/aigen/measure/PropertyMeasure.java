@@ -16,16 +16,17 @@ class PropertyMeasure extends Measure {
 
 	 @Override
 	 public Object measure(Object feature) {
-	     try {
-	         Feature f = ((Feature) feature).findFeature(this.description);
-	         java.lang.reflect.Field field = f.getClass().getDeclaredField(this.propertyName);
-	         field.setAccessible(true);
-	         return field.get(f);
-	     } catch (NoSuchFieldException | IllegalAccessException e) {
-	         return "None";
-	     } catch (DescriptionException e) {
-	         return "!";
-	     }
+//	     try {
+	    	 return "";	//TODO
+//	         Feature f = ((Feature) feature).findFeature(this.description);
+//	         java.lang.reflect.Field field = f.getClass().getDeclaredField(this.propertyName);
+//	         field.setAccessible(true);
+//	         return field.get(f);
+//	     } catch (NoSuchFieldException | IllegalAccessException e) {
+//	         return "None";
+//	     } catch (DescriptionException e) {
+//	         return "!";
+//	     }
 	 }
 
 	 @Override

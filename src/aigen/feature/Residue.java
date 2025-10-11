@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
+import aigen.geometry.Vector;
+
 public class Residue extends Feature {
     private ResidueID residueID;
     private String resname;

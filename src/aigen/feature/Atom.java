@@ -1,5 +1,7 @@
 package aigen.feature;
 
+import aigen.geometry.Vector;
+
 public class Atom extends Feature {
     private String name;
     private Vector coord;

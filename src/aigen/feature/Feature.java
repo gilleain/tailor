@@ -6,6 +6,7 @@ import java.util.List;
 
 import aigen.description.Description;
 import aigen.description.DescriptionException;
+import aigen.geometry.Vector;
 
 public class Feature implements Iterable<Feature> {
  protected List<Feature> subFeatures;

@@ -1,8 +1,8 @@
 package aigen.measure;
 
 import aigen.engine.Engine;
-import aigen.feature.Vector;
-import tailor.geometry.Geometry;
+import aigen.geometry.Vector;
+import aigen.geometry.Geometry;
 
 class TorsionMeasure extends Measure {
 	private String descriptionA;

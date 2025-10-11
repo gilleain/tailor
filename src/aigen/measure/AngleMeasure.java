@@ -1,9 +1,8 @@
 package aigen.measure;
 
 import aigen.engine.Engine;
-import aigen.feature.Atom;
-import aigen.feature.Vector;
-import tailor.geometry.Geometry;
+import aigen.geometry.Vector;
+import aigen.geometry.Geometry;
 
 class AngleMeasure extends Measure {
 	private String descriptionA;
