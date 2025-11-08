@@ -1,6 +1,6 @@
 package aigen.condition;
 
-class PropertyCondition extends BaseCondition {
+public class PropertyCondition extends BaseCondition {
 	private String propertyKey;
 	private Object propertyValue;
 

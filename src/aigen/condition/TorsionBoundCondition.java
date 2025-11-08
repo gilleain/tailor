@@ -1,6 +1,6 @@
 package aigen.condition;
 
-class TorsionBoundCondition extends BaseCondition {
+public class TorsionBoundCondition extends BaseCondition {
 	private Object descriptionA;
 	private Object descriptionB;
 	private Object descriptionC;

@@ -1,14 +1,13 @@
 package aigen.measure;
 
-import aigen.description.DescriptionException;
-import aigen.feature.Feature;
+import aigen.description.Description;
 
-class PropertyMeasure extends BaseMeasure {
-	 private String description;
+public class PropertyMeasure extends BaseMeasure {
+	 private Description description;
 	 private String propertyName;
-	 private Class<?> valueType;
+	 private Class valueType; // XXX TODO  -split into StringPropertyType, DoublePropertyType, etc
 
-	 public PropertyMeasure(String description, String propertyName, Class<?> valueType) {
+	 public PropertyMeasure(Description description, String propertyName, Class valueType) {
 	     this.description = description;
 	     this.propertyName = propertyName;
 	     this.valueType = valueType;

@@ -4,7 +4,7 @@ import aigen.engine.Engine;
 import aigen.geometry.Vector;
 import aigen.geometry.Geometry;
 
-class TorsionMeasure extends BaseMeasure {
+public class TorsionMeasure extends BaseMeasure {
 	private String descriptionA;
 	private String descriptionB;
 	private String descriptionC;

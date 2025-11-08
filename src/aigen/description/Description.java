@@ -40,7 +40,7 @@ public abstract class Description implements Iterable<Description> {
         }
     }
     
-    protected void addPropertyCondition(String propertyName, Object propertyValue) {
+    public void addPropertyCondition(String propertyName, Object propertyValue) {
         properties.put(propertyName, propertyValue);
         // conditions.add(new PropertyCondition(propertyName, propertyValue));
     }
@@ -100,6 +100,11 @@ public abstract class Description implements Iterable<Description> {
 
 	public List<Description> getChildren() {
 		return this.children;
+	}
+
+	public void setName(String string) {
+		// TODO Auto-generated method stub
+		
 	}
 }
 

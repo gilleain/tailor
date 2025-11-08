@@ -1,6 +1,6 @@
 package aigen.condition;
 
-class DistanceBoundCondition extends BaseCondition {
+public class DistanceBoundCondition extends BaseCondition {
 	private Object descriptionA;
 	private Object descriptionB;
 	private double center;

@@ -1,6 +1,6 @@
 package aigen.condition;
 
-class HBondCondition extends BaseCondition {
+public class HBondCondition extends BaseCondition {
 	private Object donorDescription;
 	private Object hydrogenDescription;
 	private Object acceptorDescription;

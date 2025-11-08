@@ -60,7 +60,8 @@ public class Pipe {
         this.resultTemplate = String.join(this.columnSeparator, formatStrings);
     }
     
-    public Description getDescription() {
+
+	public Description getDescription() {
         return description;
     }
     

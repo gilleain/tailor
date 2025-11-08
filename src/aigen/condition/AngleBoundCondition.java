@@ -1,6 +1,6 @@
 package aigen.condition;
 
-class AngleBoundCondition extends BaseCondition {
+public class AngleBoundCondition extends BaseCondition {
 	private Object descriptionA;
 	private Object descriptionB;
 	private Object descriptionC;
