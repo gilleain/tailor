@@ -4,7 +4,7 @@ import java.util.AbstractMap;
 import java.util.HashMap;
 import java.util.Map;
 
-class DescriptionGenerator {
+public class DescriptionGenerator {
 	public static ChainDescription generateBackboneDescription(String name, double[][][] bounds) {
 		Map<String, Object> props = new HashMap<>();
 		props.put("chainID", name);

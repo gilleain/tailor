@@ -11,7 +11,7 @@ motifDescription = Chain
                         Residue position = 4 
                         Residue position = 5 
 
-measures         = Torsion (1.O 2.N 2.CA 2.C)
-                   Torsion (2.N 2.CA 2.C 3.N)
-                   Torsion (2.O 3.N 3.CA 3.C)
+measures         = Torsion (1.O 2.N 2.CA 2.C),
+                   Torsion (2.N 2.CA 2.C 3.N),
+                   Torsion (2.O 3.N 3.CA 3.C),
                    Torsion (3.N 3.CA 3.C 4.N)

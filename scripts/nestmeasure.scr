@@ -14,4 +14,4 @@ motifDescription =  Chain
                         Residue position = 3
                         Residue position = 4 
 
-measures         = Distance (2.N 4.N) Angle (1.N 2.N 3.N)
+measures         = Distance (2.N 4.N), Angle (1.N 2.N 3.N)

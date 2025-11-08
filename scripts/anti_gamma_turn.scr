@@ -10,6 +10,6 @@ motifDescription = Chain
                         Residue position = 2 
                         Residue position = 3 
 
-measures         = HBond (1.N 1.H 3.O 3.C)
-                   Torsion (1.O 2.N 2.CA 2.C)
+measures         = HBond (1.N 1.H 3.O 3.C),
+                   Torsion (1.O 2.N 2.CA 2.C),
                    Torsion (2.N 2.CA 2.C 3.N)

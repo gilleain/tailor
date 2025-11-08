@@ -18,6 +18,7 @@ import aigen.condition.TorsionBoundCondition;
 import aigen.description.AtomDescription;
 import aigen.description.ChainDescription;
 import aigen.description.Description;
+import aigen.description.DescriptionGenerator;
 import aigen.description.ResidueDescription;
 import aigen.measure.AngleMeasure;
 import aigen.measure.DistanceMeasure;
@@ -182,6 +183,9 @@ public class Script {
         "HBond", HBondMeasure.class
     );
     
+    private static final Map<String, ChainDescription> PREDEFINED_DESCRIPTIONS = 
+    		DescriptionGenerator.getPredefinedDescriptions();
+    
     /**
      * Parse and execute a script file
      */
@@ -225,8 +229,9 @@ public class Script {
             if (line.isEmpty() || line.startsWith("#")) continue;
             
             if (line.startsWith("motifDescription")) {
-                currentKey = "motifDescription";
-                currentSection = new StringBuilder(line);
+                currentKey = "motifDescription =";
+                String[] parts = line.split("=");
+                result.motifDescription = parts[1].trim();
             } else if (line.startsWith("filepath")) {
                 currentKey = "filepath";
                 String[] parts = line.split("=");
@@ -240,13 +245,53 @@ public class Script {
                 }
             } else if (line.startsWith("measures")) {
                 currentKey = "measures";
-                currentSection = new StringBuilder(line);
+                String[] parts = line.split("=");
+                result.measures = parseMeasureText(parts[1]);
             } else if (currentKey != null) {
                 currentSection.append(" ").append(line);
             }
         }
         
         return result;
+    }
+    
+    private static List<MeasureText> parseMeasureText(String text) {
+    	List<MeasureText> measureTexts = new ArrayList<>();
+    	for (String textPart :  text.split(",")) {
+    		int openBracket = textPart.indexOf("(");
+    		String measureName = textPart.substring(0, openBracket).trim();
+    		if (MEASURE_DICT.containsKey(measureName)) {
+    			if (measureName.equals("Property")) {
+    				int closedBracket = textPart.indexOf(")");
+    				String[] subParts = textPart.substring(openBracket, closedBracket).split("\\s");
+    				PropertyMeasureText p = new PropertyMeasureText();
+    				p.measureType = "Property";
+    				p.property = subParts[0];
+    				p.residueNumber = Integer.valueOf(subParts[1]);
+    				p.valueType = subParts[2];
+    				measureTexts.add(p);
+    			} else {
+    				int closedBracket = textPart.indexOf(")");
+    				String[] subParts = textPart.substring(openBracket + 1, closedBracket).split("\\s");
+    				GeometricMeasureText g = new GeometricMeasureText();
+    				g.measureType = measureName;
+    				g.selections = parseSelections(subParts);
+    				measureTexts.add(g);
+    			}
+    		} else {
+    			// TODO throw error, potentially
+    		}
+    	}
+    	return measureTexts;
+    }
+    
+    private static List<Selection> parseSelections(String[] parts) {
+    	List<Selection> selections = new ArrayList<>();
+    	for (String part : parts) {
+    		String[] bits = part.split("\\.");
+    		selections.add(new Selection(Integer.parseInt(bits[0]), bits[1]));
+    	}
+    	return selections;
     }
     
     /**
@@ -274,9 +319,9 @@ public class Script {
     /**
      * Look up a predefined motif description
      */
-    public static Description lookupMotif(String motifDescriptionText) {
+    public static ChainDescription lookupMotif(String motifDescriptionText) {
         String name = motifDescriptionText.split("'")[1];
-        return PredefinedDescriptions.get(name);
+        return PREDEFINED_DESCRIPTIONS.get(name);
     }
     
     /**
@@ -483,13 +528,4 @@ class PropertyMeasureText extends MeasureText {
     public int residueNumber;
     public String property;
     public String valueType;
-}
-
-
-class PredefinedDescriptions {
-    private static Map<String, Description> descriptions = new HashMap<>();
-    
-    public static Description get(String name) {
-        return descriptions.get(name);
-    }
 }

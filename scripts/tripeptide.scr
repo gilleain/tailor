@@ -9,6 +9,6 @@ motifDescription =  Chain
                         Residue position = 3
 
 measures         = 
-                   Property 1 resname str
-                   Property 2 resname str
-                   Property 3 resname str
+                   Property ( 1 resname str),
+                   Property ( 2 resname str),
+                   Property ( 3 resname str)
