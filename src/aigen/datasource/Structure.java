@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.function.BiFunction;
 
 
-class Structure {
+public class Structure {
     private String label;
     private Constants level;
     private String data;

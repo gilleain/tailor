@@ -133,7 +133,7 @@ public class Feature implements Iterable<Feature> {
      throw new UnsupportedOperationException("getAtomCenter must be implemented by Atom class");
  }
 
- protected Feature copy() {
+ public Feature copy() {
      try {
          return (Feature) super.clone();
      } catch (CloneNotSupportedException e) {
