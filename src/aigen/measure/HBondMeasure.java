@@ -5,7 +5,7 @@ import aigen.feature.Atom;
 import aigen.engine.Engine;
 import aigen.geometry.Geometry;
 
-class HBondMeasure extends Measure {
+class HBondMeasure extends BaseMeasure {
 	private String donorDescription;
 	private String hydrogenDescription;
 	private String acceptorDescription;

@@ -1,21 +1,13 @@
 package aigen.measure;
 
-abstract class Measure {
-	private String name;
+public interface Measure {
+	
+	abstract Object measure(Object target);
 
-	public void setName(String name) {
-		this.name = name;
-	}
+	abstract int getNumberOfColumns();
 
-	public String getName() {
-		return this.name;
-	}
+	abstract Object getColumnHeaders();
 
-	public abstract Object measure(Object target);
+	abstract Object getFormatStrings();
 
-	public abstract int getNumberOfColumns();
-
-	public abstract Object getColumnHeaders();
-
-	public abstract Object getFormatStrings();
 }

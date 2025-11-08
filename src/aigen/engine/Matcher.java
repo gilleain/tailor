@@ -16,7 +16,7 @@ import aigen.feature.Model;
 import aigen.feature.Residue;
 import aigen.feature.Structure;
 
-class Matcher {
+public class Matcher {
     private static final Logger logger = Logger.getLogger(Matcher.class.getName());
     private Description description;
 

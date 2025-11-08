@@ -3,7 +3,7 @@ package aigen.measure;
 import aigen.description.DescriptionException;
 import aigen.feature.Feature;
 
-class PropertyMeasure extends Measure {
+class PropertyMeasure extends BaseMeasure {
 	 private String description;
 	 private String propertyName;
 	 private Class<?> valueType;

@@ -4,7 +4,7 @@ import aigen.engine.Engine;
 import aigen.geometry.Vector;
 import aigen.geometry.Geometry;
 
-class AngleMeasure extends Measure {
+class AngleMeasure extends BaseMeasure {
 	private String descriptionA;
 	private String descriptionB;
 	private String descriptionC;
