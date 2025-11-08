@@ -1,5 +1,8 @@
 package aigen.feature;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Chain extends Feature {
     private String chainID;
     private String chainType;
@@ -58,5 +61,15 @@ public class Chain extends Feature {
 
 	public Residue getResidue(int i) {
 		return (Residue) subFeatures.get(i);
+	}
+
+	public List<Residue> getSubFeatures() {
+		List<Residue> residues = new ArrayList<>();
+		for (Feature r : this) {
+            if (r instanceof Residue) {
+            	residues.add((Residue) r);
+            }
+		}
+		return residues;
 	}
 }

@@ -1,0 +1,309 @@
+package aigen.datasource;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import aigen.feature.Atom;
+import aigen.feature.Chain;
+import aigen.feature.Residue;
+import aigen.geometry.Geometry;
+import aigen.geometry.Vector;
+
+/**
+ * Generate protein structures from phi/psi angles
+ */
+public class Generation {
+    
+    // Bond distances
+    public static final double N_CA_DISTANCE = 1.47;
+    public static final double CA_C_DISTANCE = 1.53;
+    public static final double C_N_DISTANCE = 1.32;
+    public static final double C_O_DISTANCE = 1.24;
+    
+    // Bond angles
+    public static final double N_CA_C_ANGLE = 112;
+    public static final double CA_C_O_ANGLE = 121;
+    public static final double C_N_CA_ANGLE = 123;
+    public static final double CA_C_N_ANGLE = 114;
+    public static final double O_C_N_ANGLE = 125;
+    
+    // Common conformations
+    public static final PhiPsi HELIX = new PhiPsi(-57, -47);
+    public static final PhiPsi PARALLEL = new PhiPsi(-119, 113);
+    public static final PhiPsi ANTIPARALLEL = new PhiPsi(-139, 135);
+    public static final PhiPsi PP_II = new PhiPsi(-70, 150);
+    
+    public static final List<PhiPsi> TYPE1_TURN = List.of(
+        new PhiPsi(-60, -30), 
+        new PhiPsi(-90, 0)
+    );
+    
+    public static final List<PhiPsi> TYPE2_TURN = List.of(
+        new PhiPsi(-60, 120), 
+        new PhiPsi(80, 0)
+    );
+    
+    public static final List<PhiPsi> TYPE1_PRIME_TURN = List.of(
+        new PhiPsi(60, 30), 
+        new PhiPsi(90, 0)
+    );
+    
+    public static final List<PhiPsi> TYPE2_PRIME_TURN = List.of(
+        new PhiPsi(60, -120), 
+        new PhiPsi(-90, 0)
+    );
+    
+    public static final List<PhiPsi> CATBOX = List.of(
+        new PhiPsi(-90, 0), 
+        new PhiPsi(-90, 180)
+    );
+    
+    /**
+     * Extends an existing chain with residues based on phi/psi angles
+     */
+    public static void extendChain(List<PhiPsi> phiPsiList, Double lastPsi, Chain chain) {
+        int numberOfResidues = phiPsiList.size();
+        Residue lastResidue;
+        double currentLastPsi;
+        
+        if (chain == null) {
+            chain = new Chain("A");
+            PhiPsi firstAngles = phiPsiList.get(0);
+            Residue nTerminus = makeNTerminalResidue(firstAngles.psi);
+            chain.add(nTerminus);
+            lastResidue = nTerminus;
+            currentLastPsi = firstAngles.psi;
+        } else {
+            lastResidue = chain.getSubFeatures().get(chain.getSubFeatures().size() - 1);
+            PhiPsi firstAngles = phiPsiList.get(0);
+            Residue firstResidue = makeResidue(lastResidue, firstAngles.phi, firstAngles.psi, lastPsi);
+            chain.add(firstResidue);
+            lastResidue = firstResidue;
+            currentLastPsi = firstAngles.psi;
+        }
+        
+        for (int i = 1; i < numberOfResidues; i++) {
+            PhiPsi angles = phiPsiList.get(i);
+            Residue residue = makeResidue(lastResidue, angles.phi, angles.psi, currentLastPsi);
+            chain.add(residue);
+            lastResidue = residue;
+            currentLastPsi = angles.psi;
+        }
+    }
+    
+    /**
+     * Creates a protein fragment from a list of phi/psi angles
+     */
+    public static Chain makeFragment(List<PhiPsi> phiPsiList) {
+        Vector c_pos = new Vector(0, 0, 0);
+        Vector o_pos = new Vector(C_O_DISTANCE, 0, 0);
+        Vector ca_pos = Geometry.makeXYZFromAngle(o_pos, c_pos, CA_C_DISTANCE, CA_C_O_ANGLE, Geometry.NEG_Y);
+        
+        Residue nCap = new Residue(1, "GLY");
+        nCap.getSubFeatures().add(new Atom("CA", ca_pos));
+        nCap.getSubFeatures().add(new Atom("C", c_pos));
+        nCap.getSubFeatures().add(new Atom("O", o_pos));
+        
+        PhiPsi firstAngles = phiPsiList.get(0);
+        double phi = firstAngles.phi;
+        double psi = firstAngles.psi;
+        double N_CA_C_O_torsion = Geometry.invertTorsion(psi);
+        
+        Vector n_pos = Geometry.makeXYZFromAngle(o_pos, c_pos, C_N_DISTANCE, O_C_N_ANGLE, Geometry.Y);
+        ca_pos = Geometry.makeXYZ(n_pos, N_CA_DISTANCE, c_pos, C_N_CA_ANGLE, o_pos, 0);
+        c_pos = Geometry.makeXYZ(ca_pos, CA_C_DISTANCE, n_pos, N_CA_C_ANGLE, c_pos, phi);
+        o_pos = Geometry.makeXYZ(c_pos, C_O_DISTANCE, ca_pos, CA_C_O_ANGLE, n_pos, N_CA_C_O_torsion);
+        
+        Residue firstResidue = new Residue(2, "GLY");
+        firstResidue.getSubFeatures().add(new Atom("N", n_pos));
+        firstResidue.getSubFeatures().add(new Atom("CA", ca_pos));
+        firstResidue.getSubFeatures().add(new Atom("C", c_pos));
+        firstResidue.getSubFeatures().add(new Atom("O", o_pos));
+        
+        Chain chain = new Chain("A");
+        chain.add(nCap);
+        chain.add(firstResidue);
+        
+        if (phiPsiList.size() > 1) {
+            extendChain(phiPsiList.subList(1, phiPsiList.size()), psi, chain);
+        }
+        
+        // Add C-terminal cap
+        Residue last = chain.getSubFeatures().get(chain.getSubFeatures().size() - 1);
+        double lastPsi = phiPsiList.get(phiPsiList.size() - 1).psi;
+        
+        n_pos = last.getAtomPosition("N");
+        ca_pos = last.getAtomPosition("CA");
+        c_pos = last.getAtomPosition("C");
+        o_pos = last.getAtomPosition("O");
+        
+        n_pos = Geometry.makeXYZ(c_pos, C_N_DISTANCE, ca_pos, CA_C_N_ANGLE, n_pos, lastPsi);
+        Residue cCap = new Residue(last.getNumber() + 1, "GLY");
+        cCap.getSubFeatures().add(new Atom("N", n_pos));
+        chain.add(cCap);
+        
+        return chain;
+    }
+    
+    /**
+     * Creates an N-terminal residue
+     */
+    public static Residue makeNTerminalResidue(double psi) {
+        double N_CA_C_O_torsion = Geometry.invertTorsion(psi);
+        Vector nitrogen = new Vector(0.0, 0.0, 0.0);
+        Vector cAlpha = new Vector(N_CA_DISTANCE, 0.0, 0.0);
+        Vector carbonylCarbon = Geometry.makeXYZFromAngle(nitrogen, cAlpha, CA_C_DISTANCE, N_CA_C_ANGLE, Geometry.Y);
+        Vector oxygen = Geometry.makeXYZ(carbonylCarbon, C_O_DISTANCE, cAlpha, CA_C_O_ANGLE, nitrogen, N_CA_C_O_torsion);
+        
+        Residue r = new Residue(1, "GLY");
+        r.getSubFeatures().add(new Atom("N", nitrogen));
+        r.getSubFeatures().add(new Atom("CA", cAlpha));
+        r.getSubFeatures().add(new Atom("C", carbonylCarbon));
+        r.getSubFeatures().add(new Atom("O", oxygen));
+        
+        return r;
+    }
+    
+    /**
+     * Creates a residue based on the previous residue and phi/psi angles
+     */
+    public static Residue makeResidue(Residue previousResidue, double phi, double psi, double lastPsi) {
+        Vector previousNitrogen = previousResidue.getAtomPosition("N");
+        Vector previousCAlpha = previousResidue.getAtomPosition("CA");
+        Vector previousC = previousResidue.getAtomPosition("C");
+        double N_CA_C_O_torsion = Geometry.invertTorsion(psi);
+        
+        Vector nitrogen = Geometry.makeXYZ(previousC, C_N_DISTANCE, previousCAlpha, CA_C_N_ANGLE, previousNitrogen, lastPsi);
+        Vector cAlpha = Geometry.makeXYZ(nitrogen, N_CA_DISTANCE, previousC, C_N_CA_ANGLE, previousCAlpha, 180);
+        Vector carbonylCarbon = Geometry.makeXYZ(cAlpha, CA_C_DISTANCE, nitrogen, N_CA_C_ANGLE, previousC, phi);
+        Vector oxygen = Geometry.makeXYZ(carbonylCarbon, C_O_DISTANCE, cAlpha, CA_C_O_ANGLE, nitrogen, N_CA_C_O_torsion);
+        
+        int residueNumber = previousResidue.getNumber() + 1;
+        Residue r = new Residue(residueNumber, "GLY");
+        r.getSubFeatures().add(new Atom("N", nitrogen));
+        r.getSubFeatures().add(new Atom("CA", cAlpha));
+        r.getSubFeatures().add(new Atom("C", carbonylCarbon));
+        r.getSubFeatures().add(new Atom("O", oxygen));
+        
+        return r;
+    }
+    
+    /**
+     * Converts a chain to PDB format string
+     */
+    public static String toPDB(Chain chain) {
+        List<String> records = new ArrayList<>();
+        int atomnum = 1;
+        String recordFormat = "ATOM %6d  %-3s %s %5d     %7.3f %7.3f %7.3f";
+        
+        for (Residue residue : chain.getSubFeatures()) {
+            for (Atom atom : residue.getSubFeatures()) {
+                Vector p = atom.getCenter();
+                String record = String.format(recordFormat, 
+                    atomnum, atom.getName(), residue.getResname(), 
+                    residue.getNumber(), p.x, p.y, p.z);
+                records.add(record);
+                atomnum++;
+            }
+        }
+        
+        return String.join("\n", records);
+    }
+    
+    public static void main(String[] args) {
+        Chain ctbx = makeFragment(CATBOX);
+        System.out.println(toPDB(ctbx));
+    }
+}
+
+
+
+//class Atom implements Iterable<Atom> {
+//    private String name;
+//    private int number;
+//    private Vector coord;
+//    
+//    public Atom(String name, Vector coord) {
+//        this(name, 0, coord);
+//    }
+//    
+//    public Atom(String name, int number, Vector coord) {
+//        this.name = name;
+//        this.number = number;
+//        this.coord = coord;
+//    }
+//    
+//    public String getName() {
+//        return name;
+//    }
+//    
+//    public Vector getCenter() {
+//        return coord;
+//    }
+//    
+//    @Override
+//    public java.util.Iterator<Atom> iterator() {
+//        return java.util.Collections.singletonList(this).iterator();
+//    }
+//}
+//
+//class Residue implements Iterable<Atom> {
+//    private int number;
+//    private String resname;
+//    private List<Atom> subFeatures;
+//    
+//    public Residue(int number, String resname) {
+//        this.number = number;
+//        this.resname = resname;
+//        this.subFeatures = new ArrayList<>();
+//    }
+//    
+//    public int getNumber() {
+//        return number;
+//    }
+//    
+//    public String getResname() {
+//        return resname;
+//    }
+//    
+//    public List<Atom> getSubFeatures() {
+//        return subFeatures;
+//    }
+//    
+//    public Vector getAtomPosition(String atomName) {
+//        for (Atom atom : subFeatures) {
+//            if (atom.getName().equals(atomName)) {
+//                return atom.getCenter();
+//            }
+//        }
+//        return null;
+//    }
+//    
+//    @Override
+//    public java.util.Iterator<Atom> iterator() {
+//        return subFeatures.iterator();
+//    }
+//}
+//
+//class Chain implements Iterable<Residue> {
+//    private String chainId;
+//    private List<Residue> subFeatures;
+//    
+//    public Chain(String chainId) {
+//        this.chainId = chainId;
+//        this.subFeatures = new ArrayList<>();
+//    }
+//    
+//    public void add(Residue residue) {
+//        subFeatures.add(residue);
+//    }
+//    
+//    public List<Residue> getSubFeatures() {
+//        return subFeatures;
+//    }
+//    
+//    @Override
+//    public java.util.Iterator<Residue> iterator() {
+//        return subFeatures.iterator();
+//    }
+//}

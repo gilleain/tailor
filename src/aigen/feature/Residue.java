@@ -1,7 +1,7 @@
 package aigen.feature;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 import aigen.geometry.Vector;
@@ -44,6 +44,22 @@ public class Residue extends Feature {
         }
         throw new IllegalArgumentException("No atom with name " + atomName);
     }
+    
+    public String getResname() {
+      return resname;
+    }
+    
+    public List<Atom> getSubFeatures() {
+    	List<Atom> atoms = new ArrayList<>();
+    	for (Feature a : this) {
+            if (a instanceof Atom) {
+                atoms.add((Atom) a);
+            }
+    	}
+                
+    	return atoms;
+    }
+
 
     public Vector getAtomPosition(String atomName) {
         return getAtom(atomName).getAtomCenter();

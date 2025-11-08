@@ -1,7 +1,10 @@
 package aigen.geometry;
 
 public class Geometry {
-    
+	
+	public static final Vector Y = new Vector(0, 1, 0);
+	public static final Vector NEG_Y = new Vector(0, -1, 0);
+  
     public static double distance(Vector a, Vector b) {
         return a.subtract(b).length();
     }
