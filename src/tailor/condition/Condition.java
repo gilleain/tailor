@@ -16,5 +16,15 @@ public interface Condition {
 	public boolean contains(Description d);
 	
 	public String toXml();
+	
+	// TODO - from python code
+	
+	void negate();
+
+	boolean isNegated();
+
+	public boolean hasProperty(String key);
+
+	public Object getProperty(String key);
 
 }

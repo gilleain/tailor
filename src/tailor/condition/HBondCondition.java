@@ -10,7 +10,7 @@ import tailor.measurement.HBondMeasurement;
  * @author maclean
  *
  */
-public class HBondCondition implements Condition {
+public class HBondCondition extends BaseCondition implements Condition {
     
     private String name;
     

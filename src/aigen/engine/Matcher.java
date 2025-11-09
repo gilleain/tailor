@@ -7,7 +7,6 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import aigen.condition.Condition;
 import aigen.description.ChainDescription;
 import aigen.description.Description;
 import aigen.description.StructureDescription;
@@ -15,6 +14,8 @@ import aigen.feature.Chain;
 import aigen.feature.Model;
 import aigen.feature.Residue;
 import aigen.feature.Structure;
+import tailor.condition.Condition;
+import tailor.match.Match;
 
 public class Matcher {
     private static final Logger logger = Logger.getLogger(Matcher.class.getName());
@@ -105,12 +106,14 @@ public class Matcher {
         	Condition condition = (Condition)o;	// TODO
             logger.log(Level.FINE, "checking condition " + condition);
             
+            // TODO - not sure this makes sense?
             if (condition.hasProperty("propertyKey") && 
                 condition.getProperty("propertyKey").equals("chainID")) {
                 continue;
             }
             
-            if (condition.satisfiedBy(fragment)) {
+            Match match = null;	// TODO - this should wrap fragment
+            if (condition.satisfiedBy(match)) {
                 continue;
             } else {
                 return false;

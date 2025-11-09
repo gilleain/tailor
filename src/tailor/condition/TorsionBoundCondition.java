@@ -5,7 +5,7 @@ import tailor.match.Match;
 import tailor.measurement.TorsionMeasure;
 
 
-public class TorsionBoundCondition implements Condition {
+public class TorsionBoundCondition extends BaseCondition implements Condition {
 	
 	private final String name;
 	private final TorsionMeasure torsionMeasure;

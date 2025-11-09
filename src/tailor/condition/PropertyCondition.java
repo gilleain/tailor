@@ -5,8 +5,9 @@ import tailor.match.Match;
 
 
 //TODO : this whole class may be unnecessary...
+// TODO - how does this compare to BaseCondition.getProperty ...
 
-public class PropertyCondition implements Condition {
+public class PropertyCondition extends BaseCondition implements Condition {
 	
 	private String propertyKey;
 	private String propertyValue;

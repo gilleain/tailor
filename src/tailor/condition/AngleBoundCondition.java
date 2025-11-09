@@ -9,7 +9,7 @@ import tailor.measurement.AngleMeasure;
  * @author maclean
  *
  */
-public class AngleBoundCondition implements Condition {
+public class AngleBoundCondition extends BaseCondition implements Condition {
 
     private String name;
     private AngleMeasure angleMeasure;

@@ -6,7 +6,7 @@ import tailor.description.Description;
 import tailor.match.Match;
 
 
-public class OnlyOne implements Condition {
+public class OnlyOne extends BaseCondition implements Condition {
     
     private ArrayList<Condition> conditions;
 

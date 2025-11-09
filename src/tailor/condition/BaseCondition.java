@@ -1,6 +1,7 @@
-package aigen.condition;
+package tailor.condition;
 
 abstract class BaseCondition implements Condition {
+	
 	protected boolean negated = false;	// TODO - could just use java.util.Function instead?
 	protected String name;
 

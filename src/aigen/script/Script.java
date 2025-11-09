@@ -9,12 +9,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import aigen.condition.AngleBoundCondition;
-import aigen.condition.Condition;
-import aigen.condition.DistanceBoundCondition;
-import aigen.condition.HBondCondition;
-import aigen.condition.PropertyCondition;
-import aigen.condition.TorsionBoundCondition;
 import aigen.description.AtomDescription;
 import aigen.description.ChainDescription;
 import aigen.description.Description;
@@ -22,12 +16,18 @@ import aigen.description.DescriptionGenerator;
 import aigen.description.ResidueDescription;
 import aigen.run.Pipe;
 import aigen.run.Run;
+import tailor.condition.AngleBoundCondition;
+import tailor.condition.Condition;
+import tailor.condition.DistanceBoundCondition;
+import tailor.condition.HBondCondition;
+import tailor.condition.PropertyCondition;
+import tailor.condition.TorsionBoundCondition;
 import tailor.measurement.AngleMeasure;
 import tailor.measurement.DistanceMeasure;
-import tailor.measurement.Measure;
 import tailor.measurement.HBondMeasure;
-import tailor.measurement.TorsionMeasure;
+import tailor.measurement.Measure;
 import tailor.measurement.PropertyMeasure;
+import tailor.measurement.TorsionMeasure;
 
 /**
  * Main script parser and translator

@@ -11,7 +11,7 @@ import tailor.measurement.DistanceMeasure;
  * @author maclean
  *
  */
-public class DistanceBoundCondition implements Condition {
+public class DistanceBoundCondition extends BaseCondition implements Condition {
 	
 	private String name;
 	private DistanceMeasure distanceMeasure;
