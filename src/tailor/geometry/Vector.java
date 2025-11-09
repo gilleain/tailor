@@ -1,10 +1,16 @@
 package tailor.geometry;
 
+
 public class Vector {
 
 	private double x;
 	private double y;
 	private double z;
+
+	public static final Vector O = new Vector(0, 0, 0);
+	public static final Vector X = new Vector(1, 0, 0);
+	public static final Vector Y = new Vector(0, 1, 0);
+	public static final Vector Z = new Vector(0, 0, 1);
 	
 	public Vector() {
 	    this.x = 0;
@@ -40,15 +46,21 @@ public class Vector {
 	public double z() {
 		return this.z;
 	}
+
+	public double dot(Vector other) {
+		return x * other.x + y * other.y + z * other.z;
+	}
 	
 	public Vector plus(Vector other) {
 		return new Vector(this.x + other.x, this.y + other.y, this.z + other.z);
 	}
-    
-    public void add(Vector other) {
-        this.x += other.x;
-        this.y += other.y;
-        this.z += other.z;
+
+	public Vector add(double scalar) {
+		return new Vector(x + scalar, y + scalar, z + scalar);
+	}
+	
+	public Vector add(Vector other) {
+        return new Vector(x + other.x, y + other.y, z + other.z);
     }
 	
 	public Vector minus(Vector other) {
@@ -66,18 +78,23 @@ public class Vector {
 	public double multiply(Vector other) {
 		return this.x * other.x + this.y * other.y + this.z * other.z;
 	}
+
+	public Vector multiply(double scalar) {
+		return new Vector(x * scalar, y * scalar, z * scalar);
+	}
 	
 	public double length() {
 		return Math.sqrt(this.multiply(this));
 	}
-	
-	public void normalize() {
-		Vector normalized = this.divide(this.length());
-		this.x = normalized.x;
-		this.y = normalized.y;
-		this.z = normalized.z;
+
+	public Vector normalize() {
+		double len = length();
+		if (len == 0.0) {
+			return new Vector(x, y, z);
+		}
+		return divide(len);
 	}
-	
+
 	public double angle(Vector other) {
 		try {
 			double c = this.multiply(other) / (this.length() * other.length());

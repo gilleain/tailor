@@ -4,7 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import aigen.geometry.Vector;
+import tailor.geometry.Vector;
+
 
 public class Residue extends Feature {
     private ResidueID residueID;

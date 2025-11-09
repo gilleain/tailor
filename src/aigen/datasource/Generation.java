@@ -6,8 +6,8 @@ import java.util.List;
 import aigen.feature.Atom;
 import aigen.feature.Chain;
 import aigen.feature.Residue;
-import aigen.geometry.Geometry;
-import aigen.geometry.Vector;
+import tailor.geometry.Geometry;
+import tailor.geometry.Vector;
 
 /**
  * Generate protein structures from phi/psi angles
@@ -201,7 +201,7 @@ public class Generation {
                 Vector p = atom.getCenter();
                 String record = String.format(recordFormat, 
                     atomnum, atom.getName(), residue.getResname(), 
-                    residue.getNumber(), p.x, p.y, p.z);
+                    residue.getNumber(), p.x(), p.y(), p.z());
                 records.add(record);
                 atomnum++;
             }
@@ -215,95 +215,3 @@ public class Generation {
         System.out.println(toPDB(ctbx));
     }
 }
-
-
-
-//class Atom implements Iterable<Atom> {
-//    private String name;
-//    private int number;
-//    private Vector coord;
-//    
-//    public Atom(String name, Vector coord) {
-//        this(name, 0, coord);
-//    }
-//    
-//    public Atom(String name, int number, Vector coord) {
-//        this.name = name;
-//        this.number = number;
-//        this.coord = coord;
-//    }
-//    
-//    public String getName() {
-//        return name;
-//    }
-//    
-//    public Vector getCenter() {
-//        return coord;
-//    }
-//    
-//    @Override
-//    public java.util.Iterator<Atom> iterator() {
-//        return java.util.Collections.singletonList(this).iterator();
-//    }
-//}
-//
-//class Residue implements Iterable<Atom> {
-//    private int number;
-//    private String resname;
-//    private List<Atom> subFeatures;
-//    
-//    public Residue(int number, String resname) {
-//        this.number = number;
-//        this.resname = resname;
-//        this.subFeatures = new ArrayList<>();
-//    }
-//    
-//    public int getNumber() {
-//        return number;
-//    }
-//    
-//    public String getResname() {
-//        return resname;
-//    }
-//    
-//    public List<Atom> getSubFeatures() {
-//        return subFeatures;
-//    }
-//    
-//    public Vector getAtomPosition(String atomName) {
-//        for (Atom atom : subFeatures) {
-//            if (atom.getName().equals(atomName)) {
-//                return atom.getCenter();
-//            }
-//        }
-//        return null;
-//    }
-//    
-//    @Override
-//    public java.util.Iterator<Atom> iterator() {
-//        return subFeatures.iterator();
-//    }
-//}
-//
-//class Chain implements Iterable<Residue> {
-//    private String chainId;
-//    private List<Residue> subFeatures;
-//    
-//    public Chain(String chainId) {
-//        this.chainId = chainId;
-//        this.subFeatures = new ArrayList<>();
-//    }
-//    
-//    public void add(Residue residue) {
-//        subFeatures.add(residue);
-//    }
-//    
-//    public List<Residue> getSubFeatures() {
-//        return subFeatures;
-//    }
-//    
-//    @Override
-//    public java.util.Iterator<Residue> iterator() {
-//        return subFeatures.iterator();
-//    }
-//}

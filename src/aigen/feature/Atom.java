@@ -1,6 +1,6 @@
 package aigen.feature;
 
-import aigen.geometry.Vector;
+import tailor.geometry.Vector;
 
 public class Atom extends Feature {
     private String name;
