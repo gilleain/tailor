@@ -26,5 +26,12 @@ public interface Measure<T extends Measurement> {
      * @return 
      */
     public String getName();
+    
+    // TODO - methods from python code
+    int getNumberOfColumns();
+
+	String[] getColumnHeaders();
+
+	String[] getFormatStrings();
 
 }

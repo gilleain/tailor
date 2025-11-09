@@ -20,14 +20,14 @@ import aigen.description.ChainDescription;
 import aigen.description.Description;
 import aigen.description.DescriptionGenerator;
 import aigen.description.ResidueDescription;
-import aigen.measure.AngleMeasure;
-import aigen.measure.DistanceMeasure;
-import aigen.measure.HBondMeasure;
-import aigen.measure.Measure;
-import aigen.measure.PropertyMeasure;
-import aigen.measure.TorsionMeasure;
 import aigen.run.Pipe;
 import aigen.run.Run;
+import tailor.measurement.AngleMeasure;
+import tailor.measurement.DistanceMeasure;
+import tailor.measurement.Measure;
+import tailor.measurement.HBondMeasure;
+import tailor.measurement.TorsionMeasure;
+import tailor.measurement.PropertyMeasure;
 
 /**
  * Main script parser and translator

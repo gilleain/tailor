@@ -13,6 +13,8 @@ import tailor.match.Match;
  *
  */
 public class AngleMeasure extends GeometricMeasure implements Measure<DoubleMeasurement> {
+	
+	private static final String[] FORMAT_STRINGS = new String[] { "%.2f" };
     
     private Description descriptionA;
     
@@ -50,8 +52,28 @@ public class AngleMeasure extends GeometricMeasure implements Measure<DoubleMeas
         return new DoubleMeasurement(calculate(match));
     }
     
+    @Override
+	public int getNumberOfColumns() {
+		return 1;
+	}
+
+	@Override
+	public String[] getColumnHeaders() {
+		String name = getName();
+		if (name == null) {
+			return new String[] { "Angle" };
+		} else {
+			return new String[] { name };
+		}
+	}
+
+	@Override
+	public String[] getFormatStrings() {
+		return FORMAT_STRINGS;
+	}
+    
     public String toString() {
-        return "a (" + descriptionA.toPathString() + ", " 
+        return "A (" + descriptionA.toPathString() + ", " 
                     + descriptionB.toPathString() + ", "
                     + descriptionC.toPathString() + ") ";
     }

@@ -11,7 +11,9 @@ import tailor.match.Match;
  * @author maclean
  *
  */
-public class DistanceMeasure extends GeometricMeasure implements Measure<DoubleMeasurement>{
+public class DistanceMeasure extends GeometricMeasure implements Measure<DoubleMeasurement> {
+	
+	private static final String[] FORMAT_STRINGS = new String[] { "%.2f" };
 	 
     private Description descriptionA;
     
@@ -38,18 +40,38 @@ public class DistanceMeasure extends GeometricMeasure implements Measure<DoubleM
 	public DoubleMeasurement measure(Match match) {
 		return new DoubleMeasurement(calculate(match));
 	}
-    
-    public String toString() {
-        return "d (" + descriptionA.toXmlPathString() 
-                  + ", " + descriptionB.toXmlPathString() + ") "; // TODO
-    }
+	
+	@Override
+	public int getNumberOfColumns() {
+		return 1;
+	}
 
+	@Override
+	public String[] getColumnHeaders() {
+		String name = getName();
+		if (name == null) {
+			return new String[] { "Distance" };
+		} else {
+			return new String[] { name };
+		}
+	}
+
+	@Override
+	public String[] getFormatStrings() {
+		return FORMAT_STRINGS;
+	}
+   
     public Description getDescriptionA() {
         return this.descriptionA;
     }
     
     public Description getDescriptionB() {
         return this.descriptionB;
+    }
+    
+    public String toString() {
+        return "D (" + descriptionA.toXmlPathString() 
+                  + ", " + descriptionB.toXmlPathString() + ") "; // TODO
     }
 
 }

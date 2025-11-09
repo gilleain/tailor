@@ -10,9 +10,10 @@ import aigen.description.DescriptionException;
 import aigen.engine.Matcher;
 import aigen.feature.Chain;
 import aigen.feature.Feature;
-import aigen.feature.Model;
 import aigen.feature.Structure;
-import aigen.measure.Measure;
+import tailor.match.Match;
+import tailor.measurement.Measure;
+import tailor.measurement.Measurement;
 
 /**
  * A pipe that processes structures through a matcher and measures
@@ -50,11 +51,9 @@ public class Pipe {
         // Build format string template
         List<String> formatStrings = new ArrayList<>();
         for (Measure measure : measures) {
-            Object formatStringValue = measure.getFormatStrings();
-            if (formatStringValue instanceof List) {
-                formatStrings.addAll((List<String>) formatStringValue);
-            } else {
-                formatStrings.add((String) formatStringValue);
+            String[] formatStringValues = measure.getFormatStrings();
+            for (String formatString : formatStringValues) {
+            	formatStrings.add(formatString);
             }
         }
         this.resultTemplate = String.join(this.columnSeparator, formatStrings);
@@ -81,15 +80,9 @@ public class Pipe {
         
         List<String> measureHeaderList = new ArrayList<>();
         for (Measure measure : this.measures) {
-            Object columnHeaders = measure.getColumnHeaders();
-            if (columnHeaders instanceof List) {
-                measureHeaderList.addAll((List<String>) columnHeaders);
-            } else if (columnHeaders instanceof String[]) {
-                for (String header : (String[]) columnHeaders) {
-                    measureHeaderList.add(header);
-                }
-            } else {
-                measureHeaderList.add((String) columnHeaders);
+            String[] columnHeaders = measure.getColumnHeaders();
+            for (String header : columnHeaders) {
+            	measureHeaderList.add(header);
             }
         }
         
@@ -122,10 +115,11 @@ public class Pipe {
     /**
      * Formats the complete results line
      */
-    public String formatResults(Structure structure, Structure motif, List<Object> results) {
+    public String formatResults(Structure structure, Structure motif, List<Measurement> results) {
         String signature = formatMotif(structure, List.of(motif));	/// XXX - why a list here?
         String resultStr;
         
+        // TODO - do this in a better way ...
         try {
             // Convert results to array for String.format
             Object[] resultArray = results.toArray();
@@ -145,20 +139,13 @@ public class Pipe {
      */
     public void run(Structure structure) throws DescriptionException {
         for (Structure fragment : this.matcher.findAll(structure)) {
-            List<Object> results = new ArrayList<>();
+            List<Measurement> results = new ArrayList<>();
             
             for (Measure measure : this.measures) {
-                Object result = measure.measure(fragment);
-                
-                if (result instanceof List) {
-                    results.addAll((List<?>) result);
-                } else if (result instanceof Object[]) {
-                    for (Object r : (Object[]) result) {
-                        results.add(r);
-                    }
-                } else {
-                    results.add(result);
-                }
+            	// XXX TODO - fix this
+            	Match match = null;	// should wrap the fragment
+            	Measurement result = measure.measure(match);
+            	results.add(result);
             }
             
             this.out.print(formatResults(structure, fragment, results));

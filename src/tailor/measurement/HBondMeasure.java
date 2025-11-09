@@ -67,5 +67,33 @@ public class HBondMeasure extends GeometricMeasure implements Measure<HBondMeasu
 				|| this.donorAtomDescription.contains(d)
 				|| this.hydrogenAtomDescription.contains(d);
 	}
+	
+
+	@Override
+	public int getNumberOfColumns() {
+		return 3;
+	}
+
+	@Override
+	public String[] getColumnHeaders() {
+		String name = getName();
+		if (name == null) {
+			name = "HBond";
+		}
+		return new String[] { String.format("%s:D_H", name), String.format("%s:DHA", name),
+				String.format("%s:HAA", name) };
+	}
+
+	@Override
+	public String[] getFormatStrings() {
+		return new String[] { "%.2f", "%.2f", "%.2f" };
+	}
+	
+	@Override
+	public String toString() {
+		return String.format("HB(%s, %s, %s, %s)", 
+				this.donorAtomDescription, this.hydrogenAtomDescription,
+				this.acceptorAtomDescription, this.attachedAtomDescription);
+	}
 
 }

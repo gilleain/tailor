@@ -1,8 +1,9 @@
-package aigen.measure;
+package tailor.measurement;
 
 import aigen.description.Description;
+import tailor.match.Match;
 
-public class PropertyMeasure extends BaseMeasure {
+public class PropertyMeasure implements Measure<PropertyMeasurement> {
 	 private Description description;
 	 private String propertyName;
 	 private Class valueType; // XXX TODO  -split into StringPropertyType, DoublePropertyType, etc
@@ -12,11 +13,13 @@ public class PropertyMeasure extends BaseMeasure {
 	     this.propertyName = propertyName;
 	     this.valueType = valueType;
 	 }
+	 
+	 
 
 	 @Override
-	 public Object measure(Object feature) {
+	 public PropertyMeasurement measure(Match match) {
 //	     try {
-	    	 return "";	//TODO
+	    	 return new PropertyMeasurement("");	//TODO
 //	         Feature f = ((Feature) feature).findFeature(this.description);
 //	         java.lang.reflect.Field field = f.getClass().getDeclaredField(this.propertyName);
 //	         field.setAccessible(true);
@@ -34,29 +37,35 @@ public class PropertyMeasure extends BaseMeasure {
 	 }
 
 	 @Override
-	 public String getColumnHeaders() {
+	 public String[] getColumnHeaders() {
 	     String name = getName();
 	     if (name == null) {
-	         return this.propertyName;
+	         return new String[] { this.propertyName };
 	     } else {
-	         return name;
+	         return new String[] { name };
 	     }
 	 }
 
 	 @Override
-	 public String getFormatStrings() {
+	 public String[] getFormatStrings() {
 	     if (this.valueType == Integer.class || this.valueType == int.class) {
-	         return "%d";
+	         return new String[] { "%d" };
 	     } else if (this.valueType == Float.class || this.valueType == float.class || 
 	                this.valueType == Double.class || this.valueType == double.class) {
-	         return "%.2f";
+	         return new String[] { "%.2f" };
 	     } else {
-	         return "%s";
+	         return new String[] { "%s" };
 	     }
 	 }
 
-	 @Override
-	 public String toString() {
-	     return String.format("%s=%s", this.description, this.propertyName);
-	 }
+	@Override
+	public String getName() {
+		return this.propertyName;
 	}
+	
+	@Override
+	public String toString() {
+		return String.format("%s=%s", this.description, this.propertyName);
+	}
+
+}

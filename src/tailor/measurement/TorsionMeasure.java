@@ -13,6 +13,8 @@ import tailor.match.Match;
  *
  */
 public class TorsionMeasure extends GeometricMeasure implements Measure<DoubleMeasurement> {
+	
+	private static final String[] FORMAT_STRINGS = new String[] { "%.2f" };
     
     private final Description descriptionA;
     
@@ -66,8 +68,29 @@ public class TorsionMeasure extends GeometricMeasure implements Measure<DoubleMe
         return this.descriptionD;
     }
     
+    @Override
+	public int getNumberOfColumns() {
+		return 1;
+	}
+
+	@Override
+	public String[] getColumnHeaders() {
+		String name = getName();
+		if (name == null) {
+			return new String[] { "Torsion" };
+		} else {
+			return new String[] { name };
+		}
+	}
+
+	@Override
+	public String[] getFormatStrings() {
+		return FORMAT_STRINGS;
+	}
+
+    
     public String toString() {
-        return "t (" + this.descriptionA.toPathString() + ", " 
+        return "T (" + this.descriptionA.toPathString() + ", " 
                     + this.descriptionB.toPathString() + ", "
                     + this.descriptionC.toPathString() + ", "
                     + this.descriptionD.toPathString() + ") ";
