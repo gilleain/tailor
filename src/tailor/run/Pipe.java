@@ -16,6 +16,8 @@ import tailor.structure.Protein;
 import tailor.structure.Structure;
 
 /**
+ * Note this was AIGEN from the python code
+ * 
  * A pipe that processes structures through a matcher and measures
  */
 public class Pipe {

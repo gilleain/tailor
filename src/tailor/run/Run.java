@@ -8,6 +8,7 @@ import java.util.List;
 import tailor.datasource.aigen.PDBFileList;
 
 /**
+ * Note this was AIGEN from the python code
  * Main runner class that processes structures through a pipeline
  */
 public class Run {
