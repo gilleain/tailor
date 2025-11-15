@@ -9,10 +9,10 @@ import aigen.description.ChainDescription;
 import aigen.description.Description;
 import aigen.description.DescriptionException;
 import aigen.description.ResidueDescription;
-import aigen.feature.Atom;
-import aigen.feature.Chain;
-import aigen.feature.Residue;
-import aigen.feature.Structure;
+import tailor.structure.Atom;
+import tailor.structure.Chain;
+import tailor.structure.Group;
+import tailor.structure.Protein;
 
 /**
  * This module provides:
@@ -48,14 +48,14 @@ public class Engine {
     public static Atom lookup(Description description, Object example) throws DescriptionException {
     	// TODO - could use instanceof or a visitor?
         if (description.getLevelCode().equals("C")) {
-            return lookupChain((ChainDescription) description, (Structure) example);
+            return lookupChain((ChainDescription) description, (Protein) example);
         } else if (description.getLevelCode().equals("R")) {
             return lookupResidue((ResidueDescription) description, (Chain) example);
         }
         return null;
     }
 
-    private static Atom lookupChain(ChainDescription chainDescription, Structure structureExample) 
+    private static Atom lookupChain(ChainDescription chainDescription, Protein structureExample) 
             throws DescriptionException {
         // TODO: what if there is more than one chain?
         // TODO: this could really do with not being a generator!
@@ -69,7 +69,7 @@ public class Engine {
     private static Atom lookupResidue(ResidueDescription residueDescription, Chain chainExample) 
             throws DescriptionException {
         aigen.description.AtomDescription atomDescription = residueDescription.getAtomDescriptions().get(0);
-        Residue residue = chainExample.getResidue(residueDescription.getPosition() - 1);
+        Group residue = chainExample.getGroupAt(residueDescription.getPosition() - 1);
         
         for (Atom atom : residue.getAtoms()) {
             if (atomDescription.getName().equals(atom.getName())) {

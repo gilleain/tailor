@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import aigen.feature.Feature;
+import tailor.datasource.aigen.Feature;
 
 public class StructureDescription extends Description {
 	private String name;

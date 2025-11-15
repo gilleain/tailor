@@ -10,6 +10,8 @@ import tailor.structure.Structure;
  * NOTE : originally the intention with this seems to have been to make 
  * a series of fragments?? why does it start with angle _ranges_ then move 
  * to phi/psi pairs??
+ * 
+ * TODO - since it generates _chains_ why not narrow the type?s
  */
 public class StructureGenerator implements Iterable<Structure> {
 	
@@ -79,16 +81,12 @@ public class StructureGenerator implements Iterable<Structure> {
                 }
                 
                 // TODO
-                Structure structure = chainToStructure(Generation.makeFragment(anglePairs));
+                Structure structure = Generation.makeFragment(anglePairs);
                 updateIndices();
                 currentModel++;
                 
                 return structure;
             }
         };
-    }
-    
-    private Structure chainToStructure(aigen.feature.Chain chain) {
-    	return null;	// TODO
     }
 }

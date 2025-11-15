@@ -39,6 +39,18 @@ public class Chain extends Segment implements Structure {
         return this.type;
     }
     
+    public String getResidueRange() {
+        if (size() > 1) {
+            return String.format("%s-%s", getFirst().getNumber(), getLast().getNumber());
+        } else {
+            return String.valueOf(getFirst().getNumber());
+        }
+    }
+    
+    public Group getGroupAt(int index) {
+    	return this.getGroups().get(index);	// TODO - is this the best way to do this?
+    }
+    
     public void setType(ChainType type) {
         this.type = type;
     }

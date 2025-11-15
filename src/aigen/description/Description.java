@@ -6,7 +6,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import aigen.feature.Feature;
+import tailor.datasource.aigen.Feature;
 
 public abstract class Description implements Iterable<Description> {
 	

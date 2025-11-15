@@ -1,4 +1,4 @@
-package aigen.feature;
+package tailor.datasource.aigen;
 
 import java.util.Iterator;
 import java.util.List;

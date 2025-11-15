@@ -1,6 +1,5 @@
 package tailor.datasource.aigen;
 
-import aigen.feature.Model;
 import tailor.structure.Atom;
 import tailor.structure.Chain;
 import tailor.structure.ChainType;
@@ -15,7 +14,7 @@ public class StructureBuilder {
     private Group residue;
     
     // TODO
-    private Model model;
+//    private Model model;
     private Integer modelID;
     
     private String chainID;
@@ -30,7 +29,7 @@ public class StructureBuilder {
     
     public void reset() {
         this.structure = null;
-        this.model = null;
+//        this.model = null;
         this.chain = null;
         this.residue = null;
         

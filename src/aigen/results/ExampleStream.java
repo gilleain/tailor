@@ -5,13 +5,15 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import aigen.feature.Atom;
-import aigen.feature.Chain;
-import aigen.feature.Feature;
-import aigen.feature.Model;
-import aigen.feature.Residue;
-import aigen.feature.Structure;
+import tailor.datasource.aigen.Feature;
 import tailor.datasource.aigen.PDBFileList;
+import tailor.datasource.aigen.ResidueID;
+import tailor.structure.Atom;
+import tailor.structure.Chain;
+import tailor.structure.ChainType;
+import tailor.structure.Group;
+import tailor.structure.Protein;
+import tailor.structure.Structure;
 
 /**
 * Streams examples from PDB files
@@ -25,7 +27,7 @@ class ExampleStream {
    
    public Iterator<Structure> examples(String pdbid, List<ExampleDescription> exampleDescriptions) {
        return new Iterator<Structure>() {
-           private tailor.structure.Structure structure;
+           private Structure structure;
            private Iterator<ExampleDescription> descIterator;
            private Structure nextExample;
            
@@ -72,15 +74,15 @@ class ExampleStream {
 */
 class ExampleDescription {
    private String pdbid;
-   private String chain;
+   private String chainName;
    private int residueStart;
    private int residueEnd;
    private int ligandNum;
    
-   public ExampleDescription(String pdbid, String chain, String residueStart, 
+   public ExampleDescription(String pdbid, String chainName, String residueStart, 
                            String residueEnd, String ligandNum) {
        this.pdbid = pdbid;
-       this.chain = chain;
+       this.chainName = chainName;
        this.residueStart = Integer.parseInt(residueStart);
        this.residueEnd = Integer.parseInt(residueEnd);
        this.ligandNum = Integer.parseInt(ligandNum);
@@ -91,7 +93,7 @@ class ExampleDescription {
    }
    
    public String getChain() {
-       return chain;
+       return chainName;
    }
    
    public int getResidueStart() {
@@ -109,58 +111,62 @@ class ExampleDescription {
    /**
     * Finds and extracts this example from the given structure
     */
-   public Structure findIn(Structure structure) {
-       Structure example = new Structure(this.pdbid);
+   public Structure findIn(Protein structure) {
+       Structure example = new Protein(this.pdbid);
        
        // Get the first model
-       Model sourceModel = (Model)structure.get(0);
-       Model modelFeature = new Model(0);
-       example.add(modelFeature);
+       // TODO
+//       Model sourceModel = (Model)structure.get(0);
+//       Model modelFeature = new Model(0);
+//       example.add(modelFeature);
        
        // Process chains
-       for (Feature chainSubFeature : sourceModel) {
-    	   Chain chain = (Chain) chainSubFeature;
-           if (chain.getChainID().equals(this.chain) || this.chain.equals(" ")) {
-               Chain chainFeature = new Chain(chain.getChainID(), "Protein");
+       for (Chain chain : structure.getChains()) {
+    	   
+           if (chain.getName().equals(this.chainName) || this.chainName.equals(" ")) {
+               Chain chainFeature = new Chain(chain.getName(), ChainType.PEPTIDE);
                
                // Process residues within the range
-               for (Feature residueSubFeature : chain) {
-            	   Residue residue = (Residue) residueSubFeature;
+               for (Group residue : chain.getGroups()) {
                    int resNum = residue.getNumber();
                    if (this.residueStart <= resNum && resNum <= this.residueEnd) {
-                       Residue residueFeature = new Residue(residue.getNumber(), residue.getResname());
+                	   ResidueID residueID = new ResidueID(residue.getNumber(), "");
+                       Group residueFeature = new Group(residueID, residue.getName());
                        
                        // Copy atoms
-                       for (Feature atomSubFeature : residue) {
-                    	   Atom atom = (Atom) atomSubFeature;
-                           residueFeature.add(atom.copy());
+                       for (Atom atom : residue.getAtoms()) {
+                           residueFeature.addAtom(atom.copy());
                        }
                        
-                       chainFeature.add(residueFeature);
+                       chainFeature.addGroup(residueFeature);
                    }
                }
                
-               modelFeature.add(chainFeature);
+               // TODO
+//               modelFeature.add(chainFeature);
            }
        }
        
        // Add the ligand (water molecule)
-       Chain waterChain = new Chain("Water", "Water");
-       Residue waterResidue = new Residue(String.valueOf(this.ligandNum), "HOH");
+       Chain waterChain = new Chain("Water", ChainType.WATER);
+       ResidueID residueID = new ResidueID(ligandNum, "");
+       Group waterResidue = new Group(residueID, "HOH");
        
-       List<Chain> waterChains = structure.chainsOfType("Water");
+       List<Chain> waterChains = structure.chainsOfType(ChainType.WATER);
        if (!waterChains.isEmpty()) {
-           Residue existingWater = waterChains.get(0).getResidueNumber(this.ligandNum);
+           Group existingWater = waterChains.get(0).getGroupAt(this.ligandNum);
            if (existingWater != null) {
                Atom oAtom = existingWater.getAtom("O");
                if (oAtom != null) {
-                   waterResidue.add(oAtom.copy());
+                   waterResidue.addAtom(oAtom.copy());
                }
            }
        }
        
-       waterChain.add(waterResidue);
-       modelFeature.add(waterChain);
+       waterChain.addGroup(waterResidue);
+       
+       // TODO
+//       modelFeature.add(waterChain);
        
        return example;
    }
@@ -168,6 +174,6 @@ class ExampleDescription {
    @Override
    public String toString() {
        return String.format("%s.%s %d-%d %d", 
-           pdbid, chain, residueStart, residueEnd, ligandNum);
+           pdbid, chainName, residueStart, residueEnd, ligandNum);
    }
 }

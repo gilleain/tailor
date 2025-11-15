@@ -6,11 +6,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import aigen.feature.Feature;
+import tailor.datasource.aigen.Feature;
+import tailor.structure.ChainType;
 
 public class ChainDescription extends Description {
 	private String levelCode;
-	private String chainType;	// TODO
+	private ChainType chainType;
 
 	public ChainDescription(Map<String, Object> propertyConditions) {
 		super(propertyConditions);
@@ -24,8 +25,8 @@ public class ChainDescription extends Description {
 		return copy;
 	}
 	
-	public String getChainType() {
-		return chainType;	// TODO - enum
+	public ChainType getChainType() {
+		return chainType;
 	}
 
 	public void createResidues(int n) {

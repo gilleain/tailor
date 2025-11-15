@@ -1,4 +1,4 @@
-package aigen.feature;
+package tailor.datasource.aigen;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -8,6 +8,14 @@ import aigen.description.Description;
 import aigen.description.DescriptionException;
 import tailor.geometry.Vector;
 
+/**
+ * So originally, this was the base of the python structure hierarchy
+ * 
+ * TODO - convert any useful search methods
+ * 
+ * @author gilleain
+ *
+ */
 public class Feature implements Iterable<Feature> {
  protected List<Feature> subFeatures;
  protected String levelCode;

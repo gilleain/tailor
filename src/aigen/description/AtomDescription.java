@@ -2,7 +2,7 @@ package aigen.description;
 
 import java.util.Map;
 
-import aigen.feature.Feature;
+import tailor.datasource.aigen.Feature;
 
 public class AtomDescription extends Description {
 	private String levelCode;

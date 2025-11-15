@@ -3,11 +3,11 @@ package tailor.datasource;
 import java.util.ArrayList;
 import java.util.List;
 
-import aigen.feature.Atom;
-import aigen.feature.Chain;
-import aigen.feature.Residue;
 import tailor.geometry.Geometry;
 import tailor.geometry.Vector;
+import tailor.structure.Atom;
+import tailor.structure.Chain;
+import tailor.structure.Group;
 
 /**
  * Generate protein structures from phi/psi angles
@@ -63,29 +63,29 @@ public class Generation {
      */
     public static void extendChain(List<PhiPsi> phiPsiList, Double lastPsi, Chain chain) {
         int numberOfResidues = phiPsiList.size();
-        Residue lastResidue;
+        Group lastResidue;
         double currentLastPsi;
         
         if (chain == null) {
             chain = new Chain("A");
             PhiPsi firstAngles = phiPsiList.get(0);
-            Residue nTerminus = makeNTerminalResidue(firstAngles.psi);
-            chain.add(nTerminus);
+            Group nTerminus = makeNTerminalResidue(firstAngles.psi);
+            chain.addGroup(nTerminus);
             lastResidue = nTerminus;
             currentLastPsi = firstAngles.psi;
         } else {
-            lastResidue = chain.getSubFeatures().get(chain.getSubFeatures().size() - 1);
+            lastResidue = chain.getLast();
             PhiPsi firstAngles = phiPsiList.get(0);
-            Residue firstResidue = makeResidue(lastResidue, firstAngles.phi, firstAngles.psi, lastPsi);
-            chain.add(firstResidue);
+            Group firstResidue = makeResidue(lastResidue, firstAngles.phi, firstAngles.psi, lastPsi);
+            chain.addGroup(firstResidue);
             lastResidue = firstResidue;
             currentLastPsi = firstAngles.psi;
         }
         
         for (int i = 1; i < numberOfResidues; i++) {
             PhiPsi angles = phiPsiList.get(i);
-            Residue residue = makeResidue(lastResidue, angles.phi, angles.psi, currentLastPsi);
-            chain.add(residue);
+            Group residue = makeResidue(lastResidue, angles.phi, angles.psi, currentLastPsi);
+            chain.addGroup(residue);
             lastResidue = residue;
             currentLastPsi = angles.psi;
         }
@@ -99,10 +99,10 @@ public class Generation {
         Vector o_pos = new Vector(C_O_DISTANCE, 0, 0);
         Vector ca_pos = Geometry.makeXYZFromAngle(o_pos, c_pos, CA_C_DISTANCE, CA_C_O_ANGLE, Geometry.NEG_Y);
         
-        Residue nCap = new Residue(1, "GLY");
-        nCap.getSubFeatures().add(new Atom("CA", ca_pos));
-        nCap.getSubFeatures().add(new Atom("C", c_pos));
-        nCap.getSubFeatures().add(new Atom("O", o_pos));
+        Group nCap = new Group(1, "GLY");
+        nCap.addAtom(new Atom("CA", ca_pos));
+        nCap.addAtom(new Atom("C", c_pos));
+        nCap.addAtom(new Atom("O", o_pos));
         
         PhiPsi firstAngles = phiPsiList.get(0);
         double phi = firstAngles.phi;
@@ -114,22 +114,22 @@ public class Generation {
         c_pos = Geometry.makeXYZ(ca_pos, CA_C_DISTANCE, n_pos, N_CA_C_ANGLE, c_pos, phi);
         o_pos = Geometry.makeXYZ(c_pos, C_O_DISTANCE, ca_pos, CA_C_O_ANGLE, n_pos, N_CA_C_O_torsion);
         
-        Residue firstResidue = new Residue(2, "GLY");
-        firstResidue.getSubFeatures().add(new Atom("N", n_pos));
-        firstResidue.getSubFeatures().add(new Atom("CA", ca_pos));
-        firstResidue.getSubFeatures().add(new Atom("C", c_pos));
-        firstResidue.getSubFeatures().add(new Atom("O", o_pos));
+        Group firstResidue = new Group(2, "GLY");
+        firstResidue.addAtom(new Atom("N", n_pos));
+        firstResidue.addAtom(new Atom("CA", ca_pos));
+        firstResidue.addAtom(new Atom("C", c_pos));
+        firstResidue.addAtom(new Atom("O", o_pos));
         
         Chain chain = new Chain("A");
-        chain.add(nCap);
-        chain.add(firstResidue);
+        chain.addGroup(nCap);
+        chain.addGroup(firstResidue);
         
         if (phiPsiList.size() > 1) {
             extendChain(phiPsiList.subList(1, phiPsiList.size()), psi, chain);
         }
         
         // Add C-terminal cap
-        Residue last = chain.getSubFeatures().get(chain.getSubFeatures().size() - 1);
+        Group last = chain.getLast();
         double lastPsi = phiPsiList.get(phiPsiList.size() - 1).psi;
         
         n_pos = last.getAtomPosition("N");
@@ -138,9 +138,9 @@ public class Generation {
         o_pos = last.getAtomPosition("O");
         
         n_pos = Geometry.makeXYZ(c_pos, C_N_DISTANCE, ca_pos, CA_C_N_ANGLE, n_pos, lastPsi);
-        Residue cCap = new Residue(last.getNumber() + 1, "GLY");
-        cCap.getSubFeatures().add(new Atom("N", n_pos));
-        chain.add(cCap);
+        Group cCap = new Group(last.getNumber() + 1, "GLY");
+        cCap.addAtom(new Atom("N", n_pos));
+        chain.addGroup(cCap);
         
         return chain;
     }
@@ -148,18 +148,18 @@ public class Generation {
     /**
      * Creates an N-terminal residue
      */
-    public static Residue makeNTerminalResidue(double psi) {
+    public static Group makeNTerminalResidue(double psi) {
         double N_CA_C_O_torsion = Geometry.invertTorsion(psi);
         Vector nitrogen = new Vector(0.0, 0.0, 0.0);
         Vector cAlpha = new Vector(N_CA_DISTANCE, 0.0, 0.0);
         Vector carbonylCarbon = Geometry.makeXYZFromAngle(nitrogen, cAlpha, CA_C_DISTANCE, N_CA_C_ANGLE, Geometry.Y);
         Vector oxygen = Geometry.makeXYZ(carbonylCarbon, C_O_DISTANCE, cAlpha, CA_C_O_ANGLE, nitrogen, N_CA_C_O_torsion);
         
-        Residue r = new Residue(1, "GLY");
-        r.getSubFeatures().add(new Atom("N", nitrogen));
-        r.getSubFeatures().add(new Atom("CA", cAlpha));
-        r.getSubFeatures().add(new Atom("C", carbonylCarbon));
-        r.getSubFeatures().add(new Atom("O", oxygen));
+        Group r = new Group(1, "GLY");
+        r.addAtom(new Atom("N", nitrogen));
+        r.addAtom(new Atom("CA", cAlpha));
+        r.addAtom(new Atom("C", carbonylCarbon));
+        r.addAtom(new Atom("O", oxygen));
         
         return r;
     }
@@ -167,7 +167,7 @@ public class Generation {
     /**
      * Creates a residue based on the previous residue and phi/psi angles
      */
-    public static Residue makeResidue(Residue previousResidue, double phi, double psi, double lastPsi) {
+    public static Group makeResidue(Group previousResidue, double phi, double psi, double lastPsi) {
         Vector previousNitrogen = previousResidue.getAtomPosition("N");
         Vector previousCAlpha = previousResidue.getAtomPosition("CA");
         Vector previousC = previousResidue.getAtomPosition("C");
@@ -179,11 +179,11 @@ public class Generation {
         Vector oxygen = Geometry.makeXYZ(carbonylCarbon, C_O_DISTANCE, cAlpha, CA_C_O_ANGLE, nitrogen, N_CA_C_O_torsion);
         
         int residueNumber = previousResidue.getNumber() + 1;
-        Residue r = new Residue(residueNumber, "GLY");
-        r.getSubFeatures().add(new Atom("N", nitrogen));
-        r.getSubFeatures().add(new Atom("CA", cAlpha));
-        r.getSubFeatures().add(new Atom("C", carbonylCarbon));
-        r.getSubFeatures().add(new Atom("O", oxygen));
+        Group r = new Group(residueNumber, "GLY");
+        r.addAtom(new Atom("N", nitrogen));
+        r.addAtom(new Atom("CA", cAlpha));
+        r.addAtom(new Atom("C", carbonylCarbon));
+        r.addAtom(new Atom("O", oxygen));
         
         return r;
     }
@@ -196,11 +196,11 @@ public class Generation {
         int atomnum = 1;
         String recordFormat = "ATOM %6d  %-3s %s %5d     %7.3f %7.3f %7.3f";
         
-        for (Residue residue : chain.getSubFeatures()) {
-            for (Atom atom : residue.getSubFeatures()) {
+        for (Group residue : chain.getGroups()) {
+            for (Atom atom : residue.getAtoms()) {
                 Vector p = atom.getCenter();
                 String record = String.format(recordFormat, 
-                    atomnum, atom.getName(), residue.getResname(), 
+                    atomnum, atom.getName(), residue.getName(), 
                     residue.getNumber(), p.x(), p.y(), p.z());
                 records.add(record);
                 atomnum++;

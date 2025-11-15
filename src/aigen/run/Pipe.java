@@ -8,12 +8,13 @@ import java.util.stream.Collectors;
 import aigen.description.Description;
 import aigen.description.DescriptionException;
 import aigen.engine.Matcher;
-import aigen.feature.Chain;
-import aigen.feature.Feature;
-import aigen.feature.Structure;
+import tailor.datasource.aigen.Feature;
 import tailor.match.Match;
 import tailor.measurement.Measure;
 import tailor.measurement.Measurement;
+import tailor.structure.Chain;
+import tailor.structure.Protein;
+import tailor.structure.Structure;
 
 /**
  * A pipe that processes structures through a matcher and measures
@@ -96,13 +97,13 @@ public class Pipe {
     public String formatMotif(Structure structure, List<Structure> motif) {
         try {
             // Get the first model
-        	Structure model = motif.get(0);
+//        	Structure model = motif.get(0);
+        	Protein protein = (Protein) motif.get(0);	// TODO
             
             // Format chain info
             List<String> chainInfos = new ArrayList<>();
-            for (Feature chainFeature : model) {
-            	Chain chain = (Chain) chainFeature;
-                chainInfos.add(chain.getChainID() + " " + chain.getResidueRange());
+            for (Chain chain : protein.getChains()) {
+                chainInfos.add(chain.getName() + " " + chain.getResidueRange());
             }
             
             String motifStr = String.join(" ", chainInfos);

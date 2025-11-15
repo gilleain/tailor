@@ -15,6 +15,16 @@ public class Protein implements Structure {
         this.name = name;
         this.chains = new ArrayList<>();
     }
+    
+    public List<Chain> chainsOfType(ChainType chainType) {
+        List<Chain> chainsToReturn = new ArrayList<>();
+        for (Chain chain : chains) {
+        	if (chain.getType().equals(chainType)) {
+        		chainsToReturn.add(chain);
+        	}
+        }
+        return chainsToReturn;
+    }
    
     public void addChain(Chain chain) {
         this.chains.add(chain);

@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import tailor.datasource.aigen.ResidueID;
+import tailor.geometry.Vector;
 
 public class Group implements Structure {
     
@@ -24,10 +25,24 @@ public class Group implements Structure {
         this.atomMap = new HashMap<>();
     }
     
+    public Group(int residueNumber, String residueName) {
+    	this(new ResidueID(residueNumber, ""), residueName, "");
+    }
+    
+    public Group(ResidueID residueID, String residueName) {
+    	this(residueID, residueName, "");
+    }
+    
     public Group(ResidueID residueID, String residueName, String segmentId) {
     	this();
     	// TODO - store these things
     }
+    
+
+	public Group copy() {
+		// TODO could use a copy constructor
+		return null;
+	}
     
     public void addAtom(Atom atom) {
         this.atomMap.put(atom.getName(), atom);
@@ -88,6 +103,13 @@ public class Group implements Structure {
         return new ArrayList<>(this.atomMap.values());
     }
     
+    public Atom getAtom(String atomName) {
+    	return atomMap.get(atomName);
+    }
+
+	public Vector getAtomPosition(String atomName) {
+		return getAtom(atomName).getCenter();
+	}
 
     @Override
     public void addSubStructure(Structure structure) {
@@ -108,6 +130,4 @@ public class Group implements Structure {
     public String toString() {
         return id + atomMap;
     }
-
-
 }

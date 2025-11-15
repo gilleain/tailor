@@ -17,6 +17,10 @@ public abstract class Segment implements Structure {
         this.groups = groups;
     }
     
+    public int size() {
+    	return groups.size();
+    }
+    
     public void addGroup(Group group) {
         groups.add(group);
     }

@@ -10,12 +10,12 @@ import java.util.logging.Logger;
 import aigen.description.ChainDescription;
 import aigen.description.Description;
 import aigen.description.StructureDescription;
-import aigen.feature.Chain;
-import aigen.feature.Model;
-import aigen.feature.Residue;
-import aigen.feature.Structure;
 import tailor.condition.Condition;
 import tailor.match.Match;
+import tailor.structure.Chain;
+import tailor.structure.Group;
+import tailor.structure.Protein;
+import tailor.structure.Structure;
 
 public class Matcher {
     private static final Logger logger = Logger.getLogger(Matcher.class.getName());
@@ -30,6 +30,13 @@ public class Matcher {
      * Use the description of this matcher to find all examples in structure.
      */
     public List<Structure> findAll(Structure structure) {
+    	if (structure instanceof Protein protein) {
+    		return findAll(protein);
+    	}
+    	throw new IllegalStateException("Structure not a protein");
+    }
+    	
+    public List<Structure> findAll(Protein structure) {	
         List<Structure> matches = new ArrayList<>();
 
         // top level is Structure -> search through combinations of Chains
@@ -45,10 +52,10 @@ public class Matcher {
             for (ChainDescription chainDescription : structureDescription.getChainDescriptions()) {
                 List<String> chainIDs = new ArrayList<>();
                 for (Chain chain : structure.chainsOfType(chainDescription.getChainType())) {
-                    matchMap.put(chain.getChainID(), 
-                               findMatchesInChain(chainDescription, chain));
-                    logger.log(Level.FINE, "adding chain " + chain.getChainID());
-                    chainIDs.add(chain.getChainID());
+                	String chainName = chain.getName(); 
+                    matchMap.put(chainName, findMatchesInChain(chainDescription, chain));
+                    logger.log(Level.FINE, "adding chain " + chainName);
+                    chainIDs.add(chainName);
                 }
                 chainIDLists.add(chainIDs);
             }
@@ -67,11 +74,13 @@ public class Matcher {
                     for (Chain matchB : matchMap.get(chainCombo.get(1))) {
 
                         // XXX AARGH! : we make the fragment before testing??!
-                        Structure fragment = new Structure(description.getName());
-                        Model model = new Model(0);
-                        fragment.add(model);
-                        model.add(matchA);
-                        model.add(matchB);
+                        Structure fragment = new Protein(description.getName());
+                        
+                        // TODO
+//                        Model model = new Model(0);
+//                        fragment.add(model);
+//                        model.add(matchA);
+//                        model.add(matchB);
 
                         if (matchConditions(fragment)) {
                             matches.add(fragment);
@@ -87,7 +96,7 @@ public class Matcher {
 
             // find the next suitable chain to look through
             for (Chain chain : structure.chainsOfType(chainDescription.getChainType())) {
-                logger.log(Level.FINE, "finding matches in chain " + chain.getChainID());
+                logger.log(Level.FINE, "finding matches in chain " + chain.getName());
                 List<Chain> possibles = findMatchesInChain(description, chain);
                 for (Chain p : possibles) {
                     if (matchConditions(p)) {
@@ -139,7 +148,7 @@ public class Matcher {
                 Description residueDescription = residueDescriptions.get(i);
                 int currentIndex = startIndex + i;
                 
-                if (matchResidue(residueDescription, chain.getResidue(currentIndex))) {
+                if (matchResidue(residueDescription, chain.getGroupAt(currentIndex))) {
                     matchingIndices.add(currentIndex);
                 } else {
                     break;
@@ -148,10 +157,9 @@ public class Matcher {
 
             // store whole matches
             if (matchingIndices.size() == descriptionLength) {
-                Chain chainExample = new Chain(chain.getChainID(), chain.getChainType());
+                Chain chainExample = new Chain(chain.getName(), chain.getType());
                 for (int index : matchingIndices) {
-                	// TODO
-//                    chainExample.addResidue(chain.getResidue(index).copy());
+                    chainExample.addGroup(chain.getGroupAt(index).copy());
                 }
                 logger.log(Level.FINE, "storing " + chainExample);
                 chainMatches.add(chainExample);
@@ -162,7 +170,7 @@ public class Matcher {
     }
 
     // TODO : this needs to be implemented!
-    private boolean matchResidue(Description residueDescription, Residue residue) {
+    private boolean matchResidue(Description residueDescription, Group residue) {
         logger.log(Level.FINE, residueDescription + " -> " + residue);
         return true;
     }

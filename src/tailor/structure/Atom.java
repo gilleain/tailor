@@ -12,6 +12,11 @@ public class Atom implements Structure {
     
     private final Vector center;
     
+    // from pdb file
+    private Double bFactor;
+    private double occupancy;
+    private String altloc;
+    
     public Atom(String name) {
         this.name = name;
         this.center = new Vector();
@@ -26,7 +31,15 @@ public class Atom implements Structure {
 		// TODO Auto-generated constructor stub
     	this.name = name;
     	this.center = new Vector(coord[0], coord[1], coord[2]);
+    	this.bFactor = bFactor;
+    	this.occupancy = occupancy;
+    	this.altloc = altloc;
 	}
+    
+    public Atom copy() {
+    	// TODO - could use copy constructor
+    	return null;
+    }
 
 	public Vector getCenter() {
         return center;

@@ -10,8 +10,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 
-import aigen.feature.Feature;
-import aigen.feature.Structure;
+import tailor.structure.Structure;
+
 
 
 /**
@@ -145,9 +145,9 @@ public class ResultParser {
     /**
      * Recursively print the structure tree
      */
-    private static void recurse(Feature tree) {
+    private static void recurse(Structure tree) {
         System.out.println(tree.getClass().getSimpleName() + " " + tree);
-        for (Feature child : tree) {
+        for (Structure child : tree.getSubstructures()) {
             recurse(child);
         }
     }
