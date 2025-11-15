@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import tailor.datasource.aigen.ResidueID;
+
 public class Group implements Structure {
     
     private final Level level = Level.RESIDUE;
@@ -20,6 +22,11 @@ public class Group implements Structure {
 
     public Group() {
         this.atomMap = new HashMap<>();
+    }
+    
+    public Group(ResidueID residueID, String residueName, String segmentId) {
+    	this();
+    	// TODO - store these things
     }
     
     public void addAtom(Atom atom) {

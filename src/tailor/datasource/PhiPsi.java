@@ -1,4 +1,4 @@
-package tailor.datasource.aigen;
+package tailor.datasource;
 /**
  * Helper class to hold phi/psi angle pairs
  */

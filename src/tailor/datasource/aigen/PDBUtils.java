@@ -1,4 +1,4 @@
-package aigen.parse;
+package tailor.datasource.aigen;
 
 import java.nio.file.Paths;
 

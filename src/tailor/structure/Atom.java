@@ -22,7 +22,13 @@ public class Atom implements Structure {
         this.center = center;
     }
 
-    public Vector getCenter() {
+    public Atom(String name, double[] coord, double bFactor, double occupancy, String altloc) {
+		// TODO Auto-generated constructor stub
+    	this.name = name;
+    	this.center = new Vector(coord[0], coord[1], coord[2]);
+	}
+
+	public Vector getCenter() {
         return center;
     }
 

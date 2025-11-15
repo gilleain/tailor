@@ -22,10 +22,17 @@ public class Chain extends Segment implements Structure {
         this("A");  // XXX is this a sensible default?
     }
     
-    public Chain(String name) {
+    public Chain(String name) {	// TODO - type is null here 
         super(new ArrayList<>());
         this.name = name;
         this.sses = new ArrayList<>();
+    }
+    
+    public Chain(String name, ChainType type) {
+        super(new ArrayList<>());
+        this.name = name;
+        this.sses = new ArrayList<>();
+        this.type = type;
     }
     
     public ChainType getType() {

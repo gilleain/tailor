@@ -1,6 +1,6 @@
-package aigen.parse;
+package tailor.datasource.aigen;
 
-class ResidueID {
+public class ResidueID {
     private int resseq;
     private String icode;
     

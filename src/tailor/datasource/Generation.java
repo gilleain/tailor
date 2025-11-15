@@ -1,4 +1,4 @@
-package tailor.datasource.aigen;
+package tailor.datasource;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,4 +1,4 @@
-package tailor.datasource.aigen;
+package tailor.datasource;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -6,6 +6,11 @@ import java.util.List;
 
 import tailor.structure.Structure;
 
+/*
+ * NOTE : originally the intention with this seems to have been to make 
+ * a series of fragments?? why does it start with angle _ranges_ then move 
+ * to phi/psi pairs??
+ */
 public class StructureGenerator implements Iterable<Structure> {
 	
 	public class AngleRange {
