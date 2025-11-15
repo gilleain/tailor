@@ -1,4 +1,4 @@
-package tailor.app;
+package tailor.category;
 
 public interface CategoryChangeListener {
 	

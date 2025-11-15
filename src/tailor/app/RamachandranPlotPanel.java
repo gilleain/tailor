@@ -18,8 +18,9 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EtchedBorder;
 
-import tailor.app.filter.Bound;
-import tailor.app.filter.BoundShape;
+import tailor.category.Category;
+import tailor.category.filter.Bound;
+import tailor.category.filter.BoundShape;
 
 /**
  * Manages a RamachandranPlotCanvas

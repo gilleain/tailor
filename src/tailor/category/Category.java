@@ -1,11 +1,11 @@
-package tailor.app;
+package tailor.category;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import tailor.app.filter.Bound;
-import tailor.app.filter.Filter;
+import tailor.category.filter.Bound;
+import tailor.category.filter.Filter;
 
 /**
  * A Category is like a motif Description, except that it is less precise. It is

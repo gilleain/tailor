@@ -14,8 +14,9 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.WindowConstants;
 
-import tailor.app.filter.Bound;
-import tailor.app.filter.BoundShape;
+import tailor.category.Category;
+import tailor.category.filter.Bound;
+import tailor.category.filter.BoundShape;
 
 /**
  * @author maclean

@@ -15,6 +15,9 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JToolBar;
 
+import tailor.category.Category;
+import tailor.category.CategoryChangeListener;
+
 public class PlotFrame extends JFrame implements ActionListener{
 	
 	private CategoryChangeListener categoryChangeListener;

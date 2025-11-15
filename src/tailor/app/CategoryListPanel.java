@@ -8,6 +8,8 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.ListSelectionModel;
 
+import tailor.category.Category;
+
 /**
  * Display and manage a list of Category objects.
  * 

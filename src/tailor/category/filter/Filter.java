@@ -1,4 +1,4 @@
-package tailor.app.filter;
+package tailor.category.filter;
 
 /**
  * @author maclean

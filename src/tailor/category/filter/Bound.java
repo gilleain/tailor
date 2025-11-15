@@ -1,4 +1,4 @@
-package tailor.app.filter;
+package tailor.category.filter;
 
 import java.awt.Shape;
 import java.awt.geom.AffineTransform;

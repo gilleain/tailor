@@ -18,6 +18,8 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.border.Border;
 
+import tailor.category.Category;
+import tailor.category.CategoryChangeListener;
 import tailor.datasource.GuiResultsPrinter;
 import tailor.datasource.xml.XmlDescriptionReader;
 import tailor.description.Description;

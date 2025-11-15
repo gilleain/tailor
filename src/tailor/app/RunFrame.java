@@ -20,6 +20,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.Border;
 
+import tailor.category.Category;
+import tailor.category.CategoryChangeListener;
 import tailor.datasource.GuiResultsPrinter;
 import tailor.datasource.StructureSource;
 import tailor.datasource.xml.XmlDescriptionReader;

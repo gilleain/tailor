@@ -14,6 +14,8 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
 
+import tailor.category.Category;
+
 /**
  * java.awt.Canvas subclass to draw Ramachandran-like scatterplots
  * 

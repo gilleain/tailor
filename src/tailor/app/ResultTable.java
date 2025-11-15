@@ -17,6 +17,8 @@ import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.event.TableColumnModelListener;
 
+import tailor.category.Category;
+
 /**
  * @author maclean
  *

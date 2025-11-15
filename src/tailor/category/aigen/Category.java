@@ -1,4 +1,4 @@
-package aigen.category;
+package tailor.category.aigen;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
