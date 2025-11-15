@@ -1,4 +1,4 @@
-package aigen.description;
+package tailor.description.aigen;
 
 class BoundsPair { // TODO - unused?
 	double[][] bounds;

@@ -238,9 +238,12 @@ public class DescriptionFactory {
 	
 	public TorsionBoundCondition createPhiCondition(
 	        double midPoint, double range, int residueNumber, String chainName) {
-	    
 	    ChainDescription chain = this.root.getChainDescription(chainName);
-        
+	    return createPhiCondition(chain, residueNumber, midPoint, range);
+	}
+	
+	public static TorsionBoundCondition createPhiCondition(
+			ChainDescription chain, int residueNumber, double midPoint, double range) {
         ChainDescription a = chain.getPath(residueNumber - 1, "C");
         ChainDescription b = chain.getPath(residueNumber, "N");
         ChainDescription c = chain.getPath(residueNumber, "CA");
@@ -258,6 +261,11 @@ public class DescriptionFactory {
 	public TorsionBoundCondition createPsiCondition(
 	        double midPoint, double range, int residueNumber, String chainName) {
 	    ChainDescription chain = root.getChainDescription(chainName);
+		return createPsiCondition(chain, residueNumber, midPoint, range);
+	}
+	
+	public static TorsionBoundCondition createPsiCondition(
+	        ChainDescription chain, int residueNumber, double midPoint, double range) {
         
         ChainDescription a = chain.getPath(residueNumber, "N");
         ChainDescription b = chain.getPath(residueNumber, "CA");

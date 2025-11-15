@@ -1,4 +1,4 @@
-package aigen.description;
+package tailor.description.aigen;
 
 import java.util.ArrayList;
 import java.util.HashMap;

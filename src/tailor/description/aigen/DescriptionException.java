@@ -1,6 +1,6 @@
-package aigen.description;
+package tailor.description.aigen;
 
-public class DescriptionException extends Exception {
+class DescriptionException extends Exception {
     public DescriptionException(String message) {
         super(message);
     }

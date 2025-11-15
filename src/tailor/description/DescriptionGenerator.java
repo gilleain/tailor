@@ -1,18 +1,20 @@
-package aigen.description;
+package tailor.description;
 
 import java.util.AbstractMap;
 import java.util.HashMap;
 import java.util.Map;
 
+import tailor.condition.PropertyCondition;
+import tailor.description.ChainDescription;
+
 public class DescriptionGenerator {
 	public static ChainDescription generateBackboneDescription(String name, double[][][] bounds) {
-		Map<String, Object> props = new HashMap<>();
-		props.put("chainID", name);
-		ChainDescription chain = new ChainDescription(props);
+		ChainDescription chain = new ChainDescription();
+		chain.addCondition(new PropertyCondition("chainName", name)); // TODO - very fragile!
 		chain.createResidues(bounds.length + 2);
 
 		for (int i = 0; i < bounds.length; i++) {
-			int r = i + 2;
+			int residueNumber = i + 2;
 			double[][] bound = bounds[i];
 			double[] phiBound = bound[0];
 			double[] psiBound = bound[1];
@@ -21,8 +23,8 @@ public class DescriptionGenerator {
 			double psiCenter = psiBound[0];
 			double psiRange = psiBound[1];
 
-			chain.createPhiBoundCondition(r, phiCenter, phiRange);
-			chain.createPsiBoundCondition(r, psiCenter, psiRange);
+			chain.createPhiBoundCondition(residueNumber, phiCenter, phiRange);
+			chain.createPsiBoundCondition(residueNumber, psiCenter, psiRange);
 		}
 
 		return chain;

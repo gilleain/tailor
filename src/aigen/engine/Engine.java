@@ -1,14 +1,18 @@
 package aigen.engine;
 
+import static tailor.structure.Level.CHAIN;
+import static tailor.structure.Level.RESIDUE;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import aigen.description.ChainDescription;
-import aigen.description.Description;
-import aigen.description.DescriptionException;
-import aigen.description.ResidueDescription;
+import tailor.description.AtomDescription;
+import tailor.description.ChainDescription;
+import tailor.description.Description;
+import tailor.description.DescriptionException;
+import tailor.description.GroupDescription;
 import tailor.structure.Atom;
 import tailor.structure.Chain;
 import tailor.structure.Group;
@@ -47,10 +51,10 @@ public class Engine {
      */
     public static Atom lookup(Description description, Object example) throws DescriptionException {
     	// TODO - could use instanceof or a visitor?
-        if (description.getLevelCode().equals("C")) {
+        if (description.getLevel() == CHAIN) {
             return lookupChain((ChainDescription) description, (Protein) example);
-        } else if (description.getLevelCode().equals("R")) {
-            return lookupResidue((ResidueDescription) description, (Chain) example);
+        } else if (description.getLevel() == RESIDUE) {
+            return lookupResidue((GroupDescription) description, (Chain) example);
         }
         return null;
     }
@@ -63,13 +67,14 @@ public class Engine {
         if (chains.isEmpty()) {
             throw new DescriptionException("No chains of type " + chainDescription.getChainType());
         }
-        return lookupResidue(chainDescription.getResidueDescriptions().get(0), chains.get(0));
+        return lookupResidue(chainDescription.getGroupDescriptions().get(0), chains.get(0));
     }
 
-    private static Atom lookupResidue(ResidueDescription residueDescription, Chain chainExample) 
+    private static Atom lookupResidue(GroupDescription residueDescription, Chain chainExample) 
             throws DescriptionException {
-        aigen.description.AtomDescription atomDescription = residueDescription.getAtomDescriptions().get(0);
-        Group residue = chainExample.getGroupAt(residueDescription.getPosition() - 1);
+        AtomDescription atomDescription = residueDescription.getAtomDescriptions().get(0);
+        // TODO - little confusing to use the ID as residue number
+        Group residue = chainExample.getGroupAt(residueDescription.getID() - 1);
         
         for (Atom atom : residue.getAtoms()) {
             if (atomDescription.getName().equals(atom.getName())) {

@@ -5,10 +5,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import aigen.description.Description;
-import aigen.description.DescriptionException;
 import aigen.engine.Matcher;
-import tailor.datasource.aigen.Feature;
+import tailor.description.Description;
+import tailor.description.DescriptionException;
 import tailor.match.Match;
 import tailor.measurement.Measure;
 import tailor.measurement.Measurement;

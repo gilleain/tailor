@@ -1,6 +1,6 @@
 package tailor.measurement;
 
-import aigen.description.Description;
+import tailor.description.Description;
 import tailor.match.Match;
 
 public class PropertyMeasure implements Measure<PropertyMeasurement> {

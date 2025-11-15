@@ -1,4 +1,4 @@
-package aigen.description;
+package tailor.description.aigen;
 
 import java.util.List;
 import java.util.Map;
@@ -6,7 +6,7 @@ import java.util.stream.Collectors;
 
 import tailor.datasource.aigen.Feature;
 
-public class StructureDescription extends Description {
+class StructureDescription extends Description {
 	private String name;
 	private String levelCode;
 

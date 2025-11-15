@@ -9,11 +9,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import aigen.description.AtomDescription;
-import aigen.description.ChainDescription;
-import aigen.description.Description;
-import aigen.description.DescriptionGenerator;
-import aigen.description.ResidueDescription;
 import aigen.run.Pipe;
 import aigen.run.Run;
 import tailor.condition.AngleBoundCondition;
@@ -22,6 +17,11 @@ import tailor.condition.DistanceBoundCondition;
 import tailor.condition.HBondCondition;
 import tailor.condition.PropertyCondition;
 import tailor.condition.TorsionBoundCondition;
+import tailor.description.AtomDescription;
+import tailor.description.ChainDescription;
+import tailor.description.Description;
+import tailor.description.DescriptionGenerator;
+import tailor.description.GroupDescription;
 import tailor.measurement.AngleMeasure;
 import tailor.measurement.DistanceMeasure;
 import tailor.measurement.HBondMeasure;
@@ -151,15 +151,15 @@ public class Script {
     // Level name to description class mapping
     private static final Map<String, Class<? extends Description>> LEVEL_NAME_DICT = Map.of(
         "Chain", ChainDescription.class,
-        "Residue", ResidueDescription.class,
+        "Residue", GroupDescription.class,
         "Atom", AtomDescription.class
     );
     
     // Description to sub-description mapping
     private static final Map<Class<? extends Description>, Class<? extends Description>> 
         DESC_TO_SUB_DESC_MAP = Map.of(
-            ChainDescription.class, ResidueDescription.class,
-            ResidueDescription.class, AtomDescription.class
+            ChainDescription.class, GroupDescription.class,
+            GroupDescription.class, AtomDescription.class
         );
     
     // Keyword to condition mapping
@@ -354,7 +354,7 @@ public class Script {
                 // Add backbone atoms for Residue level
                 if ("Residue".equals(levelText.levelName)) {
                     for (String name : Arrays.asList("N", "CA", "C", "O")) {
-                        ((ResidueDescription) level).addAtom(name);
+                        ((GroupDescription) level).addAtomDescription(name);
                     }
                 }
                 
@@ -362,7 +362,8 @@ public class Script {
                 for (PropertyText prop : levelText.properties) {
                     String key = prop.attributeName;
                     if (KEYWORD_TO_CONDITION_MAP.get(key) == PropertyCondition.class) {
-                        level.addPropertyCondition(key, prop.values.get(0));
+                    	String value = (String)prop.values.get(0);
+                        level.addCondition(new PropertyCondition(key, value));
                     }
                 }
                 
@@ -393,7 +394,6 @@ public class Script {
             }
         }
         
-        motifDescription.setName("default");
         return motifDescription;
     }
     
@@ -411,8 +411,8 @@ public class Script {
             int residueNumber = selection.residueNumber;
             String atomName = selection.atomName;
             
-            ResidueDescription selectedResidue = chainDescription.selectResidue(residueNumber);
-            Description selectedAtom = selectedResidue.selectAtom(atomName);
+            GroupDescription selectedResidue = chainDescription.selectResidue(residueNumber);
+            Description selectedAtom = selectedResidue.getAtomDescription(atomName);
             
             selectionList.add(selectedAtom);
         }

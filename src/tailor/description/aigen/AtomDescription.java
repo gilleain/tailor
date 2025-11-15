@@ -1,10 +1,10 @@
-package aigen.description;
+package tailor.description.aigen;
 
 import java.util.Map;
 
 import tailor.datasource.aigen.Feature;
 
-public class AtomDescription extends Description {
+class AtomDescription extends Description {
 	private String levelCode;
 
 	public AtomDescription(Map<String, Object> propertyConditions) {

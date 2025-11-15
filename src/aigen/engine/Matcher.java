@@ -1,5 +1,8 @@
 package aigen.engine;
 
+import static tailor.structure.Level.CHAIN;
+import static tailor.structure.Level.PROTEIN;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -7,10 +10,10 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import aigen.description.ChainDescription;
-import aigen.description.Description;
-import aigen.description.StructureDescription;
 import tailor.condition.Condition;
+import tailor.description.ChainDescription;
+import tailor.description.Description;
+import tailor.description.ProteinDescription;
 import tailor.match.Match;
 import tailor.structure.Chain;
 import tailor.structure.Group;
@@ -39,11 +42,11 @@ public class Matcher {
     public List<Structure> findAll(Protein structure) {	
         List<Structure> matches = new ArrayList<>();
 
-        // top level is Structure -> search through combinations of Chains
-        if (description.getLevelCode().equals("S")) {
+        // top level is Protein -> search through combinations of Chains
+        if (description.getLevel() == PROTEIN) {
             logger.log(Level.FINE, "structure description");
             // TODO - seems odd to be casting here
-            StructureDescription structureDescription = (StructureDescription) description;
+            ProteinDescription structureDescription = (ProteinDescription) description;
 
             // select chains of a particular type and get matches
             Map<String, List<Chain>> matchMap = new HashMap<>();
@@ -90,7 +93,7 @@ public class Matcher {
             }
 
         // top level is Chain -> search through combinations of Residues
-        } else if (description.getLevelCode().equals("C")) {
+        } else if (description.getLevel() == CHAIN) {
             logger.log(Level.FINE, "chain description");
             ChainDescription chainDescription = (ChainDescription) description;
 
@@ -143,7 +146,7 @@ public class Matcher {
             // its cheaper to store the indices than to construct partial matches
             List<Integer> matchingIndices = new ArrayList<>();
             
-            List<Description> residueDescriptions = chainDescription.getChildren();
+            List<Description> residueDescriptions = (List<Description>) chainDescription.getSubDescriptions();
             for (int i = 0; i < residueDescriptions.size(); i++) {
                 Description residueDescription = residueDescriptions.get(i);
                 int currentIndex = startIndex + i;

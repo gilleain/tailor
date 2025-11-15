@@ -1,4 +1,4 @@
-package aigen.description;
+package tailor.description.aigen;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -7,7 +7,7 @@ import java.util.Map;
 
 import tailor.datasource.aigen.Feature;
 
-public class ResidueDescription extends Description {
+class ResidueDescription extends Description {
 	private String levelCode;
 
 	public ResidueDescription(Map<String, Object> propertyConditions) {

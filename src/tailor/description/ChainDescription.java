@@ -7,9 +7,11 @@ import java.util.List;
 import java.util.Map;
 
 import tailor.condition.Condition;
+import tailor.condition.PropertyCondition;
 import tailor.measurement.Measure;
 import tailor.measurement.Measurement;
 import tailor.structure.Chain;
+import tailor.structure.ChainType;
 import tailor.structure.Level;
 import tailor.structure.Structure;
 
@@ -34,7 +36,7 @@ public class ChainDescription implements Description, Iterable<GroupDescription>
     
     private int id;
     
-    private String chainType;	// TODO - enum
+    private ChainType chainType;	// TODO - can this be final?
     
     public ChainDescription() {
         this.chainName = null;
@@ -60,7 +62,7 @@ public class ChainDescription implements Description, Iterable<GroupDescription>
     	}
     }
     
-    public String getChainType() {
+    public ChainType getChainType() {
     	return chainType;
     }
     
@@ -296,5 +298,44 @@ public class ChainDescription implements Description, Iterable<GroupDescription>
     public String toString() {
         return "Chain " + ((this.chainName == null)? "" : this.chainName);
     }
+
+    // --- from python code -- // 
+    
+    public GroupDescription selectResidue(int i) {
+		return (GroupDescription)descriptionLookup.get(i - 1);
+	}
+    
+	public void createResidues(int n) {
+		createResidueFromToInclusive(1, n);
+	}
+
+	public void createResidueFromToInclusive(int i, int j) {
+		for (int x = i - 1; x < j; x++) {
+			createResidueWithBackbone(x);
+		}
+	}
+
+	public void createResidueWithBackbone(int i) {
+		GroupDescription residue = new GroupDescription();
+		
+		// TODO - so many things wrong with this ...
+		residue.addCondition(new PropertyCondition("position", String.valueOf(i + 1)));
+
+		for (String atomName : new String[] { "N", "CA", "C", "O", "H" }) {
+			residue.addAtomDescription(atomName);
+		}
+		addGroupDescription(residue);
+	}
+    
+	public void createPhiBoundCondition(int residueNumber, double midPoint, double range) {
+		this.groupConditions.add(
+				DescriptionFactory.createPhiCondition(this, residueNumber, midPoint, range));
+	}
+
+	public void createPsiBoundCondition(int residueNumber, double midPoint, double range) {
+		this.groupConditions.add(
+				DescriptionFactory.createPsiCondition(this, residueNumber, midPoint, range));
+		
+	}
 
 }

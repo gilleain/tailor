@@ -4,9 +4,10 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import aigen.description.Description;
-import aigen.description.DescriptionException;
+import tailor.description.Description;
+import tailor.description.DescriptionException;
 import tailor.geometry.Vector;
+import tailor.structure.Level;
 
 /**
  * So originally, this was the base of the python structure hierarchy
@@ -18,7 +19,7 @@ import tailor.geometry.Vector;
  */
 public class Feature implements Iterable<Feature> {
  protected List<Feature> subFeatures;
- protected String levelCode;
+ protected Level levelCode;
  protected Integer position;
 
  public Feature() {
@@ -35,10 +36,12 @@ public class Feature implements Iterable<Feature> {
 
  public List<Feature> searchForFeaturesThatMatch(Description description) {
      List<Feature> matchingFeatures = new ArrayList<>();
-     List<Feature> subFeatures = getSubFeaturesBelowLevel(description.getLevelCode());
-     int descriptionLength = description.length();
-
-     Class<? extends Feature> featureType = description.getFeatureType();
+     List<Feature> subFeatures = getSubFeaturesBelowLevel(description.getLevel());
+//     int descriptionLength = description.length();
+     int descriptionLength = 0;
+     
+//     Class<? extends Feature> featureType = description.getFeatureType();
+     Class<? extends Feature> featureType = null;
 
      ChunkIterator<Feature> chunks = new ChunkIterator<>(subFeatures, descriptionLength);
      while (chunks.hasNext()) {
@@ -54,9 +57,9 @@ public class Feature implements Iterable<Feature> {
                  feature.add(subFeatureCopy);
              }
 
-             if (description.describes(feature)) {
+//             if (description.describes(feature)) {
                  matchingFeatures.add(feature);
-             }
+//             }
          } catch (Exception e) {
              throw new RuntimeException("Failed to create feature instance", e);
          }
@@ -65,8 +68,8 @@ public class Feature implements Iterable<Feature> {
      return matchingFeatures;
  }
 
- public List<Feature> getSubFeaturesBelowLevel(String levelCode) {
-     if (this.levelCode.equals(levelCode) || this.levelCode.equals("A")) {
+ public List<Feature> getSubFeaturesBelowLevel(Level level) {
+     if (this.levelCode.equals(level) || this.levelCode == Level.ATOM) {
          return this.subFeatures;
      } else {
          for (Feature subFeature : this.subFeatures) {
@@ -77,12 +80,12 @@ public class Feature implements Iterable<Feature> {
  }
 
  public Feature findFeature(Description description) throws DescriptionException {
-     if (this.levelCode.equals(description.getLevelCode())) {
-         if (description.describes(this)) {
+     if (this.levelCode.equals(description.getLevel())) {
+//         if (description.describes(this)) {
              Feature copySelf = this.copy();
              copySelf.subFeatures = new ArrayList<>();
              
-             for (Description subDescription : description) {
+             for (Description subDescription : description.getSubDescriptions()) {
                  Feature matchingSubFeature = this.searchSubFeatures(subDescription);
                  if (matchingSubFeature != null) {
                      copySelf.add(matchingSubFeature);
@@ -91,11 +94,11 @@ public class Feature implements Iterable<Feature> {
                  }
              }
              return copySelf;
-         }
+//         }
      } else {
          return this.searchSubFeatures(description);
      }
-     return null;
+//     return null;
  }
 
  public Feature searchSubFeatures(Description description) throws DescriptionException {

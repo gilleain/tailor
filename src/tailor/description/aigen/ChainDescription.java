@@ -1,4 +1,4 @@
-package aigen.description;
+package tailor.description.aigen;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -9,7 +9,7 @@ import java.util.stream.Collectors;
 import tailor.datasource.aigen.Feature;
 import tailor.structure.ChainType;
 
-public class ChainDescription extends Description {
+class ChainDescription extends Description {
 	private String levelCode;
 	private ChainType chainType;
 
