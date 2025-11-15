@@ -10,14 +10,29 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import tailor.category.filter.Filter;
+
 /**
  * Read in the output of a tailor search and count the numbers in predefined categories
  */
-public class Category implements Iterable<String[]> {
+
+class Row {	// TODO - could be record
+	public double[] values;
+	public String id; // TODO
+	public String startEnd;	// TODO
+	public Row(String id, String startEnd, double[] values) {
+		this.id = id;
+		this.startEnd = startEnd;
+		this.values = values;
+	}
+}
+
+public class Category implements Iterable<Row> {
+	
     private String name;
     private List<Integer> columnNumbers;
     private List<Condition> conditions;
-    private List<String[]> members;
+    private List<Row> members;
     
     public Category(String name) {
         this(name, new ArrayList<>(), new ArrayList<>());
@@ -39,7 +54,7 @@ public class Category implements Iterable<String[]> {
     }
     
     @Override
-    public Iterator<String[]> iterator() {
+    public Iterator<Row> iterator() {
         return members.iterator();
     }
     
@@ -47,20 +62,20 @@ public class Category implements Iterable<String[]> {
         return members.size();
     }
     
-    public List<String[]> filter(Filter filter) {
-        List<String[]> filteredMembers = new ArrayList<>();
-        for (String[] member : this) {
-            if (filter.accepts(member)) {
-                filteredMembers.add(member);
+    public List<double[]> filter(Filter filter) {
+        List<double[]> filteredMembers = new ArrayList<>();
+        for (Row member : this) {
+            if (filter.accept(member.values)) {
+                filteredMembers.add(member.values);
             }
         }
         return filteredMembers;
     }
     
-    public boolean accepts(String[] bits) {
+    public boolean accepts(double[] bits) {
         for (int i = 0; i < columnNumbers.size(); i++) {
             int columnNumber = columnNumbers.get(i);
-            String value = bits[columnNumber];
+            double value = bits[columnNumber];
             Condition condition = conditions.get(i);
             if (!condition.satisfiedBy(value)) {
                 return false;
@@ -69,8 +84,13 @@ public class Category implements Iterable<String[]> {
         return true;
     }
     
-    public void addMember(String[] bits) {
-        this.members.add(bits);
+    public void addMember(String id, String startEnd, double[] bits) {
+        this.members.add(new Row(id, startEnd, bits));
+    }
+    
+    
+    public void addMember(Row row) {
+        this.members.add(row);
     }
     
     public List<String> getBounds() {
@@ -79,10 +99,10 @@ public class Category implements Iterable<String[]> {
             bounds.add(new double[]{Double.MAX_VALUE, -Double.MAX_VALUE});
         }
         
-        for (String[] member : this) {
-            List<String> slice = multislice(member, columnNumbers);
+        for (Row member : this) {
+            List<Double> slice = multislice(member.values, columnNumbers);
             for (int i = 0; i < slice.size(); i++) {
-                double value = Double.parseDouble(slice.get(i));
+                double value = slice.get(i);
                 double[] bound = bounds.get(i);
                 if (value < bound[0]) {
                     bound[0] = value;
@@ -104,10 +124,10 @@ public class Category implements Iterable<String[]> {
             means.add(0.0);
         }
         
-        for (String[] member : this) {
-            List<String> slice = multislice(member, columnNumbers);
+        for (Row member : this) {
+            List<Double> slice = multislice(member.values, columnNumbers);
             for (int i = 0; i < slice.size(); i++) {
-                double value = Double.parseDouble(slice.get(i));
+                double value = slice.get(i);
                 means.set(i, means.get(i) + value);
             }
         }
@@ -125,10 +145,10 @@ public class Category implements Iterable<String[]> {
         
         List<Double> means = getMeans();
         
-        for (String[] member : this) {
-            List<String> slice = multislice(member, columnNumbers);
+        for (Row member : this) {
+            List<Double> slice = multislice(member.values, columnNumbers);
             for (int i = 0; i < slice.size(); i++) {
-                double value = Double.parseDouble(slice.get(i));
+                double value = slice.get(i);
                 double x = value - means.get(i);
                 stdDevs.set(i, stdDevs.get(i) + x * x);
             }
@@ -146,16 +166,16 @@ public class Category implements Iterable<String[]> {
     public Map<Integer, Integer> countOverlap(Category other) {
         Map<Integer, Integer> offsets = new HashMap<>();
         
-        for (String[] member : this) {
-            String pdbid = member[0];
-            int[] range1 = getStartEnd(member);
+        for (Row member : this) {
+            String pdbid = member.id;
+            int[] range1 = getStartEnd(member.startEnd);
             int s1 = range1[0];
             int e1 = range1[1];
             
-            for (String[] otherMember : other) {
-                if (!pdbid.equals(otherMember[0])) continue;
+            for (Row otherMember : other) {
+                if (!pdbid.equals(otherMember.id)) continue;
                 
-                int[] range2 = getStartEnd(otherMember);
+                int[] range2 = getStartEnd(otherMember.startEnd);
                 int s2 = range2[0];
                 int e2 = range2[1];
                 
@@ -180,13 +200,13 @@ public class Category implements Iterable<String[]> {
     }
     
     // Helper methods
-    private static int[] getStartEnd(String[] rowData) {
-        String[] parts = rowData[1].split(" ")[1].split("-");
+    private static int[] getStartEnd(String rowData) {
+        String[] parts = rowData.split(" ")[1].split("-");
         return new int[]{Integer.parseInt(parts[0]), Integer.parseInt(parts[1])};
     }
     
-    private static List<String> multislice(String[] alist, List<Integer> indices) {
-        List<String> slice = new ArrayList<>();
+    private static List<Double> multislice(double[] alist, List<Integer> indices) {
+        List<Double> slice = new ArrayList<>();
         for (int index : indices) {
             slice.add(alist[index]);
         }
@@ -212,18 +232,12 @@ class MeanStdDev {
     }
 }
 
-/**
- * Filter interface
- */
-interface Filter {
-    boolean accepts(String[] row);
-}
 
 /**
  * Condition interface for value checking
  */
 interface Condition {
-    boolean satisfiedBy(String value);
+    boolean satisfiedBy(double value);
 }
 
 /**
@@ -237,9 +251,9 @@ class AndCombiner implements Filter {
     }
     
     @Override
-    public boolean accepts(String[] row) {
+    public boolean accept(double[] row) {
         for (Filter filter : filters) {
-            if (!filter.accepts(row)) {
+            if (!filter.accept(row)) {
                 return false;
             }
         }
@@ -267,8 +281,8 @@ class UpperBound implements Filter {
     }
     
     @Override
-    public boolean accepts(String[] row) {
-        return Double.parseDouble(row[columnIndex]) <= maxValue;
+    public boolean accept(double[] row) {
+        return row[columnIndex] <= maxValue;
     }
     
     @Override
@@ -290,8 +304,8 @@ class LowerBound implements Filter {
     }
     
     @Override
-    public boolean accepts(String[] row) {
-        return Double.parseDouble(row[columnIndex]) >= minValue;
+    public boolean accept(double[] row) {
+        return row[columnIndex] >= minValue;
     }
     
     @Override
@@ -313,9 +327,8 @@ class Range implements Condition {
     }
     
     @Override
-    public boolean satisfiedBy(String value) {
-        double val = Double.parseDouble(value);
-        return min < val && val < max;
+    public boolean satisfiedBy(double value) {
+        return min < value && value < max;
     }
     
     @Override
@@ -337,9 +350,8 @@ class SplitRange implements Condition {
     }
     
     @Override
-    public boolean satisfiedBy(String value) {
-        double val = Double.parseDouble(value);
-        return (-180 < val && val < lower) || (upper < val && val < 180);
+    public boolean satisfiedBy(double value) {
+        return (-180 < value && value < lower) || (upper < value && value < 180);
     }
     
     @Override
@@ -432,9 +444,9 @@ class CategorySet implements Iterable<Category> {
         categories.add(new Category(categoryName, columnNumbers, conditions));
     }
     
-    public void assign(String[] row) {
+    public void assign(Row row) {
         for (Category category : categories) {
-            if (category.accepts(row)) {
+            if (category.accepts(row.values)) {
                 category.addMember(row);
                 return;
             }
@@ -488,21 +500,26 @@ class CategorySet implements Iterable<Category> {
     
     public void fromFile(String filename) throws IOException {
         try (BufferedReader reader = new BufferedReader(new FileReader(filename))) {
-            List<String> lines = new ArrayList<>();
             String line;
+            int index = 0;
             while ((line = reader.readLine()) != null) {
-                lines.add(line);
+            	if (index == 0) {
+            		index++;
+            		continue;
+            	}
+                fromLine(line);
             }
-            fromLines(lines);
         }
     }
     
-    public void fromLines(List<String> lines) {
+    public void fromLine(String line) {
         // Skip header line
-        for (int i = 1; i < lines.size(); i++) {
-            String[] bits = lines.get(i).replace("\n", "").split("\t");
-            assign(bits);
-        }
+    	String[] bits = line.replace("\n", "").split("\t");
+    	double[] values = new double[bits.length - 2];
+    	for (int i = 0; i < values.length; i++) {
+    		values[i] = Double.valueOf(bits[i + 2]);
+    	}
+    	assign(new Row(bits[0], bits[1], values));
     }
     
     public CategorySet shallowCopy() {
