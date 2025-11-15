@@ -1,22 +1,25 @@
-package aigen.datasource;
+package tailor.datasource.aigen;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.BiFunction;
 
+import tailor.structure.Level;
+import tailor.structure.Structure;
+
 public class Visitor {
-    private Constants level;
+    private Level level;
     private BiFunction<Visitor, Structure, Boolean> action;
     private String data;
     private List<Visitor> children;
     private int index;
     public Structure store;
 
-    public Visitor(Constants level, BiFunction<Visitor, Structure, Boolean> action) {
+    public Visitor(Level level, BiFunction<Visitor, Structure, Boolean> action) {
         this(level, action, null);
     }
 
-    public Visitor(Constants level, BiFunction<Visitor, Structure, Boolean> action, String data) {
+    public Visitor(Level level, BiFunction<Visitor, Structure, Boolean> action, String data) {
         this.level = level;
         this.action = action;
         this.data = data;
@@ -29,14 +32,17 @@ public class Visitor {
     }
 
     public boolean visit(Structure structure) {
-        if (this.data == null || this.data.equals(structure.getData())) {
+    	// TODO - originally the idea seems to have been to match on properties of the
+    	// structure (like data= 'GLY'??) a more general matching mechanism would be needed
+//        if (this.data == null || this.data.equals(structure.getData())) {
+    	if (this.data == null) {
             return this.action.apply(this, structure);
         } else {
             return false;
         }
     }
 
-    public Constants getLevel() {
+    public Level getLevel() {
         return level;
     }
 

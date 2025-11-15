@@ -5,13 +5,13 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import aigen.datasource.PDBFileList;
 import aigen.feature.Atom;
 import aigen.feature.Chain;
 import aigen.feature.Feature;
 import aigen.feature.Model;
 import aigen.feature.Residue;
 import aigen.feature.Structure;
+import tailor.datasource.aigen.PDBFileList;
 
 /**
 * Streams examples from PDB files
@@ -25,7 +25,7 @@ class ExampleStream {
    
    public Iterator<Structure> examples(String pdbid, List<ExampleDescription> exampleDescriptions) {
        return new Iterator<Structure>() {
-           private aigen.datasource.Structure structure;
+           private tailor.structure.Structure structure;
            private Iterator<ExampleDescription> descIterator;
            private Structure nextExample;
            

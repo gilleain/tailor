@@ -1,4 +1,6 @@
-package aigen.datasource;
+package tailor.datasource.aigen;
+
+import tailor.structure.Structure;
 
 public class VisitorPattern {
     public static boolean printAction(Visitor visitor, Structure structure) {

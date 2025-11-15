@@ -5,7 +5,7 @@ import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.List;
 
-import aigen.datasource.PDBFileList;
+import tailor.datasource.aigen.PDBFileList;
 
 /**
  * Main runner class that processes structures through a pipeline
@@ -43,7 +43,7 @@ public class Run {
             }
             
             // Process each structure
-            for (aigen.datasource.Structure structure : structures) {
+            for (tailor.structure.Structure structure : structures) {
                 err.write(("Processing : " + structure).getBytes());
                 
 //                try {

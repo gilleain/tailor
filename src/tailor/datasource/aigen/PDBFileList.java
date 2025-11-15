@@ -1,4 +1,4 @@
-package aigen.datasource;
+package tailor.datasource.aigen;
 
 import java.io.File;
 import java.io.IOException;
@@ -7,6 +7,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+
+import tailor.structure.Structure;
 
 public class PDBFileList implements Iterable<Structure> {
     private String path;

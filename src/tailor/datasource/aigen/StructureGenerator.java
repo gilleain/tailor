@@ -1,10 +1,23 @@
-package aigen.datasource;
+package tailor.datasource.aigen;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import tailor.structure.Structure;
+
 public class StructureGenerator implements Iterable<Structure> {
+	
+	public class AngleRange {
+	    public double start;
+	    public double stop;
+	    
+	    public AngleRange(double start, double stop) {
+	        this.start = start;
+	        this.stop = stop;
+	    }
+	}
+
     private List<AngleRange> angleRanges;
     private double stepSize;
     private int numberOfModels;
@@ -53,17 +66,24 @@ public class StructureGenerator implements Iterable<Structure> {
             
             @Override
             public Structure next() {
-                List<AngleRange> anglePairs = new ArrayList<>();
+                List<PhiPsi> anglePairs = new ArrayList<>();
                 for (int i = 0; i < angles.size(); i += 2) {
-                    anglePairs.add(new AngleRange(angles.get(i), angles.get(i + 1)));
+                	// TODO - this code never made sense, even in python
+                	// an AnglePair is NOT a PhiPSi ...
+                    anglePairs.add(new PhiPsi(angles.get(i), angles.get(i + 1)));
                 }
                 
-                Structure structure = Generate.makeFragment(anglePairs);
+                // TODO
+                Structure structure = chainToStructure(Generation.makeFragment(anglePairs));
                 updateIndices();
                 currentModel++;
                 
                 return structure;
             }
         };
+    }
+    
+    private Structure chainToStructure(aigen.feature.Chain chain) {
+    	return null;	// TODO
     }
 }

@@ -1,12 +1,8 @@
-package aigen.datasource;
+package tailor.datasource.aigen;
 
-import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+
+import tailor.structure.Structure;
 
 /**
  * Classes that provide data:
@@ -38,9 +34,4 @@ class StructureBuilder {
 }
 
 
-class Generate {
-    public static Structure makeFragment(List<AngleRange> angles) {
-        // Implementation would generate structure from angles
-        throw new UnsupportedOperationException("Generate.makeFragment not implemented");
-    }
-}
+

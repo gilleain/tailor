@@ -1,6 +1,8 @@
-package aigen.datasource;
+package tailor.datasource.aigen;
 
 import java.io.IOException;
+
+import tailor.structure.Structure;
 
 public class DataSource {
     
