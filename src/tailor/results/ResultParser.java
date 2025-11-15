@@ -1,4 +1,4 @@
-package aigen.results;
+package tailor.results;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -15,7 +15,7 @@ import tailor.structure.Structure;
 
 
 /**
- * A module to convert text lists of results into Feature objects.
+ * A module to convert text lists of results into Structure objects.
  * 
  * Use like:
  * 

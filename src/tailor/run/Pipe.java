@@ -1,13 +1,13 @@
-package aigen.run;
+package tailor.run;
 
 import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import aigen.engine.Matcher;
 import tailor.description.Description;
 import tailor.description.DescriptionException;
+import tailor.engine.aigen.Matcher;
 import tailor.match.Match;
 import tailor.measurement.Measure;
 import tailor.measurement.Measurement;

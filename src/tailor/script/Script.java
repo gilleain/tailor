@@ -1,4 +1,4 @@
-package aigen.script;
+package tailor.script;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -9,8 +9,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import aigen.run.Pipe;
-import aigen.run.Run;
 import tailor.condition.AngleBoundCondition;
 import tailor.condition.Condition;
 import tailor.condition.DistanceBoundCondition;
@@ -28,6 +26,8 @@ import tailor.measurement.HBondMeasure;
 import tailor.measurement.Measure;
 import tailor.measurement.PropertyMeasure;
 import tailor.measurement.TorsionMeasure;
+import tailor.run.Pipe;
+import tailor.run.Run;
 
 /**
  * Main script parser and translator

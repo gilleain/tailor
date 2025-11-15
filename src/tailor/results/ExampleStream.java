@@ -1,11 +1,10 @@
-package aigen.results;
+package tailor.results;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import tailor.datasource.aigen.Feature;
 import tailor.datasource.aigen.PDBFileList;
 import tailor.datasource.aigen.ResidueID;
 import tailor.structure.Atom;
@@ -16,6 +15,8 @@ import tailor.structure.Protein;
 import tailor.structure.Structure;
 
 /**
+ * Note - was aigen from python
+ * 
 * Streams examples from PDB files
 */
 class ExampleStream {

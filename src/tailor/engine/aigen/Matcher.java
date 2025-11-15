@@ -1,4 +1,4 @@
-package aigen.engine;
+package tailor.engine.aigen;
 
 import static tailor.structure.Level.CHAIN;
 import static tailor.structure.Level.PROTEIN;
