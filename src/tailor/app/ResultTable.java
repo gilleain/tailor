@@ -144,7 +144,7 @@ public class ResultTable extends JPanel {
                 i += 2;
             }
             
-            if (category.accept(values)) {
+            if (category.accepts(values)) {
                 String id = this.getFullIdForRow(rowIndex);
                 category.addId(id);
             }
