@@ -28,5 +28,10 @@ public class Range implements Filter {
     public boolean accept(double[] values) {
         return this.min < values[this.columnIndex] && this.max > values[this.columnIndex];
     }
+    
+    @Override
+    public String toString() {
+        return String.format("range (%s - %s)", min, max);
+    }
 
 }
