@@ -10,20 +10,22 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import tailor.category.filter.Filter;
+
 /**
  * Set of categories for classification
  */
 class CategorySet implements Iterable<Category> {
     private List<Category> categories;
     private List<Integer> columnNumbers;
-    private Map<String, List<Condition[]>> regions;
+    private Map<String, List<Filter[]>> regions;
     private Category unmatched;
     
     public CategorySet() {
         this(new ArrayList<>(), new HashMap<>());
     }
     
-    public CategorySet(List<Integer> columnNumbers, Map<String, List<Condition[]>> regions) {
+    public CategorySet(List<Integer> columnNumbers, Map<String, List<Filter[]>> regions) {
         this.categories = new ArrayList<>();
         this.columnNumbers = columnNumbers;
         this.regions = regions;
@@ -74,7 +76,7 @@ class CategorySet implements Iterable<Category> {
     }
     
     public void createCategoryFromRegions(String... regionKeys) {
-        List<Condition[]> conditionPairs = new ArrayList<>();
+        List<Filter[]> conditionPairs = new ArrayList<>();
         for (String key : regionKeys) {
             conditionPairs.add(regions.get(key).get(0));
         }
@@ -85,9 +87,9 @@ class CategorySet implements Iterable<Category> {
     /**
      * Create categories from a name and a list of pairs of conditions
      */
-    public void createCategory(String categoryName, List<Condition[]> conditionPairs) {
-        List<Condition> conditions = new ArrayList<>();
-        for (Condition[] pair : conditionPairs) {
+    public void createCategory(String categoryName, List<Filter[]> conditionPairs) {
+        List<Filter> conditions = new ArrayList<>();
+        for (Filter[] pair : conditionPairs) {
             conditions.add(pair[0]);
             conditions.add(pair[1]);
         }

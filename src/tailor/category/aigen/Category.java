@@ -28,17 +28,17 @@ public class Category implements Iterable<Row> {
 	
     private String name;
     private List<Integer> columnNumbers;
-    private List<Condition> conditions;
+    private List<Filter> filters;
     private List<Row> members;
     
     public Category(String name) {
         this(name, new ArrayList<>(), new ArrayList<>());
     }
     
-    public Category(String name, List<Integer> columnNumbers, List<Condition> conditions) {
+    public Category(String name, List<Integer> columnNumbers, List<Filter> conditions) {
         this.name = name;
         this.columnNumbers = columnNumbers;
-        this.conditions = conditions;
+        this.filters = conditions;
         this.members = new ArrayList<>();
     }
     
@@ -70,14 +70,11 @@ public class Category implements Iterable<Row> {
     }
     
     public boolean accepts(double[] bits) {
-        for (int i = 0; i < columnNumbers.size(); i++) {
-            int columnNumber = columnNumbers.get(i);
-            double value = bits[columnNumber];
-            Condition condition = conditions.get(i);
-            if (!condition.satisfiedBy(value)) {
-                return false;
-            }
-        }
+    	for (Filter filter : filters) {
+    		if (!filter.accept(bits)) {
+    			return false;
+    		}
+    	}
         return true;
     }
     
@@ -117,7 +114,7 @@ public class Category implements Iterable<Row> {
     
     public List<Double> getMeans() {
         List<Double> means = new ArrayList<>();
-        for (int i = 0; i < conditions.size(); i++) {
+        for (int i = 0; i < filters.size(); i++) {
             means.add(0.0);
         }
         
@@ -136,7 +133,7 @@ public class Category implements Iterable<Row> {
     
     public List<MeanStdDev> getMeanWithStdDevs() {
         List<Double> stdDevs = new ArrayList<>();
-        for (int i = 0; i < conditions.size(); i++) {
+        for (int i = 0; i < filters.size(); i++) {
             stdDevs.add(0.0);
         }
         
@@ -188,12 +185,12 @@ public class Category implements Iterable<Row> {
     }
     
     public Category shallowCopy() {
-        return new Category(this.name, this.columnNumbers, this.conditions);
+        return new Category(this.name, this.columnNumbers, this.filters);
     }
     
     @Override
     public String toString() {
-        return String.format("%s %s %s", name, columnNumbers, conditions);
+        return String.format("%s %s %s", name, columnNumbers, filters);
     }
     
     // Helper methods
