@@ -1,4 +1,4 @@
-package tailor.category.aigen;
+package tailor.category;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -144,7 +144,7 @@ class CategorySet implements Iterable<Category> {
         
         if (unmatched.getCount() > 0) {
             System.out.printf("%s %4d %s%n", unmatched.getName(), unmatched.getCount(), 
-                String.join(" ", unmatched.getBounds()));
+                String.join(" ", unmatched.getBoundsStrings()));
         } else {
             System.out.printf("%s %4d%n", unmatched.getName(), unmatched.getCount());
         }
