@@ -11,6 +11,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import tailor.category.filter.Filter;
+import tailor.category.filter.PairFilter;
 
 /**
  * Set of categories for classification
@@ -18,18 +19,19 @@ import tailor.category.filter.Filter;
 class CategorySet implements Iterable<Category> {
     private List<Category> categories;
     private List<Integer> columnNumbers;
-    private Map<String, List<Filter[]>> regions;
+    private Map<String, PairFilter> regions;
+    private List<PairIndex> indexList;
     private Category unmatched;
     
     public CategorySet() {
         this(new ArrayList<>(), new HashMap<>());
     }
     
-    public CategorySet(List<Integer> columnNumbers, Map<String, List<Filter[]>> regions) {
+    public CategorySet(List<PairIndex> indexList, Map<String, PairFilter> regions) {
         this.categories = new ArrayList<>();
-        this.columnNumbers = columnNumbers;
+        this.indexList = indexList;
         this.regions = regions;
-        this.unmatched = new Category("?", columnNumbers, new ArrayList<>());
+        this.unmatched = new Category("?");
     }
     
     public void clear() {
@@ -76,29 +78,26 @@ class CategorySet implements Iterable<Category> {
     }
     
     public void createCategoryFromRegions(String... regionKeys) {
-        List<Filter[]> conditionPairs = new ArrayList<>();
-        for (String key : regionKeys) {
-            conditionPairs.add(regions.get(key).get(0));
-        }
+    	// check we have a mapping for each region key
+    	assert regionKeys.length == indexList.size();	
+
+    	Map<PairIndex, PairFilter> regionMappings = new HashMap<>();
+    	
+    	for (int index = 0; index < regionKeys.length; index++) {
+    		PairFilter region = regions.get(regionKeys[index]);
+    		PairIndex pairIndex = indexList.get(index);
+    		regionMappings.put(pairIndex, region);
+    	}
         String categoryName = String.join("", regionKeys);
-        createCategory(categoryName, conditionPairs);
+        
+        // Create categories from a name and a map of column indexes to regions
+        categories.add(new Category(categoryName, regionMappings));
     }
     
-    /**
-     * Create categories from a name and a list of pairs of conditions
-     */
-    public void createCategory(String categoryName, List<Filter[]> conditionPairs) {
-        List<Filter> conditions = new ArrayList<>();
-        for (Filter[] pair : conditionPairs) {
-            conditions.add(pair[0]);
-            conditions.add(pair[1]);
-        }
-        categories.add(new Category(categoryName, columnNumbers, conditions));
-    }
     
     public void assign(Row row) {
         for (Category category : categories) {
-            if (category.accepts(row.values)) {
+            if (category.accepts(row.values())) {
                 category.addMember(row);
                 return;
             }
@@ -143,8 +142,8 @@ class CategorySet implements Iterable<Category> {
         }
         
         if (unmatched.getCount() > 0) {
-            System.out.printf("%s %4d %s%n", unmatched.getName(), unmatched.getCount(), 
-                String.join(" ", unmatched.getBoundsStrings()));
+        	String unmatchedBounds = String.join(" ", unmatched.getBoundsStrings()); 
+            System.out.printf("%s %4d %s%n", unmatched.getName(), unmatched.getCount(), unmatchedBounds);
         } else {
             System.out.printf("%s %4d%n", unmatched.getName(), unmatched.getCount());
         }
@@ -175,7 +174,7 @@ class CategorySet implements Iterable<Category> {
     }
     
     public CategorySet shallowCopy() {
-        CategorySet copy = new CategorySet(this.columnNumbers, this.regions);
+        CategorySet copy = new CategorySet(this.indexList, this.regions);
         copy.categories = this.categories.stream()
             .map(Category::shallowCopy)
             .collect(Collectors.toList());

@@ -11,7 +11,7 @@ import java.awt.geom.Rectangle2D;
  * @author maclean
  *
  */
-public class Bound implements Filter {
+public class Bound { // implements Filter { // TODO
     
     public static BoundShape shapeType;
 

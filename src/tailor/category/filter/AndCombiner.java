@@ -6,7 +6,7 @@ import java.util.stream.Collectors;
 /**
  * Combines multiple filters with AND logic
  */
-class AndCombiner implements Filter {
+class AndCombiner implements RowFilter {
     private List<Filter> filters;
     
     public AndCombiner(List<Filter> filters) {
@@ -16,9 +16,9 @@ class AndCombiner implements Filter {
     @Override
     public boolean accept(double[] row) {
         for (Filter filter : filters) {
-            if (!filter.accept(row)) {
-                return false;
-            }
+//            if (!filter.accept(row)) {// TODO?
+//                return false;
+//            }
         }
         return true;
     }

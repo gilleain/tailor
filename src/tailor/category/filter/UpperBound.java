@@ -4,17 +4,16 @@ package tailor.category.filter;
  * Upper bound filter
  */
 class UpperBound implements Filter {
+	
     private double maxValue;
-    private int columnIndex;
     
-    public UpperBound(double maxValue, int columnIndex) {
+    public UpperBound(double maxValue) {
         this.maxValue = maxValue;
-        this.columnIndex = columnIndex;
     }
     
     @Override
-    public boolean accept(double[] row) {
-        return row[columnIndex] <= maxValue;
+    public boolean accept(double value) {
+        return value <= maxValue;
     }
     
     @Override

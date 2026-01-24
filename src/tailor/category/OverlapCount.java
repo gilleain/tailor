@@ -6,7 +6,7 @@ import java.util.Map;
  * Helper class for overlap count data
  */
 class OverlapCount {
-    public String categoryName;
+    public String categoryName; // TODO - make these private and/or make this a record
     public int categoryCount;
     public String otherName;
     public int otherCount;

@@ -9,6 +9,7 @@ import java.util.stream.Collectors;
 
 import tailor.category.filter.Bound;
 import tailor.category.filter.Filter;
+import tailor.category.filter.PairFilter;
 
 /**
  * A Category is like a motif Description, except that it is less precise. It is
@@ -21,29 +22,26 @@ import tailor.category.filter.Filter;
 public class Category {
 
 	private String name;
-	private List<Filter> filters;
-	private List<String> memberIdList;
 	private List<Row> members;	// TODO - remove memberIdList in favour of members
-	private List<Integer> columnNumbers;	// TODO - why do we need this?
+	private Map<PairIndex, PairFilter> regionMappings;
 	
 	/**
 	 * @param name an arbitrary name for this category
 	 */
 	public Category(String name) {
 		this.name = name;
-		this.filters = new ArrayList<>();
-		this.memberIdList = new ArrayList<>();
+		this.regionMappings = new HashMap<>();
+		this.members = new ArrayList<>();
 	}
 	
-	public Category(String name, List<Integer> columnNumbers, List<Filter> conditions) {
+	public Category(String name, Map<PairIndex, PairFilter> regionMappings) {
 		this.name = name;
-        this.columnNumbers = columnNumbers;
-        this.filters = conditions;
+        this.regionMappings = regionMappings;
         this.members = new ArrayList<>();
 	}
 	
 	public Category shallowCopy() {
-		return new Category(this.name, this.columnNumbers, this.filters);
+		return new Category(this.name, this.regionMappings);
 	}
 	
     public int getCount() {
@@ -57,24 +55,29 @@ public class Category {
 	public void addMember(Row row) {
         this.members.add(row);
     }
+	
+	public List<Row> getMembers() {
+		return this.members;
+	}
     
-    public String getName() {
+    public List<String> getMemberIds() {
+		return getMembers().stream().map(Row::id).toList();
+	}
+
+	public String getName() {
         return this.name;
     }
     
-    public List<Filter> getFilters() {
-        return this.filters;
-    }
-    
-    // TODO - what is this method doing?
+//    // TODO - what is this method doing?
     public List<String> getBoundsStrings() {
         List<double[]> bounds = new ArrayList<>();
-        for (int i = 0; i < columnNumbers.size(); i++) {
+        int[] columnNumbers = getColumnIndexes();
+        for (int i = 0; i < columnNumbers.length; i++) {
             bounds.add(new double[]{Double.MAX_VALUE, -Double.MAX_VALUE});
         }
         
         for (Row member : this.members) {
-            List<Double> slice = multislice(member.values, columnNumbers);
+            List<Double> slice = multislice(member.values(), columnNumbers);
             for (int i = 0; i < slice.size(); i++) {
                 double value = slice.get(i);
                 double[] bound = bounds.get(i);
@@ -94,37 +97,30 @@ public class Category {
     
     public List<Bound> getBounds() {
         List<Bound> bounds = new ArrayList<>();
-        for (Filter filter : this.filters) {
-            if (filter instanceof Bound) {
-                bounds.add((Bound) filter);
-            }
-        }
+        // TODO
+//        for (Filter filter : this.filters) {
+//            if (filter instanceof Bound) {
+//                bounds.add((Bound) filter);
+//            }
+//        }
         return bounds;
     }
-    
-    public Iterator<Filter> iterator() {
-        return this.filters.iterator();
-    }
-    
-    public Filter getFilter(int i) {
-        return this.filters.get(i);
-    }
-    
+
     public int getNumberOfFilters() {
-        return this.filters.size();
+        return this.regionMappings.size();	// TODO - slightly confusing
     }
-	
-	public void addFilter(Filter filter) {
-		this.filters.add(filter);
-	}
-    
+
     public void addBound(Bound bound) {
-        this.filters.add(bound);
+//        this.filters.add(bound);
+    	// TODO
     }
-	
-	public boolean accepts(double[] values) {
-	    for (Filter filter : this.filters) {
-			if (filter.accept(values)) {
+
+    public boolean accepts(double[] values) {
+	    for (PairIndex pairIndex : this.regionMappings.keySet()) {
+	    	PairFilter filter = this.regionMappings.get(pairIndex);
+	    	double firstValue = values[pairIndex.firstColumn()];
+	    	double secondValue = values[pairIndex.secondColumn()];
+			if (filter.accept(firstValue, secondValue)) {
 				continue;
 			} else {
 				return false;
@@ -137,15 +133,15 @@ public class Category {
         Map<Integer, Integer> offsets = new HashMap<>();
         
         for (Row member : this.members) {
-            String pdbid = member.id;
-            int[] range1 = getStartEnd(member.startEnd);
+            String pdbid = member.id();
+            int[] range1 = getStartEnd(member.startEnd());
             int s1 = range1[0];
             int e1 = range1[1];
             
             for (Row otherMember : other.members) {
-                if (!pdbid.equals(otherMember.id)) continue;
+                if (!pdbid.equals(otherMember.id())) continue;
                 
-                int[] range2 = getStartEnd(otherMember.startEnd);
+                int[] range2 = getStartEnd(otherMember.startEnd());
                 int s2 = range2[0];
                 int e2 = range2[1];
                 
@@ -161,13 +157,15 @@ public class Category {
     }
 
 	public List<Double> getMeans() {
+		int[] columnNumbers = getColumnIndexes();
+		
 		List<Double> means = new ArrayList<>();
-		for (int i = 0; i < filters.size(); i++) {
+		for (int i = 0; i < columnNumbers.length; i++) {
 			means.add(0.0);
 		}
 
 		for (Row member : this.members) {
-			List<Double> slice = multislice(member.values, columnNumbers);
+			List<Double> slice = multislice(member.values(), columnNumbers);
 			for (int i = 0; i < slice.size(); i++) {
 				double value = slice.get(i);
 				means.set(i, means.get(i) + value);
@@ -178,18 +176,33 @@ public class Category {
 				.map(mean -> mean / getCount())
 				.collect(Collectors.toList());
 	}
+	
+	private int[] getColumnIndexes() {
+		int numberOfIndexes = regionMappings.size() * 2;
+		int[] columnNumbers = new int[numberOfIndexes];
+		List<PairIndex> pairIndexes = regionMappings.keySet().stream().collect(Collectors.toList());
+		
+		for (int i = 0; i < numberOfIndexes; i += 2) {
+			int pairIndexIndex = (i == 0)? 0 : i / 2;
+			PairIndex pair = pairIndexes.get(pairIndexIndex);
+			columnNumbers[i] = pair.firstColumn();
+			columnNumbers[i + 1] = pair.secondColumn();
+		}
+		return columnNumbers;
+	}
 
 
 	public List<MeanStdDev> getMeanWithStdDevs() {
+		int[] columnNumbers = getColumnIndexes();
 		List<Double> stdDevs = new ArrayList<>();
-		for (int i = 0; i < filters.size(); i++) {
+		for (int i = 0; i < columnNumbers.length; i++) {
 			stdDevs.add(0.0);
 		}
 
 		List<Double> means = getMeans();
 
 		for (Row member : this.members) {
-			List<Double> slice = multislice(member.values, columnNumbers);
+			List<Double> slice = multislice(member.values(), columnNumbers);
 			for (int i = 0; i < slice.size(); i++) {
 				double value = slice.get(i);
 				double x = value - means.get(i);
@@ -206,25 +219,12 @@ public class Category {
 		return result;
 	}
 
-
-	public void addId(String id) {
-		this.memberIdList.add(id);
-	}
-    
-    public List<String> getMemberIds() {
-        return this.memberIdList;
-    }
-    
-    public int getNumberOfMembers() {
-        return this.memberIdList.size();
-    }
-	
 	public String toString() {
         StringBuffer stringBuffer = new StringBuffer();
-        for (Filter filter : this.filters) {
+        for (PairFilter filter : this.regionMappings.values()) {
             stringBuffer.append(filter).append(" ");
         }
-		return this.name + " " + this.getNumberOfMembers() + " " + stringBuffer;
+		return this.name + " " + this.getCount() + " " + stringBuffer;
 	}
 	
 	// Helper methods
@@ -233,7 +233,7 @@ public class Category {
         return new int[]{Integer.parseInt(parts[0]), Integer.parseInt(parts[1])};
     }
     
-    private static List<Double> multislice(double[] alist, List<Integer> indices) {
+    private static List<Double> multislice(double[] alist, int[] indices) {
         List<Double> slice = new ArrayList<>();
         for (int index : indices) {
             slice.add(alist[index]);

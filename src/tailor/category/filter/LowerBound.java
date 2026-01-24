@@ -4,17 +4,16 @@ package tailor.category.filter;
  * Lower bound filter
  */
 class LowerBound implements Filter {
+	
     private double minValue;
-    private int columnIndex;
     
-    public LowerBound(double minValue, int columnIndex) {
+    public LowerBound(double minValue) {
         this.minValue = minValue;
-        this.columnIndex = columnIndex;
     }
     
     @Override
-    public boolean accept(double[] row) {
-        return row[columnIndex] >= minValue;
+    public boolean accept(double value) {
+        return value >= minValue;
     }
     
     @Override

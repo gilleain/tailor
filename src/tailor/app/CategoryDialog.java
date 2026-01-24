@@ -137,7 +137,9 @@ public class CategoryDialog extends JDialog implements ActionListener {
         System.err.println("setting values from " + category);
         this.nameField.setText(category.getName());
         for (int i = 0; i < this.numberOfResidues; i++) {
-            Bound bound = (Bound) category.getFilter(i);
+//            Bound bound = (Bound) category.getFilter(i);
+        	// TODO
+        	Bound bound = null;
             if (Bound.shapeType == BoundShape.OVAL) {
                 this.boundTypeComboBoxes[i].setSelectedItem(CategoryDialog.boundTypes[1]);
             }

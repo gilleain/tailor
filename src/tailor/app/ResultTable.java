@@ -18,6 +18,7 @@ import javax.swing.event.ListSelectionListener;
 import javax.swing.event.TableColumnModelListener;
 
 import tailor.category.Category;
+import tailor.category.Row;
 
 /**
  * @author maclean
@@ -146,7 +147,8 @@ public class ResultTable extends JPanel {
             
             if (category.accepts(values)) {
                 String id = this.getFullIdForRow(rowIndex);
-                category.addId(id);
+                // TODO - create the full row properly
+                category.addMember(new Row(id, "", values));
             }
         }
     }

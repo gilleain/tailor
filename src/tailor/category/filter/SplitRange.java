@@ -4,18 +4,16 @@ package tailor.category.filter;
  * Split range condition (wraps around at boundaries)
  */
 class SplitRange implements Filter {
-	private int columnIndex;
     private double lower;
     private double upper;
     
-    public SplitRange(int columnIndex, double lower, double upper) {
+    public SplitRange(double lower, double upper) {
         this.lower = lower;
         this.upper = upper;
     }
     
     @Override
-    public boolean accept(double[] values) {
-    	double value = values[columnIndex];
+    public boolean accept(double value) {
         return (-180 < value && value < lower) || (upper < value && value < 180);
     }
     

@@ -7,17 +7,15 @@ package tailor.category.filter;
  */
 public class PropertyFilter implements Filter {
 
-    private int columnIndex;
     private String targetValue;
     
-    public PropertyFilter(int columnIndex, String targetValue) {
-        this.columnIndex = columnIndex;
+    public PropertyFilter(String targetValue) {
         this.targetValue = targetValue;
     }
     
-    public boolean accept(double[] values) {
+    public boolean accept(double value) {
         // TODO : this is clearly nonsense!
-        return String.valueOf(values[this.columnIndex]).equals(this.targetValue); 
+        return String.valueOf(value).equals(this.targetValue); 
     }
 
 }
