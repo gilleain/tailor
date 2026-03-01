@@ -73,7 +73,8 @@ public class AtomDescription implements Description {
     }
     
     public boolean contains(Description d) {
-    	return false;
+    	// TODO - this seems vague - is/should this ever be true?
+    	return d instanceof AtomDescription && d.getName().equals(getName());
     }
     
     public Object clone() {

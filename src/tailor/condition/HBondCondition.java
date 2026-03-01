@@ -87,10 +87,11 @@ public class HBondCondition extends BaseCondition implements Condition {
 	}
 	
 	public boolean contains(Description d) {
-		return getAcceptorAtomDescription().contains(d)
-				|| getAttachedAtomDescription().contains(d)
-				|| getDonorAtomDescription().contains(d)
-				|| getHydrogenAtomDescription().contains(d);
+		boolean isAcceptor = getAcceptorAtomDescription().contains(d);
+		boolean isAttached = getAttachedAtomDescription().contains(d);
+		boolean isDonor = getDonorAtomDescription().contains(d);
+		boolean isHydrogen = getHydrogenAtomDescription().contains(d);
+		return isAcceptor || isAttached || isDonor || isHydrogen;
 	}
 	
 	public int hashCode() {
