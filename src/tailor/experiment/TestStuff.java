@@ -11,14 +11,32 @@ import tailor.structure.Group;
 
 public class TestStuff {
 	
+	/**
+	 * - Scan for 'O' atoms
+	 */
 	@Test
-	public void testScan() {
+	public void testScanAtoms() {
 		PrintAtoms sink = new PrintAtoms();
 		Chain chain = makeData();
 		ScanAtomByLabel scan = new ScanAtomByLabel("O", chain, sink);
 		scan.run();
 	}
 	
+	/**
+	 * - Scan for {'C', 'CA', 'N'} atoms
+	 */
+	@Test
+	public void testScanAtomLists() {
+		PrintAtomLists sink = new PrintAtomLists();
+		Chain chain = makeData();
+		ScanAtomListsByLabel scan = new ScanAtomListsByLabel(List.of("C", "CA", "N"), chain, sink);
+		scan.run();
+	}
+	
+	/**
+	 * - Scan for 'O' atoms and 'N' atoms
+	 * - Combine these into (O, N) pairs
+	 */ 
 	@Test
 	public void testCombine() {
 		PrintAtomLists sink = new PrintAtomLists();
@@ -38,8 +56,13 @@ public class TestStuff {
 		combineON.run();
 	}
 	
+	/**
+	 * - Scan for 'O' atoms and 'N' atoms
+	 * - Combine these into (O, N) pairs
+	 * - Filter these pairs by distance
+	 */
 	@Test
-	public void testFilter() {
+	public void testFilterAtomCombinations() {
 		double distance = 5;	// whatever
 		
 		Chain chain = makeData();
