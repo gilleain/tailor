@@ -1,34 +1,42 @@
 package tailor.experiment.operator;
 
-import java.util.ArrayList;
 import java.util.List;
 
+import tailor.experiment.api.Operator;
+import tailor.experiment.api.Sink;
+import tailor.experiment.api.Source;
 import tailor.experiment.condition.AtomDistanceCondition;
 import tailor.structure.Atom;
 
-public class ExpandByCondition {
+/**
+ * TODO - why is this distinct from Combine and Filter? We are effectively doing a Combine and Filtering each one?
+ */
+public class ExpandByCondition implements Operator {
 	
 	private AtomDistanceCondition condition;	// make more general
 	
-	private List<Atom> source;	// again, more general
+	private Source<Atom> sourceA;
+	
+	private Source<Atom> sourceB;
+	
+	private Sink<List<Atom>> sink;
 
-	public ExpandByCondition(AtomDistanceCondition condition, List<Atom> source) {
+	public ExpandByCondition(
+			AtomDistanceCondition condition, Source<Atom> sourceA, Source<Atom> sourceB, Sink<List<Atom>> sink) {
 		this.condition = condition;
-		this.source = source;
+		this.sourceA = sourceA;
+		this.sink = sink;
 	}
 	
-	public List<Atom> run(List<Atom> candidates) { // maybe 'apply' ? and 'candidates'??
-		List<Atom> results = new ArrayList<>();	// should be more general datastructure - path?
-		for (Atom sourceAtom : source) {
-			for (Atom candidateAtom : candidates) {
-				if (condition.accept(sourceAtom, candidateAtom)) {
-					results.add(candidateAtom);
+	public void run() { 
+		while (sourceA.hasNext()) {
+			Atom sourceAAtom = sourceA.getNext();
+			while (sourceB.hasNext()) {
+				Atom sourceBAtom = sourceB.getNext();
+				if (condition.accept(sourceAAtom, sourceBAtom)) {
+					sink.put(List.of(sourceAAtom, sourceBAtom));
 				}
 			}
 		}
-		return results;
 	}
-	
-	
-
 }

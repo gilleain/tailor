@@ -3,6 +3,7 @@ package tailor.experiment.operator;
 import java.util.ArrayList;
 import java.util.List;
 
+import tailor.experiment.api.Operator;
 import tailor.experiment.api.Sink;
 import tailor.experiment.api.Source;
 import tailor.structure.Atom;
@@ -10,7 +11,7 @@ import tailor.structure.Atom;
 /**
  * Combine the output from multiple (?) sources.
  */
-public class CombineAtoms {
+public class CombineAtoms implements Operator {
 	
 	private List<Source<Atom>> sources;
 	

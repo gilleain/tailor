@@ -3,12 +3,13 @@ package tailor.experiment.operator;
 import java.util.ArrayList;
 import java.util.List;
 
+import tailor.experiment.api.Operator;
 import tailor.experiment.api.Sink;
 import tailor.structure.Atom;
 import tailor.structure.Chain;
 import tailor.structure.Group;
 
-public class ScanAtomListsByLabel {
+public class ScanAtomListsByLabel implements Operator {
 	
 	// List of atom labels to search for // TODO - could be general conditions
 	private List<String> atomLabels;

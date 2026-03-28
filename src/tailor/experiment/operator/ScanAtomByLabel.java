@@ -1,11 +1,12 @@
 package tailor.experiment.operator;
 
+import tailor.experiment.api.Operator;
 import tailor.experiment.api.Sink;
 import tailor.structure.Atom;
 import tailor.structure.Chain;
 import tailor.structure.Group;
 
-public class ScanAtomByLabel {
+public class ScanAtomByLabel implements Operator {
 	
 	// Atom label to search for // TODO - could be a general condition
 	private String atomLabel;
