@@ -2,10 +2,11 @@ package tailor.experiment.condition;
 
 import java.util.List;
 
+import tailor.experiment.api.AtomListCondition;
 import tailor.experiment.measure.AtomDistanceMeasure;
 import tailor.structure.Atom;
 
-public class AtomDistanceCondition {
+public class AtomDistanceCondition implements AtomListCondition {
 	
 	private AtomDistanceMeasure adm;
 	private double distance;

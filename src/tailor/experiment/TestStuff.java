@@ -5,6 +5,7 @@ import java.util.List;
 import org.junit.Test;
 
 import tailor.experiment.api.Operator;
+import tailor.experiment.condition.AtomAngleCondition;
 import tailor.experiment.condition.AtomDistanceCondition;
 import tailor.experiment.operator.AtomListPipe;
 import tailor.experiment.operator.AtomPipe;
@@ -88,6 +89,23 @@ public class TestStuff {
 		
 		// run the pipeline
 		runAll(List.of(scanO, scanN, combineON, filter));
+	}
+	
+	
+	/**
+	 * - Scan for {'C', 'CA', 'N'} atoms
+	 * - Filter these by angle (TODO - alter input points to be filterable!)
+	 */
+	@Test
+	public void testFilterAtomLists() {
+		double angle = 90;
+		
+		Chain chain = makeData();
+		AtomListPipe triplePipe = new AtomListPipe();
+		ScanAtomListsByLabel scanTriple = new ScanAtomListsByLabel(List.of("C", "CA", "N"), chain, triplePipe);
+		FilterAtomListsByCondition filter = 
+				new FilterAtomListsByCondition(new AtomAngleCondition(angle), triplePipe, new PrintAtomLists());
+		runAll(List.of(scanTriple, filter));
 	}
 	
 	private void runAll(List<Operator> pipeline) {
