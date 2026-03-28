@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.junit.Test;
 
+import tailor.experiment.api.Operator;
 import tailor.experiment.condition.AtomDistanceCondition;
 import tailor.experiment.operator.AtomListPipe;
 import tailor.experiment.operator.AtomPipe;
@@ -60,9 +61,7 @@ public class TestStuff {
 		CombineAtoms combineON = new CombineAtoms(List.of(oPipe, nPipe), sink);
 		
 		// run the pipeline
-		scanO.run();
-		scanN.run();
-		combineON.run();
+		runAll(List.of(scanO, scanN, combineON));
 	}
 	
 	/**
@@ -88,10 +87,13 @@ public class TestStuff {
 				new FilterAtomListsByCondition(new AtomDistanceCondition(distance), onPipe, new PrintAtomLists());
 		
 		// run the pipeline
-		scanO.run();
-		scanN.run();
-		combineON.run();
-		filter.run();
+		runAll(List.of(scanO, scanN, combineON, filter));
+	}
+	
+	private void runAll(List<Operator> pipeline) {
+		for (Operator operator : pipeline) {
+			operator.run();
+		}
 	}
 	
 	private Chain makeData() {
