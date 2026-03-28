@@ -5,8 +5,8 @@ import java.util.List;
 
 import tailor.experiment.api.Operator;
 import tailor.experiment.api.Sink;
+import tailor.experiment.api.Source;
 import tailor.structure.Atom;
-import tailor.structure.Chain;
 import tailor.structure.Group;
 
 public class ScanAtomListsByLabel implements Operator {
@@ -14,19 +14,20 @@ public class ScanAtomListsByLabel implements Operator {
 	// List of atom labels to search for // TODO - could be general conditions
 	private List<String> atomLabels;
 	
-	// Chain to search in - should be a more generic source
-	private Chain chain;
+	// Source to take from
+	private Source<Group> source;
 	
 	private Sink<List<Atom>> atomOutput;
 	
-	public ScanAtomListsByLabel(List<String> atomLabels, Chain chain, Sink<List<Atom>> atomOutput) {
+	public ScanAtomListsByLabel(List<String> atomLabels, Source<Group> source, Sink<List<Atom>> atomOutput) {
 		this.atomLabels = atomLabels;
-		this.chain = chain;
+		this.source = source;
 		this.atomOutput = atomOutput;
 	}
 	
 	public void run() {
-		for (Group group : chain.getGroups()) {
+		while (source.hasNext()) {
+			Group group = source.getNext();
 			List<Atom> matches = null;
 			int numberOfMatches = 0;
 			for (Atom atom : group.getAtoms())	{ // could just use group.getAtomByName?

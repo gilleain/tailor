@@ -11,6 +11,7 @@ import tailor.experiment.operator.AtomListPipe;
 import tailor.experiment.operator.AtomPipe;
 import tailor.experiment.operator.CombineAtoms;
 import tailor.experiment.operator.FilterAtomListsByCondition;
+import tailor.experiment.operator.GroupPipe;
 import tailor.experiment.operator.PrintAtomLists;
 import tailor.experiment.operator.PrintAtoms;
 import tailor.experiment.operator.ScanAtomByLabel;
@@ -29,7 +30,7 @@ public class TestStuff {
 	public void testScanAtoms() {
 		PrintAtoms sink = new PrintAtoms();
 		Chain chain = makeData();
-		ScanAtomByLabel scan = new ScanAtomByLabel("O", chain, sink);
+		ScanAtomByLabel scan = new ScanAtomByLabel("O", new GroupPipe(chain), sink);
 		scan.run();
 	}
 	
@@ -40,7 +41,7 @@ public class TestStuff {
 	public void testScanAtomLists() {
 		PrintAtomLists sink = new PrintAtomLists();
 		Chain chain = makeData();
-		ScanAtomListsByLabel scan = new ScanAtomListsByLabel(List.of("C", "CA", "N"), chain, sink);
+		ScanAtomListsByLabel scan = new ScanAtomListsByLabel(List.of("C", "CA", "N"), new GroupPipe(chain), sink);
 		scan.run();
 	}
 	
@@ -52,12 +53,13 @@ public class TestStuff {
 	public void testCombine() {
 		PrintAtomLists sink = new PrintAtomLists();
 		Chain chain = makeData();
+		GroupPipe inPipe = new GroupPipe(chain);
 		
 		AtomPipe oPipe = new AtomPipe();
-		ScanAtomByLabel scanO = new ScanAtomByLabel("O", chain, oPipe);
+		ScanAtomByLabel scanO = new ScanAtomByLabel("O", inPipe, oPipe);
 		
 		AtomPipe nPipe = new AtomPipe();
-		ScanAtomByLabel scanN = new ScanAtomByLabel("N", chain, nPipe);
+		ScanAtomByLabel scanN = new ScanAtomByLabel("N", inPipe, nPipe);
 		
 		CombineAtoms combineON = new CombineAtoms(List.of(oPipe, nPipe), sink);
 		
@@ -75,12 +77,13 @@ public class TestStuff {
 		double distance = 5;	// whatever
 		
 		Chain chain = makeData();
+		GroupPipe inPipe = new GroupPipe(chain);
 		
 		AtomPipe oPipe = new AtomPipe();
-		ScanAtomByLabel scanO = new ScanAtomByLabel("O", chain, oPipe);
+		ScanAtomByLabel scanO = new ScanAtomByLabel("O", inPipe, oPipe);
 		
 		AtomPipe nPipe = new AtomPipe();
-		ScanAtomByLabel scanN = new ScanAtomByLabel("N", chain, nPipe);
+		ScanAtomByLabel scanN = new ScanAtomByLabel("N", inPipe, nPipe);
 		
 		AtomListPipe onPipe = new AtomListPipe();
 		CombineAtoms combineON = new CombineAtoms(List.of(oPipe, nPipe), onPipe);
@@ -101,8 +104,9 @@ public class TestStuff {
 		double angle = 90;
 		
 		Chain chain = makeData();
+		GroupPipe inPipe = new GroupPipe(chain);
 		AtomListPipe triplePipe = new AtomListPipe();
-		ScanAtomListsByLabel scanTriple = new ScanAtomListsByLabel(List.of("C", "CA", "N"), chain, triplePipe);
+		ScanAtomListsByLabel scanTriple = new ScanAtomListsByLabel(List.of("C", "CA", "N"), inPipe, triplePipe);
 		FilterAtomListsByCondition filter = 
 				new FilterAtomListsByCondition(new AtomAngleCondition(angle), triplePipe, new PrintAtomLists());
 		runAll(List.of(scanTriple, filter));
