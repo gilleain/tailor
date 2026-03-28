@@ -1,4 +1,4 @@
-package tailor.experiment;
+package tailor.experiment.measure;
 
 import tailor.geometry.Geometry;
 import tailor.structure.Atom;

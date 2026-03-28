@@ -1,4 +1,4 @@
-package tailor.experiment;
+package tailor.experiment.condition;
 
 import tailor.structure.Atom;
 

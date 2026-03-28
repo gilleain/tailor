@@ -1,5 +1,6 @@
-package tailor.experiment;
+package tailor.experiment.operator;
 
+import tailor.experiment.api.Sink;
 import tailor.structure.Atom;
 import tailor.structure.Chain;
 import tailor.structure.Group;

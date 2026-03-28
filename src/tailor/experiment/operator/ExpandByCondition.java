@@ -1,8 +1,9 @@
-package tailor.experiment;
+package tailor.experiment.operator;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import tailor.experiment.condition.AtomDistanceCondition;
 import tailor.structure.Atom;
 
 public class ExpandByCondition {

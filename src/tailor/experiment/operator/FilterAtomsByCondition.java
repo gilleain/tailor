@@ -1,5 +1,8 @@
-package tailor.experiment;
+package tailor.experiment.operator;
 
+import tailor.experiment.api.Sink;
+import tailor.experiment.api.Source;
+import tailor.experiment.condition.AtomPropertyCondition;
 import tailor.structure.Atom;
 
 public class FilterAtomsByCondition {

@@ -1,8 +1,9 @@
-package tailor.experiment;
+package tailor.experiment.operator;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import tailor.experiment.api.Sink;
 import tailor.structure.Atom;
 import tailor.structure.Chain;
 import tailor.structure.Group;

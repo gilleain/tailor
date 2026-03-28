@@ -4,6 +4,15 @@ import java.util.List;
 
 import org.junit.Test;
 
+import tailor.experiment.condition.AtomDistanceCondition;
+import tailor.experiment.operator.AtomListPipe;
+import tailor.experiment.operator.AtomPipe;
+import tailor.experiment.operator.CombineAtoms;
+import tailor.experiment.operator.FilterAtomListsByCondition;
+import tailor.experiment.operator.PrintAtomLists;
+import tailor.experiment.operator.PrintAtoms;
+import tailor.experiment.operator.ScanAtomByLabel;
+import tailor.experiment.operator.ScanAtomListsByLabel;
 import tailor.geometry.Vector;
 import tailor.structure.Atom;
 import tailor.structure.Chain;

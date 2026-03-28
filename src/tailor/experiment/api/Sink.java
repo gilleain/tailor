@@ -1,4 +1,4 @@
-package tailor.experiment;
+package tailor.experiment.api;
 
 /**
  * Output for items - next operation, printer, etc.

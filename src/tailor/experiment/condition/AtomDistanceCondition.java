@@ -1,7 +1,8 @@
-package tailor.experiment;
+package tailor.experiment.condition;
 
 import java.util.List;
 
+import tailor.experiment.measure.AtomDistanceMeasure;
 import tailor.structure.Atom;
 
 public class AtomDistanceCondition {

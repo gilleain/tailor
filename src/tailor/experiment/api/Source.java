@@ -1,4 +1,4 @@
-package tailor.experiment;
+package tailor.experiment.api;
 
 public interface Source<T> {
 	

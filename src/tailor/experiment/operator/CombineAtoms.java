@@ -1,8 +1,10 @@
-package tailor.experiment;
+package tailor.experiment.operator;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import tailor.experiment.api.Sink;
+import tailor.experiment.api.Source;
 import tailor.structure.Atom;
 
 /**
