@@ -6,5 +6,5 @@ package tailor.experiment.api;
 public interface Operator {
 	
 	void run();
-
+	
 }

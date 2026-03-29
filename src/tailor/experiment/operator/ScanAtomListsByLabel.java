@@ -3,13 +3,13 @@ package tailor.experiment.operator;
 import java.util.ArrayList;
 import java.util.List;
 
-import tailor.experiment.api.Operator;
 import tailor.experiment.api.Sink;
 import tailor.experiment.api.Source;
+import tailor.experiment.api.TmpOperator;
 import tailor.structure.Atom;
 import tailor.structure.Group;
 
-public class ScanAtomListsByLabel implements Operator {
+public class ScanAtomListsByLabel implements TmpOperator<Group, List<Atom>> {
 	
 	// List of atom labels to search for // TODO - could be general conditions
 	private List<String> atomLabels;
@@ -17,12 +17,20 @@ public class ScanAtomListsByLabel implements Operator {
 	// Source to take from
 	private Source<Group> source;
 	
-	private Sink<List<Atom>> atomOutput;
+	private Sink<List<Atom>> sink;
 	
-	public ScanAtomListsByLabel(List<String> atomLabels, Source<Group> source, Sink<List<Atom>> atomOutput) {
+	public ScanAtomListsByLabel(List<String> atomLabels, Source<Group> source, Sink<List<Atom>> sink) {
 		this.atomLabels = atomLabels;
 		this.source = source;
-		this.atomOutput = atomOutput;
+		this.sink = sink;
+	}
+	
+	public void setSource(Source<Group> source) {
+		this.source = source;
+	}
+	
+	public void setSink(Sink<List<Atom>> sink) {
+		this.sink = sink;
 	}
 	
 	public void run() {
@@ -46,7 +54,7 @@ public class ScanAtomListsByLabel implements Operator {
 			}
 			// TODO - do we want to do anything about partial matches?
 			if (matches != null && numberOfMatches == atomLabels.size()) {
-				atomOutput.put(matches);
+				sink.put(matches);
 			}
 		}
 	}

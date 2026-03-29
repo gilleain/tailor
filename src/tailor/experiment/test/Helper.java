@@ -16,6 +16,12 @@ public class Helper {
 		}
 	}
 	
+	protected static void describe(List<Operator> pipeline) {
+		for (Operator operator : pipeline) {
+			System.out.println(operator.getClass().getSimpleName());
+		}
+	}
+	
 	protected static Chain makeData() {
 		Chain chain = new Chain();
 		double x = 1;
