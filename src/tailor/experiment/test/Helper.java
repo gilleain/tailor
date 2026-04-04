@@ -22,12 +22,11 @@ public class Helper {
 		}
 	}
 	
-	protected static Chain makeData() {
+	protected static Chain makeData(int numberOfGroups) {
 		Chain chain = new Chain();
 		double x = 1;
 		double y = 1;
 		Vector p = new Vector(x, y, 0);
-		int numberOfGroups = 3;
 		for (int i = 0; i < numberOfGroups; i++) {
 			Group group = new Group(i, "GLY");	// could add 1 to get a more realistic number ..
 			p = addAtom(group, "N", p);

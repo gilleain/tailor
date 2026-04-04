@@ -1,5 +1,7 @@
 package tailor.experiment.operator;
 
+import java.util.List;
+
 import tailor.experiment.api.Sink;
 import tailor.experiment.api.Source;
 import tailor.experiment.api.TmpOperator;
@@ -8,16 +10,16 @@ import tailor.structure.Atom;
 
 public class ScanAtomResultByLabel implements TmpOperator<Result, Result> {
 	
-	// Atom label to search for // TODO - could be a general condition
-	private String atomLabel;
+	// Atom labels to search for // TODO - could be a general condition
+	private List<String> atomLabels;
 	
 	// Source to take from
 	private Source<Result> source;
 	
 	private Sink<Result> sink;
 	
-	public ScanAtomResultByLabel(String atomLabel) {
-		this.atomLabel = atomLabel;
+	public ScanAtomResultByLabel(List<String> atomLabels) {
+		this.atomLabels = atomLabels;
 	}
 	
 	public void setSource(Source<Result> source) {
@@ -32,7 +34,7 @@ public class ScanAtomResultByLabel implements TmpOperator<Result, Result> {
 		while (source.hasNext()) {
 			Result groupResult = source.getNext();
 			for (Atom atom : groupResult.getAtoms())	{ // could just use group.getAtomByName?
-				if (atom.getName().equals(atomLabel)) {	// is this general enough?
+				if (atomLabels.contains(atom.getName())) {	
 					Result newResult = groupResult.copyWithoutAtoms();
 					newResult.addAtom(atom);
 					sink.put(newResult);

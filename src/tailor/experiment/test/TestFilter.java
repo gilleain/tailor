@@ -29,18 +29,18 @@ public class TestFilter {
 	public void testFilterAtomCombinations_ByResult() {
 		double distance = 5;	// whatever
 		
-		Chain chain = Helper.makeData();
+		Chain chain = Helper.makeData(3);
 		ResultPipe resultPipe1 = new ResultPipe();
 		ResultPipe resultPipe2 = new ResultPipe();
 		GroupSource groupSource = new GroupSource(chain, List.of(resultPipe1, resultPipe2));
 		
 		ResultPipe oPipe = new ResultPipe();
-		ScanAtomResultByLabel scanO = new ScanAtomResultByLabel("O");
+		ScanAtomResultByLabel scanO = new ScanAtomResultByLabel(List.of("O"));
 		scanO.setSink(oPipe);
 		scanO.setSource(resultPipe1);
 		
 		ResultPipe nPipe = new ResultPipe();
-		ScanAtomResultByLabel scanN = new ScanAtomResultByLabel("N");
+		ScanAtomResultByLabel scanN = new ScanAtomResultByLabel(List.of("N"));
 		scanN.setSink(nPipe);
 		scanN.setSource(resultPipe2);
 		
@@ -67,7 +67,7 @@ public class TestFilter {
 	public void testFilterAtomCombinations() {
 		double distance = 5;	// whatever
 		
-		Chain chain = Helper.makeData();
+		Chain chain = Helper.makeData(3);
 		GroupPipe inPipe = new GroupPipe(chain);
 		
 		AtomPipe oPipe = new AtomPipe();
@@ -94,7 +94,7 @@ public class TestFilter {
 	public void testFilterAtomLists() {
 		double angle = 90;
 		
-		Chain chain = Helper.makeData();
+		Chain chain = Helper.makeData(3);
 		GroupPipe inPipe = new GroupPipe(chain);
 		AtomListPipe triplePipe = new AtomListPipe();
 		ScanAtomListsByLabel scanTriple = new ScanAtomListsByLabel(List.of("C", "CA", "N"), inPipe, triplePipe);

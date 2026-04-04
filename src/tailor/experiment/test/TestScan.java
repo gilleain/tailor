@@ -4,11 +4,10 @@ import java.util.List;
 
 import org.junit.Test;
 
-import tailor.experiment.operator.GroupPipe;
-import tailor.experiment.operator.PrintAtomLists;
-import tailor.experiment.operator.PrintAtoms;
-import tailor.experiment.operator.ScanAtomByLabel;
-import tailor.experiment.operator.ScanAtomListsByLabel;
+import tailor.experiment.operator.GroupSource;
+import tailor.experiment.operator.PrintResults;
+import tailor.experiment.operator.ResultPipe;
+import tailor.experiment.operator.ScanAtomResultByLabel;
 import tailor.structure.Chain;
 
 public class TestScan {
@@ -17,22 +16,31 @@ public class TestScan {
 	 * - Scan for 'O' atoms
 	 */
 	@Test
-	public void testScanAtoms() {
-		PrintAtoms sink = new PrintAtoms();
-		Chain chain = Helper.makeData();
-		ScanAtomByLabel scan = new ScanAtomByLabel("O", new GroupPipe(chain), sink);
-		scan.run();
+	public void testScanResultsForSingleAtom() {
+		PrintResults sink = new PrintResults();
+		Chain chain = Helper.makeData(4);
+		ResultPipe resultPipe1 = new ResultPipe();
+		GroupSource groupSource = new GroupSource(chain, List.of(resultPipe1));
+		ScanAtomResultByLabel scan = new ScanAtomResultByLabel(List.of("O"));
+		scan.setSource(resultPipe1);
+		scan.setSink(sink);
+		Helper.runAll(List.of(groupSource, scan));
 	}
+	
 	
 	/**
 	 * - Scan for {'C', 'CA', 'N'} atoms
 	 */
 	@Test
-	public void testScanAtomLists() {
-		PrintAtomLists sink = new PrintAtomLists();
-		Chain chain = Helper.makeData();
-		ScanAtomListsByLabel scan = new ScanAtomListsByLabel(List.of("C", "CA", "N"), new GroupPipe(chain), sink);
-		scan.run();
+	public void testScanResultsForMultipleAtoms() {
+		PrintResults sink = new PrintResults();
+		Chain chain = Helper.makeData(4);
+		ResultPipe resultPipe1 = new ResultPipe();
+		GroupSource groupSource = new GroupSource(chain, List.of(resultPipe1));
+		ScanAtomResultByLabel scan = new ScanAtomResultByLabel(List.of("C", "CA", "N"));
+		scan.setSource(resultPipe1);
+		scan.setSink(sink);
+		Helper.runAll(List.of(groupSource, scan));
 	}
 
 }

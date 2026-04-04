@@ -27,18 +27,18 @@ public class TestCombine {
 	@Test
 	public void testCombineResultsToPairs() {
 		PrintResults sink = new PrintResults();
-		Chain chain = Helper.makeData();
+		Chain chain = Helper.makeData(3);
 		ResultPipe resultPipe1 = new ResultPipe();
 		ResultPipe resultPipe2 = new ResultPipe();
 		GroupSource groupSource = new GroupSource(chain, List.of(resultPipe1, resultPipe2));
 
 		ResultPipe oPipe = new ResultPipe();
-		ScanAtomResultByLabel scanO = new ScanAtomResultByLabel("O");
+		ScanAtomResultByLabel scanO = new ScanAtomResultByLabel(List.of("O"));
 		scanO.setSource(resultPipe1);
 		scanO.setSink(oPipe);
 		
 		ResultPipe nPipe = new ResultPipe();
-		ScanAtomResultByLabel scanN = new ScanAtomResultByLabel("N");
+		ScanAtomResultByLabel scanN = new ScanAtomResultByLabel(List.of("N"));
 		scanN.setSource(resultPipe2);
 		scanN.setSink(nPipe);
 		
@@ -51,19 +51,19 @@ public class TestCombine {
 	@Test
 	public void testCombineResultsToTriples() {
 		PrintResults sink = new PrintResults();
-		Chain chain = Helper.makeData();
+		Chain chain = Helper.makeData(3);
 		ResultPipe resultPipe1 = new ResultPipe();
 		ResultPipe resultPipe2 = new ResultPipe();
 		ResultPipe resultPipe3 = new ResultPipe();
 		GroupSource groupSource = new GroupSource(chain, List.of(resultPipe1, resultPipe2, resultPipe3));
 
 		ResultPipe oPipe = new ResultPipe();
-		ScanAtomResultByLabel scanO = new ScanAtomResultByLabel("O");
+		ScanAtomResultByLabel scanO = new ScanAtomResultByLabel(List.of("O"));
 		scanO.setSource(resultPipe1);
 		scanO.setSink(oPipe);
 		
 		ResultPipe nPipe = new ResultPipe();
-		ScanAtomResultByLabel scanN = new ScanAtomResultByLabel("N");
+		ScanAtomResultByLabel scanN = new ScanAtomResultByLabel(List.of("N"));
 		scanN.setSource(resultPipe2);
 		scanN.setSink(nPipe);
 		
@@ -71,7 +71,7 @@ public class TestCombine {
 		CombineResults combineON = new CombineResults(List.of(oPipe, nPipe), resultON);
 		
 		ResultPipe caPipe = new ResultPipe();
-		ScanAtomResultByLabel scanCA = new ScanAtomResultByLabel("CA");
+		ScanAtomResultByLabel scanCA = new ScanAtomResultByLabel(List.of("CA"));
 		scanCA.setSource(resultPipe3);
 		scanCA.setSink(caPipe);
 		
@@ -90,7 +90,7 @@ public class TestCombine {
 	@Test
 	public void testCombineAtoms() {
 		PrintAtomLists sink = new PrintAtomLists();
-		Chain chain = Helper.makeData();
+		Chain chain = Helper.makeData(3);
 		GroupPipe inPipe = new GroupPipe(chain);
 		
 		AtomPipe oPipe = new AtomPipe();
@@ -113,7 +113,7 @@ public class TestCombine {
 	 */
 	@Test
 	public void testCombineAtomLists() {
-		Chain chain = Helper.makeData();
+		Chain chain = Helper.makeData(3);
 		GroupPipe inPipe1 = new GroupPipe(chain);	// TODO - annoying - otherwise need to reset iterator
 		GroupPipe inPipe2 = new GroupPipe(chain);
 		
