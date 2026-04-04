@@ -39,5 +39,9 @@ public class ChainDescription {
 	public List<GroupDescription> getGroupDescriptions() {
 		return this.groupDescriptions;
 	}
+
+	public List<AtomDistanceDescription> getAtomSetDescriptions() {
+		return atomSetDescriptions;
+	}
  
 }

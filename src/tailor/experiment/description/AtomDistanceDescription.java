@@ -2,20 +2,27 @@ package tailor.experiment.description;
 
 public class AtomDistanceDescription {
 	
-	private final AtomDescription atomDescriptionA;
+	private final double distance;
 	
-	private final AtomDescription atomDescriptionB;
+	private final DescriptionPath atomDescriptionA;
+	
+	private final DescriptionPath atomDescriptionB;
 
-	public AtomDistanceDescription(AtomDescription atomDescriptionA, AtomDescription atomDescriptionB) {
+	public AtomDistanceDescription(double distance, DescriptionPath atomDescriptionA, DescriptionPath atomDescriptionB) {
+		this.distance = distance;
 		this.atomDescriptionA = atomDescriptionA;
 		this.atomDescriptionB = atomDescriptionB;
 	}
 
-	public AtomDescription getAtomDescriptionA() {
+	public double getDistance() {
+		return distance;
+	}
+
+	public DescriptionPath getAtomDescriptionA() {
 		return atomDescriptionA;
 	}
 
-	public AtomDescription getAtomDescriptionB() {
+	public DescriptionPath getAtomDescriptionB() {
 		return atomDescriptionB;
 	}
 

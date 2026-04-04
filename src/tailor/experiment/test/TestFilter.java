@@ -8,7 +8,7 @@ import tailor.experiment.condition.AtomAngleCondition;
 import tailor.experiment.condition.AtomDistanceCondition;
 import tailor.experiment.condition.AtomMatcher;
 import tailor.experiment.operator.CombineResults;
-import tailor.experiment.operator.FilterAtomsResultsByCondition;
+import tailor.experiment.operator.FilterAtomResultByCondition;
 import tailor.experiment.operator.GroupSource;
 import tailor.experiment.operator.PrintResults;
 import tailor.experiment.operator.ResultPipe;
@@ -46,7 +46,7 @@ public class TestFilter {
 		
 		AtomMatcher atomMatcher = new AtomMatcher(List.of("O", "N"));
 		AtomDistanceCondition condition = new AtomDistanceCondition(distance);
-		FilterAtomsResultsByCondition filter = new FilterAtomsResultsByCondition(condition, atomMatcher);
+		FilterAtomResultByCondition filter = new FilterAtomResultByCondition(condition, atomMatcher);
 		filter.setSource(onPipe);
 		filter.setSink(new PrintResults());
 		
@@ -70,9 +70,9 @@ public class TestFilter {
 		scanTriple.setSource(groupResultPipe);
 		scanTriple.setSink(triplePipe);
 		
-		AtomMatcher atomMatcher = new AtomMatcher(List.of("N", "CA", "C"));
+		AtomMatcher atomMatcher = new AtomMatcher(List.of("C", "CA", "N"));
 		AtomAngleCondition condition = new AtomAngleCondition(angle);
-		FilterAtomsResultsByCondition filter = new FilterAtomsResultsByCondition(condition, atomMatcher);
+		FilterAtomResultByCondition filter = new FilterAtomResultByCondition(condition, atomMatcher);
 		filter.setSource(triplePipe);
 		filter.setSink(new PrintResults());
 		Helper.runAll(List.of(groupSource, scanTriple, filter));

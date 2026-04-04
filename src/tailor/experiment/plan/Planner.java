@@ -9,10 +9,13 @@ import java.util.Map.Entry;
 import tailor.experiment.api.Operator;
 import tailor.experiment.api.PipeableOperator;
 import tailor.experiment.api.Source;
-import tailor.experiment.description.AtomDescription;
+import tailor.experiment.condition.AtomDistanceCondition;
+import tailor.experiment.condition.AtomMatcher;
+import tailor.experiment.description.AtomDistanceDescription;
 import tailor.experiment.description.ChainDescription;
 import tailor.experiment.description.GroupDescription;
 import tailor.experiment.operator.CombineResults;
+import tailor.experiment.operator.FilterAtomResultByCondition;
 import tailor.experiment.operator.PrintResults;
 import tailor.experiment.operator.ResultPipe;
 import tailor.experiment.operator.ScanAtomResultByLabel;
@@ -29,25 +32,58 @@ public class Planner {
 		// Go through the group descriptions in the chain, making scanners
 		Map<PipeableOperator<Result, Result>, GroupDescription> scannerMap = new HashMap<>();
 		for (GroupDescription groupDescription : chainDescription.getGroupDescriptions()) {
-			List<AtomDescription> atomDescriptions = groupDescription.getAtomDescriptions();
-			List<String> labels = atomDescriptions.stream().map(a -> a.getLabel()).toList();
+			List<String> labels = groupDescription.getAtomDescriptions().stream().map(a -> a.getLabel()).toList();
 			PipeableOperator<Result, Result> scanByLabel = new ScanAtomResultByLabel(labels);
 			scannerMap.put(scanByLabel, groupDescription);
+		}
+		
+		// TODO - more general
+		List<AtomDistanceDescription> betweenResidueDescriptions = new ArrayList<>();
+		Map<GroupDescription, AtomDistanceDescription> internalResidueDescriptions = new HashMap<>();
+		for (AtomDistanceDescription atomSetDescription : chainDescription.getAtomSetDescriptions()) {
+			// check to see if the sub-descriptions are in the same group
+			if (atomSetDescription.getAtomDescriptionA().getGroupDescription()
+					== atomSetDescription.getAtomDescriptionB().getGroupDescription()) {
+				GroupDescription groupDescription = atomSetDescription.getAtomDescriptionA().getGroupDescription();
+				internalResidueDescriptions.put(groupDescription, atomSetDescription);
+			} else {
+				betweenResidueDescriptions.add(atomSetDescription);
+			}
 		}
 		
 		// Add output pipes to the scanners
 		List<Source<Result>> outputResultPipes = new ArrayList<>();
 		for (Entry<PipeableOperator<Result, Result>, GroupDescription> entry : scannerMap.entrySet()) {
-			PipeableOperator<Result, Result> operator = entry.getKey();
-			pipeline.add(operator);
+			PipeableOperator<Result, Result> scanner = entry.getKey();
+			pipeline.add(scanner);
+			
 			ResultPipe pipe = new ResultPipe();
-			operator.setSink(pipe);
+			scanner.setSink(pipe);
+			
+			GroupDescription groupDescription = entry.getValue();
+			if (internalResidueDescriptions.containsKey(groupDescription)) {
+				AtomDistanceDescription atomSetDescription = internalResidueDescriptions.get(groupDescription);
+				AtomDistanceCondition atomCondition = new AtomDistanceCondition(atomSetDescription.getDistance());
+				List<String> labels = List.of(
+						atomSetDescription.getAtomDescriptionA().getAtomDescription().getLabel(),
+						atomSetDescription.getAtomDescriptionB().getAtomDescription().getLabel());
+				AtomMatcher atomMatcher = new AtomMatcher(labels);
+				FilterAtomResultByCondition filter = new FilterAtomResultByCondition(atomCondition, atomMatcher);
+				filter.setSource(pipe);
+				ResultPipe filteredPipe = new ResultPipe();
+				filter.setSink(filteredPipe);
+				outputResultPipes.add(filteredPipe);
+				pipeline.add(filter);
+			}
+			
 			outputResultPipes.add(pipe);
 		}
 		
 		// Combine the scanners
 		Operator combiner = new CombineResults(outputResultPipes, new PrintResults());
 		pipeline.add(combiner);
+		
+		// TODO - Add the betweenResidueDescriptions as filters on combiners
 		
 		return pipeline;
 	}

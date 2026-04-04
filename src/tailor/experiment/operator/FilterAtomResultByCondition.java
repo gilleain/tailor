@@ -10,7 +10,7 @@ import tailor.experiment.condition.AtomMatcher;
 import tailor.experiment.plan.Result;
 import tailor.structure.Atom;
 
-public class FilterAtomsResultsByCondition implements PipeableOperator<Result, Result> {
+public class FilterAtomResultByCondition implements PipeableOperator<Result, Result> {
 	
 	private AtomListCondition condition;
 	
@@ -20,7 +20,7 @@ public class FilterAtomsResultsByCondition implements PipeableOperator<Result, R
 	
 	private Sink<Result> output;
 	
-	public FilterAtomsResultsByCondition(AtomListCondition condition, AtomMatcher matcher) {
+	public FilterAtomResultByCondition(AtomListCondition condition, AtomMatcher matcher) {
 		this.condition = condition;
 		this.matcher = matcher;
 	}
