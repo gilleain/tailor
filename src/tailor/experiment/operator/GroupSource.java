@@ -1,5 +1,7 @@
 package tailor.experiment.operator;
 
+import java.util.List;
+
 import tailor.experiment.api.Operator;
 import tailor.experiment.api.Sink;
 import tailor.experiment.plan.Result;
@@ -10,17 +12,19 @@ public class GroupSource implements Operator {
 	
 	private Chain chain;
 	
-	private Sink<Result> output;
+	private List<Sink<Result>> outputs;
 	
-	public GroupSource(Chain chain, Sink<Result> output) {
+	public GroupSource(Chain chain, List<Sink<Result>> outputs) {
 		this.chain = chain;
-		this.output = output;
+		this.outputs = outputs;
 	}
 
 	@Override
 	public void run() {
 		for (Group group : chain.getGroups()) {
-			output.put(new Result(chain, group));
+			for (Sink<Result> output : outputs) {
+				output.put(new Result(chain, group));
+			}
 		}
 		
 	}

@@ -9,7 +9,6 @@ import tailor.experiment.condition.AtomDistanceCondition;
 import tailor.experiment.condition.AtomPropertyCondition;
 import tailor.experiment.operator.AtomListPipe;
 import tailor.experiment.operator.AtomPipe;
-import tailor.experiment.operator.ResultPipe;
 import tailor.experiment.operator.CombineAtoms;
 import tailor.experiment.operator.CombineResults;
 import tailor.experiment.operator.FilterAtomListsByCondition;
@@ -17,6 +16,7 @@ import tailor.experiment.operator.FilterAtomsResultsByCondition;
 import tailor.experiment.operator.GroupPipe;
 import tailor.experiment.operator.GroupSource;
 import tailor.experiment.operator.PrintAtomLists;
+import tailor.experiment.operator.ResultPipe;
 import tailor.experiment.operator.ScanAtomByLabel;
 import tailor.experiment.operator.ScanAtomListsByLabel;
 import tailor.experiment.operator.ScanAtomResultByLabel;
@@ -29,18 +29,19 @@ public class TestFilter {
 		double distance = 5;	// whatever
 		
 		Chain chain = Helper.makeData();
-		ResultPipe resultPipe = new ResultPipe();
-		GroupSource groupSource = new GroupSource(chain, resultPipe);
+		ResultPipe resultPipe1 = new ResultPipe();
+		ResultPipe resultPipe2 = new ResultPipe();
+		GroupSource groupSource = new GroupSource(chain, List.of(resultPipe1, resultPipe2));
 		
 		ResultPipe oPipe = new ResultPipe();
 		ScanAtomResultByLabel scanO = new ScanAtomResultByLabel("O");
 		scanO.setSink(oPipe);
-		scanO.setSource(resultPipe);
+		scanO.setSource(resultPipe1);
 		
 		ResultPipe nPipe = new ResultPipe();
 		ScanAtomResultByLabel scanN = new ScanAtomResultByLabel("O");
 		scanN.setSink(nPipe);
-		scanN.setSource(resultPipe);
+		scanN.setSource(resultPipe2);
 		
 		ResultPipe onPipe = new ResultPipe();
 		CombineResults combineON = new CombineResults(List.of(oPipe, nPipe), onPipe);

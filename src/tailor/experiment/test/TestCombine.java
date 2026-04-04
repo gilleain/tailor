@@ -8,7 +8,6 @@ import tailor.experiment.api.Sink;
 import tailor.experiment.api.Source;
 import tailor.experiment.operator.AtomListPipe;
 import tailor.experiment.operator.AtomPipe;
-import tailor.experiment.operator.ResultPipe;
 import tailor.experiment.operator.CombineAtomLists;
 import tailor.experiment.operator.CombineAtoms;
 import tailor.experiment.operator.CombineResults;
@@ -16,6 +15,7 @@ import tailor.experiment.operator.GroupPipe;
 import tailor.experiment.operator.GroupSource;
 import tailor.experiment.operator.PrintAtomLists;
 import tailor.experiment.operator.PrintResults;
+import tailor.experiment.operator.ResultPipe;
 import tailor.experiment.operator.ScanAtomByLabel;
 import tailor.experiment.operator.ScanAtomListsByLabel;
 import tailor.experiment.operator.ScanAtomResultByLabel;
@@ -30,8 +30,7 @@ public class TestCombine {
 		Chain chain = Helper.makeData();
 		ResultPipe resultPipe1 = new ResultPipe();
 		ResultPipe resultPipe2 = new ResultPipe();
-		GroupSource groupSource1 = new GroupSource(chain, resultPipe1);
-		GroupSource groupSource2 = new GroupSource(chain, resultPipe2);
+		GroupSource groupSource = new GroupSource(chain, List.of(resultPipe1, resultPipe2));
 
 		ResultPipe oPipe = new ResultPipe();
 		ScanAtomResultByLabel scanO = new ScanAtomResultByLabel("O");
@@ -46,7 +45,7 @@ public class TestCombine {
 		CombineResults combineON = new CombineResults(List.of(oPipe, nPipe), sink);
 		
 		// run the pipeline
-		Helper.runAll(List.of(groupSource1, groupSource2, scanO, scanN, combineON));
+		Helper.runAll(List.of(groupSource, scanO, scanN, combineON));
 	}
 	
 	
