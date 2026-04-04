@@ -79,9 +79,24 @@ public class Planner {
 			outputResultPipes.add(pipe);
 		}
 		
-		// Combine the scanners
-		Operator combiner = new CombineResults(outputResultPipes, new PrintResults());
-		pipeline.add(combiner);
+		// Combine the scanners, unless there is only one
+		if (scannerMap.size() > 1) {
+			Operator combiner = new CombineResults(outputResultPipes, new PrintResults());
+			pipeline.add(combiner);
+		} else {
+			final Source<Result> output = outputResultPipes.get(0);
+			// kind of dumb
+			Operator printAdapter = new Operator() {
+
+				@Override
+				public void run() {
+					while (output.hasNext()) {
+						System.out.println(output.getNext());
+					}
+				}
+			};
+			pipeline.add(printAdapter);
+		}
 		
 		// TODO - Add the betweenResidueDescriptions as filters on combiners
 		
