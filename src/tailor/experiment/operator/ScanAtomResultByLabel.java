@@ -33,12 +33,17 @@ public class ScanAtomResultByLabel implements TmpOperator<Result, Result> {
 	public void run() {
 		while (source.hasNext()) {
 			Result groupResult = source.getNext();
-			for (Atom atom : groupResult.getAtoms())	{ // could just use group.getAtomByName?
+			// TODO - could defer copy until we know we have a match
+			Result newResult = groupResult.copyWithoutAtoms();
+			int matchCount = 0;
+			for (Atom atom : groupResult.getAtoms())	{ 
 				if (atomLabels.contains(atom.getName())) {	
-					Result newResult = groupResult.copyWithoutAtoms();
 					newResult.addAtom(atom);
-					sink.put(newResult);
+					matchCount++;	// hmmm, bag vs set ...
 				}
+			}
+			if (matchCount == atomLabels.size()) {
+				sink.put(newResult);
 			}
 		}
 	}

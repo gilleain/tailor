@@ -4,26 +4,19 @@ import java.util.List;
 
 import org.junit.Test;
 
-import tailor.experiment.api.Sink;
-import tailor.experiment.api.Source;
-import tailor.experiment.operator.AtomListPipe;
-import tailor.experiment.operator.AtomPipe;
-import tailor.experiment.operator.CombineAtomLists;
-import tailor.experiment.operator.CombineAtoms;
 import tailor.experiment.operator.CombineResults;
-import tailor.experiment.operator.GroupPipe;
 import tailor.experiment.operator.GroupSource;
-import tailor.experiment.operator.PrintAtomLists;
 import tailor.experiment.operator.PrintResults;
 import tailor.experiment.operator.ResultPipe;
-import tailor.experiment.operator.ScanAtomByLabel;
-import tailor.experiment.operator.ScanAtomListsByLabel;
 import tailor.experiment.operator.ScanAtomResultByLabel;
-import tailor.structure.Atom;
 import tailor.structure.Chain;
 
 public class TestCombine {
 	
+	/**
+	 * - Scan for 'O' atoms and 'N' atoms
+	 * - Combine these into (O, N) pairs
+	 */ 
 	@Test
 	public void testCombineResultsToPairs() {
 		PrintResults sink = new PrintResults();
@@ -48,6 +41,12 @@ public class TestCombine {
 		Helper.runAll(List.of(groupSource, scanO, scanN, combineON));
 	}
 	
+	/**
+	 * - Scan for 'O' atoms and 'N' atoms
+	 * - Combine these into (O, N) pairs
+	 * - Scan for 'CA' atoms
+	 * - Combine these with the pairs into triples
+	 */
 	@Test
 	public void testCombineResultsToTriples() {
 		PrintResults sink = new PrintResults();
@@ -80,31 +79,6 @@ public class TestCombine {
 		// run the pipeline
 		Helper.runAll(List.of(groupSource, scanO, scanN, combineON, scanCA, combineONCa));
 	}
-
-	
-	
-	/**
-	 * - Scan for 'O' atoms and 'N' atoms
-	 * - Combine these into (O, N) pairs
-	 */ 
-	@Test
-	public void testCombineAtoms() {
-		PrintAtomLists sink = new PrintAtomLists();
-		Chain chain = Helper.makeData(3);
-		GroupPipe inPipe = new GroupPipe(chain);
-		
-		AtomPipe oPipe = new AtomPipe();
-		ScanAtomByLabel scanO = new ScanAtomByLabel("O", inPipe, oPipe);
-		
-		AtomPipe nPipe = new AtomPipe();
-		ScanAtomByLabel scanN = new ScanAtomByLabel("N", inPipe, nPipe);
-		
-		CombineAtoms combineON = new CombineAtoms(List.of(oPipe, nPipe), sink);
-		
-		// run the pipeline
-		Helper.runAll(List.of(scanO, scanN, combineON));
-	}
-	
 	
 	/**
 	 * - Scan for 'N' and 'CA' atom pairs
@@ -113,24 +87,26 @@ public class TestCombine {
 	 */
 	@Test
 	public void testCombineAtomLists() {
+		PrintResults sink = new PrintResults();
 		Chain chain = Helper.makeData(3);
-		GroupPipe inPipe1 = new GroupPipe(chain);	// TODO - annoying - otherwise need to reset iterator
-		GroupPipe inPipe2 = new GroupPipe(chain);
+		ResultPipe resultPipe1 = new ResultPipe();
+		ResultPipe resultPipe2 = new ResultPipe();
+		GroupSource groupSource = new GroupSource(chain, List.of(resultPipe1, resultPipe2));
+
+		ResultPipe n_ca_Pipe = new ResultPipe();
+		ScanAtomResultByLabel scanNCa = new ScanAtomResultByLabel(List.of("N", "CA"));
+		scanNCa.setSource(resultPipe1);
+		scanNCa.setSink(n_ca_Pipe);
 		
-		AtomListPipe outPipe1 = new AtomListPipe();
-		ScanAtomListsByLabel scan1 = new ScanAtomListsByLabel(List.of("N", "CA"), inPipe1, outPipe1);
+		ResultPipe c_o_Pipe = new ResultPipe();
+		ScanAtomResultByLabel scanCO = new ScanAtomResultByLabel(List.of("C", "O"));
+		scanCO.setSource(resultPipe2);
+		scanCO.setSink(c_o_Pipe);
 		
-		AtomListPipe outPipe2 = new AtomListPipe();
-		ScanAtomListsByLabel scan2 = new ScanAtomListsByLabel(List.of("C", "O"), inPipe2, outPipe2);
+		CombineResults combineNCACO = new CombineResults(List.of(n_ca_Pipe, c_o_Pipe), sink);
 		
-		List<Source<List<Atom>>> sources = List.of(outPipe1, outPipe2);
-		CombineAtomLists combine12 = new CombineAtomLists(sources, new Sink<List<List<Atom>>>() {
-			// TODO - clearly a more general type needed
-			public void put(List<List<Atom>> item) {
-				System.out.println(item);
-			}
-		});
-		Helper.runAll(List.of(scan1, scan2, combine12));
+		// run the pipeline
+		Helper.runAll(List.of(groupSource, scanNCa, scanCO, combineNCACO));
 	}
 	
 }

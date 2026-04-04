@@ -29,6 +29,7 @@ public class FilterAtomsResultsByCondition implements TmpOperator<Result, Result
 		while (input.hasNext()) {
 			Result nextResult = input.getNext();
 			for (List<Atom> match : matcher.extract(nextResult)) {
+				System.out.println("Checking " + match + " from " + nextResult);
 				if (condition.accept(match)) {
 					output.put(nextResult);
 				} else {
