@@ -5,12 +5,12 @@ import java.util.List;
 import tailor.experiment.api.AtomListCondition;
 import tailor.experiment.api.Sink;
 import tailor.experiment.api.Source;
-import tailor.experiment.api.TmpOperator;
+import tailor.experiment.api.PipeableOperator;
 import tailor.experiment.condition.AtomMatcher;
 import tailor.experiment.plan.Result;
 import tailor.structure.Atom;
 
-public class FilterAtomsResultsByCondition implements TmpOperator<Result, Result> {
+public class FilterAtomsResultsByCondition implements PipeableOperator<Result, Result> {
 	
 	private AtomListCondition condition;
 	

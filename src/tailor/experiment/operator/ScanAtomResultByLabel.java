@@ -4,11 +4,11 @@ import java.util.List;
 
 import tailor.experiment.api.Sink;
 import tailor.experiment.api.Source;
-import tailor.experiment.api.TmpOperator;
+import tailor.experiment.api.PipeableOperator;
 import tailor.experiment.plan.Result;
 import tailor.structure.Atom;
 
-public class ScanAtomResultByLabel implements TmpOperator<Result, Result> {
+public class ScanAtomResultByLabel implements PipeableOperator<Result, Result> {
 	
 	// Atom labels to search for // TODO - could be a general condition
 	private List<String> atomLabels;

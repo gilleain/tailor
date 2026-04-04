@@ -8,7 +8,7 @@ import java.util.Map.Entry;
 
 import tailor.experiment.api.Operator;
 import tailor.experiment.api.Source;
-import tailor.experiment.api.TmpOperator;
+import tailor.experiment.api.PipeableOperator;
 import tailor.experiment.description.AtomDescription;
 import tailor.experiment.description.ChainDescription;
 import tailor.experiment.description.GroupDescription;
@@ -28,11 +28,11 @@ public class Planner {
 		List<Operator> pipeline = new ArrayList<>();
 		
 		// Go through the group descriptions in the chain, making scanners
-		Map<TmpOperator, GroupDescription> scannerMap = new HashMap<>();
+		Map<PipeableOperator, GroupDescription> scannerMap = new HashMap<>();
 		for (GroupDescription groupDescription : chainDescription.getGroupDescriptions()) {
 			List<AtomDescription> atomDescriptions = groupDescription.getAtomDescriptions();
 			List<String> labels = atomDescriptions.stream().map(a -> a.getLabel()).toList();
-			TmpOperator scanByLabel = new ScanAtomResultByLabel(labels);
+			PipeableOperator scanByLabel = new ScanAtomResultByLabel(labels);
 			scannerMap.put(scanByLabel, groupDescription);
 		}
 		
@@ -40,8 +40,8 @@ public class Planner {
 		List<Source<Atom>> outputPipes = new ArrayList<>();
 		List<Source<List<Atom>>> outputListPipes = new ArrayList<>();
 		List<Source<Result>> outputResultPipes = new ArrayList<>();
-		for (Entry<TmpOperator, GroupDescription> entry : scannerMap.entrySet()) {
-			TmpOperator operator = entry.getKey();
+		for (Entry<PipeableOperator, GroupDescription> entry : scannerMap.entrySet()) {
+			PipeableOperator operator = entry.getKey();
 			pipeline.add(operator);
 			ResultPipe pipe = new ResultPipe();
 			operator.setSink(pipe);
