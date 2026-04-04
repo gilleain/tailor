@@ -22,7 +22,7 @@ public class FilterAtomsResultsByCondition implements TmpOperator<Result, Result
 	public void run() {
 		while (input.hasNext()) {
 			Result nextResult = input.getNext();
-			Atom atom = nextResult.getAtom(); // TODO - match the atom
+			Atom atom = nextResult.getAtoms().get(0); // TODO - match the atom
 			if (condition.accept(atom)) {
 				output.put(nextResult);
 			}

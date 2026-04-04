@@ -5,15 +5,14 @@ import tailor.experiment.api.Source;
 import tailor.experiment.api.TmpOperator;
 import tailor.experiment.plan.Result;
 import tailor.structure.Atom;
-import tailor.structure.Group;
 
-public class ScanAtomResultByLabel implements TmpOperator<Group, Result> {
+public class ScanAtomResultByLabel implements TmpOperator<Result, Result> {
 	
 	// Atom label to search for // TODO - could be a general condition
 	private String atomLabel;
 	
 	// Source to take from
-	private Source<Group> source;
+	private Source<Result> source;
 	
 	private Sink<Result> sink;
 	
@@ -21,7 +20,7 @@ public class ScanAtomResultByLabel implements TmpOperator<Group, Result> {
 		this.atomLabel = atomLabel;
 	}
 	
-	public void setSource(Source<Group> source) {
+	public void setSource(Source<Result> source) {
 		this.source = source;
 	}
 	
@@ -31,10 +30,11 @@ public class ScanAtomResultByLabel implements TmpOperator<Group, Result> {
 	
 	public void run() {
 		while (source.hasNext()) {
-			Group group = source.getNext();
-			for (Atom atom : group.getAtoms())	{ // could just use group.getAtomByName?
+			Result groupResult = source.getNext();
+			for (Atom atom : groupResult.getAtoms())	{ // could just use group.getAtomByName?
 				if (atom.getName().equals(atomLabel)) {	// is this general enough?
-					Result newResult = new Result(group, atom);
+					Result newResult = groupResult.copyWithoutAtoms();
+					newResult.addAtom(atom);
 					sink.put(newResult);
 				}
 			}

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import tailor.structure.Atom;
+import tailor.structure.Chain;
 import tailor.structure.Group;
 import tailor.structure.Level;
 
@@ -28,17 +29,30 @@ public class Result {
 		this.root = null;
 	}
 	
-	public Result(Group group, Atom atom) { // TODO .. chain
+	public Result(Chain chain, Group group) {
+		this.root = new Node(Level.CHAIN, chain);
+		Node groupNode = new Node(Level.RESIDUE, group);
+		this.root.children.add(groupNode);
+		for (Atom atom : group.getAtoms()) {
+			groupNode.children.add(new Node(Level.ATOM, atom));
+		}
+	}
+	
+	public Result(Chain chain, Group group, Atom atom) {
 		// ... 
-		this.root = new Node(Level.CHAIN, null);	// TODO
+		this.root = new Node(Level.CHAIN, chain);
 		Node groupNode = new Node(Level.RESIDUE, group);
 		this.root.children.add(groupNode);
 		groupNode.children.add(new Node(Level.ATOM, atom));
 	}
 	
-	public Atom getAtom() {
-		// TODO
-		return null;
+	public List<Atom> getAtoms() {
+		// TODO - does this make sense?
+		List<Atom> atoms = new ArrayList<>();
+		for (Node child : this.root.children) {
+			atoms.addAll(((Group)child.o).getAtoms());
+		}
+		return atoms;
 	}
 
 	public Result merge(Result anotherResult) {
@@ -56,7 +70,7 @@ public class Result {
 	
 	public Result copy() {
 		Result copy = new Result();
-		copy.root = new Node(Level.CHAIN, null);	// TODO .. chain
+		copy.root = new Node(Level.CHAIN, this.root.o);
 		// merge anotherResult with this one
 		for (Node child : root.children) {
 			Node groupCopy = new Node(Level.RESIDUE, child.o);
@@ -69,9 +83,22 @@ public class Result {
 		return copy;
 	}
 	
+	public Result copyWithoutAtoms() {
+		Result copy = new Result();
+		copy.root = new Node(Level.CHAIN, this.root.o);
+		// merge anotherResult with this one
+		for (Node child : root.children) {
+			Node groupCopy = new Node(Level.RESIDUE, child.o);
+			copy.root.children.add(groupCopy);	
+		}
+		
+		return copy;
+	}
+	
 	public String toString() {
 		StringBuffer output = new StringBuffer();
-		output.append(this.root.o).append("(");
+		Chain chain = (Chain)this.root.o;
+		output.append(chain.getName()).append("(");
 		int counter = 0;
 		int numberOfChildren = this.root.children.size();
 		for (Node child : this.root.children) {
@@ -114,6 +141,12 @@ public class Result {
 			}
 		}
 		return false;
+	}
+
+	public void addAtom(Atom atom) {
+		// TODO - always add to the first we find?
+		Node groupNode = this.root.children.get(0);
+		groupNode.children.add(new Node(Level.ATOM, atom));
 	}
 
 }
