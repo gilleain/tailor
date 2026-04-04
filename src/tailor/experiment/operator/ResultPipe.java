@@ -8,12 +8,12 @@ import tailor.experiment.api.Sink;
 import tailor.experiment.api.Source;
 import tailor.experiment.plan.Result;
 
-public class AtomResultPipe implements Source<Result>, Sink<Result> {
+public class ResultPipe implements Source<Result>, Sink<Result> {
 	
 	private Iterator<Result> resultIterator;	// TODO - convert to true stream
 	private List<Result> results;
 	
-	public AtomResultPipe() {
+	public ResultPipe() {
 		this.results = new ArrayList<>();
 		this.resultIterator = null;
 	}

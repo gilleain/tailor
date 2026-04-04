@@ -8,7 +8,7 @@ import tailor.experiment.api.Sink;
 import tailor.experiment.api.Source;
 import tailor.experiment.operator.AtomListPipe;
 import tailor.experiment.operator.AtomPipe;
-import tailor.experiment.operator.AtomResultPipe;
+import tailor.experiment.operator.ResultPipe;
 import tailor.experiment.operator.CombineAtomLists;
 import tailor.experiment.operator.CombineAtoms;
 import tailor.experiment.operator.CombineResults;
@@ -28,17 +28,17 @@ public class TestCombine {
 	public void testCombineResults() {
 		PrintResults sink = new PrintResults();
 		Chain chain = Helper.makeData();
-		AtomResultPipe resultPipe1 = new AtomResultPipe();
-		AtomResultPipe resultPipe2 = new AtomResultPipe();
+		ResultPipe resultPipe1 = new ResultPipe();
+		ResultPipe resultPipe2 = new ResultPipe();
 		GroupSource groupSource1 = new GroupSource(chain, resultPipe1);
 		GroupSource groupSource2 = new GroupSource(chain, resultPipe2);
 
-		AtomResultPipe oPipe = new AtomResultPipe();
+		ResultPipe oPipe = new ResultPipe();
 		ScanAtomResultByLabel scanO = new ScanAtomResultByLabel("O");
 		scanO.setSource(resultPipe1);
 		scanO.setSink(oPipe);
 		
-		AtomResultPipe nPipe = new AtomResultPipe();
+		ResultPipe nPipe = new ResultPipe();
 		ScanAtomResultByLabel scanN = new ScanAtomResultByLabel("N");
 		scanN.setSource(resultPipe2);
 		scanN.setSink(nPipe);

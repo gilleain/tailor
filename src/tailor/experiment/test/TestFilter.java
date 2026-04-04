@@ -9,7 +9,7 @@ import tailor.experiment.condition.AtomDistanceCondition;
 import tailor.experiment.condition.AtomPropertyCondition;
 import tailor.experiment.operator.AtomListPipe;
 import tailor.experiment.operator.AtomPipe;
-import tailor.experiment.operator.AtomResultPipe;
+import tailor.experiment.operator.ResultPipe;
 import tailor.experiment.operator.CombineAtoms;
 import tailor.experiment.operator.CombineResults;
 import tailor.experiment.operator.FilterAtomListsByCondition;
@@ -29,20 +29,20 @@ public class TestFilter {
 		double distance = 5;	// whatever
 		
 		Chain chain = Helper.makeData();
-		AtomResultPipe resultPipe = new AtomResultPipe();
+		ResultPipe resultPipe = new ResultPipe();
 		GroupSource groupSource = new GroupSource(chain, resultPipe);
 		
-		AtomResultPipe oPipe = new AtomResultPipe();
+		ResultPipe oPipe = new ResultPipe();
 		ScanAtomResultByLabel scanO = new ScanAtomResultByLabel("O");
 		scanO.setSink(oPipe);
 		scanO.setSource(resultPipe);
 		
-		AtomResultPipe nPipe = new AtomResultPipe();
+		ResultPipe nPipe = new ResultPipe();
 		ScanAtomResultByLabel scanN = new ScanAtomResultByLabel("O");
 		scanN.setSink(nPipe);
 		scanN.setSource(resultPipe);
 		
-		AtomResultPipe onPipe = new AtomResultPipe();
+		ResultPipe onPipe = new ResultPipe();
 		CombineResults combineON = new CombineResults(List.of(oPipe, nPipe), onPipe);
 		AtomPropertyCondition condition = new AtomPropertyCondition(null);	// TODO
 //				new AtomDistanceCondition(distance);
