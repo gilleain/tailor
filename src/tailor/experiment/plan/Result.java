@@ -49,8 +49,10 @@ public class Result {
 	public List<Atom> getAtoms() {
 		// TODO - does this make sense?
 		List<Atom> atoms = new ArrayList<>();
-		for (Node child : this.root.children) {
-			atoms.addAll(((Group)child.o).getAtoms());
+		for (Node groupNode : this.root.children) {
+			for (Node atomNode : groupNode.children) {
+				atoms.add((Atom)atomNode.o);
+			}
 		}
 		return atoms;
 	}

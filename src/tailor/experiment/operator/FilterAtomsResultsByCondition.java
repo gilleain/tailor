@@ -1,30 +1,39 @@
 package tailor.experiment.operator;
 
+import java.util.List;
+
+import tailor.experiment.api.AtomListCondition;
 import tailor.experiment.api.Sink;
 import tailor.experiment.api.Source;
 import tailor.experiment.api.TmpOperator;
-import tailor.experiment.condition.AtomPropertyCondition;
+import tailor.experiment.condition.AtomMatcher;
 import tailor.experiment.plan.Result;
 import tailor.structure.Atom;
 
 public class FilterAtomsResultsByCondition implements TmpOperator<Result, Result> {
 	
-	AtomPropertyCondition condition;	// TODO - make more general
+	private AtomListCondition condition;
+	
+	private AtomMatcher matcher;
 	
 	private Source<Result> input;
 	
 	private Sink<Result> output;
 	
-	public FilterAtomsResultsByCondition(AtomPropertyCondition condition) {
+	public FilterAtomsResultsByCondition(AtomListCondition condition, AtomMatcher matcher) {
 		this.condition = condition;
+		this.matcher = matcher;
 	}
 
 	public void run() {
 		while (input.hasNext()) {
 			Result nextResult = input.getNext();
-			Atom atom = nextResult.getAtoms().get(0); // TODO - match the atom
-			if (condition.accept(atom)) {
-				output.put(nextResult);
+			for (List<Atom> match : matcher.extract(nextResult)) {
+				if (condition.accept(match)) {
+					output.put(nextResult);
+				} else {
+					System.out.println("Filtering OUT " + nextResult);
+				}
 			}
 		}
 	}

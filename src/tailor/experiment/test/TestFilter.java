@@ -6,7 +6,7 @@ import org.junit.Test;
 
 import tailor.experiment.condition.AtomAngleCondition;
 import tailor.experiment.condition.AtomDistanceCondition;
-import tailor.experiment.condition.AtomPropertyCondition;
+import tailor.experiment.condition.AtomMatcher;
 import tailor.experiment.operator.AtomListPipe;
 import tailor.experiment.operator.AtomPipe;
 import tailor.experiment.operator.CombineAtoms;
@@ -16,6 +16,7 @@ import tailor.experiment.operator.FilterAtomsResultsByCondition;
 import tailor.experiment.operator.GroupPipe;
 import tailor.experiment.operator.GroupSource;
 import tailor.experiment.operator.PrintAtomLists;
+import tailor.experiment.operator.PrintResults;
 import tailor.experiment.operator.ResultPipe;
 import tailor.experiment.operator.ScanAtomByLabel;
 import tailor.experiment.operator.ScanAtomListsByLabel;
@@ -39,17 +40,19 @@ public class TestFilter {
 		scanO.setSource(resultPipe1);
 		
 		ResultPipe nPipe = new ResultPipe();
-		ScanAtomResultByLabel scanN = new ScanAtomResultByLabel("O");
+		ScanAtomResultByLabel scanN = new ScanAtomResultByLabel("N");
 		scanN.setSink(nPipe);
 		scanN.setSource(resultPipe2);
 		
 		ResultPipe onPipe = new ResultPipe();
 		CombineResults combineON = new CombineResults(List.of(oPipe, nPipe), onPipe);
-		AtomPropertyCondition condition = new AtomPropertyCondition(null);	// TODO
-//				new AtomDistanceCondition(distance);
-		FilterAtomsResultsByCondition filter = new FilterAtomsResultsByCondition(condition);
+		
+		AtomMatcher atomMatcher = new AtomMatcher(List.of("O", "N"));
+		
+		AtomDistanceCondition condition = new AtomDistanceCondition(distance);
+		FilterAtomsResultsByCondition filter = new FilterAtomsResultsByCondition(condition, atomMatcher);
 		filter.setSource(onPipe);
-		filter.setSink(onPipe);
+		filter.setSink(new PrintResults());
 		
 		// run the pipeline
 		Helper.runAll(List.of(groupSource, scanO, scanN, combineON, filter));
