@@ -7,8 +7,8 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import tailor.experiment.api.Operator;
-import tailor.experiment.api.Source;
 import tailor.experiment.api.PipeableOperator;
+import tailor.experiment.api.Source;
 import tailor.experiment.description.AtomDescription;
 import tailor.experiment.description.ChainDescription;
 import tailor.experiment.description.GroupDescription;
@@ -16,7 +16,6 @@ import tailor.experiment.operator.CombineResults;
 import tailor.experiment.operator.PrintResults;
 import tailor.experiment.operator.ResultPipe;
 import tailor.experiment.operator.ScanAtomResultByLabel;
-import tailor.structure.Atom;
 
 /**
  * Converts a {@link ChainDescription} into a pipeline of {@link Operator}
@@ -28,20 +27,18 @@ public class Planner {
 		List<Operator> pipeline = new ArrayList<>();
 		
 		// Go through the group descriptions in the chain, making scanners
-		Map<PipeableOperator, GroupDescription> scannerMap = new HashMap<>();
+		Map<PipeableOperator<Result, Result>, GroupDescription> scannerMap = new HashMap<>();
 		for (GroupDescription groupDescription : chainDescription.getGroupDescriptions()) {
 			List<AtomDescription> atomDescriptions = groupDescription.getAtomDescriptions();
 			List<String> labels = atomDescriptions.stream().map(a -> a.getLabel()).toList();
-			PipeableOperator scanByLabel = new ScanAtomResultByLabel(labels);
+			PipeableOperator<Result, Result> scanByLabel = new ScanAtomResultByLabel(labels);
 			scannerMap.put(scanByLabel, groupDescription);
 		}
 		
 		// Add output pipes to the scanners
-		List<Source<Atom>> outputPipes = new ArrayList<>();
-		List<Source<List<Atom>>> outputListPipes = new ArrayList<>();
 		List<Source<Result>> outputResultPipes = new ArrayList<>();
-		for (Entry<PipeableOperator, GroupDescription> entry : scannerMap.entrySet()) {
-			PipeableOperator operator = entry.getKey();
+		for (Entry<PipeableOperator<Result, Result>, GroupDescription> entry : scannerMap.entrySet()) {
+			PipeableOperator<Result, Result> operator = entry.getKey();
 			pipeline.add(operator);
 			ResultPipe pipe = new ResultPipe();
 			operator.setSink(pipe);
