@@ -16,6 +16,10 @@ public class Group implements Structure {
 
     private String id;
     
+    private ResidueID  residueId;	// TODO
+    
+    private String residueName;
+    
     private int index;
     
     private int number; // TODO - id, index, number...
@@ -29,13 +33,15 @@ public class Group implements Structure {
     	this(new ResidueID(residueNumber, ""), residueName, "");
     }
     
-    public Group(ResidueID residueID, String residueName) {
-    	this(residueID, residueName, "");
+    public Group(ResidueID residueId, String residueName) {
+    	this(residueId, residueName, "");
     }
     
-    public Group(ResidueID residueID, String residueName, String segmentId) {
+    public Group(ResidueID residueId, String residueName, String segmentId) {
     	this();
     	// TODO - store these things
+    	this.residueId = residueId;
+    	this.residueName = residueName;
     }
     
 
@@ -67,6 +73,14 @@ public class Group implements Structure {
     @Override
     public Level getLevel() {
         return level;
+    }
+    
+    public ResidueID getResidueId() {
+    	return this.residueId;
+    }
+    
+    public String getResidueName() {
+    	return this.residueName;
     }
 
     public String getId() {

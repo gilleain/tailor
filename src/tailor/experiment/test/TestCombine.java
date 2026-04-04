@@ -8,16 +8,43 @@ import tailor.experiment.api.Sink;
 import tailor.experiment.api.Source;
 import tailor.experiment.operator.AtomListPipe;
 import tailor.experiment.operator.AtomPipe;
+import tailor.experiment.operator.AtomResultPipe;
 import tailor.experiment.operator.CombineAtomLists;
 import tailor.experiment.operator.CombineAtoms;
+import tailor.experiment.operator.CombineResults;
 import tailor.experiment.operator.GroupPipe;
 import tailor.experiment.operator.PrintAtomLists;
+import tailor.experiment.operator.PrintResults;
 import tailor.experiment.operator.ScanAtomByLabel;
 import tailor.experiment.operator.ScanAtomListsByLabel;
+import tailor.experiment.operator.ScanAtomResultByLabel;
 import tailor.structure.Atom;
 import tailor.structure.Chain;
 
 public class TestCombine {
+	
+	@Test
+	public void testCombineResults() {
+		PrintResults sink = new PrintResults();
+		Chain chain = Helper.makeData();
+		GroupPipe inPipe1 = new GroupPipe(chain);	// TODO - annoying - otherwise need to reset iterator
+		GroupPipe inPipe2 = new GroupPipe(chain);
+		
+		AtomResultPipe oPipe = new AtomResultPipe();
+		ScanAtomResultByLabel scanO = new ScanAtomResultByLabel("O");
+		scanO.setSource(inPipe1);
+		scanO.setSink(oPipe);
+		
+		AtomResultPipe nPipe = new AtomResultPipe();
+		ScanAtomResultByLabel scanN = new ScanAtomResultByLabel("N");
+		scanN.setSource(inPipe2);
+		scanN.setSink(nPipe);
+		
+		CombineResults combineON = new CombineResults(List.of(oPipe, nPipe), sink);
+		
+		// run the pipeline
+		Helper.runAll(List.of(scanO, scanN, combineON));
+	}
 	
 	
 	/**

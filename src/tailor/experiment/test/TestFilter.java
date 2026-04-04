@@ -6,17 +6,51 @@ import org.junit.Test;
 
 import tailor.experiment.condition.AtomAngleCondition;
 import tailor.experiment.condition.AtomDistanceCondition;
+import tailor.experiment.condition.AtomPropertyCondition;
 import tailor.experiment.operator.AtomListPipe;
 import tailor.experiment.operator.AtomPipe;
+import tailor.experiment.operator.AtomResultPipe;
 import tailor.experiment.operator.CombineAtoms;
+import tailor.experiment.operator.CombineResults;
 import tailor.experiment.operator.FilterAtomListsByCondition;
+import tailor.experiment.operator.FilterAtomsResultsByCondition;
 import tailor.experiment.operator.GroupPipe;
 import tailor.experiment.operator.PrintAtomLists;
 import tailor.experiment.operator.ScanAtomByLabel;
 import tailor.experiment.operator.ScanAtomListsByLabel;
+import tailor.experiment.operator.ScanAtomResultByLabel;
 import tailor.structure.Chain;
 
 public class TestFilter {
+	
+	@Test
+	public void testFilterAtomCombinations_ByResult() {
+		double distance = 5;	// whatever
+		
+		Chain chain = Helper.makeData();
+		GroupPipe inPipe = new GroupPipe(chain);
+		
+		AtomResultPipe oPipe = new AtomResultPipe();
+		ScanAtomResultByLabel scanO = new ScanAtomResultByLabel("O");
+		scanO.setSink(oPipe);
+		scanO.setSource(inPipe);
+		
+		AtomResultPipe nPipe = new AtomResultPipe();
+		ScanAtomResultByLabel scanN = new ScanAtomResultByLabel("O");
+		scanN.setSink(nPipe);
+		scanN.setSource(inPipe);
+		
+		AtomResultPipe onPipe = new AtomResultPipe();
+		CombineResults combineON = new CombineResults(List.of(oPipe, nPipe), onPipe);
+		AtomPropertyCondition condition = new AtomPropertyCondition(null);	// TODO
+//				new AtomDistanceCondition(distance);
+		FilterAtomsResultsByCondition filter = new FilterAtomsResultsByCondition(condition);
+		filter.setSource(onPipe);
+		filter.setSink(onPipe);
+		
+		// run the pipeline
+		Helper.runAll(List.of(scanO, scanN, combineON, filter));
+	}
 	
 	/**
 	 * - Scan for 'O' atoms and 'N' atoms
