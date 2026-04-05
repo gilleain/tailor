@@ -38,8 +38,8 @@ public class Planner {
 			scannerMap.put(scanByLabel, groupDescription);
 		}
 		
-		// TODO - more general
-		List<AtomListDescription> betweenResidueDescriptions = new ArrayList<>();
+		// Extract and categorise the atom list descriptions
+		List<AtomListDescription> outerGroupDescriptions = new ArrayList<>();
 		Map<GroupDescription, AtomListDescription> innerGroupDescriptions = new HashMap<>();
 		for (AtomListDescription atomSetDescription : chainDescription.getAtomListDescriptions()) {
 			// check to see if the sub-descriptions are in the same group
@@ -47,11 +47,32 @@ public class Planner {
 				GroupDescription groupDescription = atomSetDescription.getFirstGroupDescription();
 				innerGroupDescriptions.put(groupDescription, atomSetDescription);
 			} else {
-				betweenResidueDescriptions.add(atomSetDescription);
+				outerGroupDescriptions.add(atomSetDescription);
 			}
 		}
 		
 		// Add output pipes to the scanners
+		List<Source<Result>> outputResultPipes = 
+				join(pipeline, innerGroupDescriptions, outerGroupDescriptions, scannerMap);
+		
+		// Combine the scanners, unless there is only one
+		if (scannerMap.size() > 1) {
+			pipeline.add(new CombineResults(outputResultPipes, new PrintResults()));
+		} else {
+			pipeline.add(new PrintAdapter(outputResultPipes.get(0)));
+		}
+		
+		// TODO - Add the betweenResidueDescriptions as filters on combiners
+		
+		return pipeline;
+	}
+	
+	private List<Source<Result>> join(
+			List<Operator> pipeline, 
+			Map<GroupDescription, AtomListDescription> innerGroupDescriptions,
+			List<AtomListDescription> outerGroupDescriptions, 
+			Map<PipeableOperator<Result, Result>, GroupDescription> scannerMap) {
+		
 		List<Source<Result>> outputResultPipes = new ArrayList<>();
 		for (Entry<PipeableOperator<Result, Result>, GroupDescription> entry : scannerMap.entrySet()) {
 			PipeableOperator<Result, Result> scanner = entry.getKey();
@@ -71,18 +92,7 @@ public class Planner {
 			
 			outputResultPipes.add(scannerOutput);
 		}
-		
-		// Combine the scanners, unless there is only one
-		if (scannerMap.size() > 1) {
-			Operator combiner = new CombineResults(outputResultPipes, new PrintResults());
-			pipeline.add(combiner);
-		} else {
-			pipeline.add(new PrintAdapter(outputResultPipes.get(0)));
-		}
-		
-		// TODO - Add the betweenResidueDescriptions as filters on combiners
-		
-		return pipeline;
+		return outputResultPipes;
 	}
 	
 	private FilterAtomResultByCondition addFilter(
