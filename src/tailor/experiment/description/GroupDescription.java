@@ -3,6 +3,7 @@ package tailor.experiment.description;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 public class GroupDescription {
 	
@@ -38,6 +39,12 @@ public class GroupDescription {
 
 	public List<AtomDescription> getAtomDescriptions() {
 		return this.atomDescriptions;
+	}
+	
+	public String toString() {
+		return (label.isEmpty()? "*" : label.get()) + "("
+			+ this.atomDescriptions.stream().map(AtomDescription::getLabel).collect(Collectors.joining(","))
+			+ ")";
 	}
 
 }

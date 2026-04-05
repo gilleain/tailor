@@ -42,6 +42,14 @@ public class AtomAngleDescription implements AtomListDescription {
 	}
 
 	@Override
+	public List<GroupDescription> getGroupDescriptions() {
+		return List.of(
+				atomDescriptionA.getGroupDescription(),
+				atomDescriptionB.getGroupDescription(),
+				atomDescriptionC.getGroupDescription());
+	}
+
+	@Override
 	public boolean isForSameGroup() {
 		return atomDescriptionA.getGroupDescription() == atomDescriptionB.getGroupDescription()
 				&& atomDescriptionB.getGroupDescription() == atomDescriptionC.getGroupDescription();

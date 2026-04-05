@@ -8,7 +8,6 @@ import org.junit.Test;
 import tailor.experiment.api.Operator;
 import tailor.experiment.api.Sink;
 import tailor.experiment.description.AtomAngleDescription;
-import tailor.experiment.description.AtomDescription;
 import tailor.experiment.description.AtomDistanceDescription;
 import tailor.experiment.description.ChainDescription;
 import tailor.experiment.description.DescriptionPath;
@@ -25,8 +24,8 @@ public class TestPlanner {
 	@Test
 	public void testSingles() {
 		ChainDescription chainDescription = new ChainDescription();
-		chainDescription.addGroupDescription(makeGroupDescription("N"));
-		chainDescription.addGroupDescription(makeGroupDescription("O"));
+		chainDescription.addGroupDescription(Helper.makeGroupDescription("N"));
+		chainDescription.addGroupDescription(Helper.makeGroupDescription("O"));
 		
 		List<Operator> pipeline = new Planner().plan(chainDescription);
 		Helper.describe(pipeline);
@@ -35,8 +34,8 @@ public class TestPlanner {
 	@Test
 	public void testMultiples() {
 		ChainDescription chainDescription = new ChainDescription();
-		chainDescription.addGroupDescription(makeGroupDescription("N", "CA"));
-		chainDescription.addGroupDescription(makeGroupDescription("O", "C"));
+		chainDescription.addGroupDescription(Helper.makeGroupDescription("N", "CA"));
+		chainDescription.addGroupDescription(Helper.makeGroupDescription("O", "C"));
 		
 		List<Operator> pipeline = new Planner().plan(chainDescription);
 		Helper.describe(pipeline);
@@ -50,7 +49,7 @@ public class TestPlanner {
 	public void testInnerGroupFilteringDistance() {
 		double distance = 5.0;	 // w/e
 		ChainDescription chainDescription = new ChainDescription();
-		GroupDescription groupA = makeGroupDescription("N", "CA");
+		GroupDescription groupA = Helper.makeGroupDescription("N", "CA");
 		chainDescription.addGroupDescription(groupA);
 		chainDescription.addAtomSetDescription(
 				new AtomDistanceDescription(distance, 
@@ -74,7 +73,7 @@ public class TestPlanner {
 	public void testInnerGroupFilteringAngle() {
 		double angle = 45.0;	 // w/e
 		ChainDescription chainDescription = new ChainDescription();
-		GroupDescription groupA = makeGroupDescription("N", "CA", "C");
+		GroupDescription groupA = Helper.makeGroupDescription("N", "CA", "C");
 		chainDescription.addGroupDescription(groupA);
 		chainDescription.addAtomSetDescription(
 				new AtomAngleDescription(angle, 
@@ -102,7 +101,7 @@ public class TestPlanner {
 	public void testInternalGroupFilteringOnOneResidue() {
 		double distance = 5.0;	 // w/e
 		ChainDescription chainDescription = new ChainDescription();
-		GroupDescription groupA = makeGroupDescription("N", "CA");
+		GroupDescription groupA = Helper.makeGroupDescription("N", "CA");
 		chainDescription.addGroupDescription(groupA);
 		chainDescription.addAtomSetDescription(
 				new AtomDistanceDescription(distance, 
@@ -111,7 +110,7 @@ public class TestPlanner {
 						new DescriptionPath(
 								groupA, groupA.getAtomDescriptions().get(1))));
 		
-		chainDescription.addGroupDescription(makeGroupDescription("O", "C"));
+		chainDescription.addGroupDescription(Helper.makeGroupDescription("O", "C"));
 		
 		List<Operator> pipeline = new Planner().plan(chainDescription);
 		Helper.describe(pipeline);
@@ -133,14 +132,6 @@ public class TestPlanner {
 		fullPipeline.addAll(pipeline);
 		
 		Helper.runAll(fullPipeline);
-	}
-	
-	private GroupDescription makeGroupDescription(String... atomLabels) {
-		GroupDescription groupDescription = new GroupDescription();
-		for (String atomLabel : atomLabels) {
-			groupDescription.addAtomDescription(new AtomDescription(atomLabel));
-		}
-		return groupDescription;
 	}
 
 }

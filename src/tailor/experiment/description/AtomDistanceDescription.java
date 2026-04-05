@@ -34,6 +34,11 @@ public class AtomDistanceDescription implements AtomListDescription {
 	}
 
 	@Override
+	public List<GroupDescription> getGroupDescriptions() {
+		return List.of(atomDescriptionA.getGroupDescription(), atomDescriptionB.getGroupDescription());
+	}
+
+	@Override
 	public boolean isForSameGroup() {
 		return atomDescriptionA.getGroupDescription() == atomDescriptionB.getGroupDescription();
 	}

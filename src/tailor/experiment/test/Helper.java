@@ -5,6 +5,8 @@ import java.util.List;
 
 import tailor.experiment.api.Operator;
 import tailor.experiment.api.Sink;
+import tailor.experiment.description.AtomDescription;
+import tailor.experiment.description.GroupDescription;
 import tailor.experiment.operator.GroupSource;
 import tailor.experiment.operator.ResultPipe;
 import tailor.experiment.operator.ScanAtomResultByLabel;
@@ -44,6 +46,14 @@ public class Helper {
 		for (Operator operator : pipeline) {
 			System.out.println(operator.getClass().getSimpleName());
 		}
+	}
+	
+	protected static GroupDescription makeGroupDescription(String... atomLabels) {
+		GroupDescription groupDescription = new GroupDescription();
+		for (String atomLabel : atomLabels) {
+			groupDescription.addAtomDescription(new AtomDescription(atomLabel));
+		}
+		return groupDescription;
 	}
 	
 	protected static Chain makeData(int numberOfGroups) {
