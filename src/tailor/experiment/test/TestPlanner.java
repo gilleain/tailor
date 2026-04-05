@@ -115,5 +115,21 @@ public class TestPlanner {
 		List<Operator> pipeline = new Planner().plan(chainDescription);
 		Helper.describe(pipeline);
 	}
+	
+	@Test
+	public void testOuterGroupFilteringConnectedPairs() {
+		ChainDescription chainDescription = new ChainDescription();
+		GroupDescription groupA = Helper.makeGroupDescription("O");
+		GroupDescription groupB = Helper.makeGroupDescription("O");
+		GroupDescription groupC = Helper.makeGroupDescription("O");
+		GroupDescription groupD = Helper.makeGroupDescription("O");
+		chainDescription.addGroupDescriptions(groupA, groupB, groupC, groupD);
+		chainDescription.addAtomSetDescription(new AtomDistanceDescription(1, pathTo(groupA, "O"), pathTo(groupB, "O")));
+		chainDescription.addAtomSetDescription(new AtomDistanceDescription(1, pathTo(groupB, "O"), pathTo(groupC, "O")));
+		chainDescription.addAtomSetDescription(new AtomDistanceDescription(1, pathTo(groupC, "O"), pathTo(groupD, "O")));
+		
+		List<Operator> pipeline = new Planner().plan(chainDescription);
+		Helper.describe(pipeline);
+	}
 
 }

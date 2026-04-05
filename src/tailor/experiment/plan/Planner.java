@@ -76,43 +76,33 @@ public class Planner {
 		
 		// The scanner for each group in a component needs to be joined together
 		Stack<ResultPipe> combinedOutputPipes = new Stack<>();
-		List<GroupDescription> singletons = new ArrayList<>();	// components of size 1
 		for (List<GroupDescription> component : components) {
-//			if (component.size() == 1) {
-//				singletons.add(component.get(0));
-//			} else {
-				List<ResultPipe> componentOutputResultPipes = new ArrayList<>();
-				for (GroupDescription groupDescription : component) {
-					PipeableOperator<Result, Result> scanner = scannerMap.get(groupDescription);
-					pipeline.add(scanner);
-					
-					ResultPipe scannerOutput = new ResultPipe();
-					scanner.setSink(scannerOutput);
-					
-					// for groups that have inner conditions, create a filter and connect to the scanner
-					if (innerGroupDescriptions.containsKey(groupDescription)) {
-						AtomListDescription atomSetDescription = innerGroupDescriptions.get(groupDescription);
-						ResultPipe filterOutput = addFilter(scannerOutput, atomSetDescription, pipeline);
-						componentOutputResultPipes.add(filterOutput);
-					} else {
-						componentOutputResultPipes.add(scannerOutput);
-					}
-				}
-				// join these if there are more than one
-				if (componentOutputResultPipes.size() > 1) {
-					ResultPipe combinedOutput = new ResultPipe();
-					CombineResults combiner = new CombineResults(String.valueOf(operatorId++), componentOutputResultPipes, combinedOutput);
-					combinedOutputPipes.add(combinedOutput);
-					pipeline.add(combiner);
+			List<ResultPipe> componentOutputResultPipes = new ArrayList<>();
+			for (GroupDescription groupDescription : component) {
+				PipeableOperator<Result, Result> scanner = scannerMap.get(groupDescription);
+				pipeline.add(scanner);
+
+				ResultPipe scannerOutput = new ResultPipe();
+				scanner.setSink(scannerOutput);
+
+				// for groups that have inner conditions, create a filter and connect to the scanner
+				if (innerGroupDescriptions.containsKey(groupDescription)) {
+					AtomListDescription atomSetDescription = innerGroupDescriptions.get(groupDescription);
+					ResultPipe filterOutput = addInnerFilter(scannerOutput, atomSetDescription, pipeline);
+					componentOutputResultPipes.add(filterOutput);
 				} else {
-					combinedOutputPipes.add((ResultPipe) componentOutputResultPipes.get(0));
+					componentOutputResultPipes.add(scannerOutput);
 				}
-//			}
-		}
-		
-		// The singleton components are now joined to these larger joined components
-		for (GroupDescription singleton : singletons) {
-			
+			}
+			// join these if there are more than one
+			if (componentOutputResultPipes.size() > 1) {
+				ResultPipe combinedOutput = new ResultPipe();
+				CombineResults combiner = new CombineResults(String.valueOf(operatorId++), componentOutputResultPipes, combinedOutput);
+				combinedOutputPipes.add(combinedOutput);
+				pipeline.add(combiner);
+			} else {
+				combinedOutputPipes.add((ResultPipe) componentOutputResultPipes.get(0));
+			}
 		}
 		
 		// Reduce the output pipes by joining
@@ -130,7 +120,7 @@ public class Planner {
 		return new PrintAdapter(String.valueOf(operatorId++), current);
 	}
 	
-	private ResultPipe addFilter(ResultPipe scannerOutput, AtomListDescription atomSetDescription, List<Operator> pipeline) {
+	private ResultPipe addInnerFilter(ResultPipe scannerOutput, AtomListDescription atomSetDescription, List<Operator> pipeline) {
 		FilterAtomResultByCondition filter = createFilter(atomSetDescription);
 		filter.setSource(scannerOutput);
 		Source<Result> filterOutput = filter.getSinkAsSource();
