@@ -3,7 +3,10 @@ package tailor.experiment.description;
 import tailor.experiment.api.AtomListCondition;
 import tailor.experiment.condition.AtomMatcher;
 
-public interface AtomSetDescription {
+/**
+ * Description for a list of atoms that can create conditions and matchers for filtering.
+ */
+public interface AtomListDescription {
 	
 	/**
 	 * @return true if all atom descriptions are in the same group

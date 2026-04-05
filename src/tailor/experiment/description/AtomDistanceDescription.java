@@ -6,7 +6,7 @@ import tailor.experiment.api.AtomListCondition;
 import tailor.experiment.condition.AtomDistanceCondition;
 import tailor.experiment.condition.AtomMatcher;
 
-public class AtomDistanceDescription implements AtomSetDescription {
+public class AtomDistanceDescription implements AtomListDescription {
 	
 	private final double distance;
 	

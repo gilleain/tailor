@@ -12,7 +12,7 @@ public class ChainDescription {
 	private List<GroupDescription> groupDescriptions;
 	
 	// Descriptions of relationships to find between the atoms across groups
-	private List<AtomSetDescription> atomSetDescriptions;
+	private List<AtomListDescription> atomListDescriptions;
 
 	public ChainDescription() {
 		this(null);
@@ -21,15 +21,15 @@ public class ChainDescription {
 	public ChainDescription(String label) {
 		this.label = Optional.ofNullable(label);
 		this.groupDescriptions = new ArrayList<>();
-		this.atomSetDescriptions = new ArrayList<>();
+		this.atomListDescriptions = new ArrayList<>();
 	}
 	
 	public void addGroupDescription(GroupDescription groupDescription) {
 		this.groupDescriptions.add(groupDescription);
 	}
 	
-	public void addAtomSetDescription(AtomSetDescription atomSetDescription) {
-		this.atomSetDescriptions.add(atomSetDescription);
+	public void addAtomSetDescription(AtomListDescription atomSetDescription) {
+		this.atomListDescriptions.add(atomSetDescription);
 	}
 	
 	public Optional<String> getLabel() {
@@ -40,8 +40,8 @@ public class ChainDescription {
 		return this.groupDescriptions;
 	}
 
-	public List<AtomSetDescription> getAtomSetDescriptions() {
-		return atomSetDescriptions;
+	public List<AtomListDescription> getAtomListDescriptions() {
+		return atomListDescriptions;
 	}
  
 }

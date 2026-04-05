@@ -6,7 +6,7 @@ import tailor.experiment.api.AtomListCondition;
 import tailor.experiment.condition.AtomAngleCondition;
 import tailor.experiment.condition.AtomMatcher;
 
-public class AtomAngleDescription implements AtomSetDescription {
+public class AtomAngleDescription implements AtomListDescription {
 	
 	private final double angle;
 	
