@@ -2,6 +2,7 @@ package tailor.experiment.operator;
 
 import java.util.Iterator;
 
+import tailor.experiment.api.Operator;
 import tailor.experiment.api.Source;
 import tailor.structure.Chain;
 import tailor.structure.Group;
@@ -32,6 +33,18 @@ public class GroupPipe implements Source<Group> {
 			groupIterator = chain.getGroups().iterator();
 		}
 		return groupIterator.hasNext();
+	}
+
+	@Override
+	public String getSourceId() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void registerSource(Operator operator) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

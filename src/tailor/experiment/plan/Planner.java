@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
+import java.util.Stack;
 
 import tailor.experiment.api.AtomListCondition;
 import tailor.experiment.api.AtomListDescription;
@@ -17,7 +17,6 @@ import tailor.experiment.description.GroupDescription;
 import tailor.experiment.operator.CombineResults;
 import tailor.experiment.operator.FilterAtomResultByCondition;
 import tailor.experiment.operator.PrintAdapter;
-import tailor.experiment.operator.PrintResults;
 import tailor.experiment.operator.ResultPipe;
 import tailor.experiment.operator.ScanAtomResultByLabel;
 
@@ -26,16 +25,20 @@ import tailor.experiment.operator.ScanAtomResultByLabel;
  */
 public class Planner {
 	
+	private int operatorId;	// TODO - move to Plan class?
+	
 	// TODO - move up the hierarchy, and return Plan object?
 	public List<Operator> plan(ChainDescription chainDescription) {
+		operatorId = 1;
 		List<Operator> pipeline = new ArrayList<>();
 		
 		// Go through the group descriptions in the chain, making scanners
-		Map<PipeableOperator<Result, Result>, GroupDescription> scannerMap = new HashMap<>();
+		Map<GroupDescription, PipeableOperator<Result, Result>> scannerMap = new HashMap<>();
 		for (GroupDescription groupDescription : chainDescription.getGroupDescriptions()) {
 			List<String> labels = groupDescription.getAtomDescriptions().stream().map(a -> a.getLabel()).toList();
 			PipeableOperator<Result, Result> scanByLabel = new ScanAtomResultByLabel(labels);
-			scannerMap.put(scanByLabel, groupDescription);
+			scanByLabel.setId(String.valueOf(operatorId++));
+			scannerMap.put(groupDescription, scanByLabel);
 		}
 		
 		// Extract and categorise the atom list descriptions
@@ -52,56 +55,97 @@ public class Planner {
 		}
 		
 		// Join the scanners with combiners
-		pipeline.add(join(pipeline, innerGroupDescriptions, outerGroupDescriptions, scannerMap));
-		
-		// TODO - Add the betweenResidueDescriptions as filters on combiners
+		pipeline.add(join(pipeline, chainDescription, innerGroupDescriptions, outerGroupDescriptions, scannerMap));
 		
 		return pipeline;
 	}
 	
 	private Operator join(
 			List<Operator> pipeline, 
+			ChainDescription chainDescription,
 			Map<GroupDescription, AtomListDescription> innerGroupDescriptions,
 			List<AtomListDescription> outerGroupDescriptions, 
-			Map<PipeableOperator<Result, Result>, GroupDescription> scannerMap) {
+			Map<GroupDescription, PipeableOperator<Result, Result>> scannerMap) {
 		
-		List<Source<Result>> outputResultPipes = new ArrayList<>();
-		for (Entry<PipeableOperator<Result, Result>, GroupDescription> entry : scannerMap.entrySet()) {
-			PipeableOperator<Result, Result> scanner = entry.getKey();
-			pipeline.add(scanner);
-			
-			ResultPipe scannerOutput = new ResultPipe();
-			scanner.setSink(scannerOutput);
-			
-			// for groups that have inner conditions, create a filter
-			GroupDescription groupDescription = entry.getValue();
-			if (innerGroupDescriptions.containsKey(groupDescription)) {
-				AtomListDescription atomSetDescription = innerGroupDescriptions.get(groupDescription);
-				FilterAtomResultByCondition filter = addFilter(outputResultPipes, groupDescription, atomSetDescription);
-				filter.setSource(scannerOutput);
-				pipeline.add(filter);
-			}
-			
-			outputResultPipes.add(scannerOutput);
+		// Find connected components of the graph where vertices are atoms and edges 
+		// (or hyperedges) are AtomListDescriptions - the scanners are then joined based on this
+		List<GroupDescription> allGroups = chainDescription.getGroupDescriptions();
+		GroupUnionFind groupUnionFind = new GroupUnionFind(allGroups);
+		groupUnionFind.union(outerGroupDescriptions);
+		List<List<GroupDescription>> components = groupUnionFind.getComponents();
+		
+		// The scanner for each group in a component needs to be joined together
+		Stack<ResultPipe> combinedOutputPipes = new Stack<>();
+		List<GroupDescription> singletons = new ArrayList<>();	// components of size 1
+		for (List<GroupDescription> component : components) {
+//			if (component.size() == 1) {
+//				singletons.add(component.get(0));
+//			} else {
+				List<ResultPipe> componentOutputResultPipes = new ArrayList<>();
+				for (GroupDescription groupDescription : component) {
+					PipeableOperator<Result, Result> scanner = scannerMap.get(groupDescription);
+					pipeline.add(scanner);
+					
+					ResultPipe scannerOutput = new ResultPipe();
+					scanner.setSink(scannerOutput);
+					
+					// for groups that have inner conditions, create a filter and connect to the scanner
+					if (innerGroupDescriptions.containsKey(groupDescription)) {
+						AtomListDescription atomSetDescription = innerGroupDescriptions.get(groupDescription);
+						ResultPipe filterOutput = addFilter(scannerOutput, atomSetDescription, pipeline);
+						componentOutputResultPipes.add(filterOutput);
+					} else {
+						componentOutputResultPipes.add(scannerOutput);
+					}
+				}
+				// join these if there are more than one
+				if (componentOutputResultPipes.size() > 1) {
+					ResultPipe combinedOutput = new ResultPipe();
+					CombineResults combiner = new CombineResults(String.valueOf(operatorId++), componentOutputResultPipes, combinedOutput);
+					combinedOutputPipes.add(combinedOutput);
+					pipeline.add(combiner);
+				} else {
+					combinedOutputPipes.add((ResultPipe) componentOutputResultPipes.get(0));
+				}
+//			}
 		}
-		if (outputResultPipes.size() > 1) {
-			return new CombineResults(outputResultPipes, new PrintResults());
-		} else {
-			return new PrintAdapter(outputResultPipes.get(0));
+		
+		// The singleton components are now joined to these larger joined components
+		for (GroupDescription singleton : singletons) {
+			
 		}
+		
+		// Reduce the output pipes by joining
+		ResultPipe current = combinedOutputPipes.pop();
+		while (!combinedOutputPipes.isEmpty()) {
+			ResultPipe next = combinedOutputPipes.pop();
+			ResultPipe output = new ResultPipe();
+			CombineResults combiner = new CombineResults(String.valueOf(operatorId++), List.of(current, next), output);
+			pipeline.add(combiner);
+			current = output;
+		}
+		
+		// TODO - Add the betweenResidueDescriptions as filters on combiners
+		
+		return new PrintAdapter(String.valueOf(operatorId++), current);
 	}
 	
-	private FilterAtomResultByCondition addFilter(
-			List<Source<Result>> outputResultPipes, 
-			GroupDescription groupDescription,
-			AtomListDescription atomListDescription) {
+	private ResultPipe addFilter(ResultPipe scannerOutput, AtomListDescription atomSetDescription, List<Operator> pipeline) {
+		FilterAtomResultByCondition filter = createFilter(atomSetDescription);
+		filter.setSource(scannerOutput);
+		Source<Result> filterOutput = filter.getSinkAsSource();
+		pipeline.add(filter);
+		return (ResultPipe) filterOutput;
+	}
+	
+	private FilterAtomResultByCondition createFilter(AtomListDescription atomListDescription) {
 		AtomListCondition atomCondition = atomListDescription.makeCondition();
 		AtomMatcher atomMatcher = atomListDescription.createMatcher();
 		FilterAtomResultByCondition filter = new FilterAtomResultByCondition(atomCondition, atomMatcher);
+		filter.setId(String.valueOf(operatorId++));
 		ResultPipe filteredPipe = new ResultPipe();
 		filter.setSink(filteredPipe);
-		outputResultPipes.add(filteredPipe);
 		return filter;
 	}
-
+	
 }

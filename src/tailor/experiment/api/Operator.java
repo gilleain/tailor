@@ -6,5 +6,11 @@ package tailor.experiment.api;
 public interface Operator {
 	
 	void run();
+
+	String description();
+	
+	String getId();
+	
+	void setId(String id);
 	
 }

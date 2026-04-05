@@ -1,25 +1,31 @@
 package tailor.experiment.operator;
 
-import tailor.experiment.api.Operator;
 import tailor.experiment.api.Source;
 import tailor.experiment.plan.Result;
 
 /**
  * Convenience class for converting a pipe to output (feels like we should not need this...)
  */
-public class PrintAdapter implements Operator {
+public class PrintAdapter extends AbstractOperator {
 	
-	private Source<Result> output;
+	private Source<Result> input;
 	
-	public PrintAdapter(Source<Result> output) {
-		this.output = output;
+	public PrintAdapter(String id, ResultPipe input) {
+		this.id = id;
+		this.input = input;
+		input.registerSink(this);
 	}
 
 	@Override
 	public void run() {
-		while (output.hasNext()) {
-			System.out.println(output.getNext());
+		while (input.hasNext()) {
+			System.out.println(input.getNext());
 		}
+	}
+
+	@Override
+	public String description() {
+		return "Print id[" + getId() + "]";
 	}
 
 }

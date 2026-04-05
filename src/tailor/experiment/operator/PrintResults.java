@@ -4,7 +4,7 @@ import tailor.experiment.api.Operator;
 import tailor.experiment.api.Sink;
 import tailor.experiment.plan.Result;
 
-public class PrintResults implements Sink<Result>, Operator {
+public class PrintResults extends AbstractOperator implements Sink<Result> {
 
 	@Override
 	public void put(Result item) {
@@ -16,5 +16,20 @@ public class PrintResults implements Sink<Result>, Operator {
 		// TODO Auto-generated method stub
 	}
 
+	@Override
+	public String description() {
+		return "PrintResults";
+	}
 
+	@Override
+	public String getSinkId() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void registerSink(Operator operator) {
+		// TODO Auto-generated method stub
+		
+	}
 }

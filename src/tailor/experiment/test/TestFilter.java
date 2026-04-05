@@ -42,7 +42,7 @@ public class TestFilter {
 		scanN.setSource(resultPipe2);
 		
 		ResultPipe onPipe = new ResultPipe();
-		CombineResults combineON = new CombineResults(List.of(oPipe, nPipe), onPipe);
+		CombineResults combineON = new CombineResults("1", List.of(oPipe, nPipe), onPipe);
 		
 		AtomMatcher atomMatcher = new AtomMatcher(List.of("O", "N"));
 		AtomDistanceCondition condition = new AtomDistanceCondition(distance);

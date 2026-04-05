@@ -3,7 +3,6 @@ package tailor.experiment.operator;
 import java.util.ArrayList;
 import java.util.List;
 
-import tailor.experiment.api.Operator;
 import tailor.experiment.api.Sink;
 import tailor.experiment.api.Source;
 import tailor.experiment.plan.Result;
@@ -11,16 +10,33 @@ import tailor.experiment.plan.Result;
 /**
  * Combine the output from multiple sources, flattening them into a list of results.
  */
-public class CombineResults implements Operator {
+public class CombineResults extends AbstractOperator {
 	
-	private List<Source<Result>> sources;
+	private List<ResultPipe> sources;
 	
 	private Sink<Result> output;
 	
-	
-	public CombineResults(List<Source<Result>> sources, Sink<Result> output) {
+	public CombineResults(String id, List<ResultPipe> sources, ResultPipe output) {
+		this.id = id;
 		this.sources = sources;
 		this.output = output;
+		for (ResultPipe source : sources) {
+			source.registerSink(this);
+		}
+		output.registerSource(this);
+	}
+	
+	public CombineResults(String id, List<ResultPipe> sources, Sink<Result> output) {
+		this.id = id;
+		this.sources = sources;
+		this.output = output;
+		for (ResultPipe source : sources) {
+			source.registerSink(this);
+		}
+	}
+	
+	public String description() {
+		return "Combine " + sources.stream().map(Source::getSourceId).toList() + " to " + output.getSinkId();	// TODO - id
 	}
 
 	public void run() {

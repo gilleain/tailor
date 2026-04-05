@@ -1,6 +1,7 @@
 package tailor.experiment.description;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -44,6 +45,10 @@ public class ChainDescription {
 
 	public List<AtomListDescription> getAtomListDescriptions() {
 		return atomListDescriptions;
+	}
+
+	public void addGroupDescriptions(GroupDescription... groups) {
+		this.groupDescriptions.addAll(Arrays.asList(groups));
 	}
  
 }

@@ -6,5 +6,16 @@ package tailor.experiment.api;
 public interface Sink<T> {
 	
 	void put(T item);
+	
+	/**
+	 * @return the id of the sink operator
+	 */
+	String getSinkId();
+	
+	
+	/**
+	 * @param operator the operator that is the sink
+	 */
+	void registerSink(Operator operator);
 
 }

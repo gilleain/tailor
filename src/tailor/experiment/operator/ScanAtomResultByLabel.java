@@ -2,32 +2,16 @@ package tailor.experiment.operator;
 
 import java.util.List;
 
-import tailor.experiment.api.Sink;
-import tailor.experiment.api.Source;
-import tailor.experiment.api.PipeableOperator;
 import tailor.experiment.plan.Result;
 import tailor.structure.Atom;
 
-public class ScanAtomResultByLabel implements PipeableOperator<Result, Result> {
+public class ScanAtomResultByLabel extends AbstractPipeableOperator {
 	
 	// Atom labels to search for // TODO - could be a general condition
 	private List<String> atomLabels;
 	
-	// Source to take from
-	private Source<Result> source;
-	
-	private Sink<Result> sink;
-	
 	public ScanAtomResultByLabel(List<String> atomLabels) {
 		this.atomLabels = atomLabels;
-	}
-	
-	public void setSource(Source<Result> source) {
-		this.source = source;
-	}
-	
-	public void setSink(Sink<Result> sink) {
-		this.sink = sink;
 	}
 	
 	public void run() {
@@ -46,6 +30,11 @@ public class ScanAtomResultByLabel implements PipeableOperator<Result, Result> {
 				sink.put(newResult);
 			}
 		}
+	}
+
+	@Override
+	public String description() {
+		return "ScanAtoms id:[" + getId() + "] atoms:" + atomLabels;
 	}
 
 }

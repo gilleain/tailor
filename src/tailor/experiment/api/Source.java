@@ -1,5 +1,8 @@
 package tailor.experiment.api;
 
+/**
+ * @param <T>
+ */
 public interface Source<T> {
 	
 	/**
@@ -18,5 +21,17 @@ public interface Source<T> {
 	 * @return true if there is another item
 	 */
 	boolean hasNext();
+	
+	
+	/**
+	 * @return the id of the source operator
+	 */
+	String getSourceId();
+	
+	
+	/**
+	 * @param operator the operator that is the source
+	 */
+	void registerSource(Operator operator);
 
 }

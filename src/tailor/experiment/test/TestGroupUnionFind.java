@@ -1,6 +1,7 @@
 package tailor.experiment.test;
 
 import static tailor.experiment.test.DescriptionBuilder.group;
+import static tailor.experiment.test.Helper.pathTo;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -8,17 +9,51 @@ import java.util.List;
 import org.junit.Test;
 
 import tailor.experiment.api.AtomListDescription;
-import tailor.experiment.description.AtomDescription;
 import tailor.experiment.description.AtomDistanceDescription;
-import tailor.experiment.description.DescriptionPath;
 import tailor.experiment.description.GroupDescription;
 import tailor.experiment.plan.GroupUnionFind;
 
 public class TestGroupUnionFind {
 	
 	@Test
-	public void testTwoDisconnectedPairs() {
+	public void testTwoConnectedOneDisconnected() {
+		GroupDescription group1 = group().withGroupLabel("GLY").withAtomLabels("O").build();
+		GroupDescription group2 = group().withGroupLabel("SER").withAtomLabels("O").build();
+		GroupDescription group3 = group().withGroupLabel("HIS").withAtomLabels("O").build();
+		List<GroupDescription> groups = List.of(group1, group2, group3);
 		
+		GroupUnionFind uf = new GroupUnionFind(groups);
+		
+		List<AtomListDescription> atomListDescriptions = new ArrayList<>();
+		atomListDescriptions.add(new AtomDistanceDescription(1, pathTo(group1, "O"), pathTo(group2, "O")));
+		uf.union(atomListDescriptions);
+		
+		for (List<GroupDescription> components : uf.getComponents()) {
+			System.out.println(components);
+		}
+	}
+	
+	@Test
+	public void testTwoConnectedPairs() {
+		GroupDescription group1 = group().withGroupLabel("GLY").withAtomLabels("O").build();
+		GroupDescription group2 = group().withGroupLabel("SER").withAtomLabels("O").build();
+		GroupDescription group3 = group().withGroupLabel("HIS").withAtomLabels("O").build();
+		List<GroupDescription> groups = List.of(group1, group2, group3);
+		
+		GroupUnionFind uf = new GroupUnionFind(groups);
+		
+		List<AtomListDescription> atomListDescriptions = new ArrayList<>();
+		atomListDescriptions.add(new AtomDistanceDescription(1, pathTo(group1, "O"), pathTo(group2, "O")));
+		atomListDescriptions.add(new AtomDistanceDescription(1, pathTo(group2, "O"), pathTo(group3, "O")));
+		uf.union(atomListDescriptions);
+		
+		for (List<GroupDescription> components : uf.getComponents()) {
+			System.out.println(components);
+		}
+	}
+	
+	@Test
+	public void testTwoDisconnectedPairs() {
 		GroupDescription group1 = group().withGroupLabel("GLY").withAtomLabels("O").build();
 		GroupDescription group2 = group().withGroupLabel("SER").withAtomLabels("O").build();
 		GroupDescription group3 = group().withGroupLabel("HIS").withAtomLabels("O").build();
@@ -36,14 +71,4 @@ public class TestGroupUnionFind {
 			System.out.println(components);
 		}
 	}
-	
-	private DescriptionPath pathTo(GroupDescription groupDescription, String atomLabel) {
-		AtomDescription atomDescription = 
-				groupDescription.getAtomDescriptions().stream()
-				.filter(a -> a.getLabel().equals(atomLabel))
-				.findFirst()
-				.orElseThrow();
-		return new DescriptionPath(groupDescription, atomDescription);
-	}
-
 }
