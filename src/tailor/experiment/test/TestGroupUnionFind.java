@@ -1,27 +1,49 @@
 package tailor.experiment.test;
 
+import static tailor.experiment.test.DescriptionBuilder.group;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.Test;
 
 import tailor.experiment.api.AtomListDescription;
+import tailor.experiment.description.AtomDescription;
+import tailor.experiment.description.AtomDistanceDescription;
+import tailor.experiment.description.DescriptionPath;
 import tailor.experiment.description.GroupDescription;
 import tailor.experiment.plan.GroupUnionFind;
 
 public class TestGroupUnionFind {
 	
 	@Test
-	public void testTwoPairs() {
-		List<GroupDescription> groups = new ArrayList<>();
+	public void testTwoDisconnectedPairs() {
+		
+		GroupDescription group1 = group().withGroupLabel("GLY").withAtomLabels("O").build();
+		GroupDescription group2 = group().withGroupLabel("SER").withAtomLabels("O").build();
+		GroupDescription group3 = group().withGroupLabel("HIS").withAtomLabels("O").build();
+		GroupDescription group4 = group().withGroupLabel("TYR").withAtomLabels("O").build();
+		List<GroupDescription> groups = List.of(group1, group2, group3, group4);
+		
 		GroupUnionFind uf = new GroupUnionFind(groups);
 		
 		List<AtomListDescription> atomListDescriptions = new ArrayList<>();
+		atomListDescriptions.add(new AtomDistanceDescription(1, pathTo(group1, "O"), pathTo(group2, "O")));
+		atomListDescriptions.add(new AtomDistanceDescription(1, pathTo(group3, "O"), pathTo(group4, "O")));
 		uf.union(atomListDescriptions);
 		
 		for (List<GroupDescription> components : uf.getComponents()) {
 			System.out.println(components);
 		}
+	}
+	
+	private DescriptionPath pathTo(GroupDescription groupDescription, String atomLabel) {
+		AtomDescription atomDescription = 
+				groupDescription.getAtomDescriptions().stream()
+				.filter(a -> a.getLabel().equals(atomLabel))
+				.findFirst()
+				.orElseThrow();
+		return new DescriptionPath(groupDescription, atomDescription);
 	}
 
 }
