@@ -7,15 +7,16 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import tailor.experiment.api.AtomListCondition;
+import tailor.experiment.api.AtomListDescription;
 import tailor.experiment.api.Operator;
 import tailor.experiment.api.PipeableOperator;
 import tailor.experiment.api.Source;
 import tailor.experiment.condition.AtomMatcher;
-import tailor.experiment.description.AtomListDescription;
 import tailor.experiment.description.ChainDescription;
 import tailor.experiment.description.GroupDescription;
 import tailor.experiment.operator.CombineResults;
 import tailor.experiment.operator.FilterAtomResultByCondition;
+import tailor.experiment.operator.PrintAdapter;
 import tailor.experiment.operator.PrintResults;
 import tailor.experiment.operator.ResultPipe;
 import tailor.experiment.operator.ScanAtomResultByLabel;
@@ -76,18 +77,7 @@ public class Planner {
 			Operator combiner = new CombineResults(outputResultPipes, new PrintResults());
 			pipeline.add(combiner);
 		} else {
-			final Source<Result> output = outputResultPipes.get(0);
-			// kind of dumb
-			Operator printAdapter = new Operator() {
-
-				@Override
-				public void run() {
-					while (output.hasNext()) {
-						System.out.println(output.getNext());
-					}
-				}
-			};
-			pipeline.add(printAdapter);
+			pipeline.add(new PrintAdapter(outputResultPipes.get(0)));
 		}
 		
 		// TODO - Add the betweenResidueDescriptions as filters on combiners

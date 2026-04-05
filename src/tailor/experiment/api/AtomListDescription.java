@@ -1,7 +1,7 @@
-package tailor.experiment.description;
+package tailor.experiment.api;
 
-import tailor.experiment.api.AtomListCondition;
 import tailor.experiment.condition.AtomMatcher;
+import tailor.experiment.description.GroupDescription;
 
 /**
  * Description for a list of atoms that can create conditions and matchers for filtering.

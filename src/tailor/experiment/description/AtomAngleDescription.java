@@ -3,6 +3,7 @@ package tailor.experiment.description;
 import java.util.List;
 
 import tailor.experiment.api.AtomListCondition;
+import tailor.experiment.api.AtomListDescription;
 import tailor.experiment.condition.AtomAngleCondition;
 import tailor.experiment.condition.AtomMatcher;
 

@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import tailor.experiment.api.AtomListDescription;
+
 public class ChainDescription {
 	
 	private Optional<String> label;
