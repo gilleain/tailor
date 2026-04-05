@@ -51,23 +51,15 @@ public class Planner {
 			}
 		}
 		
-		// Add output pipes to the scanners
-		List<Source<Result>> outputResultPipes = 
-				join(pipeline, innerGroupDescriptions, outerGroupDescriptions, scannerMap);
-		
-		// Combine the scanners, unless there is only one
-		if (scannerMap.size() > 1) {
-			pipeline.add(new CombineResults(outputResultPipes, new PrintResults()));
-		} else {
-			pipeline.add(new PrintAdapter(outputResultPipes.get(0)));
-		}
+		// Join the scanners with combiners
+		pipeline.add(join(pipeline, innerGroupDescriptions, outerGroupDescriptions, scannerMap));
 		
 		// TODO - Add the betweenResidueDescriptions as filters on combiners
 		
 		return pipeline;
 	}
 	
-	private List<Source<Result>> join(
+	private Operator join(
 			List<Operator> pipeline, 
 			Map<GroupDescription, AtomListDescription> innerGroupDescriptions,
 			List<AtomListDescription> outerGroupDescriptions, 
@@ -92,7 +84,11 @@ public class Planner {
 			
 			outputResultPipes.add(scannerOutput);
 		}
-		return outputResultPipes;
+		if (outputResultPipes.size() > 1) {
+			return new CombineResults(outputResultPipes, new PrintResults());
+		} else {
+			return new PrintAdapter(outputResultPipes.get(0));
+		}
 	}
 	
 	private FilterAtomResultByCondition addFilter(
