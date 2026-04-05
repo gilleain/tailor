@@ -1,14 +1,38 @@
 package tailor.experiment.test;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import tailor.experiment.api.Operator;
+import tailor.experiment.api.Sink;
+import tailor.experiment.operator.GroupSource;
+import tailor.experiment.operator.ResultPipe;
+import tailor.experiment.operator.ScanAtomResultByLabel;
+import tailor.experiment.plan.Result;
 import tailor.geometry.Vector;
 import tailor.structure.Atom;
 import tailor.structure.Chain;
 import tailor.structure.Group;
 
 public class Helper {
+	
+	protected static void run(Chain chain, List<Operator> pipeline) {
+		// TODO - better
+		List<Sink<Result>> inputs = new ArrayList<Sink<Result>>();
+		for (Operator o : pipeline) {
+			if (o instanceof ScanAtomResultByLabel scan) {
+				ResultPipe input = new ResultPipe();
+				scan.setSource(input);
+				inputs.add(input);
+			}
+		}
+		GroupSource groupSource = new GroupSource(chain, inputs);
+		List<Operator> fullPipeline = new ArrayList<>();
+		fullPipeline.add(groupSource);
+		fullPipeline.addAll(pipeline);
+
+		Helper.runAll(fullPipeline);
+	}
 	
 	protected static void runAll(List<Operator> pipeline) {
 		for (Operator operator : pipeline) {

@@ -6,12 +6,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import tailor.experiment.api.AtomListCondition;
 import tailor.experiment.api.Operator;
 import tailor.experiment.api.PipeableOperator;
 import tailor.experiment.api.Source;
-import tailor.experiment.condition.AtomDistanceCondition;
 import tailor.experiment.condition.AtomMatcher;
-import tailor.experiment.description.AtomDistanceDescription;
+import tailor.experiment.description.AtomSetDescription;
 import tailor.experiment.description.ChainDescription;
 import tailor.experiment.description.GroupDescription;
 import tailor.experiment.operator.CombineResults;
@@ -38,14 +38,13 @@ public class Planner {
 		}
 		
 		// TODO - more general
-		List<AtomDistanceDescription> betweenResidueDescriptions = new ArrayList<>();
-		Map<GroupDescription, AtomDistanceDescription> internalResidueDescriptions = new HashMap<>();
-		for (AtomDistanceDescription atomSetDescription : chainDescription.getAtomSetDescriptions()) {
+		List<AtomSetDescription> betweenResidueDescriptions = new ArrayList<>();
+		Map<GroupDescription, AtomSetDescription> innerResidueDescriptions = new HashMap<>();
+		for (AtomSetDescription atomSetDescription : chainDescription.getAtomSetDescriptions()) {
 			// check to see if the sub-descriptions are in the same group
-			if (atomSetDescription.getAtomDescriptionA().getGroupDescription()
-					== atomSetDescription.getAtomDescriptionB().getGroupDescription()) {
-				GroupDescription groupDescription = atomSetDescription.getAtomDescriptionA().getGroupDescription();
-				internalResidueDescriptions.put(groupDescription, atomSetDescription);
+			if (atomSetDescription.isForSameGroup()) {
+				GroupDescription groupDescription = atomSetDescription.getFirstGroupDescription();
+				innerResidueDescriptions.put(groupDescription, atomSetDescription);
 			} else {
 				betweenResidueDescriptions.add(atomSetDescription);
 			}
@@ -57,26 +56,19 @@ public class Planner {
 			PipeableOperator<Result, Result> scanner = entry.getKey();
 			pipeline.add(scanner);
 			
-			ResultPipe pipe = new ResultPipe();
-			scanner.setSink(pipe);
+			ResultPipe scannerOutput = new ResultPipe();
+			scanner.setSink(scannerOutput);
 			
+			// for groups that have inner conditions, create a filter
 			GroupDescription groupDescription = entry.getValue();
-			if (internalResidueDescriptions.containsKey(groupDescription)) {
-				AtomDistanceDescription atomSetDescription = internalResidueDescriptions.get(groupDescription);
-				AtomDistanceCondition atomCondition = new AtomDistanceCondition(atomSetDescription.getDistance());
-				List<String> labels = List.of(
-						atomSetDescription.getAtomDescriptionA().getAtomDescription().getLabel(),
-						atomSetDescription.getAtomDescriptionB().getAtomDescription().getLabel());
-				AtomMatcher atomMatcher = new AtomMatcher(labels);
-				FilterAtomResultByCondition filter = new FilterAtomResultByCondition(atomCondition, atomMatcher);
-				filter.setSource(pipe);
-				ResultPipe filteredPipe = new ResultPipe();
-				filter.setSink(filteredPipe);
-				outputResultPipes.add(filteredPipe);
+			if (innerResidueDescriptions.containsKey(groupDescription)) {
+				AtomSetDescription atomSetDescription = innerResidueDescriptions.get(groupDescription);
+				FilterAtomResultByCondition filter = addFilter(outputResultPipes, groupDescription, atomSetDescription);
+				filter.setSource(scannerOutput);
 				pipeline.add(filter);
 			}
 			
-			outputResultPipes.add(pipe);
+			outputResultPipes.add(scannerOutput);
 		}
 		
 		// Combine the scanners, unless there is only one
@@ -101,6 +93,19 @@ public class Planner {
 		// TODO - Add the betweenResidueDescriptions as filters on combiners
 		
 		return pipeline;
+	}
+	
+	private FilterAtomResultByCondition addFilter(
+			List<Source<Result>> outputResultPipes, 
+			GroupDescription groupDescription,
+			AtomSetDescription atomSetDescription) {
+		AtomListCondition atomCondition = atomSetDescription.makeCondition();
+		AtomMatcher atomMatcher = atomSetDescription.createMatcher();
+		FilterAtomResultByCondition filter = new FilterAtomResultByCondition(atomCondition, atomMatcher);
+		ResultPipe filteredPipe = new ResultPipe();
+		filter.setSink(filteredPipe);
+		outputResultPipes.add(filteredPipe);
+		return filter;
 	}
 
 }

@@ -3,25 +3,29 @@ package tailor.experiment.description;
 import java.util.List;
 
 import tailor.experiment.api.AtomListCondition;
-import tailor.experiment.condition.AtomDistanceCondition;
+import tailor.experiment.condition.AtomAngleCondition;
 import tailor.experiment.condition.AtomMatcher;
 
-public class AtomDistanceDescription implements AtomSetDescription {
+public class AtomAngleDescription implements AtomSetDescription {
 	
-	private final double distance;
+	private final double angle;
 	
 	private final DescriptionPath atomDescriptionA;
 	
 	private final DescriptionPath atomDescriptionB;
+	
+	private final DescriptionPath atomDescriptionC;
 
-	public AtomDistanceDescription(double distance, DescriptionPath atomDescriptionA, DescriptionPath atomDescriptionB) {
-		this.distance = distance;
+	public AtomAngleDescription(
+			double angle, DescriptionPath atomDescriptionA, DescriptionPath atomDescriptionB, DescriptionPath atomDescriptionC) {
+		this.angle = angle;
 		this.atomDescriptionA = atomDescriptionA;
 		this.atomDescriptionB = atomDescriptionB;
+		this.atomDescriptionC = atomDescriptionC;
 	}
 
-	public double getDistance() {
-		return distance;
+	public double getAngle() {
+		return angle;
 	}
 
 	public DescriptionPath getAtomDescriptionA() {
@@ -32,11 +36,16 @@ public class AtomDistanceDescription implements AtomSetDescription {
 		return atomDescriptionB;
 	}
 
-	@Override
-	public boolean isForSameGroup() {
-		return atomDescriptionA.getGroupDescription() == atomDescriptionB.getGroupDescription();
+	public DescriptionPath getAtomDescriptionC() {
+		return atomDescriptionC;
 	}
 
+	@Override
+	public boolean isForSameGroup() {
+		return atomDescriptionA.getGroupDescription() == atomDescriptionB.getGroupDescription()
+				&& atomDescriptionB.getGroupDescription() == atomDescriptionC.getGroupDescription();
+	}
+	
 	@Override
 	public GroupDescription getFirstGroupDescription() {
 		return atomDescriptionA.getGroupDescription();
@@ -44,14 +53,15 @@ public class AtomDistanceDescription implements AtomSetDescription {
 
 	@Override
 	public AtomListCondition makeCondition() {
-		return new AtomDistanceCondition(getDistance());
+		return new AtomAngleCondition(getAngle());
 	}
-
+	
 	@Override
 	public AtomMatcher createMatcher() {
 		List<String> labels = List.of(
 				atomDescriptionA.getAtomDescription().getLabel(),
-				atomDescriptionB.getAtomDescription().getLabel());
+				atomDescriptionB.getAtomDescription().getLabel(),
+				atomDescriptionC.getAtomDescription().getLabel());
 		return new AtomMatcher(labels);
 	}
 

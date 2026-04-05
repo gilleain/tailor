@@ -12,7 +12,7 @@ public class ChainDescription {
 	private List<GroupDescription> groupDescriptions;
 	
 	// Descriptions of relationships to find between the atoms across groups
-	private List<AtomDistanceDescription> atomSetDescriptions;	// TODO - make interface (and rename?)
+	private List<AtomSetDescription> atomSetDescriptions;
 
 	public ChainDescription() {
 		this(null);
@@ -28,7 +28,7 @@ public class ChainDescription {
 		this.groupDescriptions.add(groupDescription);
 	}
 	
-	public void addAtomSetDescription(AtomDistanceDescription atomSetDescription) {
+	public void addAtomSetDescription(AtomSetDescription atomSetDescription) {
 		this.atomSetDescriptions.add(atomSetDescription);
 	}
 	
@@ -40,7 +40,7 @@ public class ChainDescription {
 		return this.groupDescriptions;
 	}
 
-	public List<AtomDistanceDescription> getAtomSetDescriptions() {
+	public List<AtomSetDescription> getAtomSetDescriptions() {
 		return atomSetDescriptions;
 	}
  
