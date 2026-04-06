@@ -97,8 +97,7 @@ public class TestPlanner {
 		List<Operator> pipeline = new Planner().plan(chainDescription);
 		Helper.describe(pipeline);
 		
-		Chain chain = Helper.makeData(3);
-		Helper.run(chain, pipeline);
+		Helper.run(Helper.makeData(3), pipeline);
 	}
 	
 	@Test
@@ -114,6 +113,7 @@ public class TestPlanner {
 		
 		List<Operator> pipeline = new Planner().plan(chainDescription);
 		Helper.describe(pipeline);
+		Helper.run(Helper.makeData(3), pipeline);
 	}
 	
 	@Test
@@ -130,6 +130,8 @@ public class TestPlanner {
 		
 		List<Operator> pipeline = new Planner().plan(chainDescription);
 		Helper.describe(pipeline);
+		
+		Helper.run(Helper.makeData(3), pipeline);
 	}
 
 }

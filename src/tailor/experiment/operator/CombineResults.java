@@ -36,7 +36,9 @@ public class CombineResults extends AbstractOperator {
 	}
 	
 	public String description() {
-		return "Combine " + sources.stream().map(Source::getSourceId).toList() + " to " + output.getSinkId();	// TODO - id
+		return "Combine id:[" + getId() + "]"
+				+ " sources:" + sources.stream().map(Source::getSourceId).toList() 
+				+ " to:[" + output.getSinkId() + "]";
 	}
 
 	public void run() {

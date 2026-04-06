@@ -9,31 +9,74 @@ import tailor.structure.Atom;
 
 public class FilterAtomResultByCondition extends AbstractPipeableOperator {
 	
+	/**
+	 * Association of a matcher (to find atoms) and a condition (to match on them).
+	 */
+	public record ConditionMatcher(AtomListCondition condition, AtomMatcher matcher) {}
+	
 	private AtomListCondition condition;
 	
 	private AtomMatcher matcher;
+	
+	private List<ConditionMatcher> conditionMatchers;
 	
 	public FilterAtomResultByCondition(AtomListCondition condition, AtomMatcher matcher) {
 		this.condition = condition;
 		this.matcher = matcher;
 	}
-
+	
+	public FilterAtomResultByCondition(List<ConditionMatcher> conditionMatchers) {
+		this.conditionMatchers = conditionMatchers;
+	}
+	
 	public void run() {
 		while (source.hasNext()) {
 			Result nextResult = source.getNext();
-			for (List<Atom> match : matcher.extract(nextResult)) {
-				System.out.println("Checking " + match + " from " + nextResult);
-				if (condition.accept(match)) {
-					sink.put(nextResult);
-				} else {
-					System.out.println("Filtering OUT " + nextResult);
+			boolean isAccepted = true;
+			for (ConditionMatcher conditionMatcher : conditionMatchers) {
+				if (!matches(nextResult, conditionMatcher)) {
+					isAccepted = false;
+					break;
 				}
+			}
+			if (isAccepted) {
+				sink.put(nextResult);
 			}
 		}
 	}
+	
+	private boolean matches(Result result, ConditionMatcher conditionMatcher) {
+		boolean isMatch = true;
+		for (List<Atom> match : conditionMatcher.matcher().extract(result)) {
+			System.out.println("Checking " + match + " from " + result);
+			if (conditionMatcher.condition.accept(match)) {
+				//
+			} else {
+				System.out.println("Filtering OUT " + result);
+				isMatch = false;
+			}
+		}
+		return isMatch;
+	}
+
+
+//	public void run() {
+//		while (source.hasNext()) {
+//			Result nextResult = source.getNext();
+//			for (List<Atom> match : matcher.extract(nextResult)) {
+//				System.out.println("Checking " + match + " from " + nextResult);
+//				if (condition.accept(match)) {
+//					sink.put(nextResult);
+//				} else {
+//					System.out.println("Filtering OUT " + nextResult);
+//				}
+//			}
+//		}
+//	}
 
 	@Override
 	public String description() {
-		return "Filter: id[" + getId() + "] condition:" + condition.getClass().getSimpleName();
+		List<String> conditionNames = conditionMatchers.stream().map(c -> c.getClass().getSimpleName()).toList();
+		return "Filter: id[" + getId() + "] conditions:" + conditionNames;
 	}
 }
