@@ -17,7 +17,7 @@ import tailor.structure.Chain;
 public class TestPlanner {
 	
 	@Test
-	public void testSingles() {
+	public void testTwoResiduesWithSingleAtoms() {
 		ChainDescription chainDescription = new ChainDescription();
 		chainDescription.addGroupDescription(Helper.makeGroupDescription("N"));
 		chainDescription.addGroupDescription(Helper.makeGroupDescription("O"));
@@ -27,13 +27,14 @@ public class TestPlanner {
 	}
 	
 	@Test
-	public void testMultiples() {
+	public void testTwoResiduesWithMultipleAtoms() {
 		ChainDescription chainDescription = new ChainDescription();
 		chainDescription.addGroupDescription(Helper.makeGroupDescription("N", "CA"));
 		chainDescription.addGroupDescription(Helper.makeGroupDescription("O", "C"));
 		
 		List<Operator> pipeline = new Planner().plan(chainDescription);
 		Helper.describe(pipeline);
+		Helper.run(Helper.makeData(List.of("GLY", "SER", "PRO")), pipeline);
 	}
 	
 	/**
@@ -74,8 +75,7 @@ public class TestPlanner {
 		List<Operator> pipeline = new Planner().plan(chainDescription);
 		Helper.describe(pipeline);
 		
-//		Chain chain = Helper.makeData(3);
-//		Helper.run(chain, pipeline);
+		Helper.run(Helper.makeData(List.of("GLY", "SER", "PRO")), pipeline);
 	}
 	
 	/**
@@ -133,27 +133,27 @@ public class TestPlanner {
 		
 		List<Operator> pipeline = new Planner().plan(chainDescription);
 		Helper.describe(pipeline);
-		Helper.run(Helper.makeData(3), pipeline);
+		Helper.run(Helper.makeData(List.of("GLY", "SER", "PRO")), pipeline);
 	}
 	
 	@Test
 	public void testOuterGroupFilteringConnectedPairs() {
 		ChainDescription chainDescription = new ChainDescription();
-		GroupDescription groupA = Helper.makeGroupDescription("O");
-		GroupDescription groupB = Helper.makeGroupDescription("O");
-		GroupDescription groupC = Helper.makeGroupDescription("O");
+		GroupDescription groupA = Helper.makeGroupDescription("N");
+		GroupDescription groupB = Helper.makeGroupDescription("CA");
+		GroupDescription groupC = Helper.makeGroupDescription("C");
 		GroupDescription groupD = Helper.makeGroupDescription("O");
 		chainDescription.addGroupDescriptions(groupA, groupB, groupC, groupD);
 		chainDescription.addAtomListDescriptions(
-				new AtomDistanceDescription(1, pathTo(groupA, "O"), pathTo(groupB, "O")),
-				new AtomDistanceDescription(1, pathTo(groupB, "O"), pathTo(groupC, "O")),
-				new AtomDistanceDescription(1, pathTo(groupC, "O"), pathTo(groupD, "O"))
+				new AtomDistanceDescription(1, pathTo(groupA, "N"), pathTo(groupB, "CA")),
+				new AtomDistanceDescription(1, pathTo(groupB, "CA"), pathTo(groupC, "C")),
+				new AtomDistanceDescription(1, pathTo(groupC, "C"), pathTo(groupD, "O"))
 		);
 		
 		List<Operator> pipeline = new Planner().plan(chainDescription);
 		Helper.describe(pipeline);
 		
-		Helper.run(Helper.makeData(3), pipeline);
+		Helper.run(Helper.makeData(List.of("GLY", "SER", "PRO", "HIS")), pipeline);
 	}
 
 }

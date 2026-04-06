@@ -2,6 +2,7 @@ package tailor.experiment.plan;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import tailor.structure.Atom;
 import tailor.structure.Chain;
@@ -55,6 +56,43 @@ public class Result {
 			}
 		}
 		return atoms;
+	}
+	
+	public List<Group> getGroups() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public boolean equals(Result other) {
+		for (Node groupNode : this.root.children) {
+			if (noMatch(groupNode, other)) {
+				return false;
+			}
+		}
+		return true;
+	}
+	
+	private boolean noMatch(Node thisGroupNode, Result other) {
+		// TODO - would not need this if nodes were ordered...
+		for (Node otherGroupNode : other.root.children) {
+			if (isMatch(thisGroupNode, otherGroupNode)) {
+				return false;
+			}
+		}
+		return true;
+	}
+	
+	private boolean isMatch(Node thisGroupNode, Node otherGroupNode) {
+		Group gN = (Group) thisGroupNode.o;
+		Group gM = (Group) otherGroupNode.o;
+		boolean groupIdsEqual = gN.getResidueName().equals(gM.getResidueName()) 
+							  && gN.getResidueId().getResseq() == gM.getResidueId().getResseq();
+		boolean atomsEqual = atomString(gN).equals(atomString(gM));
+		return groupIdsEqual && atomsEqual;
+	}
+	
+	private String atomString(Group g) {
+		return g.getAtoms().stream().map(Atom::getName).collect(Collectors.joining());
 	}
 
 	public Result merge(Result anotherResult) {

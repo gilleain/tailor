@@ -67,12 +67,19 @@ public class Helper {
 	}
 	
 	protected static Chain makeData(int numberOfGroups) {
+		List<String> groupNames = new ArrayList<>();
+		for (int counter = 0; counter < numberOfGroups; counter++) {
+			groupNames.add("GLY");
+		}
+		return makeData(groupNames);
+	}
+	
+	protected static Chain makeData(List<String> groupNames) {	
 		Chain chain = new Chain();
-		double x = 1;
-		double y = 1;
-		Vector p = new Vector(x, y, 0);
-		for (int i = 0; i < numberOfGroups; i++) {
-			Group group = new Group(i, "GLY");	// could add 1 to get a more realistic number ..
+		Vector p = new Vector(1, 1, 1);
+		for (int i = 0; i < groupNames.size(); i++) {
+			String groupName = groupNames.get(i);
+			Group group = new Group(i, groupName);	// could add 1 to get a more realistic number ..
 			p = addAtom(group, "N", p);
 			p = addAtom(group, "C", p);
 			p = addAtom(group, "CA", p);
@@ -89,7 +96,7 @@ public class Helper {
 	}
 	
 	private static Vector nextP(Vector p) {
-		return new Vector(p.x() + 1, p.y() + 1, 0);
+		return new Vector(p.y() + 1.2, p.z() + 1.5, p.x() + 1.7);
 	}
 
 }

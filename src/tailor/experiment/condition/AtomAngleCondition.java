@@ -17,7 +17,9 @@ public class AtomAngleCondition implements AtomListCondition {
 	}
 	
 	public boolean accept(Atom a, Atom b, Atom c) {
-		return aam.measure(a, b, c) < angle;
+		double actualAngle = aam.measure(a, b, c);
+		System.out.println("Angle " + actualAngle + " < " + angle);
+		return actualAngle < angle;
 	}
 	
 	public boolean accept(List<Atom> atoms) {
