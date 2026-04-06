@@ -119,15 +119,16 @@ public class TestPlanner {
 	
 	@Test
 	public void testOuterGroupFilteringDisconnectedPairs() {
+		double distance = 5.0;	// w/e
 		ChainDescription chainDescription = new ChainDescription();
-		GroupDescription groupA = Helper.makeGroupDescription("O");
-		GroupDescription groupB = Helper.makeGroupDescription("O");
-		GroupDescription groupC = Helper.makeGroupDescription("O");
+		GroupDescription groupA = Helper.makeGroupDescription("N");
+		GroupDescription groupB = Helper.makeGroupDescription("CA");
+		GroupDescription groupC = Helper.makeGroupDescription("C");
 		GroupDescription groupD = Helper.makeGroupDescription("O");
 		chainDescription.addGroupDescriptions(groupA, groupB, groupC, groupD);
 		chainDescription.addAtomListDescriptions(
-				new AtomDistanceDescription(1, pathTo(groupA, "O"), pathTo(groupB, "O")),
-				new AtomDistanceDescription(1, pathTo(groupC, "O"), pathTo(groupD, "O"))
+				new AtomDistanceDescription(distance, pathTo(groupA, "N"), pathTo(groupB, "CA")),
+				new AtomDistanceDescription(distance, pathTo(groupC, "C"), pathTo(groupD, "O"))
 		);
 		
 		List<Operator> pipeline = new Planner().plan(chainDescription);

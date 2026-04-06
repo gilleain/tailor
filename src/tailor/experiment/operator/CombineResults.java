@@ -74,6 +74,7 @@ public class CombineResults extends AbstractOperator {
     	System.out.println("Combining " + seqin);
         List<Result> listout = new ArrayList<>();
         rloop(seqin, listout, new ArrayList<>(), 0);
+        System.out.println("Combined " + listout);
         return listout;
     }
 
@@ -83,10 +84,10 @@ public class CombineResults extends AbstractOperator {
             for (Result item : nextList) {
                 
                 if (isSameGroup(combinations, item)) {
-//                	System.out.println("NOT Adding " + item + " to " + combinations);
+                	System.out.println("NOT Adding " + item + " to " + combinations);
                 } else {
                 	List<Result> newcombinations = new ArrayList<>(combinations);
-//	                System.out.println("Adding " + item + " to " + newcombinations);
+	                System.out.println("Adding " + item + " to " + newcombinations);
 	                newcombinations.add(item);
 	                rloop(seqin, listout, newcombinations, index + 1);
                 }
