@@ -14,16 +14,7 @@ public class FilterAtomResultByCondition extends AbstractPipeableOperator {
 	 */
 	public record ConditionMatcher(AtomListCondition condition, AtomMatcher matcher) {}
 	
-	private AtomListCondition condition;
-	
-	private AtomMatcher matcher;
-	
 	private List<ConditionMatcher> conditionMatchers;
-	
-	public FilterAtomResultByCondition(AtomListCondition condition, AtomMatcher matcher) {
-		this.condition = condition;
-		this.matcher = matcher;
-	}
 	
 	public FilterAtomResultByCondition(List<ConditionMatcher> conditionMatchers) {
 		this.conditionMatchers = conditionMatchers;
@@ -40,6 +31,7 @@ public class FilterAtomResultByCondition extends AbstractPipeableOperator {
 				}
 			}
 			if (isAccepted) {
+				System.out.println("Filtering IN " + nextResult);
 				sink.put(nextResult);
 			}
 		}
@@ -59,20 +51,6 @@ public class FilterAtomResultByCondition extends AbstractPipeableOperator {
 		return isMatch;
 	}
 
-
-//	public void run() {
-//		while (source.hasNext()) {
-//			Result nextResult = source.getNext();
-//			for (List<Atom> match : matcher.extract(nextResult)) {
-//				System.out.println("Checking " + match + " from " + nextResult);
-//				if (condition.accept(match)) {
-//					sink.put(nextResult);
-//				} else {
-//					System.out.println("Filtering OUT " + nextResult);
-//				}
-//			}
-//		}
-//	}
 
 	@Override
 	public String description() {

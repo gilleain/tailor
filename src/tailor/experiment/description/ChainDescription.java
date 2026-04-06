@@ -31,10 +31,6 @@ public class ChainDescription {
 		this.groupDescriptions.add(groupDescription);
 	}
 	
-	public void addAtomSetDescription(AtomListDescription atomSetDescription) {
-		this.atomListDescriptions.add(atomSetDescription);
-	}
-	
 	public Optional<String> getLabel() {
 		return label;
 	}
@@ -49,6 +45,10 @@ public class ChainDescription {
 
 	public void addGroupDescriptions(GroupDescription... groups) {
 		this.groupDescriptions.addAll(Arrays.asList(groups));
+	}
+
+	public void addAtomListDescriptions(AtomListDescription... atomListDescription) {
+		this.atomListDescriptions.addAll(Arrays.asList(atomListDescription));
 	}
  
 }
