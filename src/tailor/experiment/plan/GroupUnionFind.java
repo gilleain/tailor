@@ -2,9 +2,11 @@ package tailor.experiment.plan;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import tailor.experiment.api.AtomListDescription;
 import tailor.experiment.description.GroupDescription;
@@ -17,7 +19,7 @@ import tailor.experiment.description.GroupDescription;
  */
 public class GroupUnionFind {
 	
-	public record Component(List<GroupDescription> groupDescriptions, List<AtomListDescription> atomListDescriptions) {}
+	public record Component(List<GroupDescription> groupDescriptions, Set<AtomListDescription> atomListDescriptions) {}
 
     // Maps each group to its current root (parent). LinkedHashMap preserves
     // insertion order so component lists come out in a predictable sequence.
@@ -99,8 +101,8 @@ public class GroupUnionFind {
         return buckets.values().stream().map(c -> new Component(c, get(c))).toList();
     }
 
-	private List<AtomListDescription> get(List<GroupDescription> component) {
-		List<AtomListDescription> atomListDescriptions = new ArrayList<>();
+	private Set<AtomListDescription> get(List<GroupDescription> component) {
+		Set<AtomListDescription> atomListDescriptions = new HashSet<>();
 		for (GroupDescription groupDescription : component) {
 			if (groupDescriptionToAtomListDescriptionMap.containsKey(groupDescription)) {
 				atomListDescriptions.add(groupDescriptionToAtomListDescriptionMap.get(groupDescription));

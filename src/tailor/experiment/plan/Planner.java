@@ -2,8 +2,10 @@ package tailor.experiment.plan;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.Stack;
 
 import tailor.experiment.api.AtomListDescription;
@@ -43,7 +45,7 @@ public class Planner {
 		
 		// Extract and categorise the atom list descriptions
 		Map<AtomListDescription, List<GroupDescription>> outerGroupDescriptions = new HashMap<>();
-		Map<GroupDescription, List<AtomListDescription>> innerGroupDescriptions = new HashMap<>();
+		Map<GroupDescription, Set<AtomListDescription>> innerGroupDescriptions = new HashMap<>();
 		for (AtomListDescription atomListDescription : chainDescription.getAtomListDescriptions()) {
 			// check to see if the sub-descriptions are in the same group
 			if (atomListDescription.isForSameGroup()) {
@@ -52,7 +54,7 @@ public class Planner {
 				if (innerGroupDescriptions.containsKey(groupDescription)) {
 					innerGroupDescriptions.get(groupDescription).add(atomListDescription);
 				} else {
-					List<AtomListDescription> atomListDescriptions = new ArrayList<>();
+					Set<AtomListDescription> atomListDescriptions = new HashSet<>();
 					innerGroupDescriptions.put(groupDescription, atomListDescriptions);
 					atomListDescriptions.add(atomListDescription);
 				}
@@ -70,7 +72,7 @@ public class Planner {
 	private Operator join(
 			List<Operator> pipeline, 
 			ChainDescription chainDescription,
-			Map<GroupDescription, List<AtomListDescription>> innerGroupDescriptions,
+			Map<GroupDescription, Set<AtomListDescription>> innerGroupDescriptions,
 			Map<AtomListDescription, List<GroupDescription>> outerGroupDescriptions, 
 			Map<GroupDescription, PipeableOperator<Result, Result>> scannerMap) {
 		
@@ -93,7 +95,7 @@ public class Planner {
 
 				// for groups that have inner conditions, create a filter and connect to the scanner
 				if (innerGroupDescriptions.containsKey(groupDescription)) {
-					List<AtomListDescription> atomListDescriptions = innerGroupDescriptions.get(groupDescription);
+					Set<AtomListDescription> atomListDescriptions = innerGroupDescriptions.get(groupDescription);
 					ResultPipe filterOutput = addInnerFilter(scannerOutput, atomListDescriptions, pipeline);
 					componentOutputResultPipes.add(filterOutput);
 				} else {
@@ -106,8 +108,8 @@ public class Planner {
 				CombineResults combiner = new CombineResults(getOperatorId(), componentOutputResultPipes, combinedOutput);
 				pipeline.add(combiner);
 				
-				List<AtomListDescription> atomListDescriptions = component.atomListDescriptions();
-				if (component.atomListDescriptions().size() > 1) {	// trivially, this should always be true
+				Set<AtomListDescription> atomListDescriptions = component.atomListDescriptions();
+				if (!component.atomListDescriptions().isEmpty()) {	// trivially, this should always be true
 					ResultPipe filterOutput = addOuterFilter(combinedOutput, atomListDescriptions, pipeline);
 					combinedOutputPipes.add(filterOutput);
 				} else {
@@ -134,7 +136,7 @@ public class Planner {
 	}
 	
 	// TODO - merge these inner/outer methods
-	private ResultPipe addOuterFilter(ResultPipe previousOutput, List<AtomListDescription> atomListDescriptions, List<Operator> pipeline) {
+	private ResultPipe addOuterFilter(ResultPipe previousOutput, Set<AtomListDescription> atomListDescriptions, List<Operator> pipeline) {
 		FilterAtomResultByCondition filter = createMultiFilter(atomListDescriptions);
 		filter.setSource(previousOutput);
 		Source<Result> filterOutput = filter.getSinkAsSource();
@@ -142,7 +144,7 @@ public class Planner {
 		return (ResultPipe) filterOutput;
 	}
 	
-	private FilterAtomResultByCondition createMultiFilter(List<AtomListDescription> atomListDescriptions) {
+	private FilterAtomResultByCondition createMultiFilter(Set<AtomListDescription> atomListDescriptions) {
 		List<ConditionMatcher> conditionMatchers = new ArrayList<>();
 		for (AtomListDescription atomListDescription : atomListDescriptions) {
 			conditionMatchers.add(new ConditionMatcher(atomListDescription.makeCondition(), atomListDescription.createMatcher()));
@@ -163,7 +165,7 @@ public class Planner {
 	 * @param pipeline the pipeline so far
 	 * @return the output pipe from the filter
 	 */
-	private ResultPipe addInnerFilter(ResultPipe previousOutput, List<AtomListDescription> atomListDescriptions, List<Operator> pipeline) {
+	private ResultPipe addInnerFilter(ResultPipe previousOutput, Set<AtomListDescription> atomListDescriptions, List<Operator> pipeline) {
 		FilterAtomResultByCondition filter = createMultiFilter(atomListDescriptions);
 		filter.setSource(previousOutput);
 		Source<Result> filterOutput = filter.getSinkAsSource();

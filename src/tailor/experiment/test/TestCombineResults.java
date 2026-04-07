@@ -22,8 +22,8 @@ public class TestCombineResults {
 	 */
 	@Test
 	public void testCombineSingles() {
-		ResultPipe input1 = put(resultList().withGroups("GLY", "SER", "ASP").withAtom("N"));
-		ResultPipe input2 = put(resultList().withGroups("GLY", "SER", "ASP").withAtom("O"));
+		ResultPipe input1 = put(resultList().withGroups("GLY", "SER").withAtom("N"));
+		ResultPipe input2 = put(resultList().withGroups("GLY", "SER").withAtom("O"));
 		ResultPipe output = new ResultPipe();
 		
 		CombineResults combine = new CombineResults(ID, List.of(input1, input2), output);
