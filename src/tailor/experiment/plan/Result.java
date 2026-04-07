@@ -1,6 +1,7 @@
 package tailor.experiment.plan;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -102,16 +103,25 @@ public class Result {
 			for (Node atom : child.children) {
 				groupCopy.children.add(new Node(Level.ATOM, atom.o));
 			}
-			this.root.children.add(groupCopy);	
+			this.root.children.add(groupCopy);
+			// TODO - use a data structure that maintains sort order?
+			this.root.children.sort(groupComparator);
 		}
 		
 		return this;
 	}
 	
+	private Comparator<Node> groupComparator = new Comparator<Result.Node>() {
+		
+		@Override
+		public int compare(Node n, Node m) {
+			return ((Group)n.o).getNumber().compareTo(((Group)m.o).getNumber());
+		}
+	};
+	
 	public Result copy() {
 		Result copy = new Result();
 		copy.root = new Node(Level.CHAIN, this.root.o);
-		// merge anotherResult with this one
 		for (Node child : root.children) {
 			Node groupCopy = new Node(Level.RESIDUE, child.o);
 			for (Node atom : child.children) {
@@ -143,7 +153,7 @@ public class Result {
 		int numberOfChildren = this.root.children.size();
 		for (Node child : this.root.children) {
 			Group g = (Group)child.o;
-			output.append(g.getResidueName()).append(g.getResidueId().getResseq()).append("/");
+			output.append(g.getResidueName()).append(g.getNumber()).append("/");
 			addAtoms(child, output);
 			if (numberOfChildren > 0 && counter < numberOfChildren - 1) {
 				output.append("|");
@@ -174,8 +184,7 @@ public class Result {
 			Group gN = (Group) n.o;
 			for (Node m : result.root.children) {
 				Group gM = (Group) m.o;
-				if (gN.getResidueName().equals(gM.getResidueName()) 
-						&& gN.getResidueId().getResseq() == gM.getResidueId().getResseq()) {
+				if (gN.getResidueName().equals(gM.getResidueName()) && gN.getNumber() == gM.getNumber()) {
 					return true;
 				}
 			}

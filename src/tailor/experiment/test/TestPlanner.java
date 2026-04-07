@@ -119,7 +119,7 @@ public class TestPlanner {
 	
 	@Test
 	public void testOuterGroupFilteringDisconnectedPairs() {
-		double distance = 5.0;	// w/e
+		double distance = 30.0;	// w/e
 		ChainDescription chainDescription = new ChainDescription();
 		GroupDescription groupA = Helper.makeGroupDescription("N");
 		GroupDescription groupB = Helper.makeGroupDescription("CA");
@@ -133,11 +133,12 @@ public class TestPlanner {
 		
 		List<Operator> pipeline = new Planner().plan(chainDescription);
 		Helper.describe(pipeline);
-		Helper.run(Helper.makeData(List.of("GLY", "SER", "PRO")), pipeline);
+		Helper.run(Helper.makeData(List.of("GLY", "SER", "PRO", "HIS")), pipeline);
 	}
 	
 	@Test
 	public void testOuterGroupFilteringConnectedPairs() {
+		double distance = 10.0;	// w/e
 		ChainDescription chainDescription = new ChainDescription();
 		GroupDescription groupA = Helper.makeGroupDescription("N");
 		GroupDescription groupB = Helper.makeGroupDescription("CA");
@@ -145,9 +146,9 @@ public class TestPlanner {
 		GroupDescription groupD = Helper.makeGroupDescription("O");
 		chainDescription.addGroupDescriptions(groupA, groupB, groupC, groupD);
 		chainDescription.addAtomListDescriptions(
-				new AtomDistanceDescription(1, pathTo(groupA, "N"), pathTo(groupB, "CA")),
-				new AtomDistanceDescription(1, pathTo(groupB, "CA"), pathTo(groupC, "C")),
-				new AtomDistanceDescription(1, pathTo(groupC, "C"), pathTo(groupD, "O"))
+				new AtomDistanceDescription(distance, pathTo(groupA, "N"), pathTo(groupB, "CA")),
+				new AtomDistanceDescription(distance, pathTo(groupB, "CA"), pathTo(groupC, "C")),
+				new AtomDistanceDescription(distance, pathTo(groupC, "C"), pathTo(groupD, "O"))
 		);
 		
 		List<Operator> pipeline = new Planner().plan(chainDescription);

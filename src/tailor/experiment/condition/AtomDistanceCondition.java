@@ -17,7 +17,9 @@ public class AtomDistanceCondition implements AtomListCondition {
 	}
 	
 	public boolean accept(Atom a, Atom b) {
-		return adm.measure(a, b) < distance;
+		double actualDistance = adm.measure(a, b);
+		System.out.println("Distance " + actualDistance + ((actualDistance < distance)? " < " : " > ") + distance);
+		return actualDistance < distance;
 	}
 	
 	public boolean accept(List<Atom> atoms) {

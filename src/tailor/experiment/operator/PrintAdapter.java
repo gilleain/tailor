@@ -18,8 +18,10 @@ public class PrintAdapter extends AbstractOperator {
 
 	@Override
 	public void run() {
+		int count = 1;
 		while (input.hasNext()) {
-			System.out.println(input.getNext());
+			System.out.println(count + "\t" + input.getNext());
+			count++;
 		}
 	}
 

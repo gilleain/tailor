@@ -75,6 +75,10 @@ public class Group implements Structure {
         return level;
     }
     
+    public Integer getNumber() {
+    	return this.residueId.getResseq();
+    }
+    
     public ResidueID getResidueId() {
     	return this.residueId;
     }
@@ -104,13 +108,9 @@ public class Group implements Structure {
     public String getName() {
         return id;
     }
-    
-    public int getNumber() {
-        return number;
-    }
 
     public void setNumber(int number) {
-        this.number = number;
+        this.residueId = new ResidueID(number, "");	// TODO
     }
 
     public List<Atom> getAtoms() {

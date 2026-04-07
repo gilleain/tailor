@@ -102,7 +102,7 @@ public class CombineResults extends AbstractOperator {
     private static boolean containedIn(Result result, List<Result> combination) {
     	// this is a bit odd - checking that _none_ of the results in combo have the same group
     	for (Result other : combination) {
-    		if (result.equals(other)) {
+    		if (result.hasSameGroup(other)) {
     			return true;
     		}
     	}
