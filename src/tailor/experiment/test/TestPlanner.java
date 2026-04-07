@@ -38,12 +38,82 @@ public class TestPlanner {
 	}
 	
 	/**
+	 * Make:
+	 * - THREE atoms, with different labels
+	 * - Attached to THREE residues 
+	 * - A condition between two atoms in DIFFERENT residues
+	 */
+	@Test
+	public void testTrioA() {
+		double distance = 10.0;
+		ChainDescription chainDescription = new ChainDescription();
+		GroupDescription groupA = Helper.makeGroupDescription("N");
+		GroupDescription groupB = Helper.makeGroupDescription("CA");
+		GroupDescription groupC = Helper.makeGroupDescription("C");
+		chainDescription.addGroupDescriptions(groupA, groupB, groupC);
+		chainDescription.addAtomListDescriptions(
+			new AtomDistanceDescription(distance, pathTo(groupA, "N"), pathTo(groupB, "CA"))
+	    );
+		
+		List<Operator> pipeline = new Planner().plan(chainDescription);
+		Helper.describe(pipeline);
+		
+		Helper.run(Helper.makeData(List.of("GLY", "SER", "PRO", "HIS")), pipeline);
+	}
+	
+	/**
+	 * Make:
+	 * - THREE atoms, with different labels
+	 * - Attached to TWO residues 
+	 * - A condition between two atoms in SAME residue
+	 */
+	@Test
+	public void testTrioB() {
+		double distance = 10.0;
+		ChainDescription chainDescription = new ChainDescription();
+		GroupDescription groupA = Helper.makeGroupDescription("N", "CA");
+		GroupDescription groupB = Helper.makeGroupDescription("C");
+		chainDescription.addGroupDescriptions(groupA, groupB);
+		chainDescription.addAtomListDescriptions(
+			new AtomDistanceDescription(distance, pathTo(groupA, "N"), pathTo(groupA, "CA"))
+	    );
+		
+		List<Operator> pipeline = new Planner().plan(chainDescription);
+		Helper.describe(pipeline);
+		
+		Helper.run(Helper.makeData(List.of("GLY", "SER", "PRO", "HIS")), pipeline);
+	}
+	
+	/**
+	 * Make:
+	 * - THREE atoms, with different labels
+	 * - Attached to TWO residues 
+	 * - A condition between two atoms in DIFFERENT residues
+	 */
+	@Test
+	public void testTrioC() {
+		double distance = 10.0;
+		ChainDescription chainDescription = new ChainDescription();
+		GroupDescription groupA = Helper.makeGroupDescription("N", "CA");
+		GroupDescription groupB = Helper.makeGroupDescription("C");
+		chainDescription.addGroupDescriptions(groupA, groupB);
+		chainDescription.addAtomListDescriptions(
+			new AtomDistanceDescription(distance, pathTo(groupA, "CA"), pathTo(groupB, "C"))
+	    );
+		
+		List<Operator> pipeline = new Planner().plan(chainDescription);
+		Helper.describe(pipeline);
+		
+		Helper.run(Helper.makeData(List.of("GLY", "SER", "PRO", "HIS")), pipeline);
+	}
+	
+	/**
 	 * - Create a description with one group and two atoms {N, CA}
 	 * - Add a distance description to the group
 	 */
 	@Test
 	public void testInnerGroupFilteringDistance() {
-		double distance = 5.0;	 // w/e
+		double distance = 7.0;	 // w/e
 		ChainDescription chainDescription = new ChainDescription();
 		GroupDescription groupA = Helper.makeGroupDescription("N", "CA");
 		chainDescription.addGroupDescription(groupA);
