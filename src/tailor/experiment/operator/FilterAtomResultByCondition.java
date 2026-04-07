@@ -4,8 +4,8 @@ import java.util.List;
 
 import tailor.experiment.api.AtomListCondition;
 import tailor.experiment.condition.AtomMatcher;
+import tailor.experiment.condition.AtomMatcher.Match;
 import tailor.experiment.plan.Result;
-import tailor.structure.Atom;
 
 public class FilterAtomResultByCondition extends AbstractPipeableOperator {
 	
@@ -33,18 +33,21 @@ public class FilterAtomResultByCondition extends AbstractPipeableOperator {
 			if (isAccepted) {
 				System.out.println("Filtering IN " + nextResult);
 				sink.put(nextResult);
+			} else {
+				System.out.println("Filtering OUT " + nextResult);
 			}
 		}
+			
 	}
 	
 	private boolean matches(Result result, ConditionMatcher conditionMatcher) {
 		boolean isMatch = true;
-		for (List<Atom> match : conditionMatcher.matcher().extract(result)) {
-			System.out.println("Checking " + match + " from " + result);
-			if (conditionMatcher.condition.accept(match)) {
-				//
+		for (Match match : conditionMatcher.matcher().extract(result)) {
+			System.out.print("Checking " + match + " from " + result);
+			if (conditionMatcher.condition.accept(match.getAtoms())) {
+				System.out.println(" Match");
 			} else {
-				System.out.println("Filtering OUT " + result);
+				System.out.println(" Filtering OUT " + result);
 				isMatch = false;
 			}
 		}

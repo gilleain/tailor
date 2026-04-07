@@ -82,9 +82,15 @@ public class ResultBuilder {
 					result.addAtomToGroup(group, new Atom(atomLabel));
 				}
 			} else {
-				assert atomLabels.size() == groups.size();	// should be one for each
-				for (int index = 0; index < atomLabels.size(); index++) {
-					result.addAtomToGroup(groups.get(index), new Atom(atomLabels.get(index)));
+				if (groups.size() == 1) {	// one group, multiple atoms
+					for (String atomLabel : atomLabels) {
+						result.addAtomToGroup(groups.get(0), new Atom(atomLabel));
+					}
+				} else {					// multiple groups, one atom each
+					assert atomLabels.size() == groups.size();
+					for (int index = 0; index < atomLabels.size(); index++) {
+						result.addAtomToGroup(groups.get(index), new Atom(atomLabels.get(index)));
+					}
 				}
 			}
 			
