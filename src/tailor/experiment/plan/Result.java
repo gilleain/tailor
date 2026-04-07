@@ -1,6 +1,7 @@
 package tailor.experiment.plan;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -31,12 +32,19 @@ public class Result {
 		this.root = null;
 	}
 	
-	public Result(Chain chain, Group group) {
+	public Result(Chain chain, Group... groups) {
+		this(chain, Arrays.asList(groups));
+	}
+		
+	public Result(Chain chain, List<Group> groups) {	
 		this.root = new Node(Level.CHAIN, chain);
-		Node groupNode = new Node(Level.RESIDUE, group);
-		this.root.children.add(groupNode);
-		for (Atom atom : group.getAtoms()) {
-			groupNode.children.add(new Node(Level.ATOM, atom));
+		for (Group group : groups) {
+			Node groupNode = new Node(Level.RESIDUE, group);
+			this.root.children.add(groupNode);
+			// Note this makes a ref to _every_ atom in the group
+			for (Atom atom : group.getAtoms()) {
+				groupNode.children.add(new Node(Level.ATOM, atom));
+			}
 		}
 	}
 	
@@ -190,6 +198,15 @@ public class Result {
 			}
 		}
 		return false;
+	}
+	
+	public void addAtomToGroup(Group group, Atom atom) {
+		for (Node groupNode : this.root.children) {
+			Group groupO = (Group)groupNode.o;
+			if (groupO == group) {
+				groupNode.children.add(new Node(Level.ATOM, atom));
+			}
+		}
 	}
 
 	public void addAtom(Atom atom) {
