@@ -207,7 +207,7 @@ public class TestPlanner {
 	}
 	
 	@Test
-	public void testOuterGroupFilteringConnectedPairs() {
+	public void testOuterGroupFilteringConnectedPairsDistinctLabels() {
 		double distance = 10.0;	// w/e
 		ChainDescription chainDescription = new ChainDescription();
 		GroupDescription groupA = Helper.makeGroupDescription("N");
@@ -225,6 +225,24 @@ public class TestPlanner {
 		Helper.describe(pipeline);
 		
 		Helper.run(Helper.makeData(List.of("GLY", "SER", "PRO", "HIS")), pipeline);
+	}
+	
+	@Test
+	public void testInnerGroupFilteringConnectedPairsSimilarLabels() {
+		double distance = 10.0;	// w/e
+		ChainDescription chainDescription = new ChainDescription();
+		GroupDescription groupA = Helper.makeGroupDescription("N", "O");
+		GroupDescription groupB = Helper.makeGroupDescription("N", "O");
+		chainDescription.addGroupDescriptions(groupA, groupB);
+		chainDescription.addAtomListDescriptions(
+				new AtomDistanceDescription(distance, pathTo(groupA, "N"), pathTo(groupA, "O")),
+				new AtomDistanceDescription(distance, pathTo(groupB, "N"), pathTo(groupB, "O"))
+		);
+		
+		List<Operator> pipeline = new Planner().plan(chainDescription);
+		Helper.describe(pipeline);
+		
+		Helper.run(Helper.makeData(List.of("GLY", "SER", "PRO")), pipeline);
 	}
 
 }

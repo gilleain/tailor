@@ -109,10 +109,10 @@ public class PDBReader {
 	    
 	    public static Group createResidue(int residueNumber, String residueName, int chainIndex) {
 //            System.out.println("residue " + residueNumber + " " + residueName + " " + chainIndex);
-	    	Group residue = new Group();
+	    	Group residue = new Group(residueNumber, residueName);
             residue.setIndex(chainIndex);
-	    	residue.setNumber(residueNumber);
-	    	residue.setId(residueName);
+//	    	residue.setNumber(residueNumber);
+//	    	residue.setId(residueName);
 	    	return residue;
 	    }
 }
