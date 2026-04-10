@@ -45,7 +45,7 @@ public class TestFilter {
 		ResultPipe onPipe = new ResultPipe();
 		CombineResults combineON = new CombineResults("1", List.of(oPipe, nPipe), onPipe);
 		
-		AtomMatcher atomMatcher = new AtomMatcher(List.of("O", "N"));
+		AtomMatcher atomMatcher = new AtomMatcher(List.of(List.of("O", "N")));
 		AtomDistanceCondition condition = new AtomDistanceCondition(distance);
 		ConditionMatcher conditionMatchers = new ConditionMatcher(condition, atomMatcher);
 		FilterAtomResultByCondition filter = new FilterAtomResultByCondition(List.of(conditionMatchers));
@@ -72,7 +72,7 @@ public class TestFilter {
 		scanTriple.setSource(groupResultPipe);
 		scanTriple.setSink(triplePipe);
 		
-		AtomMatcher atomMatcher = new AtomMatcher(List.of("C", "CA", "N"));
+		AtomMatcher atomMatcher = new AtomMatcher(List.of(List.of("C", "CA", "N")));
 		AtomAngleCondition condition = new AtomAngleCondition(angle);
 		FilterAtomResultByCondition filter = new FilterAtomResultByCondition(List.of(new ConditionMatcher(condition, atomMatcher)));
 		filter.setSource(triplePipe);

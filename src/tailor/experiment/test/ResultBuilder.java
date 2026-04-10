@@ -18,26 +18,28 @@ public class ResultBuilder {
 
 		protected String chainLabel = "A";
 
-		protected List<Group> groups = new ArrayList<>();
+		protected List<List<Group>> groups = new ArrayList<>();
 
-		protected List<String> atomLabels = new ArrayList<>();
+		protected List<List<String>> atomLabels = new ArrayList<>();
 		
 		
 		protected T withGroups(String... groupLabels) {
+			List<Group> subGroupList = new ArrayList<>();
 			for (String groupLabel : groupLabels) {
-				groups.add(new Group(counter, groupLabel));
+				subGroupList.add(new Group(counter, groupLabel));
 				counter++;
 			}
+			groups.add(subGroupList);
 			return (T) this;
 		}
 		
 		protected T withAtom(String atomLabel) {
-			this.atomLabels.add(atomLabel);
+			this.atomLabels.add(List.of(atomLabel));
 			return (T) this;
 		}
 		
 		protected T withAtoms(String... atomLabels) {
-			this.atomLabels.addAll(Arrays.asList(atomLabels));
+			this.atomLabels.add(Arrays.asList(atomLabels));
 			return (T) this;
 		}
 	}
@@ -48,18 +50,14 @@ public class ResultBuilder {
 			List<Result> results = new ArrayList<>();
 			
 			Chain chain = new Chain(chainLabel);
-			if (atomLabels.size() == 1) {
-				// All the same atom
-				String atomLabel = atomLabels.get(0);
-				for (Group group : groups) {
-					results.add(new Result(chain, group, new Atom(atomLabel)));
-				}
-			} else {
-				assert atomLabels.size() == groups.size();	// should be one for each
-				for (int index = 0; index < atomLabels.size(); index++) {
-					results.add( new Result(chain, groups.get(index), new Atom(atomLabels.get(index))));
-				}
+			assert atomLabels.size() == groups.size();	// should be one set of atoms for each group
+				
+			for (List<Group> subGroupList : groups) {
+				Group firstGroup = subGroupList.get(0);
+				List<Atom> atomsForGroup = atomLabels.get(0).stream().map(Atom::new).toList();
+				results.add(new Result(chain, firstGroup, atomsForGroup));
 			}
+				
 			
 			return results;
 		}
@@ -74,24 +72,17 @@ public class ResultBuilder {
 		}
 		
 		public Result build() {
-			Result result = new Result(new Chain(chainLabel), groups);
-			if (atomLabels.size() == 1) {
-				// All the same atom
-				String atomLabel = atomLabels.get(0);
-				for (Group group : groups) {
-					result.addAtomToGroup(group, new Atom(atomLabel));
+			Result result = new Result(new Chain(chainLabel));
+			
+			assert atomLabels.size() == groups.size();	// should be one set of atoms for each group
+				
+			int index = 0;
+			for (List<Group> subGroupList : groups) {
+				for (Group group : subGroupList) {
+					List<Atom> atomsForGroup = atomLabels.get(index).stream().map(Atom::new).toList();
+					result.add(group, atomsForGroup);
 				}
-			} else {
-				if (groups.size() == 1) {	// one group, multiple atoms
-					for (String atomLabel : atomLabels) {
-						result.addAtomToGroup(groups.get(0), new Atom(atomLabel));
-					}
-				} else {					// multiple groups, one atom each
-					assert atomLabels.size() == groups.size();
-					for (int index = 0; index < atomLabels.size(); index++) {
-						result.addAtomToGroup(groups.get(index), new Atom(atomLabels.get(index)));
-					}
-				}
+				index++;
 			}
 			
 			return result;

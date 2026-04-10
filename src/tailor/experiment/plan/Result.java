@@ -56,6 +56,16 @@ public class Result {
 		groupNode.children.add(new Node(Level.ATOM, atom));
 	}
 	
+	public Result(Chain chain, Group group, List<Atom> atoms) {
+		// ... 
+		this.root = new Node(Level.CHAIN, chain);
+		Node groupNode = new Node(Level.RESIDUE, group);
+		this.root.children.add(groupNode);
+		for (Atom atom : atoms) {
+			groupNode.children.add(new Node(Level.ATOM, atom));
+		}
+	}
+	
 	public List<Atom> getAtoms() {
 		// TODO - does this make sense?
 		List<Atom> atoms = new ArrayList<>();
@@ -65,6 +75,19 @@ public class Result {
 			}
 		}
 		return atoms;
+	}
+	
+
+	public List<List<Atom>> getAtomPartition() {
+		List<List<Atom>> atomPartition = new ArrayList<>();
+		for (Node groupNode : this.root.children) {
+			List<Atom> atoms = new ArrayList<>();
+			for (Node atomNode : groupNode.children) {
+				atoms.add((Atom)atomNode.o);
+			}
+			atomPartition.add(atoms);
+		}
+		return atomPartition;
 	}
 	
 	public List<Group> getGroups() {
@@ -216,6 +239,14 @@ public class Result {
 		return false;
 	}
 	
+	public void add(Group group, List<Atom> atoms) {
+		Node groupNode = new Node(Level.RESIDUE, group);
+		this.root.children.add(groupNode);
+		for (Atom atom : atoms) {
+			groupNode.children.add(new Node(Level.ATOM, atom));
+		}
+	}
+	
 	public void addAtomToGroup(Group group, Atom atom) {
 		for (Node groupNode : this.root.children) {
 			Group groupO = (Group)groupNode.o;
@@ -230,4 +261,5 @@ public class Result {
 		Node groupNode = this.root.children.get(0);
 		groupNode.children.add(new Node(Level.ATOM, atom));
 	}
+
 }

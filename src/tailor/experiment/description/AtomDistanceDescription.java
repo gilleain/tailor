@@ -1,10 +1,7 @@
 package tailor.experiment.description;
 
-import java.util.List;
-
 import tailor.experiment.api.AtomListCondition;
 import tailor.experiment.condition.AtomDistanceCondition;
-import tailor.experiment.condition.AtomMatcher;
 
 public class AtomDistanceDescription extends AtomPairDescription {
 	
@@ -24,13 +21,5 @@ public class AtomDistanceDescription extends AtomPairDescription {
 	public AtomListCondition createCondition() {
 		return new AtomDistanceCondition(getDistance());
 	}
-
-	@Override
-	public AtomMatcher createMatcher() {
-		List<String> labels = List.of(
-				getAtomDescriptionA().getAtomDescription().getLabel(),
-				getAtomDescriptionB().getAtomDescription().getLabel());
-		return new AtomMatcher(labels);
-	}
-
+	
 }

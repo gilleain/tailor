@@ -20,10 +20,19 @@ public class AtomMatcher {
 			}	
 		}
 		
-		public boolean set(int index, String atomLabel, List<Atom> resultAtoms) {
+		/**
+		 * @param partIndex the index of the part within the partition (equivalent to the group)
+		 * @param labelIndex the index of the atomLabel within the part
+		 * @param outIndex the final index in the match
+		 * @param atomLabel the atom label
+		 * @param resultAtomPartition the atoms to match against
+		 * @return
+		 */
+		public boolean set(int partIndex, int labelIndex, int outIndex, String atomLabel, List<List<Atom>> resultAtomPartition) {
+			List<Atom> resultAtoms = resultAtomPartition.get(partIndex);
 			for (Atom atom : resultAtoms) {
 				if (atom.getName().equals(atomLabel)) {
-					this.atoms.set(index, atom);
+					this.atoms.set(outIndex, atom);
 					return true;
 				}
 			}
@@ -53,9 +62,11 @@ public class AtomMatcher {
 		}
 	}
 	
-	private List<String> atomLabels; // TODO - this is implicitly in order - might want to make that explicit
+	private List<List<String>> atomLabels; // TODO - this is implicitly in order - might want to make that explicit
 	
-	public AtomMatcher(List<String> atomLabels) {
+	public AtomMatcher(List<List<String>> atomLabels) {
+		// this is a partition of the atom labels by residue group
+		// TODO - ordered parts of the partition ... which is also ordered?
 		this.atomLabels = atomLabels;
 	}
 
@@ -72,17 +83,26 @@ public class AtomMatcher {
 	}
 	
 	private Match findMatch(Result result) {
-		Match match = new Match(atomLabels.size());
-		List<Atom> resultAtoms = result.getAtoms();
-		for (int labelIndex = 0; labelIndex < atomLabels.size(); labelIndex++) {
-			String atomLabel = atomLabels.get(labelIndex);
-			// Check that we can find a matching atom in the result atoms
-			boolean isSet = match.set(labelIndex, atomLabel, resultAtoms);
-			if (!isSet) {
-				System.out.println("No match " + match + " for " + result);
-				return match;
-			}
+		int numberOfAtoms = atomLabels.stream().map(List::size).reduce(0, Integer::sum);
+		Match match = new Match(numberOfAtoms);
+		List<List<Atom>> resultAtoms = result.getAtomPartition();
+		
+		int outIndex = 0;
+		for (int partIndex = 0; partIndex < atomLabels.size(); partIndex++) {
+			List<String> part = atomLabels.get(partIndex);
+			for (int labelIndex = 0; labelIndex < part.size(); labelIndex++) {
+				String atomLabel = part.get(labelIndex);
+				// Check that we can find a matching atom in the result atoms
+				boolean isSet = match.set(partIndex, labelIndex, outIndex, atomLabel, resultAtoms);
+				if (!isSet) {
+					System.out.println("No match " + match + " for " + result);
+					return match;
+				}
+				outIndex++;
+			}	
 		}
+		
+		
 		return match.setComplete();
 	}
 }

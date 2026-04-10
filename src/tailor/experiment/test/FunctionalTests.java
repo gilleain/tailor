@@ -10,6 +10,7 @@ import org.junit.Test;
 
 import tailor.datasource.PDBReader;
 import tailor.experiment.api.Operator;
+import tailor.experiment.description.AtomAngleDescription;
 import tailor.experiment.description.AtomDistanceDescription;
 import tailor.experiment.description.AtomDistanceRangeDescription;
 import tailor.experiment.description.ChainDescription;
@@ -30,14 +31,14 @@ public class FunctionalTests {
 		double minDistance = 2.8;
 		double maxDistance = 3.2;
 		ChainDescription chainDescription = new ChainDescription();
-		GroupDescription groupA = Helper.makeGroupDescription("O");
-//		GroupDescription groupB = Helper.makeGroupDescription("C", "O");
+		GroupDescription groupA = Helper.makeGroupDescription("C", "O");
 		GroupDescription groupB = Helper.makeGroupDescription("N");
+//		GroupDescription groupB = Helper.makeGroupDescription("N");
 		chainDescription.addGroupDescriptions(groupA, groupB);
 		chainDescription.addAtomListDescriptions(
 				new AtomDistanceRangeDescription(minDistance, maxDistance, pathTo(groupA, "O"), pathTo(groupB, "N"))
-//				,
-//				new AtomAngleDescription(angle, pathTo(groupA, "N"), pathTo(groupB, "O"), pathTo(groupB, "C"))
+				,
+				new AtomAngleDescription(angle, pathTo(groupA, "C"), pathTo(groupA, "O"), pathTo(groupB, "N"))
 		);
 		
 		run(filename, chainDescription);
