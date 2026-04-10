@@ -11,6 +11,7 @@ import org.junit.Test;
 import tailor.datasource.PDBReader;
 import tailor.experiment.api.Operator;
 import tailor.experiment.description.AtomDistanceDescription;
+import tailor.experiment.description.AtomDistanceRangeDescription;
 import tailor.experiment.description.ChainDescription;
 import tailor.experiment.description.GroupDescription;
 import tailor.experiment.plan.Planner;
@@ -26,14 +27,15 @@ public class FunctionalTests {
 		String filename = "helix.pdb";
 		
 		double angle = 180;
-		double distance = 3.0;
+		double minDistance = 2.8;
+		double maxDistance = 3.2;
 		ChainDescription chainDescription = new ChainDescription();
 		GroupDescription groupA = Helper.makeGroupDescription("O");
 //		GroupDescription groupB = Helper.makeGroupDescription("C", "O");
 		GroupDescription groupB = Helper.makeGroupDescription("N");
 		chainDescription.addGroupDescriptions(groupA, groupB);
 		chainDescription.addAtomListDescriptions(
-				new AtomDistanceDescription(distance, pathTo(groupA, "O"), pathTo(groupB, "N"))
+				new AtomDistanceRangeDescription(minDistance, maxDistance, pathTo(groupA, "O"), pathTo(groupB, "N"))
 //				,
 //				new AtomAngleDescription(angle, pathTo(groupA, "N"), pathTo(groupB, "O"), pathTo(groupB, "C"))
 		);
