@@ -61,7 +61,7 @@ public class AtomAngleDescription implements AtomListDescription {
 	}
 
 	@Override
-	public AtomListCondition makeCondition() {
+	public AtomListCondition createCondition() {
 		return new AtomAngleCondition(getAngle());
 	}
 	

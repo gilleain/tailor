@@ -28,7 +28,7 @@ public interface AtomListDescription {
 	/**
 	 * @return the corresponding condition for this description
 	 */
-	AtomListCondition makeCondition();
+	AtomListCondition createCondition();
 	
 	/**
 	 * @return an atom matcher for this description

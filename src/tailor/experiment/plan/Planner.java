@@ -147,7 +147,7 @@ public class Planner {
 	private FilterAtomResultByCondition createMultiFilter(Set<AtomListDescription> atomListDescriptions) {
 		List<ConditionMatcher> conditionMatchers = new ArrayList<>();
 		for (AtomListDescription atomListDescription : atomListDescriptions) {
-			conditionMatchers.add(new ConditionMatcher(atomListDescription.makeCondition(), atomListDescription.createMatcher()));
+			conditionMatchers.add(new ConditionMatcher(atomListDescription.createCondition(), atomListDescription.createMatcher()));
 		}
 		FilterAtomResultByCondition filter = new FilterAtomResultByCondition(conditionMatchers);
 		filter.setId(getOperatorId());
