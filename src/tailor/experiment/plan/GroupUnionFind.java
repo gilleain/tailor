@@ -20,12 +20,12 @@ import tailor.experiment.description.GroupDescription;
 public class GroupUnionFind {
 	
 	public record Component(List<GroupDescription> groupDescriptions, Set<AtomListDescription> atomListDescriptions) {}
-
+	
     // Maps each group to its current root (parent). LinkedHashMap preserves
     // insertion order so component lists come out in a predictable sequence.
     private final Map<GroupDescription, GroupDescription> parent = new LinkedHashMap<>();
     
-    private final Map<GroupDescription, AtomListDescription> groupDescriptionToAtomListDescriptionMap = new HashMap<>();
+    private final Map<GroupDescription, List<AtomListDescription>> groupDescriptionToAtomListDescriptionMap = new HashMap<>();
 
     public GroupUnionFind(List<GroupDescription> groups) {
         for (GroupDescription group : groups) {
@@ -40,9 +40,8 @@ public class GroupUnionFind {
      */
     public void union(List<AtomListDescription> descriptions) {
         for (AtomListDescription description : descriptions) {
-            List<GroupDescription> groups = description.getGroupDescriptions();
-            groups.stream()
-            	  .forEach(g -> groupDescriptionToAtomListDescriptionMap.put(g, description));
+        	List<GroupDescription> groups = description.getGroupDescriptions();
+            add(description, groups);
             
             // Union every group in the hyperedge with the first — transitivity
             // of union ensures all groups in the edge land in one component.
@@ -51,6 +50,19 @@ public class GroupUnionFind {
                 union(pivot, groups.get(i));
             }
         }
+    }
+    
+    private void add(AtomListDescription description, List<GroupDescription> groups) {
+         for (GroupDescription groupDescription : groups) {
+         	List<AtomListDescription> atomListDescriptions;
+         	if (groupDescriptionToAtomListDescriptionMap.containsKey(groupDescription)) {
+         		atomListDescriptions = groupDescriptionToAtomListDescriptionMap.get(groupDescription);
+         	} else {
+         		atomListDescriptions = new ArrayList<>();
+         		groupDescriptionToAtomListDescriptionMap.put(groupDescription, atomListDescriptions);
+         	}
+         	atomListDescriptions.add(description);
+         }
     }
 
     /** Find the root of {@code group}'s component, with path compression. */
@@ -105,7 +117,7 @@ public class GroupUnionFind {
 		Set<AtomListDescription> atomListDescriptions = new HashSet<>();
 		for (GroupDescription groupDescription : component) {
 			if (groupDescriptionToAtomListDescriptionMap.containsKey(groupDescription)) {
-				atomListDescriptions.add(groupDescriptionToAtomListDescriptionMap.get(groupDescription));
+				atomListDescriptions.addAll(groupDescriptionToAtomListDescriptionMap.get(groupDescription));
 			}
 		}
 		return atomListDescriptions;

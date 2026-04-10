@@ -11,6 +11,8 @@ import tailor.experiment.condition.AtomMatcher;
  */
 public abstract class AtomPairDescription implements AtomListDescription {
 	
+	
+
 	private final DescriptionPath atomDescriptionA;
 	
 	private final DescriptionPath atomDescriptionB;

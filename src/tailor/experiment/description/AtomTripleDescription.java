@@ -9,6 +9,7 @@ import tailor.experiment.condition.AtomMatcher;
 
 public abstract class AtomTripleDescription implements AtomListDescription {
 	
+	
 	private final DescriptionPath atomDescriptionA;
 	
 	private final DescriptionPath atomDescriptionB;
@@ -85,5 +86,4 @@ public abstract class AtomTripleDescription implements AtomListDescription {
 				.map(AtomDescription::getLabel)
 				.toList();
 	}
-
 }

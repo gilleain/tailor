@@ -20,9 +20,10 @@ public class AtomAngleRangeCondition implements AtomListCondition {
 	
 	public boolean accept(Atom a, Atom b, Atom c) {
 		double actualAngle = aam.measure(a, b, c);
-		System.out.println("Angle between" 
+		boolean isInRange = minAngle < actualAngle && actualAngle < maxAngle;
+		System.out.println("Angle " + ((isInRange)? "IS" : "NOT") + " between " 
 				+ minAngle + op(minAngle, actualAngle) + actualAngle + op(actualAngle, maxAngle) + maxAngle);
-		return minAngle < actualAngle && actualAngle < maxAngle;
+		return isInRange;
 	}
 	
 	public boolean accept(List<Atom> atoms) {

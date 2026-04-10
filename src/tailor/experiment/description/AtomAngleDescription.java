@@ -21,4 +21,5 @@ public class AtomAngleDescription extends AtomTripleDescription {
 	public AtomListCondition createCondition() {
 		return new AtomAngleCondition(getAngle());
 	}
+	
 }

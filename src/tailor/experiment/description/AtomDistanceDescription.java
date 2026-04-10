@@ -16,10 +16,8 @@ public class AtomDistanceDescription extends AtomPairDescription {
 		return distance;
 	}
 
-
 	@Override
 	public AtomListCondition createCondition() {
 		return new AtomDistanceCondition(getDistance());
 	}
-	
 }

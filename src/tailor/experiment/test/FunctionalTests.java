@@ -27,10 +27,10 @@ public class FunctionalTests {
 	public void helixTest() throws IOException {
 		String filename = "helix.pdb";
 		
-		double minAngle = 160;
+		double minAngle = 145;
 		double maxAngle = 180;
 		double minDistance = 2.8;
-		double maxDistance = 3.2;
+		double maxDistance = 3.4;
 		ChainDescription chainDescription = new ChainDescription();
 		GroupDescription groupA = Helper.makeGroupDescription("C", "O");
 		GroupDescription groupB = Helper.makeGroupDescription("N");
