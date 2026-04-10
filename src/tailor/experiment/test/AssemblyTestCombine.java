@@ -11,7 +11,7 @@ import tailor.experiment.operator.ResultPipe;
 import tailor.experiment.operator.ScanAtomResultByLabel;
 import tailor.structure.Chain;
 
-public class TestCombine {
+public class AssemblyTestCombine {
 	
 	/**
 	 * - Scan for 'O' atoms and 'N' atoms

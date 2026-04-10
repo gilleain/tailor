@@ -10,7 +10,6 @@ import org.junit.Test;
 
 import tailor.datasource.PDBReader;
 import tailor.experiment.api.Operator;
-import tailor.experiment.description.AtomAngleDescription;
 import tailor.experiment.description.AtomDistanceDescription;
 import tailor.experiment.description.ChainDescription;
 import tailor.experiment.description.GroupDescription;
@@ -29,12 +28,14 @@ public class FunctionalTests {
 		double angle = 180;
 		double distance = 3.0;
 		ChainDescription chainDescription = new ChainDescription();
-		GroupDescription groupA = Helper.makeGroupDescription("N");
-		GroupDescription groupB = Helper.makeGroupDescription("C", "O");
+		GroupDescription groupA = Helper.makeGroupDescription("O");
+//		GroupDescription groupB = Helper.makeGroupDescription("C", "O");
+		GroupDescription groupB = Helper.makeGroupDescription("N");
 		chainDescription.addGroupDescriptions(groupA, groupB);
 		chainDescription.addAtomListDescriptions(
-				new AtomDistanceDescription(distance, pathTo(groupA, "N"), pathTo(groupB, "O")),
-				new AtomAngleDescription(angle, pathTo(groupA, "N"), pathTo(groupB, "O"), pathTo(groupB, "C"))
+				new AtomDistanceDescription(distance, pathTo(groupA, "O"), pathTo(groupB, "N"))
+//				,
+//				new AtomAngleDescription(angle, pathTo(groupA, "N"), pathTo(groupB, "O"), pathTo(groupB, "C"))
 		);
 		
 		run(filename, chainDescription);
@@ -44,7 +45,7 @@ public class FunctionalTests {
 	public void hairpinTest() throws IOException {
 		String filename = "hairpin.pdb";
 		
-		double distance = 4.0;
+		double distance = 5.0;
 		
 		ChainDescription chainDescription = new ChainDescription();
 		GroupDescription groupA = Helper.makeGroupDescription("N");

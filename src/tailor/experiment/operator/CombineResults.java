@@ -83,7 +83,7 @@ public class CombineResults extends AbstractOperator {
         	List<Result> nextList = seqin.get(index);
             for (Result item : nextList) {
                 
-                if (containedIn(item, combinations)) {
+                if (reject(item, combinations)) {
                 	System.out.println("NOT Adding " + item + " to " + combinations);
                 } else {
                 	List<Result> newcombinations = new ArrayList<>(combinations);
@@ -99,10 +99,11 @@ public class CombineResults extends AbstractOperator {
         }
     }
     
-    private static boolean containedIn(Result result, List<Result> combination) {
+    private static boolean reject(Result result, List<Result> combination) {
     	// this is a bit odd - checking that _none_ of the results in combo have the same group
     	for (Result other : combination) {
-    		if (result.hasSameGroup(other)) {
+    		// TODO - make this configurable? or actually 
+    		if (other.greaterThanOrEqual(result) || result.hasSameGroup(other)) {
     			return true;
     		}
     	}

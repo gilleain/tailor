@@ -186,11 +186,27 @@ public class Result {
 		}
 	}
 	
-	// TODO - simplify or ...
-	public boolean hasSameGroup(Result result) {
+	// Check the ordering of this Result compared to that
+	public boolean greaterThanOrEqual(Result other) {
+		// TODO combine with the hasSameGroup
+		// or .. do we even need to as same group would be equal?
 		for (Node n : this.root.children) {
 			Group gN = (Group) n.o;
-			for (Node m : result.root.children) {
+			for (Node m : other.root.children) {
+				Group gM = (Group) m.o;
+				if (gN.getNumber() >= gM.getNumber()) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+	
+	// TODO - simplify or ...
+	public boolean hasSameGroup(Result other) {
+		for (Node n : this.root.children) {
+			Group gN = (Group) n.o;
+			for (Node m : other.root.children) {
 				Group gM = (Group) m.o;
 				if (gN.getResidueName().equals(gM.getResidueName()) && gN.getNumber() == gM.getNumber()) {
 					return true;
@@ -214,5 +230,4 @@ public class Result {
 		Node groupNode = this.root.children.get(0);
 		groupNode.children.add(new Node(Level.ATOM, atom));
 	}
-
 }
