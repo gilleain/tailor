@@ -21,7 +21,7 @@ public class AtomDistanceRangeCondition implements AtomListCondition {
 	public boolean accept(Atom a, Atom b) {
 		double actualDistance = adm.measure(a, b);
 		System.out.println("Distance between" 
-				+ minDistance + op(minDistance, actualDistance) + actualDistance + op(actualDistance, maxDistance) + actualDistance);
+				+ minDistance + op(minDistance, actualDistance) + actualDistance + op(actualDistance, maxDistance) + maxDistance);
 		return minDistance < actualDistance && actualDistance < maxDistance;
 	}
 	
