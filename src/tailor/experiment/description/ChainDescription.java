@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Optional;
 
 import tailor.experiment.api.AtomListDescription;
+import tailor.experiment.description.group.GroupSequenceDescription;
 
 public class ChainDescription {
 	
@@ -16,6 +17,9 @@ public class ChainDescription {
 	
 	// Descriptions of relationships to find between the atoms across groups
 	private List<AtomListDescription> atomListDescriptions;
+	
+	// Descriptions of sequence relationships between the groups
+	private List<GroupSequenceDescription> groupSequenceDescriptions;
 
 	public ChainDescription() {
 		this(null);
@@ -49,6 +53,14 @@ public class ChainDescription {
 
 	public void addAtomListDescriptions(AtomListDescription... atomListDescription) {
 		this.atomListDescriptions.addAll(Arrays.asList(atomListDescription));
+	}
+	
+	public void addGroupSequenceDescriptions(GroupSequenceDescription... groupSequenceDescription) {
+		this.groupSequenceDescriptions.addAll(Arrays.asList(groupSequenceDescription));
+	}
+	
+	public List<GroupSequenceDescription> getGroupSequenceDescriptions() {
+		return this.groupSequenceDescriptions;
 	}
  
 }

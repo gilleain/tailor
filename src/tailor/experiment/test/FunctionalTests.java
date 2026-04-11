@@ -13,6 +13,7 @@ import tailor.experiment.description.GroupDescription;
 import tailor.experiment.description.atom.AtomAngleRangeDescription;
 import tailor.experiment.description.atom.AtomDistanceRangeDescription;
 import tailor.experiment.description.atom.AtomTorsionRangeDescription;
+import tailor.experiment.description.group.GroupSequenceDescription;
 import tailor.experiment.plan.Plan;
 import tailor.experiment.plan.Planner;
 import tailor.structure.Chain;
@@ -66,6 +67,8 @@ public class FunctionalTests {
 		GroupDescription groupB = Helper.makeGroupDescription("N", "CA", "C");
 		GroupDescription groupC = Helper.makeGroupDescription("N");
 		chainDescription.addGroupDescriptions(groupA, groupB, groupC);
+		chainDescription.addGroupSequenceDescriptions(
+				new GroupSequenceDescription(groupA, groupB, 1), new GroupSequenceDescription(groupB, groupC, 1));
 		chainDescription.addAtomListDescriptions(
 				new AtomTorsionRangeDescription(
 					minPhiAngle, maxPhiAngle, pathTo(groupA, "C"), pathTo(groupB, "N"), pathTo(groupB, "CA"), pathTo(groupB, "C")
