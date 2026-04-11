@@ -27,12 +27,16 @@ public class ChainDescription {
 		this.atomListDescriptions = new ArrayList<>();
 	}
 	
+	public Optional<String> getLabel() {
+		return label;
+	}
+
 	public void addGroupDescription(GroupDescription groupDescription) {
 		this.groupDescriptions.add(groupDescription);
 	}
-	
-	public Optional<String> getLabel() {
-		return label;
+
+	public void addGroupDescriptions(GroupDescription... groups) {
+		this.groupDescriptions.addAll(Arrays.asList(groups));
 	}
 
 	public List<GroupDescription> getGroupDescriptions() {
@@ -41,10 +45,6 @@ public class ChainDescription {
 
 	public List<AtomListDescription> getAtomListDescriptions() {
 		return atomListDescriptions;
-	}
-
-	public void addGroupDescriptions(GroupDescription... groups) {
-		this.groupDescriptions.addAll(Arrays.asList(groups));
 	}
 
 	public void addAtomListDescriptions(AtomListDescription... atomListDescription) {

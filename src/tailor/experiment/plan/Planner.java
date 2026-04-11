@@ -46,18 +46,20 @@ public class Planner {
 		// Extract and categorise the atom list descriptions
 		Map<AtomListDescription, List<GroupDescription>> outerGroupDescriptions = new HashMap<>();
 		Map<GroupDescription, Set<AtomListDescription>> innerGroupDescriptions = new HashMap<>();
+		
+		// Extract inner descriptions defined in group descriptions
+		for (GroupDescription groupDescription : chainDescription.getGroupDescriptions()) {
+			for (AtomListDescription atomListDescription : groupDescription.getAtomListDescriptions()) {
+				add(groupDescription, atomListDescription, innerGroupDescriptions);	
+			}
+		}
+		
+		// Extract and separate inner and outer atom list descriptions
 		for (AtomListDescription atomListDescription : chainDescription.getAtomListDescriptions()) {
 			// check to see if the sub-descriptions are in the same group
 			if (atomListDescription.isForSameGroup()) {
 				GroupDescription groupDescription = atomListDescription.getFirstGroupDescription();
-				// TODO - this should be a LIST of atomSetDescriptions, in case there are multiple!
-				if (innerGroupDescriptions.containsKey(groupDescription)) {
-					innerGroupDescriptions.get(groupDescription).add(atomListDescription);
-				} else {
-					Set<AtomListDescription> atomListDescriptions = new HashSet<>();
-					innerGroupDescriptions.put(groupDescription, atomListDescriptions);
-					atomListDescriptions.add(atomListDescription);
-				}
+				add(groupDescription, atomListDescription, innerGroupDescriptions);
 			} else {
 				outerGroupDescriptions.put(atomListDescription, atomListDescription.getGroupDescriptions());
 			}
@@ -67,6 +69,16 @@ public class Planner {
 		pipeline.add(join(pipeline, chainDescription, innerGroupDescriptions, outerGroupDescriptions, scannerMap));
 		
 		return pipeline;
+	}
+	
+	private void add(GroupDescription groupDescription, AtomListDescription atomListDescription, Map<GroupDescription, Set<AtomListDescription>> innerGroupDescriptions) {
+		if (innerGroupDescriptions.containsKey(groupDescription)) {
+			innerGroupDescriptions.get(groupDescription).add(atomListDescription);
+		} else {
+			Set<AtomListDescription> atomListDescriptions = new HashSet<>();
+			innerGroupDescriptions.put(groupDescription, atomListDescriptions);
+			atomListDescriptions.add(atomListDescription);
+		}
 	}
 	
 	private Operator join(

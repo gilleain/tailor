@@ -138,7 +138,7 @@ public class TestPlanner {
 		ChainDescription chainDescription = new ChainDescription();
 		GroupDescription groupA = Helper.makeGroupDescription("N", "CA", "C");
 		chainDescription.addGroupDescription(groupA);
-		chainDescription.addAtomListDescriptions(
+		groupA.addAtomListDescriptions(
 			new AtomAngleDescription(angle, pathTo(groupA, "N"), pathTo(groupA, "CA"), pathTo(groupA, "C"))
 		);
 		
