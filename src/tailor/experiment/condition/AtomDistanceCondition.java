@@ -1,12 +1,15 @@
 package tailor.experiment.condition;
 
 import java.util.List;
+import java.util.logging.Logger;
 
 import tailor.experiment.api.AtomListCondition;
 import tailor.experiment.measure.AtomDistanceMeasure;
 import tailor.structure.Atom;
 
 public class AtomDistanceCondition implements AtomListCondition {
+	
+	private Logger logger = Logger.getLogger(this.getClass().getName());
 	
 	private AtomDistanceMeasure adm;
 	private double distance;
@@ -18,7 +21,7 @@ public class AtomDistanceCondition implements AtomListCondition {
 	
 	public boolean accept(Atom a, Atom b) {
 		double actualDistance = adm.measure(a, b);
-		System.out.println("Distance " + actualDistance + ((actualDistance < distance)? " < " : " > ") + distance);
+		logger.fine("Distance " + actualDistance + ((actualDistance < distance)? " < " : " > ") + distance);
 		return actualDistance < distance;
 	}
 	

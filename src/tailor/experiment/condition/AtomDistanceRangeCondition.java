@@ -1,12 +1,15 @@
 package tailor.experiment.condition;
 
 import java.util.List;
+import java.util.logging.Logger;
 
 import tailor.experiment.api.AtomListCondition;
 import tailor.experiment.measure.AtomDistanceMeasure;
 import tailor.structure.Atom;
 
 public class AtomDistanceRangeCondition implements AtomListCondition {
+	
+	private Logger logger = Logger.getLogger(this.getClass().getName());
 	
 	private AtomDistanceMeasure adm;
 	private double minDistance;
@@ -21,7 +24,7 @@ public class AtomDistanceRangeCondition implements AtomListCondition {
 	public boolean accept(Atom a, Atom b) {
 		double actualDistance = adm.measure(a, b);
 		boolean isInRange = minDistance < actualDistance && actualDistance < maxDistance;
-		System.out.println("Distance " + ((isInRange)? "IS" : "NOT") +" between " 
+		logger.fine("Distance " + ((isInRange)? "IS" : "NOT") +" between " 
 				+ minDistance + op(minDistance, actualDistance) + actualDistance + op(actualDistance, maxDistance) + maxDistance);
 		return isInRange;
 	}

@@ -1,12 +1,15 @@
 package tailor.experiment.condition;
 
 import java.util.List;
+import java.util.logging.Logger;
 
 import tailor.experiment.api.AtomListCondition;
 import tailor.experiment.measure.AtomTorsionMeasure;
 import tailor.structure.Atom;
 
 public class AtomTorsionRangeCondition implements AtomListCondition {
+	
+	private Logger logger = Logger.getLogger(this.getClass().getName());
 	
 	private AtomTorsionMeasure atm;
 	private double minAngle;
@@ -27,7 +30,7 @@ public class AtomTorsionRangeCondition implements AtomListCondition {
 	public boolean accept(Atom a, Atom b, Atom c, Atom d) {
 		double actualAngle = atm.measure(a, b, c, d);
 		boolean isInRange = minAngle < actualAngle && actualAngle < maxAngle;
-		System.out.println("Angle " + ((isInRange)? "IS" : "NOT") + " between " 
+		logger.fine("Angle " + ((isInRange)? "IS" : "NOT") + " between " 
 				+ minAngle + op(minAngle, actualAngle) + actualAngle + op(actualAngle, maxAngle) + maxAngle);
 		return isInRange;
 	}

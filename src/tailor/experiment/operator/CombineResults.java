@@ -2,6 +2,7 @@ package tailor.experiment.operator;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 import tailor.experiment.api.Sink;
 import tailor.experiment.api.Source;
@@ -11,6 +12,8 @@ import tailor.experiment.plan.Result;
  * Combine the output from multiple sources, flattening them into a list of results.
  */
 public class CombineResults extends AbstractOperator {
+	
+	private static Logger logger = Logger.getLogger(CombineResults.class.getName());
 	
 	private List<ResultPipe> sources;
 	
@@ -51,9 +54,12 @@ public class CombineResults extends AbstractOperator {
 			sourceBuffers.add(getAll(source));
 		}
 		
+		int counter = 0;
 		for (Result mergedResult : combine(sourceBuffers)) {
 			output.put(mergedResult);
+			counter++;
 		}
+		logger.info(description() + " output " + counter + " results");
 	}
 	
 	private List<Result> getAll(Source<Result> source) {
@@ -71,10 +77,10 @@ public class CombineResults extends AbstractOperator {
      * For example: combine([1,2], [3,4]) returns [[1, 3], [1, 4], [2, 3], [2, 4]]
      */
     private static List<Result> combine(List<List<Result>> seqin) {
-    	System.out.println("Combining " + seqin);
+    	logger.fine("Combining " + seqin);
         List<Result> listout = new ArrayList<>();
         rloop(seqin, listout, new ArrayList<>(), 0);
-        System.out.println("Combined " + listout);
+        logger.fine("Combined " + listout);
         return listout;
     }
 
@@ -84,17 +90,17 @@ public class CombineResults extends AbstractOperator {
             for (Result item : nextList) {
                 
                 if (reject(item, combinations)) {
-                	System.out.println("NOT Adding " + item + " to " + combinations);
+                	logger.fine("NOT Adding " + item + " to " + combinations);
                 } else {
                 	List<Result> newcombinations = new ArrayList<>(combinations);
-	                System.out.println("Adding " + item + " to " + newcombinations);
+                	logger.fine("Adding " + item + " to " + newcombinations);
 	                newcombinations.add(item);
 	                rloop(seqin, listout, newcombinations, index + 1);
                 }
             }
         } else {
         	Result flattened = flatten(combinations);	// TODO - could also flatten as we go ...
-        	System.out.println("Flattening " + combinations + " to " + flattened);
+        	logger.fine("Flattening " + combinations + " to " + flattened);
             listout.add(flattened);
         }
     }
@@ -109,8 +115,6 @@ public class CombineResults extends AbstractOperator {
     	}
     	return false;
     }
-    
-    
     
     private static Result flatten(List<Result> combinations) {
     	Result mergedResult = combinations.get(0).copy();

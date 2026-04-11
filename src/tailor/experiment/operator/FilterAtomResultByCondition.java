@@ -1,6 +1,7 @@
 package tailor.experiment.operator;
 
 import java.util.List;
+import java.util.logging.Logger;
 
 import tailor.experiment.api.AtomListCondition;
 import tailor.experiment.condition.AtomMatcher;
@@ -8,6 +9,8 @@ import tailor.experiment.condition.AtomMatcher.Match;
 import tailor.experiment.plan.Result;
 
 public class FilterAtomResultByCondition extends AbstractPipeableOperator {
+	
+	private Logger logger = Logger.getLogger(FilterAtomResultByCondition.class.getName());
 	
 	/**
 	 * Association of a matcher (to find atoms) and a condition (to match on them).
@@ -21,6 +24,8 @@ public class FilterAtomResultByCondition extends AbstractPipeableOperator {
 	}
 	
 	public void run() {
+		int filterInCount = 0;
+		int filterOutCount = 0;
 		while (source.hasNext()) {
 			Result nextResult = source.getNext();
 			boolean isAccepted = true;
@@ -31,29 +36,30 @@ public class FilterAtomResultByCondition extends AbstractPipeableOperator {
 				}
 			}
 			if (isAccepted) {
-				System.out.println("Filtering IN " + nextResult);
+				logger.fine("Filtering IN " + nextResult);
 				sink.put(nextResult);
+				filterInCount++;
 			} else {
-				System.out.println("Filtering OUT " + nextResult);
+				logger.fine("Filtering OUT " + nextResult);
+				filterOutCount++;
 			}
 		}
-			
+		logger.info(description() + " filtered: IN " + filterInCount + " OUT " + filterOutCount);
 	}
 	
 	private boolean matches(Result result, ConditionMatcher conditionMatcher) {
 		boolean isMatch = true;
 		for (Match match : conditionMatcher.matcher().extract(result)) {
-			System.out.print("Checking " + match + " from " + result);
+			logger.fine("Checking " + match + " from " + result);
 			if (conditionMatcher.condition.accept(match.getAtoms())) {
-				System.out.println(" Match");
+				logger.fine(" Match");
 			} else {
-				System.out.println(" Filtering OUT " + result);
+				logger.fine(" NO Match " + result);
 				isMatch = false;
 			}
 		}
 		return isMatch;
 	}
-
 
 	@Override
 	public String description() {

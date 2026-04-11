@@ -2,11 +2,14 @@ package tailor.experiment.condition;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 import tailor.experiment.plan.Result;
 import tailor.structure.Atom;
 
 public class AtomMatcher {
+	
+	private Logger logger = Logger.getLogger(AtomMatcher.class.getName());
 	
 	public static class Match {
 		
@@ -75,7 +78,7 @@ public class AtomMatcher {
 		// TODO - need a combinatorial approach here
 		Match match = findMatch(result);
 		if (match.isComplete()) {
-			System.out.println("MATCH " + match + " for " + result);
+			logger.fine("MATCH " + match + " for " + result);
 			matches.add(match);
 		}
 		
@@ -95,14 +98,12 @@ public class AtomMatcher {
 				// Check that we can find a matching atom in the result atoms
 				boolean isSet = match.set(partIndex, labelIndex, outIndex, atomLabel, resultAtoms);
 				if (!isSet) {
-					System.out.println("No match " + match + " for " + result);
+					logger.fine("No match " + match + " for " + result);
 					return match;
 				}
 				outIndex++;
 			}	
 		}
-		
-		
 		return match.setComplete();
 	}
 }
