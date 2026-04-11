@@ -11,7 +11,6 @@ import org.junit.Test;
 import tailor.datasource.PDBReader;
 import tailor.experiment.api.Operator;
 import tailor.experiment.description.AtomAngleRangeDescription;
-import tailor.experiment.description.AtomDistanceDescription;
 import tailor.experiment.description.AtomDistanceRangeDescription;
 import tailor.experiment.description.ChainDescription;
 import tailor.experiment.description.GroupDescription;
@@ -23,42 +22,64 @@ public class FunctionalTests {
 	
 	private static final String DATA_DIR = "data";
 	
-	@Test
-	public void helixTest() throws IOException {
-		String filename = "helix.pdb";
-		
+	private ChainDescription onHBond = makeON();
+	private ChainDescription noHBond = makeNO();
+	
+	private ChainDescription makeON() {
 		double minAngle = 145;
 		double maxAngle = 180;
-		double minDistance = 2.8;
+		double minDistance = 2.7;
 		double maxDistance = 3.4;
 		ChainDescription chainDescription = new ChainDescription();
 		GroupDescription groupA = Helper.makeGroupDescription("C", "O");
 		GroupDescription groupB = Helper.makeGroupDescription("N");
-//		GroupDescription groupB = Helper.makeGroupDescription("N");
 		chainDescription.addGroupDescriptions(groupA, groupB);
 		chainDescription.addAtomListDescriptions(
 				new AtomDistanceRangeDescription(minDistance, maxDistance, pathTo(groupA, "O"), pathTo(groupB, "N")),
 				new AtomAngleRangeDescription(minAngle, maxAngle, pathTo(groupA, "C"), pathTo(groupA, "O"), pathTo(groupB, "N"))
 		);
+		return chainDescription;
+	}
+	
+	private ChainDescription makeNO() {
+		double minAngle = 145;
+		double maxAngle = 180;
+		double minDistance = 2.7;
+		double maxDistance = 3.0;
 		
-		run(filename, chainDescription);
+		ChainDescription chainDescription = new ChainDescription();
+		GroupDescription groupA = Helper.makeGroupDescription("N");
+		GroupDescription groupB = Helper.makeGroupDescription("C", "O");
+		chainDescription.addGroupDescriptions(groupA, groupB);
+		chainDescription.addAtomListDescriptions(
+				new AtomDistanceRangeDescription(minDistance, maxDistance, pathTo(groupA, "N"), pathTo(groupB, "O")),
+				new AtomAngleRangeDescription(minAngle, maxAngle, pathTo(groupA, "N"), pathTo(groupB, "O"), pathTo(groupB, "C"))
+		);
+		return chainDescription;
+	}
+	
+	@Test
+	public void helixTest() throws IOException {
+		String filename = "helix.pdb";
+		run(filename, onHBond);
 	}
 	
 	@Test
 	public void hairpinTest() throws IOException {
 		String filename = "hairpin.pdb";
-		
-		double distance = 5.0;
-		
-		ChainDescription chainDescription = new ChainDescription();
-		GroupDescription groupA = Helper.makeGroupDescription("N");
-		GroupDescription groupB = Helper.makeGroupDescription("O");
-		chainDescription.addGroupDescriptions(groupA, groupB);
-		chainDescription.addAtomListDescriptions(
-				new AtomDistanceDescription(distance, pathTo(groupA, "N"), pathTo(groupB, "O"))
-		);
-		
-		run(filename, chainDescription);
+		run(filename, noHBond);
+	}
+	
+	@Test
+	public void betaAlphaBetaTest_NO() throws IOException {
+		String filename = "3iwl_clean.pdb";
+		run(filename, noHBond);
+	}
+	
+	@Test
+	public void betaAlphaBetaTest_ON() throws IOException {
+		String filename = "3iwl_clean.pdb";
+		run(filename, onHBond);
 	}
 	
 	private void run(String filename, ChainDescription chainDescription) throws IOException {
