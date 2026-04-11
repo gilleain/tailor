@@ -3,7 +3,7 @@ package tailor.experiment.description;
 import tailor.experiment.api.AtomListCondition;
 import tailor.experiment.condition.AtomAngleCondition;
 
-public class AtomAngleDescription extends AtomTripleDescription {
+public class AtomAngleDescription extends AbstractAtomListDescription {
 	
 	private final double angle;
 	

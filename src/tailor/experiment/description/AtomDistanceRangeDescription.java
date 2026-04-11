@@ -3,7 +3,7 @@ package tailor.experiment.description;
 import tailor.experiment.api.AtomListCondition;
 import tailor.experiment.condition.AtomDistanceRangeCondition;
 
-public class AtomDistanceRangeDescription extends AtomPairDescription {
+public class AtomDistanceRangeDescription extends AbstractAtomListDescription {
 	
 	private final double minDistance;
 	
