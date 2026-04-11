@@ -7,10 +7,10 @@ import java.util.List;
 import org.junit.Test;
 
 import tailor.experiment.api.Operator;
-import tailor.experiment.description.AtomAngleDescription;
-import tailor.experiment.description.AtomDistanceDescription;
 import tailor.experiment.description.ChainDescription;
 import tailor.experiment.description.GroupDescription;
+import tailor.experiment.description.atom.AtomAngleDescription;
+import tailor.experiment.description.atom.AtomDistanceDescription;
 import tailor.experiment.plan.Planner;
 import tailor.structure.Chain;
 

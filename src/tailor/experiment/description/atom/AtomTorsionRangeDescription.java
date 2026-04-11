@@ -1,7 +1,8 @@
-package tailor.experiment.description;
+package tailor.experiment.description.atom;
 
 import tailor.experiment.api.AtomListCondition;
 import tailor.experiment.condition.AtomTorsionRangeCondition;
+import tailor.experiment.description.DescriptionPath;
 
 public class AtomTorsionRangeDescription extends AbstractAtomListDescription {
 	

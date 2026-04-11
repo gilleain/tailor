@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import tailor.experiment.description.atom.AtomDistanceDescription;
+
 public class GroupDescription {
 	
 	private Optional<String> label;

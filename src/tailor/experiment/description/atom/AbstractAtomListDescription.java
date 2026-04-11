@@ -1,4 +1,4 @@
-package tailor.experiment.description;
+package tailor.experiment.description.atom;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -8,6 +8,8 @@ import java.util.Map;
 
 import tailor.experiment.api.AtomListDescription;
 import tailor.experiment.condition.AtomMatcher;
+import tailor.experiment.description.DescriptionPath;
+import tailor.experiment.description.GroupDescription;
 
 /**
  * Abstract description of a list of atoms.

@@ -9,8 +9,8 @@ import java.util.List;
 import org.junit.Test;
 
 import tailor.experiment.api.AtomListDescription;
-import tailor.experiment.description.AtomDistanceDescription;
 import tailor.experiment.description.GroupDescription;
+import tailor.experiment.description.atom.AtomDistanceDescription;
 import tailor.experiment.plan.GroupUnionFind;
 
 public class TestGroupUnionFind {

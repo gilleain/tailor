@@ -10,11 +10,11 @@ import org.junit.Test;
 
 import tailor.datasource.PDBReader;
 import tailor.experiment.api.Operator;
-import tailor.experiment.description.AtomAngleRangeDescription;
-import tailor.experiment.description.AtomDistanceRangeDescription;
-import tailor.experiment.description.AtomTorsionRangeDescription;
 import tailor.experiment.description.ChainDescription;
 import tailor.experiment.description.GroupDescription;
+import tailor.experiment.description.atom.AtomAngleRangeDescription;
+import tailor.experiment.description.atom.AtomDistanceRangeDescription;
+import tailor.experiment.description.atom.AtomTorsionRangeDescription;
 import tailor.experiment.plan.Planner;
 import tailor.structure.Chain;
 import tailor.structure.Structure;
