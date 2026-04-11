@@ -29,7 +29,7 @@ public class TestCombineResults {
 		ResultPipe input2 = put(resultList().withGroups("GLY", "SER", "ASP").withAtom("O"));
 		ResultPipe output = new ResultPipe();
 		
-		CombineResults combine = new CombineResults(ID, List.of(input1, input2), output);
+		CombineResults combine = new CombineResults(List.of(input1, input2), output);
 		combine.run();
 		
 //		PrintAdapter printer = new PrintAdapter("", output);
@@ -55,7 +55,7 @@ public class TestCombineResults {
 				result().startAt(3).withGroups("ASP", "HIS").withAtoms("O", "N"));
 		ResultPipe output = new ResultPipe();
 		
-		CombineResults combine = new CombineResults(ID, List.of(input1, input2), output);
+		CombineResults combine = new CombineResults(List.of(input1, input2), output);
 		combine.run();
 		
 		PrintAdapter printer = new PrintAdapter("", output);
@@ -77,7 +77,7 @@ public class TestCombineResults {
 				result().startAt(3).withGroups("ASP", "HIS").withAtoms("O", "CA"));
 		ResultPipe output = new ResultPipe();
 		
-		CombineResults combine = new CombineResults(ID, List.of(input1, input2), output);
+		CombineResults combine = new CombineResults(List.of(input1, input2), output);
 		combine.run();
 		
 		PrintAdapter printer = new PrintAdapter("", output);

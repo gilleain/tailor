@@ -19,8 +19,7 @@ public class CombineResults extends AbstractOperator {
 	
 	private Sink<Result> output;
 	
-	public CombineResults(String id, List<ResultPipe> sources, ResultPipe output) {
-		this.id = id;
+	public CombineResults(List<ResultPipe> sources, ResultPipe output) {
 		this.sources = sources;
 		this.output = output;
 		for (ResultPipe source : sources) {
@@ -29,8 +28,7 @@ public class CombineResults extends AbstractOperator {
 		output.registerSource(this);
 	}
 	
-	public CombineResults(String id, List<ResultPipe> sources, Sink<Result> output) {
-		this.id = id;
+	public CombineResults(List<ResultPipe> sources, Sink<Result> output) {
 		this.sources = sources;
 		this.output = output;
 		for (ResultPipe source : sources) {

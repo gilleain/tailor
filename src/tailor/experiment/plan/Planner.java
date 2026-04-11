@@ -27,20 +27,17 @@ import tailor.experiment.plan.GroupUnionFind.Component;
  */
 public class Planner {
 	
-	private int operatorId;	// TODO - move to Plan class?
-	
-	// TODO - move up the hierarchy, and return Plan object?
-	public List<Operator> plan(ChainDescription chainDescription) {
-		operatorId = 1;
-		List<Operator> pipeline = new ArrayList<>();
+	public Plan plan(ChainDescription chainDescription) {
+		Plan plan = new Plan();
 		
 		// Go through the group descriptions in the chain, making scanners
 		Map<GroupDescription, PipeableOperator<Result, Result>> scannerMap = new HashMap<>();
 		for (GroupDescription groupDescription : chainDescription.getGroupDescriptions()) {
 			List<String> labels = groupDescription.getAtomDescriptions().stream().map(a -> a.getLabel()).toList();
 			PipeableOperator<Result, Result> scanByLabel = new ScanAtomResultByLabel(labels);
-			scanByLabel.setId(getOperatorId());
 			scannerMap.put(groupDescription, scanByLabel);
+			
+			plan.addStart(scanByLabel);
 		}
 		
 		// Extract and categorise the atom list descriptions
@@ -66,9 +63,9 @@ public class Planner {
 		}
 		
 		// Join the scanners with combiners
-		pipeline.add(join(pipeline, chainDescription, innerGroupDescriptions, outerGroupDescriptions, scannerMap));
-		
-		return pipeline;
+		ResultPipe finalOutput = join(plan, chainDescription, innerGroupDescriptions, outerGroupDescriptions, scannerMap);
+		plan.addOperator(new PrintAdapter("*", finalOutput));
+		return plan;
 	}
 	
 	private void add(GroupDescription groupDescription, AtomListDescription atomListDescription, Map<GroupDescription, Set<AtomListDescription>> innerGroupDescriptions) {
@@ -81,8 +78,8 @@ public class Planner {
 		}
 	}
 	
-	private Operator join(
-			List<Operator> pipeline, 
+	private ResultPipe join(
+			Plan plan,
 			ChainDescription chainDescription,
 			Map<GroupDescription, Set<AtomListDescription>> innerGroupDescriptions,
 			Map<AtomListDescription, List<GroupDescription>> outerGroupDescriptions, 
@@ -100,7 +97,6 @@ public class Planner {
 			List<ResultPipe> componentOutputResultPipes = new ArrayList<>();
 			for (GroupDescription groupDescription : component.groupDescriptions()) {
 				PipeableOperator<Result, Result> scanner = scannerMap.get(groupDescription);
-				pipeline.add(scanner);
 
 				ResultPipe scannerOutput = new ResultPipe();
 				scanner.setSink(scannerOutput);
@@ -108,7 +104,7 @@ public class Planner {
 				// for groups that have inner conditions, create a filter and connect to the scanner
 				if (innerGroupDescriptions.containsKey(groupDescription)) {
 					Set<AtomListDescription> atomListDescriptions = innerGroupDescriptions.get(groupDescription);
-					ResultPipe filterOutput = addInnerFilter(scannerOutput, atomListDescriptions, pipeline);
+					ResultPipe filterOutput = addInnerFilter(scannerOutput, atomListDescriptions, plan);
 					componentOutputResultPipes.add(filterOutput);
 				} else {
 					componentOutputResultPipes.add(scannerOutput);
@@ -117,12 +113,12 @@ public class Planner {
 			// join these if there are more than one
 			if (componentOutputResultPipes.size() > 1) {
 				ResultPipe combinedOutput = new ResultPipe();
-				CombineResults combiner = new CombineResults(getOperatorId(), componentOutputResultPipes, combinedOutput);
-				pipeline.add(combiner);
+				CombineResults combiner = new CombineResults(componentOutputResultPipes, combinedOutput);
+				plan.addOperator(combiner);
 				
 				Set<AtomListDescription> atomListDescriptions = component.atomListDescriptions();
 				if (!component.atomListDescriptions().isEmpty()) {	// trivially, this should always be true
-					ResultPipe filterOutput = addOuterFilter(combinedOutput, atomListDescriptions, pipeline);
+					ResultPipe filterOutput = addOuterFilter(combinedOutput, atomListDescriptions, plan);
 					combinedOutputPipes.add(filterOutput);
 				} else {
 					combinedOutputPipes.add(combinedOutput);
@@ -137,22 +133,20 @@ public class Planner {
 		while (!combinedOutputPipes.isEmpty()) {
 			ResultPipe next = combinedOutputPipes.pop();
 			ResultPipe output = new ResultPipe();
-			CombineResults combiner = new CombineResults(getOperatorId(), List.of(current, next), output);
-			pipeline.add(combiner);
+			CombineResults combiner = new CombineResults(List.of(current, next), output);
+			plan.addOperator(combiner);
 			current = output;
 		}
 		
-		// TODO - Add the betweenResidueDescriptions as filters on combiners
-		
-		return new PrintAdapter(getOperatorId(), current);
+		return current;
 	}
 	
 	// TODO - merge these inner/outer methods
-	private ResultPipe addOuterFilter(ResultPipe previousOutput, Set<AtomListDescription> atomListDescriptions, List<Operator> pipeline) {
+	private ResultPipe addOuterFilter(ResultPipe previousOutput, Set<AtomListDescription> atomListDescriptions, Plan plan) {
 		FilterAtomResultByCondition filter = createMultiFilter(atomListDescriptions);
 		filter.setSource(previousOutput);
 		Source<Result> filterOutput = filter.getSinkAsSource();
-		pipeline.add(filter);
+		plan.addOperator(filter);
 		return (ResultPipe) filterOutput;
 	}
 	
@@ -162,7 +156,6 @@ public class Planner {
 			conditionMatchers.add(new ConditionMatcher(atomListDescription.createCondition(), atomListDescription.createMatcher()));
 		}
 		FilterAtomResultByCondition filter = new FilterAtomResultByCondition(conditionMatchers);
-		filter.setId(getOperatorId());
 		
 		ResultPipe filteredPipe = new ResultPipe();
 		filter.setSink(filteredPipe);
@@ -177,19 +170,11 @@ public class Planner {
 	 * @param pipeline the pipeline so far
 	 * @return the output pipe from the filter
 	 */
-	private ResultPipe addInnerFilter(ResultPipe previousOutput, Set<AtomListDescription> atomListDescriptions, List<Operator> pipeline) {
+	private ResultPipe addInnerFilter(ResultPipe previousOutput, Set<AtomListDescription> atomListDescriptions, Plan plan) {
 		FilterAtomResultByCondition filter = createMultiFilter(atomListDescriptions);
 		filter.setSource(previousOutput);
 		Source<Result> filterOutput = filter.getSinkAsSource();
-		pipeline.add(filter);
+		plan.addOperator(filter);
 		return (ResultPipe) filterOutput;
 	}
-	
-	
-	private String getOperatorId() {
-		String operatorIdString = String.valueOf(operatorId);
-		operatorId++;
-		return operatorIdString;
-	}
-	
 }

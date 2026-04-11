@@ -6,13 +6,12 @@ import java.util.List;
 
 import org.junit.Test;
 
-import tailor.experiment.api.Operator;
 import tailor.experiment.description.ChainDescription;
 import tailor.experiment.description.GroupDescription;
 import tailor.experiment.description.atom.AtomAngleDescription;
 import tailor.experiment.description.atom.AtomDistanceDescription;
+import tailor.experiment.plan.Plan;
 import tailor.experiment.plan.Planner;
-import tailor.structure.Chain;
 
 public class TestPlanner {
 	
@@ -22,8 +21,8 @@ public class TestPlanner {
 		chainDescription.addGroupDescription(Helper.makeGroupDescription("N"));
 		chainDescription.addGroupDescription(Helper.makeGroupDescription("O"));
 		
-		List<Operator> pipeline = new Planner().plan(chainDescription);
-		Helper.describe(pipeline);
+		Plan plan = new Planner().plan(chainDescription);
+		Helper.describe(plan);
 	}
 	
 	@Test
@@ -32,9 +31,9 @@ public class TestPlanner {
 		chainDescription.addGroupDescription(Helper.makeGroupDescription("N", "CA"));
 		chainDescription.addGroupDescription(Helper.makeGroupDescription("O", "C"));
 		
-		List<Operator> pipeline = new Planner().plan(chainDescription);
-		Helper.describe(pipeline);
-		Helper.run(Helper.makeData(List.of("GLY", "SER", "PRO")), pipeline);
+		Plan plan = new Planner().plan(chainDescription);
+		Helper.describe(plan);
+		Helper.run(Helper.makeData(List.of("GLY", "SER", "PRO")), plan);
 	}
 	
 	/**
@@ -55,10 +54,10 @@ public class TestPlanner {
 			new AtomDistanceDescription(distance, pathTo(groupA, "N"), pathTo(groupB, "CA"))
 	    );
 		
-		List<Operator> pipeline = new Planner().plan(chainDescription);
-		Helper.describe(pipeline);
+		Plan plan = new Planner().plan(chainDescription);
+		Helper.describe(plan);
 		
-		Helper.run(Helper.makeData(List.of("GLY", "SER", "PRO", "HIS")), pipeline);
+		Helper.run(Helper.makeData(List.of("GLY", "SER", "PRO", "HIS")), plan);
 	}
 	
 	/**
@@ -78,10 +77,10 @@ public class TestPlanner {
 			new AtomDistanceDescription(distance, pathTo(groupA, "N"), pathTo(groupA, "CA"))
 	    );
 		
-		List<Operator> pipeline = new Planner().plan(chainDescription);
-		Helper.describe(pipeline);
+		Plan plan = new Planner().plan(chainDescription);
+		Helper.describe(plan);
 		
-		Helper.run(Helper.makeData(List.of("GLY", "SER", "PRO", "HIS")), pipeline);
+		Helper.run(Helper.makeData(List.of("GLY", "SER", "PRO", "HIS")), plan);
 	}
 	
 	/**
@@ -101,10 +100,10 @@ public class TestPlanner {
 			new AtomDistanceDescription(distance, pathTo(groupA, "CA"), pathTo(groupB, "C"))
 	    );
 		
-		List<Operator> pipeline = new Planner().plan(chainDescription);
-		Helper.describe(pipeline);
+		Plan plan = new Planner().plan(chainDescription);
+		Helper.describe(plan);
 		
-		Helper.run(Helper.makeData(List.of("GLY", "SER", "PRO", "HIS")), pipeline);
+		Helper.run(Helper.makeData(List.of("GLY", "SER", "PRO", "HIS")), plan);
 	}
 	
 	/**
@@ -121,11 +120,9 @@ public class TestPlanner {
 			new AtomDistanceDescription(distance, pathTo(groupA, "N"), pathTo(groupA, "CA"))
 		);
 		
-		List<Operator> pipeline = new Planner().plan(chainDescription);
-		Helper.describe(pipeline);
-		
-		Chain chain = Helper.makeData(3);
-		Helper.run(chain, pipeline);
+		Plan plan  = new Planner().plan(chainDescription);
+		Helper.describe(plan);
+		Helper.run(Helper.makeData(3), plan);
 	}
 	
 	/**
@@ -142,10 +139,9 @@ public class TestPlanner {
 			new AtomAngleDescription(angle, pathTo(groupA, "N"), pathTo(groupA, "CA"), pathTo(groupA, "C"))
 		);
 		
-		List<Operator> pipeline = new Planner().plan(chainDescription);
-		Helper.describe(pipeline);
-		
-		Helper.run(Helper.makeData(List.of("GLY", "SER", "PRO")), pipeline);
+		Plan plan = new Planner().plan(chainDescription);
+		Helper.describe(plan);
+		Helper.run(Helper.makeData(List.of("GLY", "SER", "PRO")), plan);
 	}
 	
 	/**
@@ -164,10 +160,9 @@ public class TestPlanner {
 		
 		chainDescription.addGroupDescription(Helper.makeGroupDescription("O", "C"));
 		
-		List<Operator> pipeline = new Planner().plan(chainDescription);
-		Helper.describe(pipeline);
-		
-		Helper.run(Helper.makeData(3), pipeline);
+		Plan plan = new Planner().plan(chainDescription);
+		Helper.describe(plan);
+		Helper.run(Helper.makeData(3), plan);
 	}
 	
 	@Test
@@ -181,10 +176,9 @@ public class TestPlanner {
 			new AtomDistanceDescription(distance, pathTo(groupA, "C"), pathTo(groupA, "O"))
 		);
 		
-		List<Operator> pipeline = new Planner().plan(chainDescription);
-		Helper.describe(pipeline);
-		
-		Helper.run(Helper.makeData(3), pipeline);
+		Plan plan = new Planner().plan(chainDescription);
+		Helper.describe(plan);
+		Helper.run(Helper.makeData(3), plan);
 	}
 	
 	@Test
@@ -201,9 +195,9 @@ public class TestPlanner {
 				new AtomDistanceDescription(distance, pathTo(groupC, "C"), pathTo(groupD, "O"))
 		);
 		
-		List<Operator> pipeline = new Planner().plan(chainDescription);
-		Helper.describe(pipeline);
-		Helper.run(Helper.makeData(List.of("GLY", "SER", "PRO", "HIS")), pipeline);
+		Plan plan = new Planner().plan(chainDescription);
+		Helper.describe(plan);
+		Helper.run(Helper.makeData(List.of("GLY", "SER", "PRO", "HIS")), plan);
 	}
 	
 	@Test
@@ -221,10 +215,9 @@ public class TestPlanner {
 				new AtomDistanceDescription(distance, pathTo(groupC, "C"), pathTo(groupD, "O"))
 		);
 		
-		List<Operator> pipeline = new Planner().plan(chainDescription);
-		Helper.describe(pipeline);
-		
-		Helper.run(Helper.makeData(List.of("GLY", "SER", "PRO", "HIS")), pipeline);
+		Plan plan = new Planner().plan(chainDescription);
+		Helper.describe(plan);
+		Helper.run(Helper.makeData(List.of("GLY", "SER", "PRO", "HIS")), plan);
 	}
 	
 	@Test
@@ -239,10 +232,9 @@ public class TestPlanner {
 				new AtomDistanceDescription(distance, pathTo(groupB, "N"), pathTo(groupB, "O"))
 		);
 		
-		List<Operator> pipeline = new Planner().plan(chainDescription);
-		Helper.describe(pipeline);
-		
-		Helper.run(Helper.makeData(List.of("GLY", "SER", "PRO")), pipeline);
+		Plan plan = new Planner().plan(chainDescription);
+		Helper.describe(plan);
+		Helper.run(Helper.makeData(List.of("GLY", "SER", "PRO")), plan);
 	}
 
 }

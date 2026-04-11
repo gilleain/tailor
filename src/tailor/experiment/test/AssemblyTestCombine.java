@@ -35,7 +35,7 @@ public class AssemblyTestCombine {
 		scanN.setSource(resultPipe2);
 		scanN.setSink(nPipe);
 		
-		CombineResults combineON = new CombineResults("1", List.of(oPipe, nPipe), sink);
+		CombineResults combineON = new CombineResults(List.of(oPipe, nPipe), sink);
 		
 		// run the pipeline
 		Helper.runAll(List.of(groupSource, scanO, scanN, combineON));
@@ -67,14 +67,14 @@ public class AssemblyTestCombine {
 		scanN.setSink(nPipe);
 		
 		ResultPipe resultON = new ResultPipe();
-		CombineResults combineON = new CombineResults("1", List.of(oPipe, nPipe), resultON);
+		CombineResults combineON = new CombineResults(List.of(oPipe, nPipe), resultON);
 		
 		ResultPipe caPipe = new ResultPipe();
 		ScanAtomResultByLabel scanCA = new ScanAtomResultByLabel(List.of("CA"));
 		scanCA.setSource(resultPipe3);
 		scanCA.setSink(caPipe);
 		
-		CombineResults combineONCa = new CombineResults("1", List.of(resultON, caPipe), sink);
+		CombineResults combineONCa = new CombineResults(List.of(resultON, caPipe), sink);
 		
 		// run the pipeline
 		Helper.runAll(List.of(groupSource, scanO, scanN, combineON, scanCA, combineONCa));
@@ -103,7 +103,7 @@ public class AssemblyTestCombine {
 		scanCO.setSource(resultPipe2);
 		scanCO.setSink(c_o_Pipe);
 		
-		CombineResults combineNCACO = new CombineResults("1", List.of(n_ca_Pipe, c_o_Pipe), sink);
+		CombineResults combineNCACO = new CombineResults(List.of(n_ca_Pipe, c_o_Pipe), sink);
 		
 		// run the pipeline
 		Helper.runAll(List.of(groupSource, scanNCa, scanCO, combineNCACO));

@@ -4,17 +4,16 @@ import static tailor.experiment.test.Helper.pathTo;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.List;
 
 import org.junit.Test;
 
 import tailor.datasource.PDBReader;
-import tailor.experiment.api.Operator;
 import tailor.experiment.description.ChainDescription;
 import tailor.experiment.description.GroupDescription;
 import tailor.experiment.description.atom.AtomAngleRangeDescription;
 import tailor.experiment.description.atom.AtomDistanceRangeDescription;
 import tailor.experiment.description.atom.AtomTorsionRangeDescription;
+import tailor.experiment.plan.Plan;
 import tailor.experiment.plan.Planner;
 import tailor.structure.Chain;
 import tailor.structure.Structure;
@@ -115,14 +114,14 @@ public class FunctionalTests {
 	}
 	
 	private void run(String filename, ChainDescription chainDescription) throws IOException {
-		List<Operator> pipeline = new Planner().plan(chainDescription);
-		Helper.describe(pipeline);
+		Plan plan = new Planner().plan(chainDescription);
+		plan.describe();
 		
 		Structure structure = PDBReader.read(new File(DATA_DIR, filename));
 		for (Structure chainStructure : structure.getSubstructures()) {
 			Chain chain = (Chain) chainStructure;
 			// TODO - do we have to reset?
-			Helper.run(chain, pipeline);
+			Helper.run(chain, plan);
 		}
 	}
 
