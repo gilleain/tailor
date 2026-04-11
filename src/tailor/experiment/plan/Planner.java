@@ -14,6 +14,7 @@ import tailor.experiment.api.PipeableOperator;
 import tailor.experiment.api.Source;
 import tailor.experiment.description.ChainDescription;
 import tailor.experiment.description.GroupDescription;
+import tailor.experiment.description.group.GroupSequenceDescription;
 import tailor.experiment.operator.CombineResults;
 import tailor.experiment.operator.FilterAtomResultByCondition;
 import tailor.experiment.operator.FilterAtomResultByCondition.ConditionMatcher;
@@ -36,7 +37,7 @@ public class Planner {
 			List<String> labels = groupDescription.getAtomDescriptions().stream().map(a -> a.getLabel()).toList();
 			PipeableOperator<Result, Result> scanByLabel = new ScanAtomResultByLabel(labels);
 			scannerMap.put(groupDescription, scanByLabel);
-			
+			// add to the list of starts
 			plan.addStart(scanByLabel);
 		}
 		
@@ -63,8 +64,20 @@ public class Planner {
 		}
 		
 		// Join the scanners with combiners
-		ResultPipe finalOutput = join(plan, chainDescription, innerGroupDescriptions, outerGroupDescriptions, scannerMap);
-		plan.addOperator(new PrintAdapter("*", finalOutput));
+		Stack<ResultPipe> combinedOutputPipes = join(plan, chainDescription, innerGroupDescriptions, outerGroupDescriptions, scannerMap);
+		
+		// Reduce the output pipes by joining
+		ResultPipe current = combinedOutputPipes.pop();
+		while (!combinedOutputPipes.isEmpty()) {
+			ResultPipe next = combinedOutputPipes.pop();
+			ResultPipe output = new ResultPipe();
+			CombineResults combiner = new CombineResults(List.of(current, next), output);
+			plan.addOperator(combiner);
+			current = output;
+		}
+		
+		// Wrap the output in a print (for now)
+		plan.addOperator(new PrintAdapter("*", current));
 		return plan;
 	}
 	
@@ -78,12 +91,16 @@ public class Planner {
 		}
 	}
 	
-	private ResultPipe join(
+	private Stack<ResultPipe> join(
 			Plan plan,
 			ChainDescription chainDescription,
 			Map<GroupDescription, Set<AtomListDescription>> innerGroupDescriptions,
 			Map<AtomListDescription, List<GroupDescription>> outerGroupDescriptions, 
 			Map<GroupDescription, PipeableOperator<Result, Result>> scannerMap) {
+		
+		for (GroupSequenceDescription groupSequenceDescription : chainDescription.getGroupSequenceDescriptions()) {
+			
+		}
 		
 		// Find connected components of the graph where vertices are atoms and edges 
 		// (or hyperedges) are AtomListDescriptions - the scanners are then joined based on this
@@ -128,17 +145,7 @@ public class Planner {
 			}
 		}
 		
-		// Reduce the output pipes by joining
-		ResultPipe current = combinedOutputPipes.pop();
-		while (!combinedOutputPipes.isEmpty()) {
-			ResultPipe next = combinedOutputPipes.pop();
-			ResultPipe output = new ResultPipe();
-			CombineResults combiner = new CombineResults(List.of(current, next), output);
-			plan.addOperator(combiner);
-			current = output;
-		}
-		
-		return current;
+		return combinedOutputPipes;
 	}
 	
 	// TODO - merge these inner/outer methods
