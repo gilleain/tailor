@@ -12,6 +12,7 @@ import tailor.datasource.PDBReader;
 import tailor.experiment.api.Operator;
 import tailor.experiment.description.AtomAngleRangeDescription;
 import tailor.experiment.description.AtomDistanceRangeDescription;
+import tailor.experiment.description.AtomTorsionRangeDescription;
 import tailor.experiment.description.ChainDescription;
 import tailor.experiment.description.GroupDescription;
 import tailor.experiment.plan.Planner;
@@ -21,9 +22,6 @@ import tailor.structure.Structure;
 public class FunctionalTests {
 	
 	private static final String DATA_DIR = "data";
-	
-	private ChainDescription onHBond = makeON();
-	private ChainDescription noHBond = makeNO();
 	
 	private ChainDescription makeON() {
 		double minAngle = 145;
@@ -58,28 +56,62 @@ public class FunctionalTests {
 		return chainDescription;
 	}
 	
+	private ChainDescription makeAlphaPhiPsi() {
+		double minPhiAngle = -71;
+		double maxPhiAngle = -57;
+		double minPsiAngle = -48;
+		double maxPsiAngle = -34;
+		
+		ChainDescription chainDescription = new ChainDescription();
+		GroupDescription groupA = Helper.makeGroupDescription("C");
+		GroupDescription groupB = Helper.makeGroupDescription("N", "CA", "C");
+		GroupDescription groupC = Helper.makeGroupDescription("N");
+		chainDescription.addGroupDescriptions(groupA, groupB, groupC);
+		chainDescription.addAtomListDescriptions(
+				new AtomTorsionRangeDescription(
+					minPhiAngle, maxPhiAngle, pathTo(groupA, "C"), pathTo(groupB, "N"), pathTo(groupB, "CA"), pathTo(groupB, "C")
+				),
+				new AtomTorsionRangeDescription(
+					minPsiAngle, maxPsiAngle, pathTo(groupB, "N"), pathTo(groupB, "CA"), pathTo(groupB, "C"), pathTo(groupC, "N")
+				)
+		);
+		return chainDescription;
+	}
+	
 	@Test
-	public void helixTest() throws IOException {
+	public void helixONBondTest() throws IOException {
 		String filename = "helix.pdb";
-		run(filename, onHBond);
+		run(filename, makeON());
 	}
 	
 	@Test
-	public void hairpinTest() throws IOException {
+	public void helixPhiPsiTest() throws IOException {
+		String filename = "helix.pdb";
+		run(filename, makeAlphaPhiPsi());
+	}
+	
+	@Test
+	public void hairpinNOBondTest() throws IOException {
 		String filename = "hairpin.pdb";
-		run(filename, noHBond);
+		run(filename, makeNO());
 	}
 	
 	@Test
-	public void betaAlphaBetaTest_NO() throws IOException {
+	public void betaAlphaBetaTest_NOBond() throws IOException {
 		String filename = "3iwl_clean.pdb";
-		run(filename, noHBond);
+		run(filename, makeNO());
 	}
 	
 	@Test
-	public void betaAlphaBetaTest_ON() throws IOException {
+	public void betaAlphaBetaTest_ONBond() throws IOException {
 		String filename = "3iwl_clean.pdb";
-		run(filename, onHBond);
+		run(filename, makeON());
+	}
+	
+	@Test
+	public void betaAlphaBetaTest_PhiPsi() throws IOException {
+		String filename = "3iwl_clean.pdb";
+		run(filename, makeAlphaPhiPsi());
 	}
 	
 	private void run(String filename, ChainDescription chainDescription) throws IOException {
