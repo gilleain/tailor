@@ -8,6 +8,9 @@ import tailor.experiment.api.Sink;
 import tailor.experiment.operator.ResultPipe;
 import tailor.experiment.operator.ScanAtomResultByLabel;
 
+/**
+ * A plan is a directed graph of operators that carry out a search.
+ */
 public class Plan {
 	
 	private int operatorId;

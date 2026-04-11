@@ -15,6 +15,8 @@ public class PrintAdapter extends AbstractOperator {
 		this.input = input;
 		input.registerSink(this);
 	}
+	
+	
 
 	@Override
 	public void run() {
