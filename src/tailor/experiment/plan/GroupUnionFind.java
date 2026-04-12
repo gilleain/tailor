@@ -10,6 +10,7 @@ import java.util.Set;
 
 import tailor.experiment.api.AtomListDescription;
 import tailor.experiment.description.GroupDescription;
+import tailor.experiment.description.group.GroupSequenceDescription;
 
 /**
  * Union-find over {@link GroupDescription}s, where each outer (cross-group)
@@ -19,13 +20,25 @@ import tailor.experiment.description.GroupDescription;
  */
 public class GroupUnionFind {
 	
-	public record Component(List<GroupDescription> groupDescriptions, Set<AtomListDescription> atomListDescriptions) {}
+	public record Component(List<GroupDescription> groupDescriptions, 
+							Set<AtomListDescription> atomListDescriptions,
+							Set<GroupSequenceDescription> groupSequenceDescriptions) {}
 	
-    // Maps each group to its current root (parent). LinkedHashMap preserves
-    // insertion order so component lists come out in a predictable sequence.
+   /**
+    * Maps each group to its current root (parent). LinkedHashMap preserves
+    *  insertion order so component lists come out in a predictable sequence.
+    */
     private final Map<GroupDescription, GroupDescription> parent = new LinkedHashMap<>();
     
+    /**
+     * Associate groups with their atom list descriptions
+     */
     private final Map<GroupDescription, List<AtomListDescription>> groupDescriptionToAtomListDescriptionMap = new HashMap<>();
+    
+    /**
+     * Associate groups with their group sequence descriptions
+     */
+    private final Map<GroupDescription, GroupSequenceDescription> groupDescriptionToGroupSeqDescriptionMap = new HashMap<>();
 
     public GroupUnionFind(List<GroupDescription> groups) {
         for (GroupDescription group : groups) {
@@ -38,18 +51,29 @@ public class GroupUnionFind {
      * Each description is a hyperedge in the description graph: 
      * all groups it references end up in the same component.
      */
-    public void union(List<AtomListDescription> descriptions) {
-        for (AtomListDescription description : descriptions) {
+    public void union(List<AtomListDescription> atomListDescriptions, List<GroupSequenceDescription> groupSequenceDescriptions) {
+    	List<List<GroupDescription>> groupDescriptionLists = new ArrayList<>();
+        for (AtomListDescription description : atomListDescriptions) {
         	List<GroupDescription> groups = description.getGroupDescriptions();
             add(description, groups);
-            
-            // Union every group in the hyperedge with the first — transitivity
+            groupDescriptionLists.add(groups);
+        }
+        
+        for (GroupSequenceDescription groupSequenceDescription : groupSequenceDescriptions) {
+        	groupDescriptionLists.add(List.of(groupSequenceDescription.getStart(), groupSequenceDescription.getEnd()));
+        	groupDescriptionToGroupSeqDescriptionMap.put(groupSequenceDescription.getStart(), groupSequenceDescription);
+        	groupDescriptionToGroupSeqDescriptionMap.put(groupSequenceDescription.getEnd(), groupSequenceDescription);
+        }
+        
+        for (List<GroupDescription> groups : groupDescriptionLists) {
+        	 // Union every group in the hyperedge with the first — transitivity
             // of union ensures all groups in the edge land in one component.
             GroupDescription pivot = groups.get(0);
             for (int i = 1; i < groups.size(); i++) {
                 union(pivot, groups.get(i));
             }
         }
+        
     }
     
     private void add(AtomListDescription description, List<GroupDescription> groups) {
@@ -88,16 +112,7 @@ public class GroupUnionFind {
      * Return the connected components as a list of groups, one list per
      * component. Order within each component matches insertion order.
      */
-    public List<List<GroupDescription>> getComponents() {
-        Map<GroupDescription, List<GroupDescription>> buckets = new LinkedHashMap<>();
-        for (GroupDescription group : parent.keySet()) {
-            GroupDescription root = find(group);
-            buckets.computeIfAbsent(root, k -> new ArrayList<GroupDescription>()).add(group);
-        }
-        return new ArrayList<>(buckets.values());
-    }
-    
-    public List<Component> getComponents2() {
+    public List<Component> getComponents() {
         Map<GroupDescription, List<GroupDescription>> buckets = new LinkedHashMap<>();
         for (GroupDescription group : parent.keySet()) {
             GroupDescription root = find(group);
@@ -110,16 +125,20 @@ public class GroupUnionFind {
             }
             componentGroups.add(group);
         }
-        return buckets.values().stream().map(c -> new Component(c, get(c))).toList();
+        return buckets.values().stream().map(this::makeComponent).toList();
     }
 
-	private Set<AtomListDescription> get(List<GroupDescription> component) {
+	private Component makeComponent(List<GroupDescription> component) {
 		Set<AtomListDescription> atomListDescriptions = new HashSet<>();
+		Set<GroupSequenceDescription> groupSequenceDescriptions = new HashSet<>();
 		for (GroupDescription groupDescription : component) {
 			if (groupDescriptionToAtomListDescriptionMap.containsKey(groupDescription)) {
 				atomListDescriptions.addAll(groupDescriptionToAtomListDescriptionMap.get(groupDescription));
 			}
+			if (groupDescriptionToGroupSeqDescriptionMap.containsKey(groupDescription)) {
+				groupSequenceDescriptions.add(groupDescriptionToGroupSeqDescriptionMap.get(groupDescription));
+			}
 		}
-		return atomListDescriptions;
+		return new Component(component, atomListDescriptions, groupSequenceDescriptions);
 	}
 }

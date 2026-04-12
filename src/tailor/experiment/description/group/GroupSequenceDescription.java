@@ -4,11 +4,11 @@ import tailor.experiment.description.GroupDescription;
 
 public class GroupSequenceDescription {
 	
-	private GroupDescription start;
+	private final GroupDescription start;
 	
-	private GroupDescription end;
+	private final GroupDescription end;
 	
-	private int separation;
+	private final int separation;
 
 	public GroupSequenceDescription(GroupDescription start, GroupDescription end, int separation) {
 		this.start = start;
@@ -16,4 +16,15 @@ public class GroupSequenceDescription {
 		this.separation = separation;
 	}
 
+	public int getSeparation() {
+		return separation;
+	}
+
+	public GroupDescription getStart() {
+		return start;
+	}
+
+	public GroupDescription getEnd() {
+		return end;
+	}
 }

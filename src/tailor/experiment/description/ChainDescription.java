@@ -29,6 +29,7 @@ public class ChainDescription {
 		this.label = Optional.ofNullable(label);
 		this.groupDescriptions = new ArrayList<>();
 		this.atomListDescriptions = new ArrayList<>();
+		this.groupSequenceDescriptions = new ArrayList<>();
 	}
 	
 	public Optional<String> getLabel() {

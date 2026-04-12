@@ -12,6 +12,7 @@ import tailor.experiment.api.AtomListDescription;
 import tailor.experiment.description.GroupDescription;
 import tailor.experiment.description.atom.AtomDistanceDescription;
 import tailor.experiment.plan.GroupUnionFind;
+import tailor.experiment.plan.GroupUnionFind.Component;
 
 public class TestGroupUnionFind {
 	
@@ -26,10 +27,10 @@ public class TestGroupUnionFind {
 		
 		List<AtomListDescription> atomListDescriptions = new ArrayList<>();
 		atomListDescriptions.add(new AtomDistanceDescription(1, pathTo(group1, "O"), pathTo(group2, "O")));
-		uf.union(atomListDescriptions);
+		uf.union(atomListDescriptions, List.of());
 		
-		for (List<GroupDescription> components : uf.getComponents()) {
-			System.out.println(components);
+		for (Component component : uf.getComponents()) {
+			System.out.println(component);
 		}
 	}
 	
@@ -45,10 +46,10 @@ public class TestGroupUnionFind {
 		List<AtomListDescription> atomListDescriptions = new ArrayList<>();
 		atomListDescriptions.add(new AtomDistanceDescription(1, pathTo(group1, "O"), pathTo(group2, "O")));
 		atomListDescriptions.add(new AtomDistanceDescription(1, pathTo(group2, "O"), pathTo(group3, "O")));
-		uf.union(atomListDescriptions);
+		uf.union(atomListDescriptions, List.of());
 		
-		for (List<GroupDescription> components : uf.getComponents()) {
-			System.out.println(components);
+		for (Component component : uf.getComponents()) {
+			System.out.println(component);
 		}
 	}
 	
@@ -65,10 +66,10 @@ public class TestGroupUnionFind {
 		List<AtomListDescription> atomListDescriptions = new ArrayList<>();
 		atomListDescriptions.add(new AtomDistanceDescription(1, pathTo(group1, "O"), pathTo(group2, "O")));
 		atomListDescriptions.add(new AtomDistanceDescription(1, pathTo(group3, "O"), pathTo(group4, "O")));
-		uf.union(atomListDescriptions);
+		uf.union(atomListDescriptions, List.of());
 		
-		for (List<GroupDescription> components : uf.getComponents()) {
-			System.out.println(components);
+		for (Component component : uf.getComponents()) {
+			System.out.println(component);
 		}
 	}
 }

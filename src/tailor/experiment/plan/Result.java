@@ -239,6 +239,15 @@ public class Result {
 		return false;
 	}
 	
+	public Group lastGroup() {
+		return (Group)this.root.children.get(this.root.children.size() - 1).o;
+	}
+	
+
+	public int separation(Result result) {
+		return result.lastGroup().getNumber() - lastGroup().getNumber();
+	}
+	
 	public void add(Group group, List<Atom> atoms) {
 		Node groupNode = new Node(Level.RESIDUE, group);
 		this.root.children.add(groupNode);
@@ -261,5 +270,6 @@ public class Result {
 		Node groupNode = this.root.children.get(0);
 		groupNode.children.add(new Node(Level.ATOM, atom));
 	}
+
 
 }

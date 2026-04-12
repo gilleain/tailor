@@ -16,6 +16,7 @@ import tailor.experiment.description.ChainDescription;
 import tailor.experiment.description.GroupDescription;
 import tailor.experiment.description.group.GroupSequenceDescription;
 import tailor.experiment.operator.CombineResults;
+import tailor.experiment.operator.CombineResults.PipeSeqConstraint;
 import tailor.experiment.operator.FilterAtomResultByCondition;
 import tailor.experiment.operator.FilterAtomResultByCondition.ConditionMatcher;
 import tailor.experiment.operator.PrintAdapter;
@@ -98,40 +99,28 @@ public class Planner {
 			Map<AtomListDescription, List<GroupDescription>> outerGroupDescriptions, 
 			Map<GroupDescription, PipeableOperator<Result, Result>> scannerMap) {
 		
-		for (GroupSequenceDescription groupSequenceDescription : chainDescription.getGroupSequenceDescriptions()) {
-			
-		}
 		
-		// Find connected components of the graph where vertices are atoms and edges 
-		// (or hyperedges) are AtomListDescriptions - the scanners are then joined based on this
+		// Find connected components of the graph where vertices are groups and edges 
+		// (or hyperedges) are (groups associated with) AtomListDescriptions or GroupSequenceDescriptions 
+		// - the scanners are then joined based on the components found
 		List<AtomListDescription> outerAtomListDescriptions = new ArrayList<>(outerGroupDescriptions.keySet()); 
 		GroupUnionFind groupUnionFind = new GroupUnionFind(chainDescription.getGroupDescriptions());
-		groupUnionFind.union(outerAtomListDescriptions);
+		groupUnionFind.union(outerAtomListDescriptions, chainDescription.getGroupSequenceDescriptions());
 		
 		// The scanner for each group in a component needs to be joined together
 		Stack<ResultPipe> combinedOutputPipes = new Stack<>();
-		for (Component component : groupUnionFind.getComponents2()) {
+		for (Component component : groupUnionFind.getComponents()) {
 			List<ResultPipe> componentOutputResultPipes = new ArrayList<>();
+			Map<GroupDescription, ResultPipe> groupDescriptionToOutputPipeMap = new HashMap<>();
 			for (GroupDescription groupDescription : component.groupDescriptions()) {
-				PipeableOperator<Result, Result> scanner = scannerMap.get(groupDescription);
-
-				ResultPipe scannerOutput = new ResultPipe();
-				scanner.setSink(scannerOutput);
-
-				// for groups that have inner conditions, create a filter and connect to the scanner
-				if (innerGroupDescriptions.containsKey(groupDescription)) {
-					Set<AtomListDescription> atomListDescriptions = innerGroupDescriptions.get(groupDescription);
-					ResultPipe filterOutput = addInnerFilter(scannerOutput, atomListDescriptions, plan);
-					componentOutputResultPipes.add(filterOutput);
-				} else {
-					componentOutputResultPipes.add(scannerOutput);
-				}
+				ResultPipe groupOutput = handleComponentGroup(plan, groupDescription, scannerMap, innerGroupDescriptions);
+				componentOutputResultPipes.add(groupOutput);
+				groupDescriptionToOutputPipeMap.put(groupDescription, groupOutput);
 			}
 			// join these if there are more than one
 			if (componentOutputResultPipes.size() > 1) {
 				ResultPipe combinedOutput = new ResultPipe();
-				CombineResults combiner = new CombineResults(componentOutputResultPipes, combinedOutput);
-				plan.addOperator(combiner);
+				plan.addOperator(makeCombiner(groupDescriptionToOutputPipeMap, combinedOutput, component));
 				
 				Set<AtomListDescription> atomListDescriptions = component.atomListDescriptions();
 				if (!component.atomListDescriptions().isEmpty()) {	// trivially, this should always be true
@@ -146,6 +135,36 @@ public class Planner {
 		}
 		
 		return combinedOutputPipes;
+	}
+	
+	private ResultPipe handleComponentGroup(
+			Plan plan,GroupDescription groupDescription,
+			Map<GroupDescription, PipeableOperator<Result, Result>> scannerMap,
+			Map<GroupDescription, Set<AtomListDescription>> innerGroupDescriptions) {
+		PipeableOperator<Result, Result> scanner = scannerMap.get(groupDescription);
+
+		ResultPipe scannerOutput = new ResultPipe();
+		scanner.setSink(scannerOutput);
+
+		// for groups that have inner conditions, create a filter and connect to the scanner
+		if (innerGroupDescriptions.containsKey(groupDescription)) {
+			Set<AtomListDescription> atomListDescriptions = innerGroupDescriptions.get(groupDescription);
+			ResultPipe filterOutput = addInnerFilter(scannerOutput, atomListDescriptions, plan);
+			return filterOutput;
+		} else {
+			return scannerOutput;
+		}
+	}
+	
+	private CombineResults makeCombiner(Map<GroupDescription, ResultPipe> groupDescriptionToOutputPipeMap, ResultPipe combinedOutput, Component component) {
+		List<CombineResults.PipeSeqConstraint> seqConstraints = new ArrayList<>();
+		for (GroupSequenceDescription groupSequenceDescription : component.groupSequenceDescriptions()) {
+			ResultPipe startPipe = groupDescriptionToOutputPipeMap.get(groupSequenceDescription.getStart());
+			ResultPipe endPipe = groupDescriptionToOutputPipeMap.get(groupSequenceDescription.getEnd());
+			seqConstraints.add(new PipeSeqConstraint(startPipe, endPipe, groupSequenceDescription));
+		}
+		List<ResultPipe> inputs = new ArrayList<>(groupDescriptionToOutputPipeMap.values());
+		return new CombineResults(inputs, combinedOutput, seqConstraints);
 	}
 	
 	// TODO - merge these inner/outer methods
