@@ -164,6 +164,7 @@ public class Planner {
 			seqConstraints.add(new PipeSeqConstraint(startPipe, endPipe, groupSequenceDescription));
 		}
 		List<ResultPipe> inputs = new ArrayList<>(groupDescriptionToOutputPipeMap.values());
+		inputs.sort((a, b) -> a.getSourceId().compareTo(b.getSourceId())); // sort on source ids - bit hacky
 		return new CombineResults(inputs, combinedOutput, seqConstraints);
 	}
 	
