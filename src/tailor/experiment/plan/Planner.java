@@ -8,6 +8,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.Stack;
 
+import tailor.experiment.api.AtomListCondition;
 import tailor.experiment.api.AtomListDescription;
 import tailor.experiment.api.Operator;
 import tailor.experiment.api.PipeableOperator;
@@ -18,7 +19,6 @@ import tailor.experiment.description.group.GroupSequenceDescription;
 import tailor.experiment.operator.CombineResults;
 import tailor.experiment.operator.CombineResults.PipeSeqConstraint;
 import tailor.experiment.operator.FilterAtomResultByCondition;
-import tailor.experiment.operator.FilterAtomResultByCondition.ConditionMatcher;
 import tailor.experiment.operator.PrintAdapter;
 import tailor.experiment.operator.ResultPipe;
 import tailor.experiment.operator.ScanAtomResultByLabel;
@@ -178,11 +178,9 @@ public class Planner {
 	}
 	
 	private FilterAtomResultByCondition createMultiFilter(Set<AtomListDescription> atomListDescriptions) {
-		List<ConditionMatcher> conditionMatchers = new ArrayList<>();
-		for (AtomListDescription atomListDescription : atomListDescriptions) {
-			conditionMatchers.add(new ConditionMatcher(atomListDescription.createCondition(), atomListDescription.createMatcher()));
-		}
-		FilterAtomResultByCondition filter = new FilterAtomResultByCondition(conditionMatchers);
+		List<AtomListCondition> conditions = 
+				atomListDescriptions.stream().map(AtomListDescription::createCondition).toList();
+		FilterAtomResultByCondition filter = new FilterAtomResultByCondition(conditions);
 		
 		ResultPipe filteredPipe = new ResultPipe();
 		filter.setSink(filteredPipe);

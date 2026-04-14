@@ -53,5 +53,15 @@ public class GroupDescription {
 			+ this.atomDescriptions.stream().map(AtomDescription::getLabel).collect(Collectors.joining(","))
 			+ ")";
 	}
+	
+	private int index;	// TODO - currently need this to preserve creation order - could be a better way...
+
+	public void setIndex(int index) {
+		this.index = index;
+	}
+	
+	public int getIndex() {
+		return this.index;
+	}
 
 }

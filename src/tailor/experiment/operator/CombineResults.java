@@ -40,6 +40,7 @@ public class CombineResults extends AbstractOperator {
 			source.registerSink(this);
 		}
 		output.registerSource(this);
+		this.gapMap = new HashMap<>();
 	}
 	
 	public CombineResults(List<ResultPipe> sources, Sink<Result> output) {
@@ -48,15 +49,11 @@ public class CombineResults extends AbstractOperator {
 		for (ResultPipe source : sources) {
 			source.registerSink(this);
 		}
+		this.gapMap = new HashMap<>();
 	}
 	
 	public CombineResults(List<ResultPipe> sources, Sink<Result> output, List<PipeSeqConstraint> pipeToSeqenceConstraints) {
-		this.sources = sources;
-		this.output = output;
-		for (ResultPipe source : sources) {
-			source.registerSink(this);
-		}
-		this.gapMap = new HashMap<>();
+		this(sources, output);
 		for (PipeSeqConstraint pipeSeqConstraint : pipeToSeqenceConstraints) {
 			ResultPipe end = pipeSeqConstraint.end();
 			gapMap.put(sources.indexOf(end), pipeSeqConstraint.groupSeqDescription().getSeparation());

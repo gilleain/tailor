@@ -112,6 +112,7 @@ public class FunctionalTests {
 	
 	@Test
 	public void betaAlphaBetaTest_PhiPsi() throws IOException {
+		
 		String filename = "3iwl_clean.pdb";
 		run(filename, makeAlphaPhiPsi());
 	}

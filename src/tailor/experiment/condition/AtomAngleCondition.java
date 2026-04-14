@@ -3,18 +3,18 @@ package tailor.experiment.condition;
 import java.util.List;
 import java.util.logging.Logger;
 
-import tailor.experiment.api.AtomListCondition;
 import tailor.experiment.measure.AtomAngleMeasure;
 import tailor.structure.Atom;
 
-public class AtomAngleCondition implements AtomListCondition {
+public class AtomAngleCondition extends AbstractAtomListCondition {
 	
 	private Logger logger = Logger.getLogger(this.getClass().getName());
 	
 	private AtomAngleMeasure aam;
 	private double angle;
 	
-	public AtomAngleCondition(double angle) {
+	public AtomAngleCondition(AtomMatcher atomMatcher, double angle) {
+		super(atomMatcher);
 		this.angle = angle;
 		this.aam = new AtomAngleMeasure();
 	}

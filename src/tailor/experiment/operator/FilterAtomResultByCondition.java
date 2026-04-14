@@ -4,23 +4,18 @@ import java.util.List;
 import java.util.logging.Logger;
 
 import tailor.experiment.api.AtomListCondition;
-import tailor.experiment.condition.AtomMatcher;
-import tailor.experiment.condition.AtomMatcher.Match;
+import tailor.experiment.condition.AtomPartition;
 import tailor.experiment.plan.Result;
 
 public class FilterAtomResultByCondition extends AbstractPipeableOperator {
 	
 	private Logger logger = Logger.getLogger(FilterAtomResultByCondition.class.getName());
 	
-	/**
-	 * Association of a matcher (to find atoms) and a condition (to match on them).
-	 */
-	public record ConditionMatcher(AtomListCondition condition, AtomMatcher matcher) {}
 	
-	private List<ConditionMatcher> conditionMatchers;
+	private List<AtomListCondition> conditions;
 	
-	public FilterAtomResultByCondition(List<ConditionMatcher> conditionMatchers) {
-		this.conditionMatchers = conditionMatchers;
+	public FilterAtomResultByCondition(List<AtomListCondition> conditions) {
+		this.conditions = conditions;
 	}
 	
 	public void run() {
@@ -29,8 +24,10 @@ public class FilterAtomResultByCondition extends AbstractPipeableOperator {
 		while (source.hasNext()) {
 			Result nextResult = source.getNext();
 			boolean isAccepted = true;
-			for (ConditionMatcher conditionMatcher : conditionMatchers) {
-				if (!matches(nextResult, conditionMatcher)) {
+			AtomPartition atomPartition = nextResult.getAtomPartition();
+			for (AtomListCondition condition : conditions) {
+				if (!condition.accept(atomPartition)) {
+					logger.info(condition + " failed for " + atomPartition + " of " + nextResult);
 					isAccepted = false;
 					break;
 				}
@@ -47,23 +44,9 @@ public class FilterAtomResultByCondition extends AbstractPipeableOperator {
 		logger.info(description() + " filtered: IN " + filterInCount + " OUT " + filterOutCount);
 	}
 	
-	private boolean matches(Result result, ConditionMatcher conditionMatcher) {
-		boolean isMatch = true;
-		for (Match match : conditionMatcher.matcher().extract(result)) {
-			logger.fine("Checking " + match + " from " + result);
-			if (conditionMatcher.condition.accept(match.getAtoms())) {
-				logger.fine(" Match");
-			} else {
-				logger.fine(" NO Match " + result);
-				isMatch = false;
-			}
-		}
-		return isMatch;
-	}
-
 	@Override
 	public String description() {
-		List<String> conditionNames = conditionMatchers.stream().map(c -> c.getClass().getSimpleName()).toList();
+		List<String> conditionNames = conditions.stream().map(c -> c.getClass().getSimpleName()).toList();
 		return "Filter: id[" + getId() + "] conditions:" + conditionNames;
 	}
 }

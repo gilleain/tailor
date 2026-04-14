@@ -3,11 +3,11 @@ package tailor.experiment.condition;
 import java.util.List;
 import java.util.logging.Logger;
 
-import tailor.experiment.api.AtomListCondition;
+import tailor.experiment.condition.AtomMatcher.Match;
 import tailor.experiment.measure.AtomAngleMeasure;
 import tailor.structure.Atom;
 
-public class AtomAngleRangeCondition implements AtomListCondition {
+public class AtomAngleRangeCondition extends AbstractAtomListCondition {
 	
 	private Logger logger = Logger.getLogger(this.getClass().getName());
 	
@@ -15,10 +15,15 @@ public class AtomAngleRangeCondition implements AtomListCondition {
 	private double minAngle;
 	private double maxAngle;
 	
-	public AtomAngleRangeCondition(double minAngle, double maxAngle) {
+	public AtomAngleRangeCondition(AtomMatcher atomMatcher, double minAngle, double maxAngle) {
+		super(atomMatcher);
 		this.minAngle = minAngle;
 		this.maxAngle = maxAngle;
 		this.aam = new AtomAngleMeasure();
+	}
+	
+	public boolean accept(Match match) {
+		return accept(match.getAtoms());
 	}
 	
 	public boolean accept(List<Atom> atoms) {

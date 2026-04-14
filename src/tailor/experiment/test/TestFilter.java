@@ -7,10 +7,11 @@ import org.junit.Test;
 import tailor.experiment.condition.AtomAngleCondition;
 import tailor.experiment.condition.AtomDistanceCondition;
 import tailor.experiment.condition.AtomMatcher;
+import tailor.experiment.condition.LabelPartition;
 import tailor.experiment.operator.CombineResults;
 import tailor.experiment.operator.FilterAtomResultByCondition;
-import tailor.experiment.operator.FilterAtomResultByCondition.ConditionMatcher;
 import tailor.experiment.operator.GroupSource;
+import tailor.experiment.operator.PrintAdapter;
 import tailor.experiment.operator.PrintResults;
 import tailor.experiment.operator.ResultPipe;
 import tailor.experiment.operator.ScanAtomResultByLabel;
@@ -45,15 +46,17 @@ public class TestFilter {
 		ResultPipe onPipe = new ResultPipe();
 		CombineResults combineON = new CombineResults(List.of(oPipe, nPipe), onPipe);
 		
-		AtomMatcher atomMatcher = new AtomMatcher(List.of(List.of("O", "N")));
-		AtomDistanceCondition condition = new AtomDistanceCondition(distance);
-		ConditionMatcher conditionMatchers = new ConditionMatcher(condition, atomMatcher);
-		FilterAtomResultByCondition filter = new FilterAtomResultByCondition(List.of(conditionMatchers));
+		AtomMatcher atomMatcher = new AtomMatcher(new LabelPartition(List.of(List.of("O"), List.of("N"))));
+		AtomDistanceCondition condition = new AtomDistanceCondition(atomMatcher, distance);
+		FilterAtomResultByCondition filter = new FilterAtomResultByCondition(List.of(condition));
 		filter.setSource(onPipe);
-		filter.setSink(new PrintResults());
+		ResultPipe end = new ResultPipe();
+		filter.setSink(end);
+		
+		PrintAdapter printAdapter = new PrintAdapter("END", end);
 		
 		// run the pipeline
-		Helper.runAll(List.of(groupSource, scanO, scanN, combineON, filter));
+		Helper.runAll(List.of(groupSource, scanO, scanN, combineON, filter, printAdapter));
 	}
 	
 	/**
@@ -72,9 +75,9 @@ public class TestFilter {
 		scanTriple.setSource(groupResultPipe);
 		scanTriple.setSink(triplePipe);
 		
-		AtomMatcher atomMatcher = new AtomMatcher(List.of(List.of("C", "CA", "N")));
-		AtomAngleCondition condition = new AtomAngleCondition(angle);
-		FilterAtomResultByCondition filter = new FilterAtomResultByCondition(List.of(new ConditionMatcher(condition, atomMatcher)));
+		AtomMatcher atomMatcher = new AtomMatcher(new LabelPartition(List.of(List.of("C", "CA", "N"))));
+		AtomAngleCondition condition = new AtomAngleCondition(atomMatcher, angle);
+		FilterAtomResultByCondition filter = new FilterAtomResultByCondition(List.of(condition));
 		filter.setSource(triplePipe);
 		filter.setSink(new PrintResults());
 		Helper.runAll(List.of(groupSource, scanTriple, filter));

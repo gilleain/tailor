@@ -6,6 +6,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import tailor.experiment.condition.AtomPartition;
 import tailor.structure.Atom;
 import tailor.structure.Chain;
 import tailor.structure.Group;
@@ -78,16 +79,16 @@ public class Result {
 	}
 	
 
-	public List<List<Atom>> getAtomPartition() {
-		List<List<Atom>> atomPartition = new ArrayList<>();
+	public AtomPartition getAtomPartition() {
+		List<List<Atom>> atomParts = new ArrayList<>();
 		for (Node groupNode : this.root.children) {
 			List<Atom> atoms = new ArrayList<>();
 			for (Node atomNode : groupNode.children) {
 				atoms.add((Atom)atomNode.o);
 			}
-			atomPartition.add(atoms);
+			atomParts.add(atoms);
 		}
-		return atomPartition;
+		return new AtomPartition(atomParts);
 	}
 	
 	public List<Group> getGroups() {

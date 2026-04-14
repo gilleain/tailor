@@ -3,11 +3,10 @@ package tailor.experiment.condition;
 import java.util.List;
 import java.util.logging.Logger;
 
-import tailor.experiment.api.AtomListCondition;
 import tailor.experiment.measure.AtomDistanceMeasure;
 import tailor.structure.Atom;
 
-public class AtomDistanceRangeCondition implements AtomListCondition {
+public class AtomDistanceRangeCondition extends AbstractAtomListCondition {
 	
 	private Logger logger = Logger.getLogger(this.getClass().getName());
 	
@@ -15,7 +14,8 @@ public class AtomDistanceRangeCondition implements AtomListCondition {
 	private double minDistance;
 	private double maxDistance;
 	
-	public AtomDistanceRangeCondition(double minDistance, double maxDistance) {
+	public AtomDistanceRangeCondition(AtomMatcher atomMatcher, double minDistance, double maxDistance) {
+		super(atomMatcher);
 		this.minDistance = minDistance;
 		this.maxDistance = maxDistance;
 		this.adm = new AtomDistanceMeasure();

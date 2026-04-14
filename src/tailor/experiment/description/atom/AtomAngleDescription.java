@@ -20,7 +20,7 @@ public class AtomAngleDescription extends AbstractAtomListDescription {
 
 	@Override
 	public AtomListCondition createCondition() {
-		return new AtomAngleCondition(getAngle());
+		return new AtomAngleCondition(createMatcher(), getAngle());
 	}
 	
 }

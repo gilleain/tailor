@@ -27,6 +27,6 @@ public class AtomDistanceRangeDescription extends AbstractAtomListDescription {
 
 	@Override
 	public AtomListCondition createCondition() {
-		return new AtomDistanceRangeCondition(getMinDistance(), getMaxDistance());
+		return new AtomDistanceRangeCondition(createMatcher(), getMinDistance(), getMaxDistance());
 	}
 }

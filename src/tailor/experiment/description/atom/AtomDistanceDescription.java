@@ -19,6 +19,6 @@ public class AtomDistanceDescription extends AbstractAtomListDescription {
 
 	@Override
 	public AtomListCondition createCondition() {
-		return new AtomDistanceCondition(getDistance());
+		return new AtomDistanceCondition(createMatcher(), getDistance());
 	}
 }

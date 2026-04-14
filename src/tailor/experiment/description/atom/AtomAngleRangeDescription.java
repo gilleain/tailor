@@ -28,6 +28,6 @@ public class AtomAngleRangeDescription extends AbstractAtomListDescription {
 
 	@Override
 	public AtomListCondition createCondition() {
-		return new AtomAngleRangeCondition(getMinAngle(), getMaxAngle());
+		return new AtomAngleRangeCondition(createMatcher(), getMinAngle(), getMaxAngle());
 	}
 }

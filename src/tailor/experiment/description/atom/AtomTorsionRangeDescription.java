@@ -29,6 +29,6 @@ public class AtomTorsionRangeDescription extends AbstractAtomListDescription {
 
 	@Override
 	public AtomListCondition createCondition() {
-		return new AtomTorsionRangeCondition(getMinAngle(), getMaxAngle());
+		return new AtomTorsionRangeCondition(createMatcher(), getMinAngle(), getMaxAngle());
 	}
 }
