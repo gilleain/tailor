@@ -2,7 +2,6 @@ package tailor.experiment.api;
 
 import java.util.List;
 
-import tailor.experiment.condition.AtomMatcher;
 import tailor.experiment.description.GroupDescription;
 
 /**
@@ -30,9 +29,5 @@ public interface AtomListDescription {
 	 */
 	AtomListCondition createCondition();
 	
-	/**
-	 * @return an atom matcher for this description
-	 */
-	AtomMatcher createMatcher();
 
 }

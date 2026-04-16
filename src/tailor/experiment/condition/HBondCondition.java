@@ -16,10 +16,6 @@ public class HBondCondition implements AtomListCondition {
 	
 	private AtomAngleRangeCondition dhaAngleRangeCondition;
 	
-	private AtomMatcher distanceMatcher;
-	
-	private AtomMatcher angleMatcher;
-	
 	public HBondCondition(AtomMatcher distanceMatcher, AtomMatcher angleMatcher,
 			double haDistance, double minDHAAngle, double maxDHAAngle) {
 		this.haDistanceCondition = new AtomDistanceCondition(distanceMatcher, haDistance);

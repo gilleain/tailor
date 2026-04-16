@@ -13,6 +13,7 @@ import tailor.experiment.description.GroupDescription;
 import tailor.experiment.description.atom.AtomAngleRangeDescription;
 import tailor.experiment.description.atom.AtomDistanceRangeDescription;
 import tailor.experiment.description.atom.AtomTorsionRangeDescription;
+import tailor.experiment.description.atom.HBondDescription;
 import tailor.experiment.description.group.GroupSequenceDescription;
 import tailor.experiment.plan.Plan;
 import tailor.experiment.plan.Planner;
@@ -22,6 +23,22 @@ import tailor.structure.Structure;
 public class FunctionalTests {
 	
 	private static final String DATA_DIR = "data";
+	
+	private ChainDescription makeHBond() {
+		double minAngle = 145;
+		double maxAngle = 180;
+		double maxDistance = 3.5;
+		ChainDescription chainDescription = new ChainDescription();
+		GroupDescription groupA = Helper.makeGroupDescription("C", "O");
+		GroupDescription groupB = Helper.makeGroupDescription("H", "N");
+		chainDescription.addGroupDescriptions(groupA, groupB);
+		chainDescription.addAtomListDescriptions(
+				new HBondDescription(
+						maxDistance, minAngle, maxAngle, 
+						pathTo(groupA, "C"), pathTo(groupA, "O"), pathTo(groupB, "H"), pathTo(groupB, "N"))
+		);
+		return chainDescription;
+	}
 	
 	private ChainDescription makeON() {
 		double minAngle = 145;
@@ -90,6 +107,12 @@ public class FunctionalTests {
 	public void helixPhiPsiTest() throws IOException {
 		String filename = "helix.pdb";
 		run(filename, makeAlphaPhiPsi());
+	}
+	
+	@Test
+	public void helixHBondTest() throws IOException {
+		String filename = "helix.pdb";
+		run(filename, makeHBond());
 	}
 	
 	@Test

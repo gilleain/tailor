@@ -46,7 +46,6 @@ public abstract class AbstractAtomListDescription implements AtomListDescription
 		return atomDescriptionPaths.get(0).getGroupDescription();
 	}
 	
-	@Override
 	public AtomMatcher createMatcher() {
 		return new AtomMatcher(LabelPartition.fromDescriptionPaths(atomDescriptionPaths));
 	}
