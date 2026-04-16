@@ -19,10 +19,9 @@ public class LabelPartition {
 	
 	public static LabelPartition fromDescriptionPaths(List<DescriptionPath> descriptionPaths) {
 		Map<GroupDescription, List<String>> partition = new HashMap<>();
-		int index = 0;	// TODO :/ this is needed to preserve original order?
+		
 		for (DescriptionPath descriptionPath : descriptionPaths) {
 			GroupDescription groupDescription = descriptionPath.getGroupDescription();
-			groupDescription.setIndex(index);
 			List<String> atomLabels;
 			if (partition.containsKey(groupDescription)) {
 				atomLabels = partition.get(groupDescription);
@@ -31,13 +30,23 @@ public class LabelPartition {
 				partition.put(groupDescription, atomLabels);
 			}
 			atomLabels.add(descriptionPath.getAtomDescription().getLabel());
-			index++;
 		}
 		List<List<String>> parts = new ArrayList<>();
 		List<GroupDescription> keys = new ArrayList<>(partition.keySet());
 		keys.sort(Comparator.comparing(GroupDescription::getIndex));
+		
+		int index = 0;
 		for (GroupDescription groupDescription : keys) {
+			int groupIndex = groupDescription.getIndex();
+			
+			if (groupIndex > index) {
+				while (groupIndex != index) {
+					parts.add(new ArrayList<>());
+					index++;
+				}
+			}
 			parts.add(partition.get(groupDescription));
+			index++;
 		}
 		return new LabelPartition(parts);
 	}

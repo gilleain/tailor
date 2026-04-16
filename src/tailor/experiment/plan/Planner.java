@@ -32,6 +32,9 @@ public class Planner {
 	public Plan plan(ChainDescription chainDescription) {
 		Plan plan = new Plan();
 		
+		// this is needed at the moment for getting label partitions matching correctly
+		labelDescription(chainDescription);
+		
 		// Go through the group descriptions in the chain, making scanners
 		Map<GroupDescription, PipeableOperator<Result, Result>> scannerMap = new HashMap<>();
 		for (GroupDescription groupDescription : chainDescription.getGroupDescriptions()) {
@@ -80,6 +83,14 @@ public class Planner {
 		// Wrap the output in a print (for now)
 		plan.addOperator(new PrintAdapter("*", current));
 		return plan;
+	}
+	
+	private void labelDescription(ChainDescription chainDescription) {	// TODO - expand on this?
+		int index = 0;
+		for (GroupDescription groupDescription : chainDescription.getGroupDescriptions()) {
+			groupDescription.setIndex(index);
+			index++;
+		}
 	}
 	
 	private void add(GroupDescription groupDescription, AtomListDescription atomListDescription, Map<GroupDescription, Set<AtomListDescription>> innerGroupDescriptions) {

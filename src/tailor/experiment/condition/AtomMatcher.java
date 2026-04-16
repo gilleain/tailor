@@ -16,29 +16,8 @@ public class AtomMatcher {
 		private List<Atom> atoms;
 		private boolean isComplete;
 		
-		public Match(int size) {
-			this.atoms = new ArrayList<>();
-			for (int index = 0; index < size; index++) {
-				atoms.add(null);
-			}	
-		}
-		
-		/**
-		 * @param partIndex the index of the part within the partition (equivalent to the group)
-		 * @param labelIndex the index of the atomLabel within the part
-		 * @param outIndex the final index in the match
-		 * @param atomLabel the atom label
-		 * @param resultAtomPartition the atoms to match against
-		 * @return
-		 */
-		public boolean set(int labelIndex, int outIndex, String atomLabel, List<Atom> resultAtoms) {
-			for (Atom resultAtom : resultAtoms) {
-				if (resultAtom.getName().equals(atomLabel)) {
-					this.atoms.set(outIndex, resultAtom);
-					return true;
-				}
-			}
-			return false;
+		public Match(List<Atom> atoms) {
+			this.atoms = atoms;
 		}
 		
 		public boolean isComplete() {
@@ -57,7 +36,7 @@ public class AtomMatcher {
 		public String toString() {
 			String atomLabels = "|";
 			for (Atom atom : atoms) {
-				atomLabels += (atom == null)? "!" : atom.getName();
+				atomLabels += atom.getName();
 				atomLabels += "|";
 			}
 			return isComplete + atomLabels;
@@ -76,7 +55,7 @@ public class AtomMatcher {
 		// check the label partition is contained in the atom partition
 		Match match = findMatch(other);
 		if (match.isComplete()) {
-			logger.fine("MATCH " + match + " for " + other);
+			logger.info("MATCH " + match + " for " + other);
 			return Optional.of(match);
 		} else {
 			logger.info("No match " + this.atomLabels + " to " + other + " " + match);
@@ -85,23 +64,28 @@ public class AtomMatcher {
 	}
 	
 	private Match findMatch(AtomPartition resultAtoms) {
-		int numberOfAtoms = atomLabels.totalElements();
-		Match match = new Match(numberOfAtoms);
-		
-		int outIndex = 0;
+		List<Atom> atomMatches = new ArrayList<>();
 		for (int partIndex = 0; partIndex < atomLabels.numberOfParts(); partIndex++) {
 			List<String> part = atomLabels.getPart(partIndex);
 			List<Atom> atomPart = resultAtoms.getPart(partIndex);
-			for (int labelIndex = 0; labelIndex < part.size(); labelIndex++) {
-				String atomLabel = part.get(labelIndex);
-				// Check that we can find a matching atom in the result atoms
-				boolean isSet = match.set(labelIndex, outIndex, atomLabel, atomPart);
-				if (!isSet) {
-					return match;
+			for (String atomLabel : part) {	
+				Atom atom = findAtom(atomLabel, atomPart);
+				if (atom == null) {
+					return new Match(atomMatches);
+				} else {
+					atomMatches.add(atom);
 				}
-				outIndex++;
 			}	
 		}
-		return match.setComplete();
+		return new Match(atomMatches).setComplete();
+	}
+	
+	private Atom findAtom(String label, List<Atom> atoms) {
+		for (Atom atom : atoms) {
+			if (atom.getName().equals(label)) {
+				return atom;
+			}
+		}
+		return null;
 	}
 }
