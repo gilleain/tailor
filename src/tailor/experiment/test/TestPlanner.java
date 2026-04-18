@@ -6,14 +6,44 @@ import java.util.List;
 
 import org.junit.Test;
 
+import tailor.experiment.api.AtomListCondition;
+import tailor.experiment.condition.AtomPartition;
 import tailor.experiment.description.ChainDescription;
+import tailor.experiment.description.DescriptionPath;
 import tailor.experiment.description.GroupDescription;
-import tailor.experiment.description.atom.AtomAngleDescription;
-import tailor.experiment.description.atom.AtomDistanceDescription;
+import tailor.experiment.description.atom.AbstractAtomListDescription;
 import tailor.experiment.plan.Plan;
 import tailor.experiment.plan.Planner;
+import tailor.structure.Atom;
 
 public class TestPlanner {
+	
+	private class DummyAtomListCondition implements AtomListCondition {
+
+		@Override
+		public boolean accept(List<Atom> atoms) {
+			return true;	// Always true
+		}
+
+		@Override
+		public boolean accept(AtomPartition atomPartition) {
+			return true;
+		}
+		
+	}
+	
+	private class DummyAtomListDescription extends AbstractAtomListDescription {
+		
+		DummyAtomListDescription(DescriptionPath... paths) {
+			super(paths);
+		}
+
+		@Override
+		public AtomListCondition createCondition() {
+			return new DummyAtomListCondition();
+		}
+		
+	}
 	
 	@Test
 	public void testTwoResiduesWithSingleAtoms() {
@@ -44,14 +74,13 @@ public class TestPlanner {
 	 */
 	@Test
 	public void testTrioA() {
-		double distance = 10.0;
 		ChainDescription chainDescription = new ChainDescription();
 		GroupDescription groupA = Helper.makeGroupDescription("N");
 		GroupDescription groupB = Helper.makeGroupDescription("CA");
 		GroupDescription groupC = Helper.makeGroupDescription("C");
 		chainDescription.addGroupDescriptions(groupA, groupB, groupC);
 		chainDescription.addAtomListDescriptions(
-			new AtomDistanceDescription(distance, pathTo(groupA, "N"), pathTo(groupB, "CA"))
+			new DummyAtomListDescription(pathTo(groupA, "N"), pathTo(groupB, "CA"))
 	    );
 		
 		Plan plan = new Planner().plan(chainDescription);
@@ -68,13 +97,12 @@ public class TestPlanner {
 	 */
 	@Test
 	public void testTrioB() {
-		double distance = 10.0;
 		ChainDescription chainDescription = new ChainDescription();
 		GroupDescription groupA = Helper.makeGroupDescription("N", "CA");
 		GroupDescription groupB = Helper.makeGroupDescription("C");
 		chainDescription.addGroupDescriptions(groupA, groupB);
 		chainDescription.addAtomListDescriptions(
-			new AtomDistanceDescription(distance, pathTo(groupA, "N"), pathTo(groupA, "CA"))
+			new DummyAtomListDescription(pathTo(groupA, "N"), pathTo(groupA, "CA"))
 	    );
 		
 		Plan plan = new Planner().plan(chainDescription);
@@ -91,13 +119,12 @@ public class TestPlanner {
 	 */
 	@Test
 	public void testTrioC() {
-		double distance = 10.0;
 		ChainDescription chainDescription = new ChainDescription();
 		GroupDescription groupA = Helper.makeGroupDescription("N", "CA");
 		GroupDescription groupB = Helper.makeGroupDescription("C");
 		chainDescription.addGroupDescriptions(groupA, groupB);
 		chainDescription.addAtomListDescriptions(
-			new AtomDistanceDescription(distance, pathTo(groupA, "CA"), pathTo(groupB, "C"))
+			new DummyAtomListDescription(pathTo(groupA, "CA"), pathTo(groupB, "C"))
 	    );
 		
 		Plan plan = new Planner().plan(chainDescription);
@@ -112,12 +139,11 @@ public class TestPlanner {
 	 */
 	@Test
 	public void testInnerGroupFilteringDistance() {
-		double distance = 7.0;	 // w/e
 		ChainDescription chainDescription = new ChainDescription();
 		GroupDescription groupA = Helper.makeGroupDescription("N", "CA");
 		chainDescription.addGroupDescription(groupA);
 		chainDescription.addAtomListDescriptions(
-			new AtomDistanceDescription(distance, pathTo(groupA, "N"), pathTo(groupA, "CA"))
+			new DummyAtomListDescription(pathTo(groupA, "N"), pathTo(groupA, "CA"))
 		);
 		
 		Plan plan  = new Planner().plan(chainDescription);
@@ -130,13 +156,12 @@ public class TestPlanner {
 	 * - Add an angle description to the group
 	 */
 	@Test
-	public void testInnerGroupFilteringAngle() {
-		double angle = 45.0;	 // w/e
+	public void testInnerGroupFilteringThreeAtoms() {
 		ChainDescription chainDescription = new ChainDescription();
 		GroupDescription groupA = Helper.makeGroupDescription("N", "CA", "C");
 		chainDescription.addGroupDescription(groupA);
 		groupA.addAtomListDescriptions(
-			new AtomAngleDescription(angle, pathTo(groupA, "N"), pathTo(groupA, "CA"), pathTo(groupA, "C"))
+			new DummyAtomListDescription(pathTo(groupA, "N"), pathTo(groupA, "CA"), pathTo(groupA, "C"))
 		);
 		
 		Plan plan = new Planner().plan(chainDescription);
@@ -150,12 +175,11 @@ public class TestPlanner {
 	 */
 	@Test
 	public void testInnerGroupFilteringOnOneResidue() {
-		double distance = 5.0;	 // w/e
 		ChainDescription chainDescription = new ChainDescription();
 		GroupDescription groupA = Helper.makeGroupDescription("N", "CA");
 		chainDescription.addGroupDescription(groupA);
 		chainDescription.addAtomListDescriptions(
-			new AtomDistanceDescription(distance, pathTo(groupA, "N"), pathTo(groupA, "CA"))
+			new DummyAtomListDescription(pathTo(groupA, "N"), pathTo(groupA, "CA"))
 		);
 		
 		chainDescription.addGroupDescription(Helper.makeGroupDescription("O", "C"));
@@ -167,13 +191,12 @@ public class TestPlanner {
 	
 	@Test
 	public void testInnerGroupMultiFilteringOnOneResidue() {
-		double distance = 5.0;	 // w/e
 		ChainDescription chainDescription = new ChainDescription();
 		GroupDescription groupA = Helper.makeGroupDescription("N", "CA", "C", "O");
 		chainDescription.addGroupDescription(groupA);
 		chainDescription.addAtomListDescriptions(
-			new AtomDistanceDescription(distance, pathTo(groupA, "N"), pathTo(groupA, "CA")),
-			new AtomDistanceDescription(distance, pathTo(groupA, "C"), pathTo(groupA, "O"))
+			new DummyAtomListDescription(pathTo(groupA, "N"), pathTo(groupA, "CA")),
+			new DummyAtomListDescription(pathTo(groupA, "C"), pathTo(groupA, "O"))
 		);
 		
 		Plan plan = new Planner().plan(chainDescription);
@@ -183,7 +206,6 @@ public class TestPlanner {
 	
 	@Test
 	public void testOuterGroupFilteringDisconnectedPairs() {
-		double distance = 30.0;	// w/e
 		ChainDescription chainDescription = new ChainDescription();
 		GroupDescription groupA = Helper.makeGroupDescription("N");
 		GroupDescription groupB = Helper.makeGroupDescription("CA");
@@ -191,18 +213,17 @@ public class TestPlanner {
 		GroupDescription groupD = Helper.makeGroupDescription("O");
 		chainDescription.addGroupDescriptions(groupA, groupB, groupC, groupD);
 		chainDescription.addAtomListDescriptions(
-				new AtomDistanceDescription(distance, pathTo(groupA, "N"), pathTo(groupB, "CA")),
-				new AtomDistanceDescription(distance, pathTo(groupC, "C"), pathTo(groupD, "O"))
+				new DummyAtomListDescription(pathTo(groupA, "N"), pathTo(groupB, "CA")),
+				new DummyAtomListDescription(pathTo(groupC, "C"), pathTo(groupD, "O"))
 		);
 		
 		Plan plan = new Planner().plan(chainDescription);
 		Helper.describe(plan);
-		Helper.run(Helper.makeData(List.of("GLY", "SER", "PRO", "HIS")), plan);
+		Helper.run(Helper.makeData(List.of("GLY", "SER", "PRO", "HIS", "ASP", "GLN")), plan);
 	}
 	
 	@Test
 	public void testOuterGroupFilteringConnectedPairsDistinctLabels() {
-		double distance = 10.0;	// w/e
 		ChainDescription chainDescription = new ChainDescription();
 		GroupDescription groupA = Helper.makeGroupDescription("N");
 		GroupDescription groupB = Helper.makeGroupDescription("CA");
@@ -210,9 +231,9 @@ public class TestPlanner {
 		GroupDescription groupD = Helper.makeGroupDescription("O");
 		chainDescription.addGroupDescriptions(groupA, groupB, groupC, groupD);
 		chainDescription.addAtomListDescriptions(
-				new AtomDistanceDescription(distance, pathTo(groupA, "N"), pathTo(groupB, "CA")),
-				new AtomDistanceDescription(distance, pathTo(groupB, "CA"), pathTo(groupC, "C")),
-				new AtomDistanceDescription(distance, pathTo(groupC, "C"), pathTo(groupD, "O"))
+				new DummyAtomListDescription(pathTo(groupA, "N"), pathTo(groupB, "CA")),
+				new DummyAtomListDescription(pathTo(groupB, "CA"), pathTo(groupC, "C")),
+				new DummyAtomListDescription(pathTo(groupC, "C"), pathTo(groupD, "O"))
 		);
 		
 		Plan plan = new Planner().plan(chainDescription);
@@ -222,14 +243,13 @@ public class TestPlanner {
 	
 	@Test
 	public void testInnerGroupFilteringConnectedPairsSimilarLabels() {
-		double distance = 10.0;	// w/e
 		ChainDescription chainDescription = new ChainDescription();
 		GroupDescription groupA = Helper.makeGroupDescription("N", "O");
 		GroupDescription groupB = Helper.makeGroupDescription("N", "O");
 		chainDescription.addGroupDescriptions(groupA, groupB);
 		chainDescription.addAtomListDescriptions(
-				new AtomDistanceDescription(distance, pathTo(groupA, "N"), pathTo(groupA, "O")),
-				new AtomDistanceDescription(distance, pathTo(groupB, "N"), pathTo(groupB, "O"))
+				new DummyAtomListDescription(pathTo(groupA, "N"), pathTo(groupA, "O")),
+				new DummyAtomListDescription(pathTo(groupB, "N"), pathTo(groupB, "O"))
 		);
 		
 		Plan plan = new Planner().plan(chainDescription);

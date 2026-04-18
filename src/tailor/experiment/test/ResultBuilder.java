@@ -33,6 +33,16 @@ public class ResultBuilder {
 			return (T) this;
 		}
 		
+		protected T withGroupNumbers(int... groupNumbers) {
+			// implicitly withGroupNumbers has to be called after withGroups ...
+			List<Group> groupList = groups.get(groups.size() - 1); // get the last list added
+			assert groupNumbers.length == groupList.size();
+			for (int index = 0; index < groupNumbers.length; index++) {
+				groupList.get(index).setNumber(groupNumbers[index]);
+			}
+			return (T) this;
+		}
+		
 		protected T withAtom(String atomLabel) {
 			this.atomLabels.add(List.of(atomLabel));
 			return (T) this;
