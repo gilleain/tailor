@@ -38,7 +38,7 @@ public class Helper {
 		plan.describe();
 	}
 	
-	protected static DescriptionPath pathTo(GroupDescription groupDescription, String atomLabel) {
+	public static DescriptionPath pathTo(GroupDescription groupDescription, String atomLabel) {
 		AtomDescription atomDescription = 
 				groupDescription.getAtomDescriptions().stream()
 				.filter(a -> a.getLabel().equals(atomLabel))
@@ -47,7 +47,7 @@ public class Helper {
 		return new DescriptionPath(groupDescription, atomDescription);
 	}
 	
-	protected static GroupDescription makeGroupDescription(String... atomLabels) {
+	public static GroupDescription makeGroupDescription(String... atomLabels) {
 		GroupDescription groupDescription = new GroupDescription();
 		for (String atomLabel : atomLabels) {
 			groupDescription.addAtomDescription(new AtomDescription(atomLabel));

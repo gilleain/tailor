@@ -60,6 +60,14 @@ public class CombineResults extends AbstractOperator {
 		}
 	}
 	
+	public List<ResultPipe> getSources() {
+		return this.sources;
+	}
+
+	public Sink<Result> getOutput() {
+		return this.output;
+	}
+
 	public String description() {
 		return "Combine id:[" + getId() + "]"
 				+ " sources:" + sources.stream().map(Source::getSourceId).toList() 

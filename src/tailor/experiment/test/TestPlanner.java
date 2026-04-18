@@ -14,6 +14,7 @@ import tailor.experiment.description.GroupDescription;
 import tailor.experiment.description.atom.AbstractAtomListDescription;
 import tailor.experiment.plan.Plan;
 import tailor.experiment.plan.Planner;
+import tailor.experiment.view.PlanViewer;
 import tailor.structure.Atom;
 
 public class TestPlanner {
@@ -238,7 +239,8 @@ public class TestPlanner {
 		
 		Plan plan = new Planner().plan(chainDescription);
 		Helper.describe(plan);
-		Helper.run(Helper.makeData(List.of("GLY", "SER", "PRO", "HIS")), plan);
+//		Helper.run(Helper.makeData(List.of("GLY", "SER", "PRO", "HIS")), plan);
+		PlanViewer.show(plan);
 	}
 	
 	@Test
