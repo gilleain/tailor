@@ -109,13 +109,19 @@ public class PlanViewer extends JFrame {
         private void collectEdges(Plan plan) {
             for (Operator op : plan.getOperators()) {
                 if (op instanceof PipeableOperator pipeable) {
+                	System.out.println("Found pipeable " + op.description());
                     Sink<?> sink = pipeable.getSink();
+                    System.out.println("Sink " + sink);
                     if (sink instanceof ResultPipe pipe && pipe.getSinkId() != null) {
+                    	System.out.println("Pipe sink id " + pipe.getSinkId());
                         edges.add(new String[]{op.getId(), pipe.getSinkId()});
                     }
                 } else if (op instanceof CombineResults combine) {
+                	System.out.println("Found combine " + op.description());
                     Sink<Result> output = combine.getOutput();
+                    System.out.println("Sink " + output);
                     if (output instanceof ResultPipe pipe && pipe.getSinkId() != null) {
+                    	System.out.println("Pipe sink id " + output.getSinkId());
                         edges.add(new String[]{op.getId(), pipe.getSinkId()});
                     }
                 }

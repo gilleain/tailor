@@ -46,9 +46,6 @@ public class CombineResults extends AbstractOperator {
 	public CombineResults(List<ResultPipe> sources, Sink<Result> output) {
 		this.sources = sources;
 		this.output = output;
-		for (ResultPipe source : sources) {
-			source.registerSink(this);
-		}
 		this.gapMap = new HashMap<>();
 	}
 	
@@ -57,6 +54,14 @@ public class CombineResults extends AbstractOperator {
 		for (PipeSeqConstraint pipeSeqConstraint : pipeToSeqenceConstraints) {
 			ResultPipe end = pipeSeqConstraint.end();
 			gapMap.put(sources.indexOf(end), pipeSeqConstraint.groupSeqDescription().getSeparation());
+		}
+	}
+	
+	// TODO - not great - is there another way to do this?
+	public void setId(String id) {
+		super.setId(id);
+		for (ResultPipe source : sources) {
+			source.registerSink(this);
 		}
 	}
 	

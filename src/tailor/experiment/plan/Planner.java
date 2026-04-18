@@ -12,7 +12,6 @@ import tailor.experiment.api.AtomListCondition;
 import tailor.experiment.api.AtomListDescription;
 import tailor.experiment.api.Operator;
 import tailor.experiment.api.PipeableOperator;
-import tailor.experiment.api.Source;
 import tailor.experiment.description.ChainDescription;
 import tailor.experiment.description.GroupDescription;
 import tailor.experiment.description.group.GroupSequenceDescription;
@@ -139,7 +138,7 @@ public class Planner {
 				
 				Set<AtomListDescription> atomListDescriptions = component.atomListDescriptions();
 				if (!component.atomListDescriptions().isEmpty()) {	// trivially, this should always be true
-					ResultPipe filterOutput = addOuterFilter(combinedOutput, atomListDescriptions, plan);
+					ResultPipe filterOutput = addFilter(combinedOutput, atomListDescriptions, plan);
 					combinedOutputPipes.add(filterOutput);
 				} else {
 					combinedOutputPipes.add(combinedOutput);
@@ -164,7 +163,7 @@ public class Planner {
 		// for groups that have inner conditions, create a filter and connect to the scanner
 		if (innerGroupDescriptions.containsKey(groupDescription)) {
 			Set<AtomListDescription> atomListDescriptions = innerGroupDescriptions.get(groupDescription);
-			ResultPipe filterOutput = addInnerFilter(scannerOutput, atomListDescriptions, plan);
+			ResultPipe filterOutput = addFilter(scannerOutput, atomListDescriptions, plan);
 			return filterOutput;
 		} else {
 			return scannerOutput;
@@ -183,38 +182,27 @@ public class Planner {
 		return new CombineResults(inputs, combinedOutput, seqConstraints);
 	}
 	
-	// TODO - merge these inner/outer methods
-	private ResultPipe addOuterFilter(ResultPipe previousOutput, Set<AtomListDescription> atomListDescriptions, Plan plan) {
-		FilterAtomResultByCondition filter = createMultiFilter(atomListDescriptions);
-		filter.setSource(previousOutput);
-		Source<Result> filterOutput = filter.getSinkAsSource();
-		plan.addOperator(filter);
-		return (ResultPipe) filterOutput;
-	}
-	
-	private FilterAtomResultByCondition createMultiFilter(Set<AtomListDescription> atomListDescriptions) {
-		List<AtomListCondition> conditions = 
-				atomListDescriptions.stream().map(AtomListDescription::createCondition).toList();
-		FilterAtomResultByCondition filter = new FilterAtomResultByCondition(conditions);
-		
-		ResultPipe filteredPipe = new ResultPipe();
-		filter.setSink(filteredPipe);
-		return filter;
-	}
-
 	/**
-	 * Add an inner filter : a filter between a subset of the atoms in a group.
+	 * Add a filter between a subset of the atoms in a group or set of groups
 	 * 
 	 * @param previousOutput the input for the filter, which is the output from the previous step
 	 * @param atomListDescriptions all condition descriptions to add
 	 * @param pipeline the pipeline so far
 	 * @return the output pipe from the filter
 	 */
-	private ResultPipe addInnerFilter(ResultPipe previousOutput, Set<AtomListDescription> atomListDescriptions, Plan plan) {
-		FilterAtomResultByCondition filter = createMultiFilter(atomListDescriptions);
-		filter.setSource(previousOutput);
-		Source<Result> filterOutput = filter.getSinkAsSource();
+	private ResultPipe addFilter(ResultPipe previousOutput, Set<AtomListDescription> atomListDescriptions, Plan plan) {
+		List<AtomListCondition> conditions = 
+				atomListDescriptions.stream().map(AtomListDescription::createCondition).toList();
+		FilterAtomResultByCondition filter = new FilterAtomResultByCondition(conditions);
+		
+		ResultPipe filterOutput = new ResultPipe();
+		filter.setSink(filterOutput);
+		
+		// TODO - nasty hidden effect here where we have to call this before setSource to ensure ids
+		// are set correctly!
 		plan.addOperator(filter);
-		return (ResultPipe) filterOutput;
+		filter.setSource(previousOutput);
+		
+		return filterOutput;
 	}
 }

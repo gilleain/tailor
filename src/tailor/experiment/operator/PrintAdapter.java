@@ -13,9 +13,12 @@ public class PrintAdapter extends AbstractOperator {
 	public PrintAdapter(String id, ResultPipe input) {
 		this.id = id;
 		this.input = input;
-		input.registerSink(this);
 	}
 	
+	public void setId(String id) {
+		super.setId(id);
+		((ResultPipe)this.input).registerSink(this);// TODO
+	}
 	
 
 	@Override
