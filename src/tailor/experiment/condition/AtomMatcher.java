@@ -55,10 +55,10 @@ public class AtomMatcher {
 		// check the label partition is contained in the atom partition
 		Match match = findMatch(other);
 		if (match.isComplete()) {
-			logger.info("MATCH " + match + " for " + other);
+			logger.fine("MATCH " + match + " for " + other);
 			return Optional.of(match);
 		} else {
-			logger.info("No match " + this.atomLabels + " to " + other + " " + match);
+			logger.fine("No match " + this.atomLabels + " to " + other + " " + match);
 			return Optional.empty();
 		}
 	}

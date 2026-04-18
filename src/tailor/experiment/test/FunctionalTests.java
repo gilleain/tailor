@@ -24,10 +24,10 @@ public class FunctionalTests {
 	
 	private static final String DATA_DIR = "data";
 	
-	private ChainDescription makeHBond() {
-		double minAngle = 145;
+	private ChainDescription makeHBondON() {
+		double minAngle = 120;	// Generous angle
 		double maxAngle = 180;
-		double maxDistance = 3.5;
+		double maxDistance = 2.5; // this is a very long H-A distance!
 		ChainDescription chainDescription = new ChainDescription();
 		GroupDescription groupA = Helper.makeGroupDescription("C", "O");
 		GroupDescription groupB = Helper.makeGroupDescription("H", "N");
@@ -36,6 +36,22 @@ public class FunctionalTests {
 				new HBondDescription(
 						maxDistance, minAngle, maxAngle, 
 						pathTo(groupA, "C"), pathTo(groupA, "O"), pathTo(groupB, "H"), pathTo(groupB, "N"))
+		);
+		return chainDescription;
+	}
+	
+	private ChainDescription makeHBondNO() {
+		double minAngle = 120;	// Generous angle
+		double maxAngle = 180;
+		double maxDistance = 2.5;	// this is a very long H-A distance!
+		ChainDescription chainDescription = new ChainDescription();
+		GroupDescription groupA = Helper.makeGroupDescription("H", "N");
+		GroupDescription groupB = Helper.makeGroupDescription("C", "O");
+		chainDescription.addGroupDescriptions(groupA, groupB);
+		chainDescription.addAtomListDescriptions(
+				new HBondDescription(
+						maxDistance, minAngle, maxAngle, 
+						pathTo(groupA, "N"), pathTo(groupA, "H"), pathTo(groupB, "O"), pathTo(groupB, "C"))
 		);
 		return chainDescription;
 	}
@@ -112,13 +128,21 @@ public class FunctionalTests {
 	@Test
 	public void helixHBondTest() throws IOException {
 		String filename = "helix.pdb";
-		run(filename, makeHBond());
+		run(filename, makeHBondON());
+		run(filename, makeHBondNO());
 	}
 	
 	@Test
 	public void hairpinNOBondTest() throws IOException {
 		String filename = "hairpin.pdb";
 		run(filename, makeNO());
+	}
+	
+	@Test
+	public void hairpinHBondTest() throws IOException {
+		String filename = "hairpin.pdb";
+		run(filename, makeHBondON());
+		run(filename, makeHBondNO());
 	}
 	
 	@Test

@@ -27,7 +27,7 @@ public class FilterAtomResultByCondition extends AbstractPipeableOperator {
 			AtomPartition atomPartition = nextResult.getAtomPartition();
 			for (AtomListCondition condition : conditions) {
 				if (!condition.accept(atomPartition)) {
-					logger.info(condition + " failed for " + atomPartition + " of " + nextResult);
+					logger.fine(condition + " failed for " + atomPartition + " of " + nextResult);
 					isAccepted = false;
 					break;
 				}
