@@ -52,16 +52,18 @@ public class Planner {
 		// Extract inner descriptions defined in group descriptions
 		for (GroupDescription groupDescription : chainDescription.getGroupDescriptions()) {
 			for (AtomListDescription atomListDescription : groupDescription.getAtomListDescriptions()) {
-				add(groupDescription, atomListDescription, innerGroupDescriptions);	
+				addToInnerListDescriptions(groupDescription, atomListDescription, innerGroupDescriptions);	
 			}
 		}
 		
 		// Extract and separate inner and outer atom list descriptions
 		for (AtomListDescription atomListDescription : chainDescription.getAtomListDescriptions()) {
 			// check to see if the sub-descriptions are in the same group
-			if (atomListDescription.isForSameGroup()) {
-				GroupDescription groupDescription = atomListDescription.getFirstGroupDescription();
-				add(groupDescription, atomListDescription, innerGroupDescriptions);
+			List<GroupDescription> groupDescriptions = atomListDescription.getGroupDescriptions();
+			GroupDescription firstGroupDescription = groupDescriptions.get(0);
+			boolean isForSameGroup = groupDescriptions.stream().allMatch(g -> g == firstGroupDescription);
+			if (isForSameGroup) {
+				addToInnerListDescriptions(firstGroupDescription, atomListDescription, innerGroupDescriptions);
 			} else {
 				outerGroupDescriptions.put(atomListDescription, atomListDescription.getGroupDescriptions());
 			}
@@ -93,7 +95,9 @@ public class Planner {
 		}
 	}
 	
-	private void add(GroupDescription groupDescription, AtomListDescription atomListDescription, Map<GroupDescription, Set<AtomListDescription>> innerGroupDescriptions) {
+	private void addToInnerListDescriptions(
+			GroupDescription groupDescription, AtomListDescription atomListDescription, 
+			Map<GroupDescription, Set<AtomListDescription>> innerGroupDescriptions) {
 		if (innerGroupDescriptions.containsKey(groupDescription)) {
 			innerGroupDescriptions.get(groupDescription).add(atomListDescription);
 		} else {

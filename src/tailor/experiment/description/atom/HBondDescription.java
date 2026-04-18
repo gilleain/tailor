@@ -64,16 +64,6 @@ public class HBondDescription implements AtomListDescription {
 	}
 
 	@Override
-	public boolean isForSameGroup() {
-		return false;
-	}
-
-	@Override
-	public GroupDescription getFirstGroupDescription() {
-		return null;	// TODO
-	}
-
-	@Override
 	public List<GroupDescription> getGroupDescriptions() {
 		return List.of(donorDescriptionPath.getGroupDescription(), 
 					   hydrogenDescriptionPath.getGroupDescription(), 

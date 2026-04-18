@@ -10,16 +10,6 @@ import tailor.experiment.description.GroupDescription;
 public interface AtomListDescription {
 
 	/**
-	 * @return true if all atom descriptions are in the same group
-	 */
-	boolean isForSameGroup();
-
-	/**
-	 * @return the first group description (if all the same, this will be a representative)
-	 */
-	GroupDescription getFirstGroupDescription();
-
-	/**
 	 * @return all group descriptions referenced by this description
 	 */
 	List<GroupDescription> getGroupDescriptions();

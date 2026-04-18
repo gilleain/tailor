@@ -14,7 +14,6 @@ import tailor.experiment.description.GroupDescription;
  */
 public abstract class AbstractAtomListDescription implements AtomListDescription {
 	
-	
 	private final List<DescriptionPath> atomDescriptionPaths;
 	
 	public AbstractAtomListDescription(DescriptionPath... atomDescriptionPaths) {
@@ -30,22 +29,6 @@ public abstract class AbstractAtomListDescription implements AtomListDescription
 		return atomDescriptionPaths.stream().map(DescriptionPath::getGroupDescription).toList();
 	}
 
-	@Override
-	public boolean isForSameGroup() {
-		GroupDescription first = getFirstGroupDescription();
-		for (DescriptionPath descriptionPath : atomDescriptionPaths.subList(1, atomDescriptionPaths.size())) {
-			if (descriptionPath.getGroupDescription() != first) {
-				return false;
-			}
-		}
-		return true;
-	}
-
-	@Override
-	public GroupDescription getFirstGroupDescription() {
-		return atomDescriptionPaths.get(0).getGroupDescription();
-	}
-	
 	public AtomMatcher createMatcher() {
 		return new AtomMatcher(LabelPartition.fromDescriptionPaths(atomDescriptionPaths));
 	}
