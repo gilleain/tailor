@@ -10,6 +10,8 @@ import org.junit.Test;
 import tailor.api.AtomListDescription;
 import tailor.api.AtomListMeasure;
 import tailor.datasource.PDBReader;
+import tailor.engine.plan.Plan;
+import tailor.engine.plan.Planner;
 import tailor.experiment.description.AtomValueRangeDescription;
 import tailor.experiment.description.ChainDescription;
 import tailor.experiment.description.GroupDescription;
@@ -20,8 +22,6 @@ import tailor.experiment.description.atom.HBondDescription;
 import tailor.experiment.description.group.GroupSequenceDescription;
 import tailor.experiment.measure.AtomDistanceMeasure;
 import tailor.experiment.measure.AtomTorsionMeasure;
-import tailor.experiment.plan.Plan;
-import tailor.experiment.plan.Planner;
 import tailor.structure.Chain;
 import tailor.structure.Structure;
 

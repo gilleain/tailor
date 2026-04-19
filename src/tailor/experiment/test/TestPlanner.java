@@ -10,14 +10,14 @@ import tailor.api.AtomListCondition;
 import tailor.api.AtomListDescription;
 import tailor.api.AtomListMeasure;
 import tailor.condition.AtomPartition;
+import tailor.engine.plan.Plan;
+import tailor.engine.plan.Planner;
+import tailor.engine.view.PlanViewer;
 import tailor.experiment.description.ChainDescription;
 import tailor.experiment.description.DescriptionPath;
 import tailor.experiment.description.GroupDescription;
 import tailor.experiment.measure.AbstractAtomListMeasure;
 import tailor.experiment.measure.DoubleMeasurement;
-import tailor.experiment.plan.Plan;
-import tailor.experiment.plan.Planner;
-import tailor.experiment.view.PlanViewer;
 import tailor.structure.Atom;
 
 public class TestPlanner {

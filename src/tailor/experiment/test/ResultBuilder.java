@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import tailor.experiment.plan.Result;
+import tailor.engine.plan.Result;
 import tailor.structure.Atom;
 import tailor.structure.Chain;
 import tailor.structure.Group;

@@ -3,8 +3,8 @@ package tailor.experiment.test;
 import java.util.List;
 
 import tailor.api.Source;
-import tailor.experiment.operator.AbstractOperator;
-import tailor.experiment.plan.Result;
+import tailor.engine.operator.AbstractOperator;
+import tailor.engine.plan.Result;
 
 public class CaptorAdapter extends AbstractOperator {
 	

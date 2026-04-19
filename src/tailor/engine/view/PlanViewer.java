@@ -1,4 +1,4 @@
-package tailor.experiment.view;
+package tailor.engine.view;
 
 import static tailor.experiment.test.Helper.pathTo;
 
@@ -26,15 +26,15 @@ import tailor.api.AtomListDescription;
 import tailor.api.Operator;
 import tailor.api.PipeableOperator;
 import tailor.api.Sink;
+import tailor.engine.operator.CombineResults;
+import tailor.engine.operator.ResultPipe;
+import tailor.engine.plan.Plan;
+import tailor.engine.plan.Planner;
+import tailor.engine.plan.Result;
 import tailor.experiment.description.ChainDescription;
 import tailor.experiment.description.GroupDescription;
 import tailor.experiment.description.atom.AtomAngleRangeDescription;
 import tailor.experiment.description.atom.AtomDistanceRangeDescription;
-import tailor.experiment.operator.CombineResults;
-import tailor.experiment.operator.ResultPipe;
-import tailor.experiment.plan.Plan;
-import tailor.experiment.plan.Planner;
-import tailor.experiment.plan.Result;
 import tailor.experiment.test.Helper;
 
 /**

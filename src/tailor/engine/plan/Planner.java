@@ -1,4 +1,4 @@
-package tailor.experiment.plan;
+package tailor.engine.plan;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -12,17 +12,17 @@ import tailor.api.AtomListCondition;
 import tailor.api.AtomListDescription;
 import tailor.api.Operator;
 import tailor.api.PipeableOperator;
+import tailor.engine.operator.CombineResults;
+import tailor.engine.operator.CombineResults.PipeSeqConstraint;
+import tailor.engine.plan.GroupUnionFind.Component;
+import tailor.engine.operator.FilterAtomResultByCondition;
+import tailor.engine.operator.Measurer;
+import tailor.engine.operator.PrintAdapter;
+import tailor.engine.operator.ResultPipe;
+import tailor.engine.operator.ScanAtomResultByLabel;
 import tailor.experiment.description.ChainDescription;
 import tailor.experiment.description.GroupDescription;
 import tailor.experiment.description.group.GroupSequenceDescription;
-import tailor.experiment.operator.CombineResults;
-import tailor.experiment.operator.CombineResults.PipeSeqConstraint;
-import tailor.experiment.operator.FilterAtomResultByCondition;
-import tailor.experiment.operator.Measurer;
-import tailor.experiment.operator.PrintAdapter;
-import tailor.experiment.operator.ResultPipe;
-import tailor.experiment.operator.ScanAtomResultByLabel;
-import tailor.experiment.plan.GroupUnionFind.Component;
 
 /**
  * Converts a {@link ChainDescription} into a pipeline of {@link Operator}

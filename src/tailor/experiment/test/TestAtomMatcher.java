@@ -10,8 +10,8 @@ import org.junit.Test;
 
 import tailor.condition.AtomMatcher;
 import tailor.condition.AtomMatcher.Match;
+import tailor.engine.plan.Result;
 import tailor.condition.LabelPartition;
-import tailor.experiment.plan.Result;
 
 public class TestAtomMatcher {
 	

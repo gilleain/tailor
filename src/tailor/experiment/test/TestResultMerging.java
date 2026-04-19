@@ -2,7 +2,7 @@ package tailor.experiment.test;
 
 import org.junit.Test;
 
-import tailor.experiment.plan.Result;
+import tailor.engine.plan.Result;
 
 public class TestResultMerging {
 	

@@ -1,11 +1,11 @@
-package tailor.experiment.operator;
+package tailor.engine.operator;
 
 import java.util.List;
 import java.util.logging.Logger;
 
 import tailor.api.AtomListCondition;
 import tailor.condition.AtomPartition;
-import tailor.experiment.plan.Result;
+import tailor.engine.plan.Result;
 
 public class FilterAtomResultByCondition extends AbstractPipeableOperator {
 	

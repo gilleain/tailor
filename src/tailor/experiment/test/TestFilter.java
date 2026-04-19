@@ -8,14 +8,14 @@ import org.junit.Test;
 
 import tailor.condition.atom.AtomAngleCondition;
 import tailor.condition.atom.AtomDistanceCondition;
+import tailor.engine.operator.CombineResults;
+import tailor.engine.operator.FilterAtomResultByCondition;
+import tailor.engine.operator.GroupSource;
+import tailor.engine.operator.PrintAdapter;
+import tailor.engine.operator.PrintResults;
+import tailor.engine.operator.ResultPipe;
+import tailor.engine.operator.ScanAtomResultByLabel;
 import tailor.experiment.description.GroupDescription;
-import tailor.experiment.operator.CombineResults;
-import tailor.experiment.operator.FilterAtomResultByCondition;
-import tailor.experiment.operator.GroupSource;
-import tailor.experiment.operator.PrintAdapter;
-import tailor.experiment.operator.PrintResults;
-import tailor.experiment.operator.ResultPipe;
-import tailor.experiment.operator.ScanAtomResultByLabel;
 import tailor.structure.Chain;
 
 public class TestFilter {

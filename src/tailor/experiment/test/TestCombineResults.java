@@ -9,10 +9,10 @@ import java.util.List;
 
 import org.junit.Test;
 
-import tailor.experiment.operator.CombineResults;
-import tailor.experiment.operator.PrintAdapter;
-import tailor.experiment.operator.ResultPipe;
-import tailor.experiment.plan.Result;
+import tailor.engine.operator.CombineResults;
+import tailor.engine.operator.PrintAdapter;
+import tailor.engine.operator.ResultPipe;
+import tailor.engine.plan.Result;
 import tailor.experiment.test.ResultBuilder.ResultGroupBuilder;
 import tailor.experiment.test.ResultBuilder.ResultGroupListBuilder;
 

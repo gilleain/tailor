@@ -1,12 +1,12 @@
-package tailor.experiment.plan;
+package tailor.engine.plan;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import tailor.api.Operator;
 import tailor.api.Sink;
-import tailor.experiment.operator.ResultPipe;
-import tailor.experiment.operator.ScanAtomResultByLabel;
+import tailor.engine.operator.ResultPipe;
+import tailor.engine.operator.ScanAtomResultByLabel;
 
 /**
  * A plan is a directed graph of operators that carry out a search.

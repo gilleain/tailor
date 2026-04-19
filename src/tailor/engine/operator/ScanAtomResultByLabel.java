@@ -1,8 +1,8 @@
-package tailor.experiment.operator;
+package tailor.engine.operator;
 
 import java.util.List;
 
-import tailor.experiment.plan.Result;
+import tailor.engine.plan.Result;
 import tailor.structure.Atom;
 
 public class ScanAtomResultByLabel extends AbstractPipeableOperator {

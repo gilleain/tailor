@@ -4,10 +4,10 @@ import java.util.List;
 
 import org.junit.Test;
 
-import tailor.experiment.operator.GroupSource;
-import tailor.experiment.operator.PrintResults;
-import tailor.experiment.operator.ResultPipe;
-import tailor.experiment.operator.ScanAtomResultByLabel;
+import tailor.engine.operator.GroupSource;
+import tailor.engine.operator.PrintResults;
+import tailor.engine.operator.ResultPipe;
+import tailor.engine.operator.ScanAtomResultByLabel;
 import tailor.structure.Chain;
 
 public class TestScan {

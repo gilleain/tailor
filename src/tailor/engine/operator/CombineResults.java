@@ -1,4 +1,4 @@
-package tailor.experiment.operator;
+package tailor.engine.operator;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -8,8 +8,8 @@ import java.util.logging.Logger;
 
 import tailor.api.Sink;
 import tailor.api.Source;
+import tailor.engine.plan.Result;
 import tailor.experiment.description.group.GroupSequenceDescription;
-import tailor.experiment.plan.Result;
 
 /**
  * Combine the output from multiple sources, flattening them into a list of results.

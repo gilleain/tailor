@@ -1,4 +1,4 @@
-package tailor.experiment.operator;
+package tailor.engine.operator;
 
 import tailor.api.Operator;
 

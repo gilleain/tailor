@@ -1,7 +1,7 @@
-package tailor.experiment.operator;
+package tailor.engine.operator;
 
 import tailor.api.Source;
-import tailor.experiment.plan.Result;
+import tailor.engine.plan.Result;
 
 /**
  * Convenience class for converting a pipe to output (feels like we should not need this...)

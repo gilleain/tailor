@@ -1,10 +1,10 @@
-package tailor.experiment.operator;
+package tailor.engine.operator;
 
 import java.util.List;
 
 import tailor.api.Operator;
 import tailor.api.Sink;
-import tailor.experiment.plan.Result;
+import tailor.engine.plan.Result;
 import tailor.structure.Chain;
 import tailor.structure.Group;
 
