@@ -10,6 +10,7 @@ import org.junit.Test;
 import tailor.datasource.PDBReader;
 import tailor.experiment.api.AtomListDescription;
 import tailor.experiment.api.AtomListMeasure;
+import tailor.experiment.description.AtomValueRangeDescription;
 import tailor.experiment.description.ChainDescription;
 import tailor.experiment.description.GroupDescription;
 import tailor.experiment.description.atom.AtomAngleRangeDescription;
@@ -17,6 +18,7 @@ import tailor.experiment.description.atom.AtomDistanceRangeDescription;
 import tailor.experiment.description.atom.AtomTorsionRangeDescription;
 import tailor.experiment.description.atom.HBondDescription;
 import tailor.experiment.description.group.GroupSequenceDescription;
+import tailor.experiment.measure.AtomDistanceMeasure;
 import tailor.experiment.measure.AtomTorsionMeasure;
 import tailor.experiment.plan.Plan;
 import tailor.experiment.plan.Planner;
@@ -75,7 +77,8 @@ public class FunctionalTests {
 		GroupDescription groupB = Helper.makeGroupDescription("N");
 		chainDescription.addGroupDescriptions(groupA, groupB);
 		AtomListDescription distance = 
-				new AtomDistanceRangeDescription(minDistance, maxDistance, pathTo(groupA, "O"), pathTo(groupB, "N"));
+				new AtomValueRangeDescription(minDistance, maxDistance, 
+						new AtomDistanceMeasure(pathTo(groupA, "O"), pathTo(groupB, "N")));
 		AtomListDescription angle = 
 				new AtomAngleRangeDescription(minAngle, maxAngle, pathTo(groupA, "C"), pathTo(groupA, "O"), pathTo(groupB, "N"));
 		chainDescription.addAtomListDescriptions(distance, angle);

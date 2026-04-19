@@ -9,12 +9,10 @@ import org.junit.Test;
 import tailor.experiment.api.AtomListCondition;
 import tailor.experiment.api.AtomListDescription;
 import tailor.experiment.api.AtomListMeasure;
-import tailor.experiment.condition.AtomMatcher;
 import tailor.experiment.condition.AtomPartition;
 import tailor.experiment.description.ChainDescription;
 import tailor.experiment.description.DescriptionPath;
 import tailor.experiment.description.GroupDescription;
-import tailor.experiment.description.atom.AbstractAtomListDescription;
 import tailor.experiment.measure.AbstractAtomListMeasure;
 import tailor.experiment.measure.DoubleMeasurement;
 import tailor.experiment.plan.Plan;
@@ -33,10 +31,12 @@ public class TestPlanner {
 		
 	}
 	
-	private class DummyAtomListDescription extends AbstractAtomListDescription {
+	private class DummyAtomListDescription implements AtomListDescription {
+		
+		private AtomListMeasure measure;
 		
 		DummyAtomListDescription(DescriptionPath... paths) {
-			super(paths);
+			this.measure = new DummyAtomListMeasure(paths);
 		}
 
 		@Override
@@ -45,15 +45,20 @@ public class TestPlanner {
 		}
 		
 		public AtomListMeasure createMeasure() {
-			return new DummyAtomListMeasure(this.createMatcher());
+			return this.measure;
+		}
+
+		@Override
+		public List<GroupDescription> getGroupDescriptions() {
+			return this.measure.getGroupDescriptions();
 		}
 		
 	}
 	
 	private class DummyAtomListMeasure extends AbstractAtomListMeasure {
 
-		public DummyAtomListMeasure(AtomMatcher atomMatcher) {
-			super(atomMatcher);
+		public DummyAtomListMeasure(DescriptionPath... paths) {
+			super(paths);
 		}
 
 		@Override
@@ -120,7 +125,7 @@ public class TestPlanner {
 		GroupDescription groupB = Helper.makeGroupDescription("C");
 		chainDescription.addGroupDescriptions(groupA, groupB);
 		chainDescription.addAtomListDescriptions(
-			new DummyAtomListDescription(pathTo(groupA, "N"), pathTo(groupA, "CA"))
+				new DummyAtomListDescription(pathTo(groupA, "N"), pathTo(groupA, "CA"))
 	    );
 		
 		Plan plan = new Planner().plan(chainDescription);

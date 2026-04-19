@@ -1,41 +1,16 @@
 package tailor.experiment.description.atom;
 
-import tailor.experiment.api.AtomListCondition;
-import tailor.experiment.api.AtomListMeasure;
-import tailor.experiment.condition.AtomTorsionRangeCondition;
+import tailor.experiment.description.AtomValueRangeDescription;
 import tailor.experiment.description.DescriptionPath;
 import tailor.experiment.measure.AtomTorsionMeasure;
 
-public class AtomTorsionRangeDescription extends AbstractAtomListDescription {
-	
-	private final double minAngle;
-	
-	private final double maxAngle;
+public class AtomTorsionRangeDescription extends AtomValueRangeDescription {
 	
 	public AtomTorsionRangeDescription(
 			double minAngle, double maxAngle,
 			DescriptionPath atomDescriptionA, DescriptionPath atomDescriptionB, 
 			DescriptionPath atomDescriptionC, DescriptionPath atomDescriptionD) {
-		super(atomDescriptionA, atomDescriptionB, atomDescriptionC, atomDescriptionD);
-		this.minAngle = minAngle;
-		this.maxAngle = maxAngle;
-	}
-
-	public double getMinAngle() {
-		return minAngle;
-	}
-	
-	public double getMaxAngle() {
-		return maxAngle;
-	}
-
-	@Override
-	public AtomListCondition createCondition() {
-		return new AtomTorsionRangeCondition(createMatcher(), getMinAngle(), getMaxAngle());
-	}
-	
-	@Override
-	public AtomListMeasure createMeasure() {
-		return new AtomTorsionMeasure(createMatcher());
+		super(minAngle, maxAngle, 
+				new AtomTorsionMeasure(atomDescriptionA, atomDescriptionB, atomDescriptionC, atomDescriptionD));
 	}
 }

@@ -1,15 +1,11 @@
 package tailor.experiment.description.atom;
 
-import java.util.Arrays;
 import java.util.List;
 
 import tailor.experiment.api.AtomListCondition;
 import tailor.experiment.api.AtomListDescription;
 import tailor.experiment.api.AtomListMeasure;
-import tailor.experiment.condition.AtomMatcher;
 import tailor.experiment.condition.HBondCondition;
-import tailor.experiment.condition.LabelPartition;
-import tailor.experiment.description.AtomDescription;
 import tailor.experiment.description.DescriptionPath;
 import tailor.experiment.description.GroupDescription;
 import tailor.experiment.measure.HBondMeasure;
@@ -45,29 +41,15 @@ public class HBondDescription implements AtomListDescription {
 
 	@Override
 	public AtomListCondition createCondition() {
-		return new HBondCondition(getDHMatcher(), getDHAMatcher(), haDistance, minDHAAngle, maxDHAAngle);
+		return new HBondCondition(getDHPaths(), getDHAPaths(), haDistance, minDHAAngle, maxDHAAngle);
 	}
 	
-	private AtomMatcher getDHMatcher() {
-		return new AtomMatcher(
-				new LabelPartition(List.of(
-						getPart(hydrogenDescriptionPath), 
-						getPart(acceptorDescriptionPath)
-				)
-			)
-		);
+	private List<DescriptionPath> getDHPaths() {
+		return List.of(hydrogenDescriptionPath, acceptorDescriptionPath);
 	}
 	
-	private AtomMatcher getDHAMatcher() {
-		return new AtomMatcher(new LabelPartition(List.of(
-				getPart(donorDescriptionPath, hydrogenDescriptionPath), 
-				getPart(acceptorDescriptionPath)
-			)
-		));
-	}
-	
-	private List<String> getPart(DescriptionPath... descriptions) {
-		return Arrays.stream(descriptions).map(DescriptionPath::getAtomDescription).map(AtomDescription::getLabel).toList();
+	private List<DescriptionPath>  getDHAPaths() {
+		return List.of(donorDescriptionPath, hydrogenDescriptionPath, acceptorDescriptionPath);
 	}
 
 	@Override
@@ -80,7 +62,7 @@ public class HBondDescription implements AtomListDescription {
 	
 	@Override
 	public AtomListMeasure createMeasure() {
-		return new HBondMeasure(getDHMatcher(), getDHAMatcher());
+		return new HBondMeasure(getDHPaths(), getDHAPaths());
 	}
 
 }

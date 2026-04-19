@@ -1,13 +1,14 @@
 package tailor.experiment.test;
 
+import static tailor.experiment.test.Helper.pathTo;
+
 import java.util.List;
 
 import org.junit.Test;
 
 import tailor.experiment.condition.AtomAngleCondition;
 import tailor.experiment.condition.AtomDistanceCondition;
-import tailor.experiment.condition.AtomMatcher;
-import tailor.experiment.condition.LabelPartition;
+import tailor.experiment.description.GroupDescription;
 import tailor.experiment.operator.CombineResults;
 import tailor.experiment.operator.FilterAtomResultByCondition;
 import tailor.experiment.operator.GroupSource;
@@ -46,8 +47,10 @@ public class TestFilter {
 		ResultPipe onPipe = new ResultPipe();
 		CombineResults combineON = new CombineResults(List.of(oPipe, nPipe), onPipe);
 		
-		AtomMatcher atomMatcher = new AtomMatcher(new LabelPartition(List.of(List.of("O"), List.of("N"))));
-		AtomDistanceCondition condition = new AtomDistanceCondition(atomMatcher, distance);
+		GroupDescription groupA = Helper.makeGroupDescription("O");
+		GroupDescription groupB = Helper.makeGroupDescription("N");
+		AtomDistanceCondition condition = new AtomDistanceCondition(
+				distance, List.of(Helper.pathTo(groupA, "O"), Helper.pathTo(groupB, "N")));
 		FilterAtomResultByCondition filter = new FilterAtomResultByCondition(List.of(condition));
 		filter.setSource(onPipe);
 		ResultPipe end = new ResultPipe();
@@ -75,8 +78,9 @@ public class TestFilter {
 		scanTriple.setSource(groupResultPipe);
 		scanTriple.setSink(triplePipe);
 		
-		AtomMatcher atomMatcher = new AtomMatcher(new LabelPartition(List.of(List.of("C", "CA", "N"))));
-		AtomAngleCondition condition = new AtomAngleCondition(atomMatcher, angle);
+		GroupDescription group = Helper.makeGroupDescription("C", "CA", "N");
+		AtomAngleCondition condition = 
+				new AtomAngleCondition(angle, pathTo(group, "N"), pathTo(group, "CA"), pathTo(group, "C"));
 		FilterAtomResultByCondition filter = new FilterAtomResultByCondition(List.of(condition));
 		filter.setSource(triplePipe);
 		filter.setSink(new PrintResults());

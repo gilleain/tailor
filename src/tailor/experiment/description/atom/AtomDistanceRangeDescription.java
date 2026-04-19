@@ -1,39 +1,13 @@
 package tailor.experiment.description.atom;
 
-import tailor.experiment.api.AtomListCondition;
-import tailor.experiment.api.AtomListMeasure;
-import tailor.experiment.condition.AtomDistanceRangeCondition;
+import tailor.experiment.description.AtomValueRangeDescription;
 import tailor.experiment.description.DescriptionPath;
 import tailor.experiment.measure.AtomDistanceMeasure;
 
-public class AtomDistanceRangeDescription extends AbstractAtomListDescription {
-	
-	private final double minDistance;
-	
-	private final double maxDistance;
+public class AtomDistanceRangeDescription extends AtomValueRangeDescription {
 	
 	public AtomDistanceRangeDescription(
 			double minDistance, double maxDistance, DescriptionPath atomDescriptionA, DescriptionPath atomDescriptionB) {
-		super(atomDescriptionA, atomDescriptionB);
-		this.minDistance = minDistance;
-		this.maxDistance = maxDistance;
-	}
-
-	public double getMinDistance() {
-		return minDistance;
-	}
-	
-	public double getMaxDistance() {
-		return maxDistance;
-	}
-
-	@Override
-	public AtomListCondition createCondition() {
-		return new AtomDistanceRangeCondition(createMatcher(), getMinDistance(), getMaxDistance());
-	}
-	
-	@Override
-	public AtomListMeasure createMeasure() {
-		return new AtomDistanceMeasure(createMatcher());
+		super(minDistance, maxDistance, new AtomDistanceMeasure(atomDescriptionA, atomDescriptionB));
 	}
 }

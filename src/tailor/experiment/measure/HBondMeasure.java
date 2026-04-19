@@ -1,9 +1,13 @@
 package tailor.experiment.measure;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import tailor.experiment.api.AtomListMeasure;
 import tailor.experiment.api.Measurement;
-import tailor.experiment.condition.AtomMatcher;
 import tailor.experiment.condition.AtomPartition;
+import tailor.experiment.description.DescriptionPath;
+import tailor.experiment.description.GroupDescription;
 
 public class HBondMeasure implements AtomListMeasure {
 	
@@ -11,9 +15,9 @@ public class HBondMeasure implements AtomListMeasure {
 	
 	private AtomAngleMeasure atomAngleMeasure;
 
-	public HBondMeasure(AtomMatcher atomDistanceMatcher, AtomMatcher atomAngleMatcher) {
-		this.atomDistanceMeasure = new AtomDistanceMeasure(atomDistanceMatcher);
-		this.atomAngleMeasure = new AtomAngleMeasure(atomAngleMatcher);
+	public HBondMeasure(List<DescriptionPath> atomDistancePaths, List<DescriptionPath> atomAnglePaths) {
+		this.atomDistanceMeasure = new AtomDistanceMeasure(atomDistancePaths);
+		this.atomAngleMeasure = new AtomAngleMeasure(atomAnglePaths);
 	}
 
 	@Override
@@ -23,5 +27,13 @@ public class HBondMeasure implements AtomListMeasure {
 		DoubleMeasurement a = this.atomAngleMeasure.measure(atomPartition);
 		
 		return new CompositeMeasurement(d, a);
+	}
+
+	@Override
+	public List<GroupDescription> getGroupDescriptions() {
+		List<GroupDescription> descriptions = new ArrayList<>();
+		descriptions.addAll(atomDistanceMeasure.getGroupDescriptions());
+		descriptions.addAll(atomAngleMeasure.getGroupDescriptions());
+		return descriptions;
 	}
 }
