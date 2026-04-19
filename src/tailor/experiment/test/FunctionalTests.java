@@ -33,11 +33,11 @@ public class FunctionalTests {
 		GroupDescription groupA = Helper.makeGroupDescription("C", "O");
 		GroupDescription groupB = Helper.makeGroupDescription("H", "N");
 		chainDescription.addGroupDescriptions(groupA, groupB);
-		chainDescription.addAtomListDescriptions(
-				new HBondDescription(
-						maxDistance, minAngle, maxAngle, 
-						pathTo(groupA, "C"), pathTo(groupA, "O"), pathTo(groupB, "H"), pathTo(groupB, "N"))
-		);
+		HBondDescription hBond = new HBondDescription(
+				maxDistance, minAngle, maxAngle, 
+				pathTo(groupA, "C"), pathTo(groupA, "O"), pathTo(groupB, "H"), pathTo(groupB, "N"));
+		chainDescription.addAtomListDescriptions(hBond);
+		chainDescription.addAtomListMeasures(hBond.createMeasure());
 		return chainDescription;
 	}
 	
@@ -49,11 +49,11 @@ public class FunctionalTests {
 		GroupDescription groupA = Helper.makeGroupDescription("H", "N");
 		GroupDescription groupB = Helper.makeGroupDescription("C", "O");
 		chainDescription.addGroupDescriptions(groupA, groupB);
-		chainDescription.addAtomListDescriptions(
-				new HBondDescription(
-						maxDistance, minAngle, maxAngle, 
-						pathTo(groupA, "N"), pathTo(groupA, "H"), pathTo(groupB, "O"), pathTo(groupB, "C"))
-		);
+		HBondDescription hBond = new HBondDescription(
+				maxDistance, minAngle, maxAngle, 
+				pathTo(groupA, "N"), pathTo(groupA, "H"), pathTo(groupB, "O"), pathTo(groupB, "C"));
+		chainDescription.addAtomListDescriptions(hBond);
+		chainDescription.addAtomListMeasures(hBond.createMeasure());
 		return chainDescription;
 	}
 	

@@ -12,6 +12,7 @@ import tailor.experiment.condition.LabelPartition;
 import tailor.experiment.description.AtomDescription;
 import tailor.experiment.description.DescriptionPath;
 import tailor.experiment.description.GroupDescription;
+import tailor.experiment.measure.HBondMeasure;
 
 public class HBondDescription implements AtomListDescription {
 	
@@ -44,20 +45,25 @@ public class HBondDescription implements AtomListDescription {
 
 	@Override
 	public AtomListCondition createCondition() {
-		AtomMatcher haMatcher = new AtomMatcher(
+		return new HBondCondition(getDHMatcher(), getDHAMatcher(), haDistance, minDHAAngle, maxDHAAngle);
+	}
+	
+	private AtomMatcher getDHMatcher() {
+		return new AtomMatcher(
 				new LabelPartition(List.of(
-							getPart(hydrogenDescriptionPath), getPart(acceptorDescriptionPath)
-						)
+						getPart(hydrogenDescriptionPath), 
+						getPart(acceptorDescriptionPath)
 				)
+			)
 		);
-						
-		AtomMatcher angleMatcher = new AtomMatcher(new LabelPartition(List.of(
+	}
+	
+	private AtomMatcher getDHAMatcher() {
+		return new AtomMatcher(new LabelPartition(List.of(
 				getPart(donorDescriptionPath, hydrogenDescriptionPath), 
 				getPart(acceptorDescriptionPath)
 			)
 		));
-		
-		return new HBondCondition(haMatcher, angleMatcher, haDistance, minDHAAngle, maxDHAAngle);
 	}
 	
 	private List<String> getPart(DescriptionPath... descriptions) {
@@ -74,7 +80,7 @@ public class HBondDescription implements AtomListDescription {
 	
 	@Override
 	public AtomListMeasure createMeasure() {
-		return null;	// TODO
+		return new HBondMeasure(getDHMatcher(), getDHAMatcher());
 	}
 
 }

@@ -13,12 +13,12 @@ public class AtomAngleMeasure extends AbstractAtomListMeasure {
 	}
 	
 	@Override
-	public double measure(List<Atom> atoms) {
+	public DoubleMeasurement measure(List<Atom> atoms) {
 		return measure(atoms.get(0), atoms.get(1), atoms.get(2));
 	}
 
-	public double measure(Atom a, Atom b, Atom c) {
-		return Geometry.angle(a.getCenter(), b.getCenter(), c.getCenter());
+	public DoubleMeasurement measure(Atom a, Atom b, Atom c) {
+		return new DoubleMeasurement(Geometry.angle(a.getCenter(), b.getCenter(), c.getCenter()));
 	}
 
 }

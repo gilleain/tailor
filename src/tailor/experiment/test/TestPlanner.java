@@ -16,6 +16,7 @@ import tailor.experiment.description.DescriptionPath;
 import tailor.experiment.description.GroupDescription;
 import tailor.experiment.description.atom.AbstractAtomListDescription;
 import tailor.experiment.measure.AbstractAtomListMeasure;
+import tailor.experiment.measure.DoubleMeasurement;
 import tailor.experiment.plan.Plan;
 import tailor.experiment.plan.Planner;
 import tailor.experiment.view.PlanViewer;
@@ -24,11 +25,6 @@ import tailor.structure.Atom;
 public class TestPlanner {
 	
 	private class DummyAtomListCondition implements AtomListCondition {
-
-		@Override
-		public boolean accept(List<Atom> atoms) {
-			return true;	// Always true
-		}
 
 		@Override
 		public boolean accept(AtomPartition atomPartition) {
@@ -61,8 +57,8 @@ public class TestPlanner {
 		}
 
 		@Override
-		public double measure(List<Atom> atoms) {
-			return 1;
+		public DoubleMeasurement measure(List<Atom> atoms) {
+			return new DoubleMeasurement(1);
 		}
 		
 	}

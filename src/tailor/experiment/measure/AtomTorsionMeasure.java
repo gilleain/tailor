@@ -13,12 +13,12 @@ public class AtomTorsionMeasure extends AbstractAtomListMeasure {
 	}
 	
 	@Override
-	public double measure(List<Atom> atoms) {
+	public DoubleMeasurement measure(List<Atom> atoms) {
 		return measure(atoms.get(0), atoms.get(1), atoms.get(2), atoms.get(3));
 	}
 
-	public double measure(Atom a, Atom b, Atom c, Atom d) {
-		return Geometry.torsion(a.getCenter(), b.getCenter(), c.getCenter(), d.getCenter());
+	public DoubleMeasurement measure(Atom a, Atom b, Atom c, Atom d) {
+		return new DoubleMeasurement(Geometry.torsion(a.getCenter(), b.getCenter(), c.getCenter(), d.getCenter()));
 	}
 
 }

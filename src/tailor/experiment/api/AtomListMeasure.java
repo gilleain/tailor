@@ -1,14 +1,12 @@
 package tailor.experiment.api;
 
-import java.util.List;
-
 import tailor.experiment.condition.AtomPartition;
-import tailor.structure.Atom;
 
+/**
+ * Measurement to make on a list of atoms.
+ */
 public interface AtomListMeasure {
 	
-	double measure(List<Atom> atoms);
-	
-	double measure(AtomPartition atomPartition);
+	Measurement measure(AtomPartition atomPartition);
 
 }

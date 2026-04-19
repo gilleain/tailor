@@ -1,14 +1,19 @@
 package tailor.experiment.api;
 
-import java.util.List;
-
 import tailor.experiment.condition.AtomPartition;
-import tailor.structure.Atom;
 
+/**
+ * Conditions on a list of atoms.
+ */
 public interface AtomListCondition {
 	
-	boolean accept(List<Atom> atoms);
 	
+	/**
+	 * Check if this atom partition is accepted by this condition.
+	 * 
+	 * @param atomPartition
+	 * @return true if accepted
+	 */
 	boolean accept(AtomPartition atomPartition);
 
 }

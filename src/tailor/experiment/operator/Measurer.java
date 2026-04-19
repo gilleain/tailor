@@ -3,6 +3,7 @@ package tailor.experiment.operator;
 import java.util.List;
 
 import tailor.experiment.api.AtomListMeasure;
+import tailor.experiment.api.Measurement;
 import tailor.experiment.condition.AtomPartition;
 import tailor.experiment.plan.Result;
 
@@ -20,7 +21,7 @@ public class Measurer extends AbstractPipeableOperator {
 			Result nextResult = source.getNext();
 			AtomPartition atomPartition = nextResult.getAtomPartition();
 			for (AtomListMeasure measure : measures) {
-				double measurement = measure.measure(atomPartition);
+				Measurement measurement = measure.measure(atomPartition);
 				nextResult.addMeasurement(measurement);
 			}
 			sink.put(nextResult);

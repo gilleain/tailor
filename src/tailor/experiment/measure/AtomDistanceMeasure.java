@@ -13,12 +13,12 @@ public class AtomDistanceMeasure extends AbstractAtomListMeasure {
 	}
 	
 	@Override
-	public double measure(List<Atom> atoms) {
+	public DoubleMeasurement measure(List<Atom> atoms) {
 		return measure(atoms.get(0), atoms.get(1));
 	}
 
-	public double measure(Atom a, Atom b) {
-		return Geometry.distance(a.getCenter(), b.getCenter());
+	public DoubleMeasurement measure(Atom a, Atom b) {
+		return new DoubleMeasurement(Geometry.distance(a.getCenter(), b.getCenter()));
 	}
 
 }

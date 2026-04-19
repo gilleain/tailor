@@ -1,9 +1,6 @@
 package tailor.experiment.condition;
 
-import java.util.List;
-
 import tailor.experiment.api.AtomListCondition;
-import tailor.structure.Atom;
 
 /**
  * Hydrogen bond defined by D-H...A-AA :
@@ -25,10 +22,4 @@ public class HBondCondition implements AtomListCondition {
 	public boolean accept(AtomPartition atoms) {
 		return haDistanceCondition.accept(atoms) && dhaAngleRangeCondition.accept(atoms);
 	}
-	
-	@Override
-	public boolean accept(List<Atom> atoms) {
-		return false;	// TODO
-	}
-
 }

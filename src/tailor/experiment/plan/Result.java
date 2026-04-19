@@ -6,6 +6,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import tailor.experiment.api.Measurement;
 import tailor.experiment.condition.AtomPartition;
 import tailor.structure.Atom;
 import tailor.structure.Chain;
@@ -30,7 +31,7 @@ public class Result {
 	private Node root;
 	
 	// store measurements
-	private List<Double> measurements = new ArrayList<>();	// TODO
+	private List<Measurement> measurements = new ArrayList<>();	// TODO
 	
 	private Result() {
 		this.root = null;
@@ -81,7 +82,7 @@ public class Result {
 		return atoms;
 	}
 	
-	public void addMeasurement(double measurement) {
+	public void addMeasurement(Measurement measurement) {
 		this.measurements.add(measurement);	// TODO
 	}
 	
@@ -204,7 +205,7 @@ public class Result {
 		if (!measurements.isEmpty()) {
 			output.append("\t");
 			output.append(measurements.stream()
-					.map(m -> String.format("%2.2f", m))
+					.map(Measurement::toString)
 					.collect(Collectors.joining("\t")));
 		}
 		
