@@ -17,6 +17,4 @@ public interface PipeableOperator<I, O> extends Operator {
 	
 	Sink<I> getSink();
 	
-	Source<O> getSinkAsSource();	// bit of an odd one - might indicate bad interface design
-
 }

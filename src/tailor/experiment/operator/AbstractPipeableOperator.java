@@ -33,14 +33,14 @@ public abstract class AbstractPipeableOperator extends AbstractOperator implemen
 		return this.sink;
 	}
 	
-	public Source<Result> getSinkAsSource() {
+	private Source<Result> getSinkAsSource() {
 		if (sink instanceof ResultPipe) {	// TODO - this seems odd
 			return (Source<Result>)this.sink;
 		}
 		throw new IllegalStateException("Cannot cast sink as source");
 	}
 	
-	public Sink<Result> getSourceAsSink() {
+	private Sink<Result> getSourceAsSink() {
 		if (source instanceof ResultPipe) {	// TODO - this seems odd
 			return (Sink<Result>)this.source;
 		}
