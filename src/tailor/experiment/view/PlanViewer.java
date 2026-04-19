@@ -22,12 +22,14 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.SwingUtilities;
 
+import tailor.experiment.api.AtomListDescription;
 import tailor.experiment.api.Operator;
 import tailor.experiment.api.PipeableOperator;
 import tailor.experiment.api.Sink;
 import tailor.experiment.description.ChainDescription;
 import tailor.experiment.description.GroupDescription;
-import tailor.experiment.description.atom.AtomDistanceDescription;
+import tailor.experiment.description.atom.AtomAngleRangeDescription;
+import tailor.experiment.description.atom.AtomDistanceRangeDescription;
 import tailor.experiment.operator.CombineResults;
 import tailor.experiment.operator.ResultPipe;
 import tailor.experiment.plan.Plan;
@@ -42,17 +44,20 @@ import tailor.experiment.test.Helper;
 public class PlanViewer extends JFrame {
 	
 	public static void main(String[] args) {
+		double minAngle = 145;
+		double maxAngle = 180;
+		double minDistance = 2.7;
+		double maxDistance = 3.4;
 		ChainDescription chainDescription = new ChainDescription();
-		GroupDescription groupA = Helper.makeGroupDescription("N");
-		GroupDescription groupB = Helper.makeGroupDescription("CA");
-		GroupDescription groupC = Helper.makeGroupDescription("C");
-		GroupDescription groupD = Helper.makeGroupDescription("O");
-		chainDescription.addGroupDescriptions(groupA, groupB, groupC, groupD);
-		chainDescription.addAtomListDescriptions(
-				new AtomDistanceDescription(1, pathTo(groupA, "N"), pathTo(groupB, "CA")),
-				new AtomDistanceDescription(1, pathTo(groupB, "CA"), pathTo(groupC, "C")),
-				new AtomDistanceDescription(1, pathTo(groupC, "C"), pathTo(groupD, "O"))
-		);
+		GroupDescription groupA = Helper.makeGroupDescription("C", "O");
+		GroupDescription groupB = Helper.makeGroupDescription("N");
+		chainDescription.addGroupDescriptions(groupA, groupB);
+		AtomListDescription distance = 
+				new AtomDistanceRangeDescription(minDistance, maxDistance, pathTo(groupA, "O"), pathTo(groupB, "N"));
+		AtomListDescription angle = 
+				new AtomAngleRangeDescription(minAngle, maxAngle, pathTo(groupA, "C"), pathTo(groupA, "O"), pathTo(groupB, "N"));
+		chainDescription.addAtomListDescriptions(distance, angle);
+		chainDescription.addAtomListMeasures(distance.createMeasure(), angle.createMeasure());
 		
 		Plan plan = new Planner().plan(chainDescription);
 		PlanViewer.show(plan);
@@ -259,6 +264,7 @@ public class PlanViewer extends JFrame {
                 case "FilterAtomResultByCondition"  -> new Color(144, 238, 144); // light green
                 case "CombineResults"               -> new Color(255, 218, 185); // peach/orange
                 case "PrintAdapter", "PrintResults" -> new Color(216, 191, 216); // lavender
+                case "Measurer"  					-> new Color(120, 202, 170); // ???
                 default                             -> new Color(220, 220, 220); // light grey
             };
         }
