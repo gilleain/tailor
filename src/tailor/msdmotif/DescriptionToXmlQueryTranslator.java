@@ -5,7 +5,8 @@ import tailor.description.ChainDescription;
 import tailor.description.Description;
 import tailor.description.GroupDescription;
 import tailor.description.ProteinDescription;
-import tailor.condition.TorsionBoundCondition;
+import tailor.experiment.condition.atom.AtomTorsionRangeCondition;
+import tailor.experiment.description.DescriptionPath;
 
 /**
  * A very crude and limited way to transform tailor.core.Description hierarchies
@@ -34,10 +35,12 @@ public class DescriptionToXmlQueryTranslator {
 		for (ChainDescription chain : protein.getChainDescriptions()) {
 			for (GroupDescription residue : chain.getGroupDescriptions()) {
                 
-				for (TorsionBoundCondition torsionBoundCondition : residue.getTorsionBoundConditions()) {
+				for (AtomTorsionRangeCondition torsionBoundCondition : residue.getAtomTorsionRangeConditions()) {
 					String name = torsionBoundCondition.getName();
-					double midPoint = torsionBoundCondition.getMidPoint();
-					double range = torsionBoundCondition.getRange();
+					double minValue = torsionBoundCondition.getMinValue();
+					double maxValue = torsionBoundCondition.getMaxValue();
+					double range = maxValue - minValue;
+					double midPoint = minValue + (range / 2);	// TODO - XXX?
 					if (range > phiPsiDeviation) {
 						phiPsiDeviation = range;
 					}
@@ -101,9 +104,15 @@ public class DescriptionToXmlQueryTranslator {
         p.addChainDescription(chain);
         chain.addGroupDescription(residue);
 		residue.addAtomDescription(n);
+		
+		// TODO
+		DescriptionPath a = null;
+		DescriptionPath b = null;
+		DescriptionPath c = null;
+		DescriptionPath d = null;
         
-		residue.addAtomCondition(new TorsionBoundCondition("phi", p, p, p, p, -50.0, 10.0));
-		residue.addAtomCondition(new TorsionBoundCondition("psi", p, p, p, p, 100.0, 20.0));
+		residue.addAtomCondition(new AtomTorsionRangeCondition("phi", -60.0, -40.0, a, b, c, d));
+		residue.addAtomCondition(new AtomTorsionRangeCondition("psi", 80.0, 120.0, a, b, c, d));
 		
 		
 		System.out.println(DescriptionToXmlQueryTranslator.translate(p));

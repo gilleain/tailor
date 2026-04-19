@@ -10,8 +10,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-import tailor.condition.HBondCondition;
 import tailor.description.DescriptionFactory;
+import tailor.experiment.condition.atom.HBondCondition;
 
 public class HBondConditionPropertySheet extends JPanel implements ActionListener {
 	

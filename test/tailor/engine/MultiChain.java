@@ -25,8 +25,9 @@ public class MultiChain {
         Run run = new Run(filename);
         run.addDescription(proteinDescription);
         
-        Engine engine = EngineFactory.getEngine(proteinDescription);
-        engine.run(run);
+        // TODO
+//        Engine engine = EngineFactory.getEngine(proteinDescription);
+//        engine.run(run);
     }
 
 }

@@ -9,17 +9,16 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import tailor.condition.AngleBoundCondition;
-import tailor.condition.Condition;
-import tailor.condition.DistanceBoundCondition;
-import tailor.condition.HBondCondition;
-import tailor.condition.PropertyCondition;
-import tailor.condition.TorsionBoundCondition;
 import tailor.description.AtomDescription;
 import tailor.description.ChainDescription;
 import tailor.description.Description;
 import tailor.description.DescriptionGenerator;
 import tailor.description.GroupDescription;
+import tailor.experiment.api.AtomListCondition;
+import tailor.experiment.condition.atom.AtomAngleRangeCondition;
+import tailor.experiment.condition.atom.AtomDistanceRangeCondition;
+import tailor.experiment.condition.atom.AtomTorsionRangeCondition;
+import tailor.experiment.condition.atom.HBondCondition;
 import tailor.measurement.AngleMeasure;
 import tailor.measurement.DistanceMeasure;
 import tailor.measurement.HBondMeasure;
@@ -163,14 +162,15 @@ public class Script {
         );
     
     // Keyword to condition mapping
-    private static final Map<String, Class<? extends Condition>> KEYWORD_TO_CONDITION_MAP = Map.of(
-        "chainID", PropertyCondition.class,
-        "chainType", PropertyCondition.class,
-        "position", PropertyCondition.class,
-        "resname", PropertyCondition.class,
-        "distance-bound", DistanceBoundCondition.class,
-        "angle-bound", AngleBoundCondition.class,
-        "torsion-bound", TorsionBoundCondition.class,
+    private static final Map<String, Class<? extends AtomListCondition>> KEYWORD_TO_CONDITION_MAP = Map.of(
+    		// TODO
+//        "chainID", PropertyCondition.class,
+//        "chainType", PropertyCondition.class,
+//        "position", PropertyCondition.class,
+//        "resname", PropertyCondition.class,
+        "distance-bound", AtomDistanceRangeCondition.class,
+        "angle-bound", AtomAngleRangeCondition.class,
+        "torsion-bound", AtomTorsionRangeCondition.class,
         "hydrogen-bond", HBondCondition.class
     );
     
@@ -361,10 +361,13 @@ public class Script {
                 // Setup PropertyConditions
                 for (PropertyText prop : levelText.properties) {
                     String key = prop.attributeName;
-                    if (KEYWORD_TO_CONDITION_MAP.get(key) == PropertyCondition.class) {
+                    // TODO
+//                    if (KEYWORD_TO_CONDITION_MAP.get(key) == PropertyCondition.class) {
                     	String value = (String)prop.values.get(0);
-                        level.addCondition(new PropertyCondition(key, value));
-                    }
+                    	
+                    	// TODO
+//                        level.addCondition(new PropertyCondition(key, value));
+//                    }
                 }
                 
             } catch (Exception e) {
@@ -377,14 +380,15 @@ public class Script {
             for (PropertyText prop : levelText.properties) {
                 String key = prop.attributeName;
                 
-                Class<? extends Condition> conditionClass = KEYWORD_TO_CONDITION_MAP.get(key);
-                if (conditionClass != null && conditionClass != PropertyCondition.class) {
+                Class<? extends AtomListCondition> conditionClass = KEYWORD_TO_CONDITION_MAP.get(key);
+//                if (conditionClass != null && conditionClass != PropertyCondition.class) {
+                if (conditionClass != null ) { // TODO
                     try {
                         List<Object> params = makeSelections(motifDescription, prop.selections);
                         params.addAll(prop.values.subList(prop.selections.size(), prop.values.size()));
                         
                         // Create condition instance
-                        Condition condition = createCondition(conditionClass, params);
+                        AtomListCondition condition = createCondition(conditionClass, params);
                         motifDescription.addCondition(condition);
                         
                     } catch (Exception e) {
@@ -459,7 +463,7 @@ public class Script {
     /**
      * Helper method to create condition instances
      */
-    private static Condition createCondition(Class<? extends Condition> conditionClass, 
+    private static AtomListCondition createCondition(Class<? extends AtomListCondition> conditionClass, 
                                             List<Object> params) throws Exception {
         // Use reflection to find appropriate constructor
         Class<?>[] paramTypes = params.stream()

@@ -8,11 +8,12 @@ import java.util.List;
 
 import org.junit.Test;
 
-import tailor.condition.TorsionBoundCondition;
 import tailor.description.AtomDescription;
 import tailor.description.ChainDescription;
 import tailor.description.Description;
 import tailor.description.GroupDescription;
+import tailor.experiment.condition.atom.AtomTorsionRangeCondition;
+import tailor.experiment.description.DescriptionPath;
 import tailor.source.PDBReader;
 import tailor.structure.Chain;
 import tailor.structure.Protein;
@@ -48,14 +49,14 @@ public class TestSampleData {
         chainDescription.addGroupDescription(makeGroupDescription("i",     "N", "CA", "C", "O"));
         chainDescription.addGroupDescription(makeGroupDescription("i + 1", "N", "CA", "C", "O"));
         
-        Description cIM1 = chainDescription.getPathByGroupLabel("i - 1", "C");
-        Description nI   = chainDescription.getPathByGroupLabel("i",     "N");
-        Description caI  = chainDescription.getPathByGroupLabel("i",     "CA");
-        Description cI   = chainDescription.getPathByGroupLabel("i",     "C");
-        Description nI1  = chainDescription.getPathByGroupLabel("i + 1", "N");
+        DescriptionPath cIM1 = chainDescription.getDescriptionPathByGroupLabel("i - 1", "C");
+        DescriptionPath nI   = chainDescription.getDescriptionPathByGroupLabel("i",     "N");
+        DescriptionPath caI  = chainDescription.getDescriptionPathByGroupLabel("i",     "CA");
+        DescriptionPath cI   = chainDescription.getDescriptionPathByGroupLabel("i",     "C");
+        DescriptionPath nI1  = chainDescription.getDescriptionPathByGroupLabel("i + 1", "N");
         
-        chainDescription.addCondition(new TorsionBoundCondition("phi", cIM1, nI, caI, cI, 90, 30));
-        chainDescription.addCondition(new TorsionBoundCondition("psi", nI, caI, cI, nI1, 90, 30));
+        chainDescription.addCondition(new AtomTorsionRangeCondition("phi", 60, 120, cIM1, nI, caI, cI));
+        chainDescription.addCondition(new AtomTorsionRangeCondition("psi", 60, 120, nI, caI, cI, nI1));
         
         Protein structure = PDBReader.read(new File(DIR, "helix.pdb"));
         Chain chain = structure.getChains().get(0);

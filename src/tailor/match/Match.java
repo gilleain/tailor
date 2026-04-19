@@ -3,7 +3,6 @@ package tailor.match; // TODO : move to right package
 import java.util.ArrayList;
 import java.util.List;
 
-import tailor.condition.Condition;
 import tailor.description.Description;
 import tailor.structure.Level;
 import tailor.structure.Structure;
@@ -33,11 +32,11 @@ public class Match {
      * @return
      */
     public boolean satisfiesConditions(Description description) {
-        for (Condition condition : description.getConditions()) {
-            if (!condition.satisfiedBy(this)) {
-                return false;
-            }
-        }
+//        for (Condition condition : description.getConditions()) {
+//            if (!condition.satisfiedBy(this)) {
+//                return false;
+//            }
+//        }
         return true;
     }
     

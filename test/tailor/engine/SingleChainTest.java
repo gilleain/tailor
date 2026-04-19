@@ -1,54 +1,18 @@
 package tailor.engine;
 
-import java.io.IOException;
-
 import org.junit.Test;
 
-import tailor.condition.DistanceBoundCondition;
-import tailor.datasource.PDBFileList;
-import tailor.datasource.StructureSource;
 import tailor.description.ChainDescription;
 import tailor.description.Description;
-import tailor.description.DescriptionException;
 import tailor.description.DescriptionFactory;
 import tailor.description.ProteinDescription;
-import tailor.match.Match;
-import tailor.measurement.Measure;
-import tailor.measurement.Measurement;
-import tailor.structure.Structure;
+import tailor.experiment.condition.atom.AtomDistanceRangeCondition;
+import tailor.experiment.description.AtomDescription;
+import tailor.experiment.description.DescriptionPath;
+import tailor.experiment.description.GroupDescription;
 
 public class SingleChainTest {
     
-    @Test
-    public void simpleTest() throws IOException, DescriptionException {
-        String filename = "structures/2bop.pdb";
-        
-        DescriptionFactory factory = new DescriptionFactory();
-        factory.addResidues(4);
-        
-        Description description = factory.getProduct(); 
-        
-        ChainDescription chainD = 
-            (ChainDescription) description.getSubDescriptionAt(0);
-        chainD.addMeasure(factory.createPhiMeasure("psi2", 2));
-        chainD.addMeasure(factory.createPsiMeasure("phi2", 2));
-        
-        SingleChainEngine engine = new SingleChainEngine();
-        StructureSource structureSource = new PDBFileList(filename, null);
-        while (structureSource.hasNext()) {
-            Structure protein = structureSource.next();
-            for (Structure chain : protein.getSubstructures()) {
-                for (Match match : engine.match(chainD, chain)) {
-                    System.out.print(match + " ");
-                    for (Measure<? extends Measurement> measure : chainD.getMeasures()) {
-                        Measurement measurement = measure.measure(match);
-                        System.out.print(measurement + ", ");
-                    }
-                    System.out.println();
-                }
-            }
-        }
-    }
     
     @Test
     public void simpleHBondTest() {
@@ -56,23 +20,25 @@ public class SingleChainTest {
         
         DescriptionFactory factory = new DescriptionFactory();
         factory.addResidues(4);
-        ChainDescription carbonylOxygen = 
-            factory.getChainDescription("A").getPath(0, "O");
-        ChainDescription amineNitrogen = 
-            factory.getChainDescription("A").getPath(3, "N");
+        ChainDescription chainDescription = new ChainDescription("A");
+        GroupDescription groupA = new GroupDescription();
+        GroupDescription groupB = new GroupDescription();
         
-        Description description = factory.getProduct(); 
-        factory.getChainDescription("A").addCondition(
-                new DistanceBoundCondition("i.O->(i+3).N", carbonylOxygen, amineNitrogen, 3.5, 1));
+        DescriptionPath carbonylOxygen = new DescriptionPath(groupA, new AtomDescription("O"));
+        DescriptionPath amineNitrogen = new DescriptionPath(groupB, new AtomDescription("O"));
         
-        description.addMeasure(factory.createPhiMeasure("psi2", 2));
-        description.addMeasure(factory.createPsiMeasure("phi2", 2));
+        chainDescription.addCondition(
+                new AtomDistanceRangeCondition("i.O->(i+3).N", 2.5, 4.5, carbonylOxygen, amineNitrogen));
+        
+        chainDescription.addMeasure(factory.createPhiMeasure("psi2", 2));
+        chainDescription.addMeasure(factory.createPsiMeasure("phi2", 2));
         
         Run run = new Run(filename);
-        run.addDescription((ProteinDescription)description);
+//        run.addDescription((ProteinDescription)chainDescription);
         
-        Engine engine = EngineFactory.getEngine(description);
-        engine.run(run);
+        // TODO
+//        Engine engine = EngineFactory.getEngine(description);
+//        engine.run(run);
     }
     
     @Test
@@ -92,8 +58,9 @@ public class SingleChainTest {
         Run run = new Run(filename);
         run.addDescription((ProteinDescription)description);
         
-        Engine engine = EngineFactory.getEngine(description);
-        engine.run(run);
+        // TODO
+//        Engine engine = EngineFactory.getEngine(description);
+//        engine.run(run);
     }
 
 

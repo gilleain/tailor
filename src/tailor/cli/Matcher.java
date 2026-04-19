@@ -9,8 +9,6 @@ import tailor.datasource.PDBFileList;
 import tailor.datasource.StructureSource;
 import tailor.datasource.xml.XmlDescriptionReader;
 import tailor.description.Description;
-import tailor.engine.Engine;
-import tailor.engine.EngineFactory;
 import tailor.engine.Run;
 
 public class Matcher {
@@ -37,8 +35,9 @@ public class Matcher {
         
         
         Run run = new Run(description, structureSource);
-        Engine engine = EngineFactory.getEngine(description);
-        engine.run(run);
+        // TODO
+//        Engine engine = EngineFactory.getEngine(description);
+//        engine.run(run);
     }
     
     public static void main(String[] args) throws ParseException, IOException {

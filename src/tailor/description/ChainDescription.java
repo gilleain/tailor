@@ -6,8 +6,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import tailor.condition.Condition;
-import tailor.condition.PropertyCondition;
+import tailor.experiment.api.AtomListCondition;
+import tailor.experiment.description.DescriptionPath;
 import tailor.measurement.Measure;
 import tailor.measurement.Measurement;
 import tailor.structure.Chain;
@@ -28,7 +28,7 @@ public class ChainDescription implements Description, Iterable<GroupDescription>
     
     private List<GroupDescription> groupDescriptions;
     
-    private List<Condition> groupConditions;
+    private List<AtomListCondition> groupConditions;
     
     private List<Measure<? extends Measurement>> groupMeasures;
     
@@ -56,7 +56,7 @@ public class ChainDescription implements Description, Iterable<GroupDescription>
     	for (GroupDescription groupDescription : chainDescription.groupDescriptions) {
     		this.groupDescriptions.add(new GroupDescription(groupDescription));
     	}
-    	for (Condition condition : chainDescription.getConditions()) {
+    	for (AtomListCondition condition : chainDescription.getConditions()) {
     	    // TODO ?
 //    		this.groupConditions.add((Condition) condition.clone());
     	}
@@ -79,16 +79,16 @@ public class ChainDescription implements Description, Iterable<GroupDescription>
     
     public void removeLastGroupDescription() {
     	GroupDescription g = this.groupDescriptions.remove(this.groupDescriptions.size() - 1);
-    	List<Condition> toRemove = new ArrayList<>();
-    	for (Condition condition : this.groupConditions) {
-    		if (condition.contains(g)) {
-    			toRemove.add(condition);
-    		}
+    	List<AtomListCondition> toRemove = new ArrayList<>();
+    	for (AtomListCondition condition : this.groupConditions) {
+//    		if (condition.contains(g)) {
+//    			toRemove.add(condition);
+//    		}
     	}
     	this.groupConditions.removeAll(toRemove);
     }
     
-    public void addGroupCondition(Condition condition) {
+    public void addGroupCondition(AtomListCondition condition) {
         this.groupConditions.add(condition);
     }
     
@@ -148,6 +148,25 @@ public class ChainDescription implements Description, Iterable<GroupDescription>
         }
         
         return root;
+    }
+    
+    // TODO - temp method
+    public DescriptionPath getDescriptionPathByGroupLabel(String groupLabel, String atomName) {
+        ChainDescription root = new ChainDescription(this.chainName);
+        
+        // TODO : what if multiple matches...
+        for (GroupDescription groupDescription : this.groupDescriptions) {
+            if (groupDescription.labelMatches(groupLabel)) {
+                GroupDescription group = 
+                    (GroupDescription) groupDescription.shallowCopy();
+                AtomDescription atom = 
+                    groupDescription.getAtomDescription(atomName);
+                group.addAtomDescription(atom);
+                root.addGroupDescription(group);
+            }
+        }
+        
+        return null;	// TODO
     }
     
     public ChainDescription getPath(int groupIndex, String atomName) {
@@ -234,11 +253,11 @@ public class ChainDescription implements Description, Iterable<GroupDescription>
     	return this.chainName;
     }
 
-    public void addCondition(Condition condition) {
+    public void addCondition(AtomListCondition condition) {
         this.groupConditions.add(condition);
     }
 
-    public List<Condition> getConditions() {
+    public List<AtomListCondition> getConditions() {
         return this.groupConditions;
     }
 
@@ -319,7 +338,8 @@ public class ChainDescription implements Description, Iterable<GroupDescription>
 		GroupDescription residue = new GroupDescription();
 		
 		// TODO - so many things wrong with this ...
-		residue.addCondition(new PropertyCondition("position", String.valueOf(i + 1)));
+//		residue.addCondition(new PropertyCondition("position", String.valueOf(i + 1)));
+		residue.setID(i);	// TODO
 
 		for (String atomName : new String[] { "N", "CA", "C", "O", "H" }) {
 			residue.addAtomDescription(atomName);
@@ -336,6 +356,11 @@ public class ChainDescription implements Description, Iterable<GroupDescription>
 		this.groupConditions.add(
 				DescriptionFactory.createPsiCondition(this, residueNumber, midPoint, range));
 		
+	}
+
+	public DescriptionPath getDescriptionPath(int donorNumber, String string) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

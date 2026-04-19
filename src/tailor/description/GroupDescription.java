@@ -6,8 +6,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import tailor.condition.Condition;
-import tailor.condition.TorsionBoundCondition;
+import tailor.experiment.api.AtomListCondition;
+import tailor.experiment.condition.atom.AtomTorsionRangeCondition;
 import tailor.measurement.Measure;
 import tailor.measurement.Measurement;
 import tailor.structure.Group;
@@ -29,7 +29,7 @@ public class GroupDescription implements Description, Iterable<AtomDescription> 
     
     private List<AtomDescription> atomDescriptions;
     
-    private List<Condition> atomConditions;
+    private List<AtomListCondition> atomConditions;
     
     private List<Measure<? extends Measurement>> atomMeasures;
     
@@ -83,7 +83,7 @@ public class GroupDescription implements Description, Iterable<AtomDescription> 
     	this.addAtomDescription(new AtomDescription(atomName));
     }
     
-    public void addAtomCondition(Condition condition) {
+    public void addAtomCondition(AtomListCondition condition) {
         this.atomConditions.add(condition);
     }
     
@@ -91,11 +91,11 @@ public class GroupDescription implements Description, Iterable<AtomDescription> 
         return this.atomDescriptions;
     }
     
-    public List<TorsionBoundCondition> getTorsionBoundConditions() {
-        List<TorsionBoundCondition> torsions = new ArrayList<>();
-        for (Condition condition : this.atomConditions) {
-            if (condition instanceof TorsionBoundCondition) {
-                torsions.add((TorsionBoundCondition) condition);
+    public List<AtomTorsionRangeCondition> getTorsionBoundConditions() {
+        List<AtomTorsionRangeCondition> torsions = new ArrayList<>();
+        for (AtomListCondition condition : this.atomConditions) {
+            if (condition instanceof AtomTorsionRangeCondition) {
+                torsions.add((AtomTorsionRangeCondition) condition);
             }
         }
         
@@ -201,11 +201,11 @@ public class GroupDescription implements Description, Iterable<AtomDescription> 
         }
     }
 
-    public void addCondition(Condition condition) {
+    public void addCondition(AtomListCondition condition) {
         this.atomConditions.add(condition);
     }
 
-    public List<Condition> getConditions() {
+    public List<AtomListCondition> getConditions() {
         return this.atomConditions;
     }
 
@@ -278,5 +278,10 @@ public class GroupDescription implements Description, Iterable<AtomDescription> 
     public boolean labelMatches(String groupLabel) {
         return groupLabel.equals(label);
     }
+
+	public AtomTorsionRangeCondition[] getAtomTorsionRangeConditions() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
 }

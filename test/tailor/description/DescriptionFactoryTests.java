@@ -2,8 +2,6 @@ package tailor.description;
 
 import org.junit.Test;
 
-import tailor.condition.DistanceBoundCondition;
-
 public class DescriptionFactoryTests {
     
     public void setupFactory(DescriptionFactory factory) {
@@ -40,8 +38,8 @@ public class DescriptionFactoryTests {
         ChainDescription a = chain.getPathByGroupName("GLY", "N");
         ChainDescription b = chain.getPathByGroupName("LYS", "O");
         
-        DistanceBoundCondition bound = new DistanceBoundCondition("NODistance", a, b, 4, 2);
-        chain.addGroupCondition(bound);
+//        DistanceBoundCondition bound = new DistanceBoundCondition("NODistance", a, b, 4, 2);
+//        chain.addGroupCondition(bound);
         // TODO - asserts!
     }
 

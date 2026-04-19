@@ -31,6 +31,14 @@ public class AtomRangeCondition implements AtomListCondition {
 		return isInRange;
 	}
 	
+	public double getMinValue() {
+		return minValue;
+	}
+	
+	public double getMaxValue() {
+		return maxValue;
+	}
+	
 	public String op(double a, double b) {
 		return a < b? " < " : " > ";
 	}

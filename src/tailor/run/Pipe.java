@@ -7,7 +7,6 @@ import java.util.stream.Collectors;
 
 import tailor.description.Description;
 import tailor.description.DescriptionException;
-import tailor.engine.aigen.Matcher;
 import tailor.match.Match;
 import tailor.measurement.Measure;
 import tailor.measurement.Measurement;
@@ -21,6 +20,21 @@ import tailor.structure.Structure;
  * A pipe that processes structures through a matcher and measures
  */
 public class Pipe {
+	
+	// TODO - stub as deleted the previous one
+	public class Matcher {
+		
+		public Matcher(Description description) {
+			
+		}
+
+		public Structure[] findAll(Structure structure) {
+			// TODO Auto-generated method stub
+			return null;
+		}
+		
+	}
+	
     private Description description;
     private Matcher matcher;
     private List<Measure> measures;

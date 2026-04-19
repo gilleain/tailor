@@ -4,12 +4,12 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
-import tailor.condition.Condition;
 import tailor.description.AtomDescription;
 import tailor.description.ChainDescription;
 import tailor.description.Description;
 import tailor.description.GroupDescription;
 import tailor.description.ProteinDescription;
+import tailor.experiment.api.AtomListCondition;
 import tailor.structure.Level;
 
 public class XmlDescriptionWriter {
@@ -37,7 +37,7 @@ public class XmlDescriptionWriter {
 			for (GroupDescription group : c.getGroupDescriptions()) {
 				XmlDescriptionWriter.writeDescription(group, writer);
 			}
-			for (Condition condition : c.getConditions()) {
+			for (AtomListCondition condition : c.getConditions()) {
 				XmlDescriptionWriter.writeCondition(condition, writer);
 			}
 			writer.write("\t</ChainDescription>\n");
@@ -63,9 +63,13 @@ public class XmlDescriptionWriter {
 		}
 	}
 	
-	private static void writeCondition(Condition condition, FileWriter writer) 
+	private static void writeCondition(AtomListCondition condition, FileWriter writer) 
 						throws IOException {
-		writer.write(condition.toXml());
+		writer.write(toXML(condition));
+	}
+	
+	private static String toXML(AtomListCondition atomListCondition) {
+		return null;	// TODO
 	}
 	
 	public static void main(String[] args) {

@@ -3,8 +3,9 @@ package tailor.description;
 import java.util.ArrayList;
 import java.util.List;
 
-import tailor.condition.HBondCondition;
-import tailor.condition.TorsionBoundCondition;
+import tailor.experiment.condition.atom.AtomTorsionRangeCondition;
+import tailor.experiment.condition.atom.HBondCondition;
+import tailor.experiment.description.DescriptionPath;
 import tailor.measurement.HBondMeasure;
 import tailor.measurement.TorsionMeasure;
 import tailor.structure.Level;
@@ -102,15 +103,15 @@ public class DescriptionFactory {
 		        DescriptionFactory.DEFAULT_CHAIN_NAME, numberOfResidues);
 	}
 	
-	public HBondCondition createHBondCondition(
+	public tailor.experiment.condition.atom.HBondCondition createHBondCondition(
 	        double maxDH, double minDHA, double minHAA, int donorNumber, int acceptorNumber) {
 	    ChainDescription chain = this.root.getChainDescription(DescriptionFactory.DEFAULT_CHAIN_NAME);
         
-        ChainDescription a = chain.getPath(donorNumber, "N");
-        ChainDescription b = chain.getPath(donorNumber, "H");
-        ChainDescription c = chain.getPath(acceptorNumber, "O");
-        ChainDescription d = chain.getPath(acceptorNumber, "C");
-        return new HBondCondition(a, b, c, d, maxDH, minDHA, minHAA);
+	    DescriptionPath a = chain.getDescriptionPath(donorNumber, "N");
+	    DescriptionPath b = chain.getDescriptionPath(donorNumber, "H");
+	    DescriptionPath c = chain.getDescriptionPath(acceptorNumber, "O");
+	    DescriptionPath d = chain.getDescriptionPath(acceptorNumber, "C");
+        return new tailor.experiment.condition.atom.HBondCondition( maxDH, minDHA, minHAA, List.of(b, c), List.of(a, b, c));
 	}
 	
 	public void addHBondCondition(double maxDH, double minDHA, double minHAA,
@@ -230,49 +231,55 @@ public class DescriptionFactory {
 	}
 	
 	public void addPhiConditionToChain(
-	        TorsionBoundCondition partialCondition, String chainName) {
+	        AtomTorsionRangeCondition partialCondition, String chainName) {
 		
 	    ChainDescription chain = this.root.getChainDescription(chainName);
-		chain.addCondition(partialCondition);
+//		chain.addCondition(partialCondition);
 	}
 	
-	public TorsionBoundCondition createPhiCondition(
+	public AtomTorsionRangeCondition createPhiCondition(
 	        double midPoint, double range, int residueNumber, String chainName) {
 	    ChainDescription chain = this.root.getChainDescription(chainName);
 	    return createPhiCondition(chain, residueNumber, midPoint, range);
 	}
 	
-	public static TorsionBoundCondition createPhiCondition(
+	public static AtomTorsionRangeCondition createPhiCondition(
 			ChainDescription chain, int residueNumber, double midPoint, double range) {
-        ChainDescription a = chain.getPath(residueNumber - 1, "C");
-        ChainDescription b = chain.getPath(residueNumber, "N");
-        ChainDescription c = chain.getPath(residueNumber, "CA");
-        ChainDescription d = chain.getPath(residueNumber, "C");
+        DescriptionPath a = chain.getDescriptionPath(residueNumber - 1, "C");
+        DescriptionPath b = chain.getDescriptionPath(residueNumber, "N");
+        DescriptionPath c = chain.getDescriptionPath(residueNumber, "CA");
+        DescriptionPath d = chain.getDescriptionPath(residueNumber, "C");
         
-		return new TorsionBoundCondition("phi", a, b, c, d, midPoint, range);
+        double min = midPoint - range;
+        double max = midPoint + range;
+        
+		return new AtomTorsionRangeCondition("phi", min, max, a, b, c, d);
 	}
 	
 	public void addPsiConditionToChain(
-	        TorsionBoundCondition partialCondition, String chainName) {
+	        AtomTorsionRangeCondition partialCondition, String chainName) {
 	    ChainDescription chain = root.getChainDescription(chainName);
-		chain.addCondition(partialCondition);
+//		chain.addCondition(partialCondition);
 	}
 	
-	public TorsionBoundCondition createPsiCondition(
+	public AtomTorsionRangeCondition createPsiCondition(
 	        double midPoint, double range, int residueNumber, String chainName) {
 	    ChainDescription chain = root.getChainDescription(chainName);
 		return createPsiCondition(chain, residueNumber, midPoint, range);
 	}
 	
-	public static TorsionBoundCondition createPsiCondition(
+	public static AtomTorsionRangeCondition createPsiCondition(
 	        ChainDescription chain, int residueNumber, double midPoint, double range) {
         
-        ChainDescription a = chain.getPath(residueNumber, "N");
-        ChainDescription b = chain.getPath(residueNumber, "CA");
-        ChainDescription c = chain.getPath(residueNumber, "C");
-        ChainDescription d = chain.getPath(residueNumber + 1, "N");
+        DescriptionPath a = chain.getDescriptionPath(residueNumber, "N");
+        DescriptionPath b = chain.getDescriptionPath(residueNumber, "CA");
+        DescriptionPath c = chain.getDescriptionPath(residueNumber, "C");
+        DescriptionPath d = chain.getDescriptionPath(residueNumber + 1, "N");
+        
+        double min = midPoint - range;
+        double max = midPoint + range;
 	    
-		return new TorsionBoundCondition("phi", a, b, c, d, midPoint, range);
+		return new AtomTorsionRangeCondition("phi", min, max, a, b, c, d);
 	}
 	
 	public TorsionMeasure createPhiMeasure(

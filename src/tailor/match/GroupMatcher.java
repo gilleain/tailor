@@ -3,7 +3,6 @@ package tailor.match;
 import java.util.ArrayList;
 import java.util.List;
 
-import tailor.condition.Condition;
 import tailor.description.ChainDescription;
 import tailor.description.GroupDescription;
 import tailor.structure.Chain;
@@ -95,9 +94,9 @@ public class GroupMatcher {
         // the size of the description at the next level
         int expectedSize = description.getGroupDescriptions().size();
         
-        for (Condition condition : description.getConditions()) {
+//        for (Condition condition : description.getConditions()) {
 //            condition.satisfiedBy(partial); XXX argh!
-        }
+//        }
         
         return partial.getSize() == expectedSize;
     }

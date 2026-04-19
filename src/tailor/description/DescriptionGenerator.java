@@ -4,8 +4,6 @@ import java.util.AbstractMap;
 import java.util.HashMap;
 import java.util.Map;
 
-import tailor.condition.PropertyCondition;
-
 public class DescriptionGenerator {
 
 	public static final Map<String, double[][]> PREDEFINED_BOUNDS = new HashMap<>();
@@ -46,7 +44,8 @@ public class DescriptionGenerator {
 
 	private static ChainDescription generateBackboneDescription(String name, double[][][] bounds) {
 		ChainDescription chain = new ChainDescription();
-		chain.addCondition(new PropertyCondition("chainName", name)); // TODO - very fragile!
+		// TODO
+//		chain.addCondition(new PropertyCondition("chainName", name)); // TODO - very fragile!
 		chain.createResidues(bounds.length + 2);
 
 		for (int i = 0; i < bounds.length; i++) {

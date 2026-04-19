@@ -5,9 +5,10 @@ import java.util.Map;
 
 import org.xml.sax.Attributes;
 
-import tailor.condition.DistanceBoundCondition;
 import tailor.datasource.xml.PathXmlHandler;
 import tailor.description.Description;
+import tailor.experiment.condition.atom.AtomDistanceRangeCondition;
+import tailor.experiment.description.DescriptionPath;
 
 public class DistanceConditionXmlHandler implements ConditionXmlHandler {
     
@@ -29,10 +30,10 @@ public class DistanceConditionXmlHandler implements ConditionXmlHandler {
         double center = Double.parseDouble(this.dataStore.get("center"));
         double range = Double.parseDouble(this.dataStore.get("range"));
         
-        Description a1  = pathXmlHandler.getPath("a");
-        Description a2  = pathXmlHandler.getPath("b");
-        DistanceBoundCondition distance = 
-                new DistanceBoundCondition("name", a1, a2, center, range);
+        DescriptionPath a1  = pathXmlHandler.getPath("a");
+        DescriptionPath a2  = pathXmlHandler.getPath("b");
+        AtomDistanceRangeCondition distance = 
+                new AtomDistanceRangeCondition("name", center - range, center + range, a1, a2);
         
         // add the condition to the parent description
         currentParent.addCondition(distance);

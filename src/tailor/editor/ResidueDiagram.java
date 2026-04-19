@@ -8,9 +8,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import tailor.condition.Condition;
-import tailor.condition.HBondCondition;
-import tailor.condition.TorsionBoundCondition;
 import tailor.description.AtomDescription;
 import tailor.description.ChainDescription;
 import tailor.description.Description;
@@ -21,6 +18,9 @@ import tailor.editor.symbol.PeptideHalfSquare;
 import tailor.editor.symbol.ResidueCircle;
 import tailor.editor.symbol.Symbol;
 import tailor.editor.symbol.TorsionBox;
+import tailor.experiment.api.AtomListCondition;
+import tailor.experiment.condition.atom.AtomTorsionRangeCondition;
+import tailor.experiment.condition.atom.HBondCondition;
 
 public class ResidueDiagram {
 	
@@ -107,9 +107,8 @@ public class ResidueDiagram {
 		this.numberOfResidues = chain.size();
 		this.createBackbone(this.numberOfResidues);
 		this.fillMap(chain);
-		for (Condition condition : chain.getConditions()) {
-			if (condition instanceof TorsionBoundCondition) {
-				TorsionBoundCondition t = (TorsionBoundCondition) condition; 
+		for (AtomListCondition condition : chain.getConditions()) {
+			if (condition instanceof AtomTorsionRangeCondition t) {
 				this.makeTorsion(t);
 			} else if (condition instanceof HBondCondition) {
 				HBondCondition h = (HBondCondition) condition;
@@ -118,11 +117,11 @@ public class ResidueDiagram {
 		}
 	}
 	
-	public void makeTorsion(TorsionBoundCondition t) {
+	public void makeTorsion(AtomTorsionRangeCondition t) {
 		System.err.println("making torsion");
 		
-		Description firstDesc = t.getDescriptionA();
-		Description lastDesc = t.getDescriptionD();
+		Description firstDesc = null;	// TODO t.getDescriptionA();
+		Description lastDesc =  null;  // TODO t.getDescriptionD();
 		
 		// FIXME ugly hack to map C->O for phi  
 		AtomDescription a = (AtomDescription) firstDesc.getPathEnd();
@@ -141,8 +140,11 @@ public class ResidueDiagram {
 			return;							// FIXME
 		}
 		
-		this.makeTorsion(-1, t.makeTorsionLabel(), first, last, 
-				this.getTrackFromString(t.getLetterSymbol()), Symbol.Stroke.DASHED);
+		String torsionLabel = "";	// TODO - "min < letterSymbol < max"
+		String letterSymbol = "";	// TODO - phi psi etc
+		
+		this.makeTorsion(-1, torsionLabel, first, last, 
+				this.getTrackFromString(letterSymbol), Symbol.Stroke.DASHED);
 	}
 	
 	public int getTrackFromString(String s) {
@@ -157,10 +159,13 @@ public class ResidueDiagram {
 	}
 	
 	public void makeBond(HBondCondition h) {
-	    AtomDescription donorAtom = (AtomDescription) h.getDonorAtomDescription().getPathEnd();
+		// TODO
+//	    AtomDescription donorAtom = (AtomDescription) h.getDonorAtomDescription().getPathEnd();
+		AtomDescription donorAtom = null;
 		Symbol donor = this.reverseLookup(donorAtom);
 		
-		AtomDescription acceptorAtom = (AtomDescription) h.getAcceptorAtomDescription().getPathEnd();
+//		AtomDescription acceptorAtom = (AtomDescription) h.getAcceptorAtomDescription().getPathEnd();
+		AtomDescription acceptorAtom = null;
 		Symbol acceptor = this.reverseLookup(acceptorAtom);
 		
 		if (donor == null || acceptor == null) {

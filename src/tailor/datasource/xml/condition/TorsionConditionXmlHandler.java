@@ -5,9 +5,10 @@ import java.util.Map;
 
 import org.xml.sax.Attributes;
 
-import tailor.condition.TorsionBoundCondition;
 import tailor.datasource.xml.PathXmlHandler;
 import tailor.description.Description;
+import tailor.experiment.condition.atom.AtomTorsionRangeCondition;
+import tailor.experiment.description.DescriptionPath;
 
 public class TorsionConditionXmlHandler implements ConditionXmlHandler {
     
@@ -30,13 +31,17 @@ public class TorsionConditionXmlHandler implements ConditionXmlHandler {
         double midPoint = Double.parseDouble(this.dataStore.get("midPoint"));
         double range = Double.parseDouble(this.dataStore.get("range"));
         
-        Description pathA  = pathXmlHandler.getPath("a");
-        Description pathB  = pathXmlHandler.getPath("b");
-        Description pathC  = pathXmlHandler.getPath("c");
-        Description pathD = pathXmlHandler.getPath("d");
+        DescriptionPath pathA  = pathXmlHandler.getPath("a");
+        DescriptionPath pathB  = pathXmlHandler.getPath("b");
+        DescriptionPath pathC  = pathXmlHandler.getPath("c");
+        DescriptionPath pathD = pathXmlHandler.getPath("d");
         
-        TorsionBoundCondition torsion = 
-                new TorsionBoundCondition(name, pathA, pathB, pathC, pathD, midPoint, range);
+        // TODO - is it range or half range?
+        double minValue = midPoint - range;
+        double maxValue = midPoint + range;
+        
+        AtomTorsionRangeCondition torsion = 
+                new AtomTorsionRangeCondition(name, minValue, maxValue, pathA, pathB, pathC, pathD);
         
         // add the condition to the parent description
         parent.addCondition(torsion);

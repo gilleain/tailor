@@ -1,14 +1,23 @@
 package tailor.experiment.condition.atom;
 
-import java.util.List;
-
 import tailor.experiment.condition.AtomRangeCondition;
 import tailor.experiment.description.DescriptionPath;
 import tailor.experiment.measure.AtomTorsionMeasure;
 
 public class AtomTorsionRangeCondition extends AtomRangeCondition {
 	
-	public AtomTorsionRangeCondition(double minAngle, double maxAngle, List<DescriptionPath> descriptionPaths) {
+	private String name;
+	
+	public AtomTorsionRangeCondition(double minAngle, double maxAngle, DescriptionPath... descriptionPaths) {
+		this("", minAngle, maxAngle, descriptionPaths);
+	}
+	
+	public AtomTorsionRangeCondition(String name, double minAngle, double maxAngle, DescriptionPath... descriptionPaths) {
 		super(minAngle, maxAngle, new AtomTorsionMeasure(descriptionPaths));
+		this.name = name;
+	}
+
+	public String getName() {
+		return this.name;
 	}
 }

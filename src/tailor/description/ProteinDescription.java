@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import tailor.condition.Condition;
+import tailor.experiment.api.AtomListCondition;
 import tailor.measurement.Measure;
 import tailor.measurement.Measurement;
 import tailor.structure.Level;
@@ -23,7 +23,7 @@ public class ProteinDescription implements Description {
     
     private List<ChainDescription> chainDescriptions;
     
-    private List<Condition> chainConditions;
+    private List<AtomListCondition> chainConditions;
     
     private List<Measure<? extends Measurement>> chainMeasures;
     
@@ -69,7 +69,7 @@ public class ProteinDescription implements Description {
         this.descriptionLookup.put(id, chainDescription);
     }
     
-    public void addChainCondition(Condition condition) {
+    public void addChainCondition(AtomListCondition condition) {
         this.chainConditions.add(condition);
     }
     
@@ -166,7 +166,7 @@ public class ProteinDescription implements Description {
         }
     }
 
-    public void addCondition(Condition condition) {
+    public void addCondition(AtomListCondition condition) {
         this.chainConditions.add(condition);
     }
 
@@ -194,7 +194,7 @@ public class ProteinDescription implements Description {
         chainMeasures.add(measure);
     }
 
-    public List<Condition> getConditions() {
+    public List<AtomListCondition> getConditions() {
         return this.chainConditions;
     }
 

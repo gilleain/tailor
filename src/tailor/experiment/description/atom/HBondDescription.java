@@ -41,7 +41,7 @@ public class HBondDescription implements AtomListDescription {
 
 	@Override
 	public AtomListCondition createCondition() {
-		return new HBondCondition(getDHPaths(), getDHAPaths(), haDistance, minDHAAngle, maxDHAAngle);
+		return new HBondCondition(haDistance, minDHAAngle, maxDHAAngle, getDHPaths(), getDHAPaths());
 	}
 	
 	private List<DescriptionPath> getDHPaths() {

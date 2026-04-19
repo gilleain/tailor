@@ -3,8 +3,7 @@ package tailor.description;
 import java.util.ArrayList;
 import java.util.List;
 
-import tailor.condition.Condition;
-import tailor.condition.PropertyCondition;
+import tailor.experiment.api.AtomListCondition;
 import tailor.measurement.Measure;
 import tailor.measurement.Measurement;
 import tailor.structure.Atom;
@@ -20,7 +19,7 @@ public class AtomDescription implements Description {
     
     private static final Level level = Level.ATOM;
     
-    private List<Condition> conditions;
+    private List<AtomListCondition> conditions;
     
     private int id;
     
@@ -31,7 +30,7 @@ public class AtomDescription implements Description {
     public AtomDescription(String name) {
         this();
         // TODO : resolve!
-        addCondition(new PropertyCondition("Name", name));
+//        addCondition(new PropertyCondition("Name", name));
     }
     
     public AtomDescription(AtomDescription atomDescription) {
@@ -44,7 +43,7 @@ public class AtomDescription implements Description {
      * constructor if never used...
      */
     public void setName(String atomName) {
-        addCondition(new PropertyCondition("Name", atomName));
+//        addCondition(new PropertyCondition("Name", atomName));
     }
 
     public boolean nameMatches(String name) {
@@ -93,11 +92,11 @@ public class AtomDescription implements Description {
         return AtomDescription.level;
     }
     
-    public void addCondition(Condition condition) {
+    public void addCondition(AtomListCondition condition) {
         this.conditions.add(condition);
     }
     
-    public List<Condition> getConditions() {
+    public List<AtomListCondition> getConditions() {
         return this.conditions;
     }
     
@@ -116,13 +115,13 @@ public class AtomDescription implements Description {
     
     public String getName() {
         String name = "";
-        for (Condition condition : conditions) {
-            if (condition instanceof PropertyCondition) {
-                PropertyCondition prop = (PropertyCondition) condition;
-                if (prop.keyEquals("Name")) {
-                    return prop.getValue();
-                }
-            }
+        for (AtomListCondition condition : conditions) {
+//            if (condition instanceof PropertyCondition) {
+//                PropertyCondition prop = (PropertyCondition) condition;
+//                if (prop.keyEquals("Name")) {
+//                    return prop.getValue();
+//                }
+//            }
         }
         return name;
     }

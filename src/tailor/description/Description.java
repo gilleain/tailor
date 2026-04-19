@@ -2,7 +2,7 @@ package tailor.description;
 
 import java.util.List;
 
-import tailor.condition.Condition;
+import tailor.experiment.api.AtomListCondition;
 import tailor.measurement.Measure;
 import tailor.measurement.Measurement;
 import tailor.structure.Level;
@@ -26,9 +26,9 @@ public interface Description extends Cloneable {
     
     public void addSubDescription(Description subDescription);
     
-    public void addCondition(Condition condition);
+    public void addCondition(AtomListCondition condition);
     
-    public List<Condition> getConditions();
+    public List<AtomListCondition> getConditions();
     
     public void addMeasure(Measure<? extends Measurement> measure);
     

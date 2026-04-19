@@ -18,9 +18,6 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
 import tailor.api.Torsion;
-import tailor.condition.Condition;
-import tailor.condition.HBondCondition;
-import tailor.condition.TorsionBoundCondition;
 import tailor.datasource.xml.XmlDescriptionReader;
 import tailor.description.AtomDescription;
 import tailor.description.ChainDescription;
@@ -29,6 +26,9 @@ import tailor.description.DescriptionFactory;
 import tailor.description.GroupDescription;
 import tailor.description.ProteinDescription;
 import tailor.editor.symbol.Symbol;
+import tailor.experiment.api.AtomListCondition;
+import tailor.experiment.condition.atom.AtomTorsionRangeCondition;
+import tailor.experiment.condition.atom.HBondCondition;
 import tailor.measurement.HBondMeasure;
 import tailor.measurement.Measure;
 import tailor.measurement.TorsionMeasure;
@@ -154,7 +154,7 @@ public class ResidueDiagramEditor extends JPanel implements SymbolSelectionListe
 		ProteinDescription p = (ProteinDescription) description;
 		this.canvas.createFromDescription(p);
 		for (ChainDescription chain : p.getChainDescriptions()) {
-			for (Condition condition : chain.getConditions()) {
+			for (AtomListCondition condition : chain.getConditions()) {
 				this.conditionListBox.addConditionToList(condition);
 			}
 		}
@@ -312,12 +312,16 @@ public class ResidueDiagramEditor extends JPanel implements SymbolSelectionListe
 		int residueNumber = newlySelectedSymbol.getResidueIndex();
 		this.conditionPropertySheetPanel.setTorsionSheetResidue(Torsion.PHI, residueNumber, residueNumber + 1);
 		
-		TorsionBoundCondition torsionCondition = this.conditionPropertySheetPanel.getTorsionCondition(residueNumber);
-		factory.addPhiConditionToChain(torsionCondition, "A");
+		AtomTorsionRangeCondition torsionCondition = this.conditionPropertySheetPanel.getTorsionCondition(residueNumber);
+		// TODO
+//		factory.addPhiConditionToChain(torsionCondition, "A");
+		
 		this.showTorsionCondition(torsionCondition);
 		
-		torsionCondition.setLetterSymbol("\u03C6");
-		String label = torsionCondition.makeTorsionLabel(); 
+		// TODO
+//		torsionCondition.setLetterSymbol("\u03C6");
+//		String label = torsionCondition.makeTorsionLabel();
+		String label = "";
 		this.canvas.makePhi(residueNumber, label, Symbol.Stroke.DASHED);
 	}
 	
@@ -336,13 +340,16 @@ public class ResidueDiagramEditor extends JPanel implements SymbolSelectionListe
 		int residueNumber = newlySelectedSymbol.getResidueIndex();
 		this.conditionPropertySheetPanel.setTorsionSheetResidue(Torsion.PSI, residueNumber + 1, residueNumber + 2);
 		
-		TorsionBoundCondition torsionCondition = 
+		AtomTorsionRangeCondition torsionCondition = 
 		        this.conditionPropertySheetPanel.getTorsionCondition(residueNumber);
-		factory.addPsiConditionToChain(torsionCondition, "A");
+		// TODO
+//		factory.addPsiConditionToChain(torsionCondition, "A");
 		this.showTorsionCondition(torsionCondition);
 		
-		torsionCondition.setLetterSymbol("\u03C8");
-		String label = torsionCondition.makeTorsionLabel();
+		// TODO
+//		torsionCondition.setLetterSymbol("\u03C8");
+//		String label = torsionCondition.makeTorsionLabel();
+		String label = "";
 		this.canvas.makePsi(residueNumber, label, Symbol.Stroke.DASHED);
 	}
 	
@@ -357,7 +364,7 @@ public class ResidueDiagramEditor extends JPanel implements SymbolSelectionListe
 		this.canvas.makePsi(residueNumber, "\u03C8?", Symbol.Stroke.DOTTED);
 	}
 	
-	private void showTorsionCondition(TorsionBoundCondition torsionCondition) {
+	private void showTorsionCondition(AtomTorsionRangeCondition torsionCondition) {
 		this.conditionListBox.addConditionToList(torsionCondition);
 		this.diagramPropertyPanel.incrementNumberOfTorsionConditions();
 	}
