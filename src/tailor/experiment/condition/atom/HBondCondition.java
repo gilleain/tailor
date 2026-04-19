@@ -1,8 +1,9 @@
-package tailor.experiment.condition;
+package tailor.experiment.condition.atom;
 
 import java.util.List;
 
 import tailor.experiment.api.AtomListCondition;
+import tailor.experiment.condition.AtomPartition;
 import tailor.experiment.description.DescriptionPath;
 
 /**
