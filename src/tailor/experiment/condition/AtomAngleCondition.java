@@ -16,7 +16,7 @@ public class AtomAngleCondition extends AbstractAtomListCondition {
 	public AtomAngleCondition(AtomMatcher atomMatcher, double angle) {
 		super(atomMatcher);
 		this.angle = angle;
-		this.aam = new AtomAngleMeasure();
+		this.aam = new AtomAngleMeasure(atomMatcher);
 	}
 	
 	public boolean accept(Atom a, Atom b, Atom c) {

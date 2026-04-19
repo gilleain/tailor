@@ -11,7 +11,6 @@ public class FilterAtomResultByCondition extends AbstractPipeableOperator {
 	
 	private Logger logger = Logger.getLogger(FilterAtomResultByCondition.class.getName());
 	
-	
 	private List<AtomListCondition> conditions;
 	
 	public FilterAtomResultByCondition(List<AtomListCondition> conditions) {

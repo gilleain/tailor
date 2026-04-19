@@ -18,7 +18,7 @@ public class AtomDistanceRangeCondition extends AbstractAtomListCondition {
 		super(atomMatcher);
 		this.minDistance = minDistance;
 		this.maxDistance = maxDistance;
-		this.adm = new AtomDistanceMeasure();
+		this.adm = new AtomDistanceMeasure(atomMatcher);
 	}
 	
 	public boolean accept(Atom a, Atom b) {

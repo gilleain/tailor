@@ -19,7 +19,7 @@ public class AtomAngleRangeCondition extends AbstractAtomListCondition {
 		super(atomMatcher);
 		this.minAngle = minAngle;
 		this.maxAngle = maxAngle;
-		this.aam = new AtomAngleMeasure();
+		this.aam = new AtomAngleMeasure(atomMatcher);
 	}
 	
 	public boolean accept(Match match) {

@@ -17,7 +17,7 @@ public class AtomDistanceCondition extends AbstractAtomListCondition {
 	public AtomDistanceCondition(AtomMatcher atomMatcher, double distance) {
 		super(atomMatcher);
 		this.distance = distance;
-		this.adm = new AtomDistanceMeasure();
+		this.adm = new AtomDistanceMeasure(atomMatcher);
 	}
 	
 	public boolean accept(Atom a, Atom b) {

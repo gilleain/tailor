@@ -18,7 +18,7 @@ public class AtomTorsionRangeCondition extends AbstractAtomListCondition {
 		super(atomMatcher);
 		this.minAngle = minAngle;
 		this.maxAngle = maxAngle;
-		this.atm = new AtomTorsionMeasure();
+		this.atm = new AtomTorsionMeasure(atomMatcher);
 	}
 
 	@Override
