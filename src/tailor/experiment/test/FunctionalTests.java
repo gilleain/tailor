@@ -107,14 +107,14 @@ public class FunctionalTests {
 		chainDescription.addGroupDescriptions(groupA, groupB, groupC);
 		chainDescription.addGroupSequenceDescriptions(
 				new GroupSequenceDescription(groupA, groupB, 1), new GroupSequenceDescription(groupB, groupC, 1));
-		chainDescription.addAtomListDescriptions(
-				new AtomTorsionRangeDescription(
-					minPhiAngle, maxPhiAngle, pathTo(groupA, "C"), pathTo(groupB, "N"), pathTo(groupB, "CA"), pathTo(groupB, "C")
-				),
-				new AtomTorsionRangeDescription(
-					minPsiAngle, maxPsiAngle, pathTo(groupB, "N"), pathTo(groupB, "CA"), pathTo(groupB, "C"), pathTo(groupC, "N")
-				)
+		AtomListDescription phi = new AtomTorsionRangeDescription(
+				minPhiAngle, maxPhiAngle, pathTo(groupA, "C"), pathTo(groupB, "N"), pathTo(groupB, "CA"), pathTo(groupB, "C")
 		);
+		AtomListDescription psi = new AtomTorsionRangeDescription(
+				minPsiAngle, maxPsiAngle, pathTo(groupB, "N"), pathTo(groupB, "CA"), pathTo(groupB, "C"), pathTo(groupC, "N")
+		);
+		chainDescription.addAtomListDescriptions(phi, psi);
+		chainDescription.addAtomListMeasures(phi.createMeasure(), psi.createMeasure());
 		return chainDescription;
 	}
 	

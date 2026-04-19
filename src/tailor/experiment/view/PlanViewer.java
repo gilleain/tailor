@@ -57,7 +57,7 @@ public class PlanViewer extends JFrame {
 		AtomListDescription angle = 
 				new AtomAngleRangeDescription(minAngle, maxAngle, pathTo(groupA, "C"), pathTo(groupA, "O"), pathTo(groupB, "N"));
 		chainDescription.addAtomListDescriptions(distance, angle);
-		chainDescription.addAtomListMeasures(distance.createMeasure(), angle.createMeasure());
+		chainDescription.addAtomListMeasures(distance.createMeasure(), angle.createMeasure());	
 		
 		Plan plan = new Planner().plan(chainDescription);
 		PlanViewer.show(plan);

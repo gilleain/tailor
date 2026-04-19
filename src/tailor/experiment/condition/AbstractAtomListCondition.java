@@ -23,7 +23,7 @@ public abstract class AbstractAtomListCondition implements AtomListCondition {
 			logger.fine(" Match");
 			return true;
 		} else {
-			logger.fine(" NO Match " + atomPartition);
+			logger.fine(" NO Match " + atomMatcher + " to " + atomPartition);
 			return false;
 		}
 	}

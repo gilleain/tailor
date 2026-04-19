@@ -42,11 +42,14 @@ public class ChainDescription {
 	}
 
 	public void addGroupDescription(GroupDescription groupDescription) {
+		groupDescription.setIndex(this.groupDescriptions.size());
 		this.groupDescriptions.add(groupDescription);
 	}
 
 	public void addGroupDescriptions(GroupDescription... groups) {
-		this.groupDescriptions.addAll(Arrays.asList(groups));
+		for (GroupDescription group : groups) {
+			addGroupDescription(group);
+		}
 	}
 
 	public List<GroupDescription> getGroupDescriptions() {

@@ -46,4 +46,19 @@ public class TestLabelPartition {
 		System.out.println(l);
 		assertEquals("6 parts", 6, l.numberOfParts());
 	}
+	
+	@Test
+	public void testFromEmptyInitial() {
+		GroupDescription gd1 = new GroupDescription();
+		gd1.setIndex(1);
+		DescriptionPath dp1 = new DescriptionPath(gd1, new AtomDescription("N"));
+		
+		GroupDescription gd2 = new GroupDescription();
+		gd2.setIndex(2);
+		DescriptionPath dp2 = new DescriptionPath(gd2, new AtomDescription("C"));
+		
+		LabelPartition l = LabelPartition.fromDescriptionPaths(List.of(dp1, dp2));
+		System.out.println(l);
+		assertEquals("3 parts", 3, l.numberOfParts());
+	}
 }
