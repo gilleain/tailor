@@ -9,6 +9,7 @@ import org.junit.Test;
 
 import tailor.datasource.PDBReader;
 import tailor.experiment.api.AtomListDescription;
+import tailor.experiment.api.AtomListMeasure;
 import tailor.experiment.description.ChainDescription;
 import tailor.experiment.description.GroupDescription;
 import tailor.experiment.description.atom.AtomAngleRangeDescription;
@@ -16,6 +17,7 @@ import tailor.experiment.description.atom.AtomDistanceRangeDescription;
 import tailor.experiment.description.atom.AtomTorsionRangeDescription;
 import tailor.experiment.description.atom.HBondDescription;
 import tailor.experiment.description.group.GroupSequenceDescription;
+import tailor.experiment.measure.AtomTorsionMeasure;
 import tailor.experiment.plan.Plan;
 import tailor.experiment.plan.Planner;
 import tailor.structure.Chain;
@@ -31,13 +33,16 @@ public class FunctionalTests {
 		double maxDistance = 2.5; // this is a very long H-A distance!
 		ChainDescription chainDescription = new ChainDescription();
 		GroupDescription groupA = Helper.makeGroupDescription("C", "O");
-		GroupDescription groupB = Helper.makeGroupDescription("H", "N");
+		GroupDescription groupB = Helper.makeGroupDescription("H", "N", "CA", "C");
 		chainDescription.addGroupDescriptions(groupA, groupB);
 		HBondDescription hBond = new HBondDescription(
 				maxDistance, minAngle, maxAngle, 
 				pathTo(groupA, "C"), pathTo(groupA, "O"), pathTo(groupB, "H"), pathTo(groupB, "N"));
+		AtomListMeasure phi = new AtomTorsionMeasure(
+				pathTo(groupA, "C"), pathTo(groupB, "N"), pathTo(groupB, "CA"), pathTo(groupB, "C")
+		);
 		chainDescription.addAtomListDescriptions(hBond);
-		chainDescription.addAtomListMeasures(hBond.createMeasure());
+		chainDescription.addAtomListMeasures(hBond.createMeasure(), phi);
 		return chainDescription;
 	}
 	
@@ -46,14 +51,17 @@ public class FunctionalTests {
 		double maxAngle = 180;
 		double maxDistance = 2.5;	// this is a very long H-A distance!
 		ChainDescription chainDescription = new ChainDescription();
-		GroupDescription groupA = Helper.makeGroupDescription("H", "N");
-		GroupDescription groupB = Helper.makeGroupDescription("C", "O");
+		GroupDescription groupA = Helper.makeGroupDescription("H", "N", "C");
+		GroupDescription groupB = Helper.makeGroupDescription("C", "O", "N", "CA");
 		chainDescription.addGroupDescriptions(groupA, groupB);
 		HBondDescription hBond = new HBondDescription(
 				maxDistance, minAngle, maxAngle, 
 				pathTo(groupA, "N"), pathTo(groupA, "H"), pathTo(groupB, "O"), pathTo(groupB, "C"));
+		AtomListMeasure phi = new AtomTorsionMeasure(
+				pathTo(groupA, "C"), pathTo(groupB, "N"), pathTo(groupB, "CA"), pathTo(groupB, "C")
+		);
 		chainDescription.addAtomListDescriptions(hBond);
-		chainDescription.addAtomListMeasures(hBond.createMeasure());
+		chainDescription.addAtomListMeasures(hBond.createMeasure(), phi);
 		return chainDescription;
 	}
 	

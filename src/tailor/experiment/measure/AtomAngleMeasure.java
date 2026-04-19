@@ -3,6 +3,7 @@ package tailor.experiment.measure;
 import java.util.List;
 
 import tailor.experiment.condition.AtomMatcher;
+import tailor.experiment.description.DescriptionPath;
 import tailor.geometry.Geometry;
 import tailor.structure.Atom;
 
@@ -10,6 +11,10 @@ public class AtomAngleMeasure extends AbstractAtomListMeasure {
 	
 	public AtomAngleMeasure(AtomMatcher atomMatcher) {
 		super(atomMatcher);
+	}
+	
+	public AtomAngleMeasure(DescriptionPath... descriptionPaths) {
+		super(descriptionPaths);
 	}
 	
 	@Override

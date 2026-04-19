@@ -1,6 +1,7 @@
 package tailor.experiment.condition;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
@@ -17,6 +18,10 @@ public class LabelPartition {
 		this.parts = parts;
 	}
 
+	public static LabelPartition fromDescriptionPaths(DescriptionPath... descriptionPaths) {
+		return LabelPartition.fromDescriptionPaths(Arrays.asList(descriptionPaths));
+	}
+	
 	// TODO - calling this method twice on the same list of paths reverses the matcher!!
 	public static LabelPartition fromDescriptionPaths(List<DescriptionPath> descriptionPaths) {
 		Map<GroupDescription, List<String>> partition = new HashMap<>();

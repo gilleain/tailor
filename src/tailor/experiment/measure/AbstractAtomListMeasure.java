@@ -8,6 +8,8 @@ import tailor.experiment.api.AtomListMeasure;
 import tailor.experiment.condition.AtomMatcher;
 import tailor.experiment.condition.AtomMatcher.Match;
 import tailor.experiment.condition.AtomPartition;
+import tailor.experiment.condition.LabelPartition;
+import tailor.experiment.description.DescriptionPath;
 import tailor.structure.Atom;
 
 public abstract class AbstractAtomListMeasure implements AtomListMeasure {
@@ -18,6 +20,10 @@ public abstract class AbstractAtomListMeasure implements AtomListMeasure {
 	
 	public AbstractAtomListMeasure(AtomMatcher atomMatcher) {
 		this.atomMatcher = atomMatcher;
+	}
+	
+	public AbstractAtomListMeasure(DescriptionPath... descriptionPaths) {
+		this(new AtomMatcher(LabelPartition.fromDescriptionPaths(descriptionPaths)));
 	}
 	
 	public DoubleMeasurement measure(AtomPartition atomPartition) {
