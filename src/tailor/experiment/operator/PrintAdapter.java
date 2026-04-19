@@ -1,6 +1,6 @@
 package tailor.experiment.operator;
 
-import tailor.experiment.api.Source;
+import tailor.api.Source;
 import tailor.experiment.plan.Result;
 
 /**

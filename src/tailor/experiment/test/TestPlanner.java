@@ -6,10 +6,10 @@ import java.util.List;
 
 import org.junit.Test;
 
-import tailor.experiment.api.AtomListCondition;
-import tailor.experiment.api.AtomListDescription;
-import tailor.experiment.api.AtomListMeasure;
-import tailor.experiment.condition.AtomPartition;
+import tailor.api.AtomListCondition;
+import tailor.api.AtomListDescription;
+import tailor.api.AtomListMeasure;
+import tailor.condition.AtomPartition;
 import tailor.experiment.description.ChainDescription;
 import tailor.experiment.description.DescriptionPath;
 import tailor.experiment.description.GroupDescription;

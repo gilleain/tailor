@@ -1,6 +1,6 @@
-package tailor.experiment.api;
+package tailor.api;
 
-import tailor.experiment.condition.AtomPartition;
+import tailor.condition.AtomPartition;
 
 /**
  * Conditions on a list of atoms.

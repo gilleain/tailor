@@ -2,10 +2,10 @@ package tailor.experiment.description.atom;
 
 import java.util.List;
 
-import tailor.experiment.api.AtomListCondition;
-import tailor.experiment.api.AtomListDescription;
-import tailor.experiment.api.AtomListMeasure;
-import tailor.experiment.condition.atom.HBondCondition;
+import tailor.api.AtomListCondition;
+import tailor.api.AtomListDescription;
+import tailor.api.AtomListMeasure;
+import tailor.condition.atom.HBondCondition;
 import tailor.experiment.description.DescriptionPath;
 import tailor.experiment.description.GroupDescription;
 import tailor.experiment.measure.HBondMeasure;

@@ -7,9 +7,9 @@ import java.io.IOException;
 
 import org.junit.Test;
 
+import tailor.api.AtomListDescription;
+import tailor.api.AtomListMeasure;
 import tailor.datasource.PDBReader;
-import tailor.experiment.api.AtomListDescription;
-import tailor.experiment.api.AtomListMeasure;
 import tailor.experiment.description.AtomValueRangeDescription;
 import tailor.experiment.description.ChainDescription;
 import tailor.experiment.description.GroupDescription;

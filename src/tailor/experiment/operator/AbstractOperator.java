@@ -1,6 +1,6 @@
 package tailor.experiment.operator;
 
-import tailor.experiment.api.Operator;
+import tailor.api.Operator;
 
 public abstract class AbstractOperator implements Operator {
 	

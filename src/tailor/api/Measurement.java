@@ -1,4 +1,4 @@
-package tailor.experiment.api;
+package tailor.api;
 
 /**
  * The outcome of applying a measure to some atoms.

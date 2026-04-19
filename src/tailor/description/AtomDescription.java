@@ -3,7 +3,7 @@ package tailor.description;
 import java.util.ArrayList;
 import java.util.List;
 
-import tailor.experiment.api.AtomListCondition;
+import tailor.api.AtomListCondition;
 import tailor.measurement.Measure;
 import tailor.measurement.Measurement;
 import tailor.structure.Atom;

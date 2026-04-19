@@ -8,6 +8,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import tailor.api.AtomListCondition;
+import tailor.condition.atom.AtomTorsionRangeCondition;
+import tailor.condition.atom.HBondCondition;
 import tailor.description.AtomDescription;
 import tailor.description.ChainDescription;
 import tailor.description.Description;
@@ -18,9 +21,6 @@ import tailor.editor.symbol.PeptideHalfSquare;
 import tailor.editor.symbol.ResidueCircle;
 import tailor.editor.symbol.Symbol;
 import tailor.editor.symbol.TorsionBox;
-import tailor.experiment.api.AtomListCondition;
-import tailor.experiment.condition.atom.AtomTorsionRangeCondition;
-import tailor.experiment.condition.atom.HBondCondition;
 
 public class ResidueDiagram {
 	

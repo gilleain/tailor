@@ -5,11 +5,11 @@ import java.util.List;
 import java.util.Optional;
 import java.util.logging.Logger;
 
-import tailor.experiment.api.AtomListMeasure;
-import tailor.experiment.condition.AtomMatcher;
-import tailor.experiment.condition.AtomMatcher.Match;
-import tailor.experiment.condition.AtomPartition;
-import tailor.experiment.condition.LabelPartition;
+import tailor.api.AtomListMeasure;
+import tailor.condition.AtomMatcher;
+import tailor.condition.AtomMatcher.Match;
+import tailor.condition.AtomPartition;
+import tailor.condition.LabelPartition;
 import tailor.experiment.description.DescriptionPath;
 import tailor.experiment.description.GroupDescription;
 import tailor.structure.Atom;

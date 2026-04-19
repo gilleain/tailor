@@ -6,9 +6,9 @@ import java.util.Map;
 
 import org.xml.sax.Attributes;
 
+import tailor.condition.atom.HBondCondition;
 import tailor.datasource.xml.PathXmlHandler;
 import tailor.description.Description;
-import tailor.experiment.condition.atom.HBondCondition;
 import tailor.experiment.description.DescriptionPath;
 
 public class HBondConditionXmlHandler implements ConditionXmlHandler {

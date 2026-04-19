@@ -6,8 +6,8 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import tailor.experiment.api.Measurement;
-import tailor.experiment.condition.AtomPartition;
+import tailor.api.Measurement;
+import tailor.condition.AtomPartition;
 import tailor.structure.Atom;
 import tailor.structure.Chain;
 import tailor.structure.Group;

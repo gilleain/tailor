@@ -4,7 +4,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import tailor.experiment.api.Measurement;
+import tailor.api.Measurement;
 
 public class CompositeMeasurement implements Measurement {
 	

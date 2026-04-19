@@ -6,7 +6,7 @@ import java.util.List;
 
 import org.junit.Test;
 
-import tailor.experiment.condition.LabelPartition;
+import tailor.condition.LabelPartition;
 import tailor.experiment.description.AtomDescription;
 import tailor.experiment.description.DescriptionPath;
 import tailor.experiment.description.GroupDescription;

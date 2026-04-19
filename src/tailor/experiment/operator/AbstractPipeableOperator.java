@@ -1,8 +1,8 @@
 package tailor.experiment.operator;
 
-import tailor.experiment.api.PipeableOperator;
-import tailor.experiment.api.Sink;
-import tailor.experiment.api.Source;
+import tailor.api.PipeableOperator;
+import tailor.api.Sink;
+import tailor.api.Source;
 import tailor.experiment.plan.Result;
 
 public abstract class AbstractPipeableOperator extends AbstractOperator implements PipeableOperator<Result, Result> {

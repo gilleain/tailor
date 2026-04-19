@@ -2,9 +2,9 @@ package tailor.experiment.operator;
 
 import java.util.List;
 
-import tailor.experiment.api.AtomListMeasure;
-import tailor.experiment.api.Measurement;
-import tailor.experiment.condition.AtomPartition;
+import tailor.api.AtomListMeasure;
+import tailor.api.Measurement;
+import tailor.condition.AtomPartition;
 import tailor.experiment.plan.Result;
 
 public class Measurer extends AbstractPipeableOperator {

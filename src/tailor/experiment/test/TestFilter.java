@@ -6,8 +6,8 @@ import java.util.List;
 
 import org.junit.Test;
 
-import tailor.experiment.condition.atom.AtomAngleCondition;
-import tailor.experiment.condition.atom.AtomDistanceCondition;
+import tailor.condition.atom.AtomAngleCondition;
+import tailor.condition.atom.AtomDistanceCondition;
 import tailor.experiment.description.GroupDescription;
 import tailor.experiment.operator.CombineResults;
 import tailor.experiment.operator.FilterAtomResultByCondition;

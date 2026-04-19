@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import tailor.experiment.api.AtomListDescription;
+import tailor.api.AtomListDescription;
 import tailor.experiment.description.GroupDescription;
 import tailor.experiment.description.group.GroupSequenceDescription;
 

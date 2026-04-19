@@ -1,9 +1,9 @@
-package tailor.experiment.condition;
+package tailor.condition;
 
 import java.util.logging.Logger;
 
-import tailor.experiment.api.AtomListCondition;
-import tailor.experiment.api.AtomListMeasure;
+import tailor.api.AtomListCondition;
+import tailor.api.AtomListMeasure;
 import tailor.experiment.measure.DoubleMeasurement;
 
 public class AtomRangeCondition implements AtomListCondition {
@@ -22,7 +22,6 @@ public class AtomRangeCondition implements AtomListCondition {
 		this.measure = measure;
 	}
 
-	@Override
 	public boolean accept(AtomPartition atomPartition) {
 		double actualValue = ((DoubleMeasurement) measure.measure(atomPartition)).getValue();
 		boolean isInRange = minValue < actualValue && actualValue < maxValue;

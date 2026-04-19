@@ -8,11 +8,11 @@ import java.util.List;
 
 import org.junit.Test;
 
+import tailor.condition.atom.AtomTorsionRangeCondition;
 import tailor.description.AtomDescription;
 import tailor.description.ChainDescription;
 import tailor.description.Description;
 import tailor.description.GroupDescription;
-import tailor.experiment.condition.atom.AtomTorsionRangeCondition;
 import tailor.experiment.description.DescriptionPath;
 import tailor.source.PDBReader;
 import tailor.structure.Chain;

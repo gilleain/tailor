@@ -1,8 +1,8 @@
-package tailor.experiment.condition.atom;
+package tailor.condition.atom;
 
 import java.util.List;
 
-import tailor.experiment.condition.AtomUpperBoundCondition;
+import tailor.condition.AtomUpperBoundCondition;
 import tailor.experiment.description.DescriptionPath;
 import tailor.experiment.measure.AtomDistanceMeasure;
 

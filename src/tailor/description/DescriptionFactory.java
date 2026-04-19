@@ -3,8 +3,8 @@ package tailor.description;
 import java.util.ArrayList;
 import java.util.List;
 
-import tailor.experiment.condition.atom.AtomTorsionRangeCondition;
-import tailor.experiment.condition.atom.HBondCondition;
+import tailor.condition.atom.AtomTorsionRangeCondition;
+import tailor.condition.atom.HBondCondition;
 import tailor.experiment.description.DescriptionPath;
 import tailor.measurement.HBondMeasure;
 import tailor.measurement.TorsionMeasure;
@@ -103,7 +103,7 @@ public class DescriptionFactory {
 		        DescriptionFactory.DEFAULT_CHAIN_NAME, numberOfResidues);
 	}
 	
-	public tailor.experiment.condition.atom.HBondCondition createHBondCondition(
+	public tailor.condition.atom.HBondCondition createHBondCondition(
 	        double maxDH, double minDHA, double minHAA, int donorNumber, int acceptorNumber) {
 	    ChainDescription chain = this.root.getChainDescription(DescriptionFactory.DEFAULT_CHAIN_NAME);
         
@@ -111,7 +111,7 @@ public class DescriptionFactory {
 	    DescriptionPath b = chain.getDescriptionPath(donorNumber, "H");
 	    DescriptionPath c = chain.getDescriptionPath(acceptorNumber, "O");
 	    DescriptionPath d = chain.getDescriptionPath(acceptorNumber, "C");
-        return new tailor.experiment.condition.atom.HBondCondition( maxDH, minDHA, minHAA, List.of(b, c), List.of(a, b, c));
+        return new tailor.condition.atom.HBondCondition( maxDH, minDHA, minHAA, List.of(b, c), List.of(a, b, c));
 	}
 	
 	public void addHBondCondition(double maxDH, double minDHA, double minHAA,

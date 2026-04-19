@@ -8,10 +8,10 @@ import java.util.Map;
 import java.util.Set;
 import java.util.Stack;
 
-import tailor.experiment.api.AtomListCondition;
-import tailor.experiment.api.AtomListDescription;
-import tailor.experiment.api.Operator;
-import tailor.experiment.api.PipeableOperator;
+import tailor.api.AtomListCondition;
+import tailor.api.AtomListDescription;
+import tailor.api.Operator;
+import tailor.api.PipeableOperator;
 import tailor.experiment.description.ChainDescription;
 import tailor.experiment.description.GroupDescription;
 import tailor.experiment.description.group.GroupSequenceDescription;

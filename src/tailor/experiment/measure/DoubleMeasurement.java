@@ -1,6 +1,6 @@
 package tailor.experiment.measure;
 
-import tailor.experiment.api.Measurement;
+import tailor.api.Measurement;
 
 public class DoubleMeasurement implements Measurement {
 	

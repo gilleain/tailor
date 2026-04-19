@@ -1,9 +1,9 @@
-package tailor.experiment.condition;
+package tailor.condition;
 
 import java.util.logging.Logger;
 
-import tailor.experiment.api.AtomListCondition;
-import tailor.experiment.api.AtomListMeasure;
+import tailor.api.AtomListCondition;
+import tailor.api.AtomListMeasure;
 import tailor.experiment.measure.DoubleMeasurement;
 
 public class AtomUpperBoundCondition implements AtomListCondition {

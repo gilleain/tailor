@@ -4,9 +4,9 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import tailor.experiment.api.Operator;
-import tailor.experiment.api.Sink;
-import tailor.experiment.api.Source;
+import tailor.api.Operator;
+import tailor.api.Sink;
+import tailor.api.Source;
 import tailor.experiment.plan.Result;
 
 public class ResultPipe implements Source<Result>, Sink<Result> {

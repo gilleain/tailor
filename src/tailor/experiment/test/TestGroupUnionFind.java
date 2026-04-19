@@ -8,7 +8,7 @@ import java.util.List;
 
 import org.junit.Test;
 
-import tailor.experiment.api.AtomListDescription;
+import tailor.api.AtomListDescription;
 import tailor.experiment.description.GroupDescription;
 import tailor.experiment.description.atom.AtomDistanceDescription;
 import tailor.experiment.plan.GroupUnionFind;

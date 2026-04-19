@@ -4,12 +4,12 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
+import tailor.api.AtomListCondition;
 import tailor.description.AtomDescription;
 import tailor.description.ChainDescription;
 import tailor.description.Description;
 import tailor.description.GroupDescription;
 import tailor.description.ProteinDescription;
-import tailor.experiment.api.AtomListCondition;
 import tailor.structure.Level;
 
 public class XmlDescriptionWriter {

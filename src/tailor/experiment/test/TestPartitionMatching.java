@@ -8,10 +8,10 @@ import java.util.Optional;
 
 import org.junit.Test;
 
-import tailor.experiment.condition.AtomMatcher;
-import tailor.experiment.condition.AtomMatcher.Match;
-import tailor.experiment.condition.AtomPartition;
-import tailor.experiment.condition.LabelPartition;
+import tailor.condition.AtomMatcher;
+import tailor.condition.AtomMatcher.Match;
+import tailor.condition.AtomPartition;
+import tailor.condition.LabelPartition;
 import tailor.structure.Atom;
 
 public class TestPartitionMatching {

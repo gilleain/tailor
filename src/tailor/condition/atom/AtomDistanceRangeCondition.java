@@ -1,6 +1,6 @@
-package tailor.experiment.condition.atom;
+package tailor.condition.atom;
 
-import tailor.experiment.condition.AtomRangeCondition;
+import tailor.condition.AtomRangeCondition;
 import tailor.experiment.description.DescriptionPath;
 import tailor.experiment.measure.AtomDistanceMeasure;
 

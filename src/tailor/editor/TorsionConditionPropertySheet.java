@@ -11,8 +11,8 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import tailor.api.Torsion;
+import tailor.condition.atom.AtomTorsionRangeCondition;
 import tailor.description.DescriptionFactory;
-import tailor.experiment.condition.atom.AtomTorsionRangeCondition;
 
 public class TorsionConditionPropertySheet extends JPanel implements ActionListener {
 	

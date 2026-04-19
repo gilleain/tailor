@@ -10,8 +10,8 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.ListSelectionModel;
 
+import tailor.api.AtomListCondition;
 import tailor.description.Description;
-import tailor.experiment.api.AtomListCondition;
 
 public class ConditionListBox extends JPanel {
 	

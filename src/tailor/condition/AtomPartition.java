@@ -1,4 +1,4 @@
-package tailor.experiment.condition;
+package tailor.condition;
 
 import java.util.List;
 

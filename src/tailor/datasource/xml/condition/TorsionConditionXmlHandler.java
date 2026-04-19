@@ -5,9 +5,9 @@ import java.util.Map;
 
 import org.xml.sax.Attributes;
 
+import tailor.condition.atom.AtomTorsionRangeCondition;
 import tailor.datasource.xml.PathXmlHandler;
 import tailor.description.Description;
-import tailor.experiment.condition.atom.AtomTorsionRangeCondition;
 import tailor.experiment.description.DescriptionPath;
 
 public class TorsionConditionXmlHandler implements ConditionXmlHandler {

@@ -1,7 +1,7 @@
 package tailor.experiment.operator;
 
-import tailor.experiment.api.Operator;
-import tailor.experiment.api.Sink;
+import tailor.api.Operator;
+import tailor.api.Sink;
 import tailor.experiment.plan.Result;
 
 public class PrintResults extends AbstractOperator implements Sink<Result> {

@@ -5,9 +5,9 @@ import java.awt.CardLayout;
 import javax.swing.JPanel;
 
 import tailor.api.Torsion;
+import tailor.condition.atom.AtomTorsionRangeCondition;
+import tailor.condition.atom.HBondCondition;
 import tailor.description.DescriptionFactory;
-import tailor.experiment.condition.atom.AtomTorsionRangeCondition;
-import tailor.experiment.condition.atom.HBondCondition;
 
 public class ConditionPropertySheetPanel extends JPanel {
 	

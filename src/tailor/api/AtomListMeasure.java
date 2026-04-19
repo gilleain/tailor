@@ -1,8 +1,8 @@
-package tailor.experiment.api;
+package tailor.api;
 
 import java.util.List;
 
-import tailor.experiment.condition.AtomPartition;
+import tailor.condition.AtomPartition;
 import tailor.experiment.description.GroupDescription;
 
 /**

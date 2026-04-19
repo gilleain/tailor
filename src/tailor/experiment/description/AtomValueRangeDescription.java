@@ -2,10 +2,10 @@ package tailor.experiment.description;
 
 import java.util.List;
 
-import tailor.experiment.api.AtomListCondition;
-import tailor.experiment.api.AtomListDescription;
-import tailor.experiment.api.AtomListMeasure;
-import tailor.experiment.condition.AtomRangeCondition;
+import tailor.api.AtomListCondition;
+import tailor.api.AtomListDescription;
+import tailor.api.AtomListMeasure;
+import tailor.condition.AtomRangeCondition;
 
 public class AtomValueRangeDescription implements AtomListDescription  {
 	

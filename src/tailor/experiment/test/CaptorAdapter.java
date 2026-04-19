@@ -2,7 +2,7 @@ package tailor.experiment.test;
 
 import java.util.List;
 
-import tailor.experiment.api.Source;
+import tailor.api.Source;
 import tailor.experiment.operator.AbstractOperator;
 import tailor.experiment.plan.Result;
 

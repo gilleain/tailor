@@ -5,8 +5,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
-import tailor.experiment.api.AtomListDescription;
-import tailor.experiment.api.AtomListMeasure;
+import tailor.api.AtomListDescription;
+import tailor.api.AtomListMeasure;
 import tailor.experiment.description.group.GroupSequenceDescription;
 
 public class ChainDescription {

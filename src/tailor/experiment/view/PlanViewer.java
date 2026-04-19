@@ -22,10 +22,10 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.SwingUtilities;
 
-import tailor.experiment.api.AtomListDescription;
-import tailor.experiment.api.Operator;
-import tailor.experiment.api.PipeableOperator;
-import tailor.experiment.api.Sink;
+import tailor.api.AtomListDescription;
+import tailor.api.Operator;
+import tailor.api.PipeableOperator;
+import tailor.api.Sink;
 import tailor.experiment.description.ChainDescription;
 import tailor.experiment.description.GroupDescription;
 import tailor.experiment.description.atom.AtomAngleRangeDescription;

@@ -2,11 +2,11 @@ package tailor.engine;
 
 import org.junit.Test;
 
+import tailor.condition.atom.AtomDistanceRangeCondition;
 import tailor.description.ChainDescription;
 import tailor.description.Description;
 import tailor.description.DescriptionFactory;
 import tailor.description.ProteinDescription;
-import tailor.experiment.condition.atom.AtomDistanceRangeCondition;
 import tailor.experiment.description.AtomDescription;
 import tailor.experiment.description.DescriptionPath;
 import tailor.experiment.description.GroupDescription;

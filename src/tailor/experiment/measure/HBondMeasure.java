@@ -3,9 +3,9 @@ package tailor.experiment.measure;
 import java.util.ArrayList;
 import java.util.List;
 
-import tailor.experiment.api.AtomListMeasure;
-import tailor.experiment.api.Measurement;
-import tailor.experiment.condition.AtomPartition;
+import tailor.api.AtomListMeasure;
+import tailor.api.Measurement;
+import tailor.condition.AtomPartition;
 import tailor.experiment.description.DescriptionPath;
 import tailor.experiment.description.GroupDescription;
 

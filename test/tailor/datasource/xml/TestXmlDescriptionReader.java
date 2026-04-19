@@ -12,15 +12,15 @@ import java.nio.charset.StandardCharsets;
 
 import org.junit.Test;
 
+import tailor.api.AtomListCondition;
+import tailor.condition.atom.AtomDistanceRangeCondition;
+import tailor.condition.atom.AtomTorsionRangeCondition;
+import tailor.condition.atom.HBondCondition;
 import tailor.description.AtomDescription;
 import tailor.description.ChainDescription;
 import tailor.description.Description;
 import tailor.description.GroupDescription;
 import tailor.description.ProteinDescription;
-import tailor.experiment.api.AtomListCondition;
-import tailor.experiment.condition.atom.AtomDistanceRangeCondition;
-import tailor.experiment.condition.atom.AtomTorsionRangeCondition;
-import tailor.experiment.condition.atom.HBondCondition;
 
 public class TestXmlDescriptionReader {
     

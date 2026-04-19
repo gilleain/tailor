@@ -3,8 +3,8 @@ package tailor.experiment.test;
 import java.util.ArrayList;
 import java.util.List;
 
-import tailor.experiment.api.Operator;
-import tailor.experiment.api.Sink;
+import tailor.api.Operator;
+import tailor.api.Sink;
 import tailor.experiment.description.AtomDescription;
 import tailor.experiment.description.DescriptionPath;
 import tailor.experiment.description.GroupDescription;

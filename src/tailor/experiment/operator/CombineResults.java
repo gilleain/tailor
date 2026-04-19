@@ -6,8 +6,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
 
-import tailor.experiment.api.Sink;
-import tailor.experiment.api.Source;
+import tailor.api.Sink;
+import tailor.api.Source;
 import tailor.experiment.description.group.GroupSequenceDescription;
 import tailor.experiment.plan.Result;
 

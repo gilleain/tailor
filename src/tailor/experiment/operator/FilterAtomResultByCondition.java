@@ -3,8 +3,8 @@ package tailor.experiment.operator;
 import java.util.List;
 import java.util.logging.Logger;
 
-import tailor.experiment.api.AtomListCondition;
-import tailor.experiment.condition.AtomPartition;
+import tailor.api.AtomListCondition;
+import tailor.condition.AtomPartition;
 import tailor.experiment.plan.Result;
 
 public class FilterAtomResultByCondition extends AbstractPipeableOperator {

@@ -6,7 +6,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import tailor.experiment.api.AtomListCondition;
+import tailor.api.AtomListCondition;
 import tailor.experiment.description.DescriptionPath;
 import tailor.measurement.Measure;
 import tailor.measurement.Measurement;

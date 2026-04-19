@@ -2,8 +2,8 @@ package tailor.experiment.operator;
 
 import java.util.Iterator;
 
-import tailor.experiment.api.Operator;
-import tailor.experiment.api.Source;
+import tailor.api.Operator;
+import tailor.api.Source;
 import tailor.structure.Chain;
 import tailor.structure.Group;
 
