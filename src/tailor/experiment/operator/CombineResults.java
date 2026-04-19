@@ -36,9 +36,6 @@ public class CombineResults extends AbstractOperator {
 	public CombineResults(List<ResultPipe> sources, ResultPipe output) {
 		this.sources = sources;
 		this.output = output;
-		for (ResultPipe source : sources) {
-			source.registerSink(this);
-		}
 		output.registerSource(this);
 		this.gapMap = new HashMap<>();
 	}
