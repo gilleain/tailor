@@ -72,6 +72,8 @@ public class PlanViewer extends JFrame {
     }
 
     private static class PlanPanel extends JPanel {
+    	
+    	private record Edge(String start, String end) { }
 
         private static final int BOX_W  = 180;
         private static final int BOX_H  = 60;
@@ -84,7 +86,7 @@ public class PlanViewer extends JFrame {
         /** operator id -> bounding rectangle in panel coordinates */
         private final Map<String, Rectangle> positions = new LinkedHashMap<>();
         /** directed edges as {sourceId, sinkId} pairs */
-        private final List<String[]> edges = new ArrayList<>();
+        private final List<Edge> edges = new ArrayList<>();
 
         PlanPanel(Plan plan) {
             setBackground(Color.WHITE);
@@ -114,7 +116,7 @@ public class PlanViewer extends JFrame {
                     System.out.println("Sink " + sink);
                     if (sink instanceof ResultPipe pipe && pipe.getSinkId() != null) {
                     	System.out.println("Pipe sink id " + pipe.getSinkId());
-                        edges.add(new String[]{op.getId(), pipe.getSinkId()});
+                        edges.add(new Edge(op.getId(), pipe.getSinkId()));
                     }
                 } else if (op instanceof CombineResults combine) {
                 	System.out.println("Found combine " + op.description());
@@ -122,7 +124,7 @@ public class PlanViewer extends JFrame {
                     System.out.println("Sink " + output);
                     if (output instanceof ResultPipe pipe && pipe.getSinkId() != null) {
                     	System.out.println("Pipe sink id " + output.getSinkId());
-                        edges.add(new String[]{op.getId(), pipe.getSinkId()});
+                        edges.add(new Edge(op.getId(), pipe.getSinkId()));
                     }
                 }
             }
@@ -142,11 +144,11 @@ public class PlanViewer extends JFrame {
             boolean changed = true;
             while (changed) {
                 changed = false;
-                for (String[] edge : edges) {
-                    int srcLayer = layers.getOrDefault(edge[0], 0);
+                for (Edge edge : edges) {
+                    int srcLayer = layers.getOrDefault(edge.start(), 0);
                     int candidate = srcLayer + 1;
-                    if (layers.getOrDefault(edge[1], -1) < candidate) {
-                        layers.put(edge[1], candidate);
+                    if (layers.getOrDefault(edge.end(), -1) < candidate) {
+                        layers.put(edge.end(), candidate);
                         changed = true;
                     }
                 }
@@ -161,7 +163,7 @@ public class PlanViewer extends JFrame {
             Map<Integer, List<String>> byLayer = new TreeMap<>();
             for (Operator op : plan.getOperators()) {
                 int layer = layers.get(op.getId());
-                byLayer.computeIfAbsent(layer, k -> new ArrayList<>()).add(op.getId());
+                byLayer.computeIfAbsent(layer, ArrayList::new).add(op.getId());
             }
 
             // Convert layer / row indices to pixel rectangles
@@ -190,9 +192,9 @@ public class PlanViewer extends JFrame {
         private void drawEdges(Graphics2D g2) {
             g2.setColor(new Color(80, 80, 100));
             g2.setStroke(new BasicStroke(1.5f));
-            for (String[] edge : edges) {
-                Rectangle src = positions.get(edge[0]);
-                Rectangle dst = positions.get(edge[1]);
+            for (Edge edge : edges) {
+                Rectangle src = positions.get(edge.start());
+                Rectangle dst = positions.get(edge.end());
                 if (src == null || dst == null) continue;
 
                 int x1 = src.x + src.width;
