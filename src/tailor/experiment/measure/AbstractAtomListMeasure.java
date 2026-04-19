@@ -1,6 +1,7 @@
 package tailor.experiment.measure;
 
 import java.util.Optional;
+import java.util.logging.Logger;
 
 import tailor.experiment.api.AtomListMeasure;
 import tailor.experiment.condition.AtomMatcher;
@@ -8,6 +9,8 @@ import tailor.experiment.condition.AtomMatcher.Match;
 import tailor.experiment.condition.AtomPartition;
 
 public abstract class AbstractAtomListMeasure implements AtomListMeasure {
+	
+	private Logger logger = Logger.getLogger(this.getClass().getName());
 	
 	private AtomMatcher atomMatcher;
 	
@@ -20,6 +23,7 @@ public abstract class AbstractAtomListMeasure implements AtomListMeasure {
 		if (match.isPresent()) {
 			return measure(match.get().getAtoms());
 		} else {
+			logger.info("NO match " + atomMatcher + " to " + atomPartition);
 			return -1;	// TODO
 		}
 	}

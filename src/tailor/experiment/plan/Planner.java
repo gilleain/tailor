@@ -18,6 +18,7 @@ import tailor.experiment.description.group.GroupSequenceDescription;
 import tailor.experiment.operator.CombineResults;
 import tailor.experiment.operator.CombineResults.PipeSeqConstraint;
 import tailor.experiment.operator.FilterAtomResultByCondition;
+import tailor.experiment.operator.Measurer;
 import tailor.experiment.operator.PrintAdapter;
 import tailor.experiment.operator.ResultPipe;
 import tailor.experiment.operator.ScanAtomResultByLabel;
@@ -79,6 +80,15 @@ public class Planner {
 			CombineResults combiner = new CombineResults(List.of(current, next), output);
 			plan.addOperator(combiner);
 			current = output;
+		}
+		
+		// Add measures, if any
+		if (!chainDescription.getAtomListMeasures().isEmpty()) {
+			Measurer measurer = new Measurer(chainDescription.getAtomListMeasures());
+			plan.addOperator(measurer);
+			measurer.setSource(current);
+			current = new ResultPipe();
+			measurer.setSink(current);
 		}
 		
 		// Wrap the output in a print (for now)

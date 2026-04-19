@@ -88,4 +88,8 @@ public class AtomMatcher {
 		}
 		return null;
 	}
+	
+	public String toString() {
+		return "Matcher(" + atomLabels + ")";
+	}
 }

@@ -16,7 +16,8 @@ public class LabelPartition {
 	public LabelPartition(List<List<String>> parts) {
 		this.parts = parts;
 	}
-	
+
+	// TODO - calling this method twice on the same list of paths reverses the matcher!!
 	public static LabelPartition fromDescriptionPaths(List<DescriptionPath> descriptionPaths) {
 		Map<GroupDescription, List<String>> partition = new HashMap<>();
 		

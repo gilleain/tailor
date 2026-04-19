@@ -1,8 +1,10 @@
 package tailor.experiment.description.atom;
 
 import tailor.experiment.api.AtomListCondition;
+import tailor.experiment.api.AtomListMeasure;
 import tailor.experiment.condition.AtomTorsionRangeCondition;
 import tailor.experiment.description.DescriptionPath;
+import tailor.experiment.measure.AtomTorsionMeasure;
 
 public class AtomTorsionRangeDescription extends AbstractAtomListDescription {
 	
@@ -30,5 +32,10 @@ public class AtomTorsionRangeDescription extends AbstractAtomListDescription {
 	@Override
 	public AtomListCondition createCondition() {
 		return new AtomTorsionRangeCondition(createMatcher(), getMinAngle(), getMaxAngle());
+	}
+	
+	@Override
+	public AtomListMeasure createMeasure() {
+		return new AtomTorsionMeasure(createMatcher());
 	}
 }

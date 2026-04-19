@@ -8,6 +8,7 @@ import java.io.IOException;
 import org.junit.Test;
 
 import tailor.datasource.PDBReader;
+import tailor.experiment.api.AtomListDescription;
 import tailor.experiment.description.ChainDescription;
 import tailor.experiment.description.GroupDescription;
 import tailor.experiment.description.atom.AtomAngleRangeDescription;
@@ -65,10 +66,12 @@ public class FunctionalTests {
 		GroupDescription groupA = Helper.makeGroupDescription("C", "O");
 		GroupDescription groupB = Helper.makeGroupDescription("N");
 		chainDescription.addGroupDescriptions(groupA, groupB);
-		chainDescription.addAtomListDescriptions(
-				new AtomDistanceRangeDescription(minDistance, maxDistance, pathTo(groupA, "O"), pathTo(groupB, "N")),
-				new AtomAngleRangeDescription(minAngle, maxAngle, pathTo(groupA, "C"), pathTo(groupA, "O"), pathTo(groupB, "N"))
-		);
+		AtomListDescription distance = 
+				new AtomDistanceRangeDescription(minDistance, maxDistance, pathTo(groupA, "O"), pathTo(groupB, "N"));
+		AtomListDescription angle = 
+				new AtomAngleRangeDescription(minAngle, maxAngle, pathTo(groupA, "C"), pathTo(groupA, "O"), pathTo(groupB, "N"));
+		chainDescription.addAtomListDescriptions(distance, angle);
+		chainDescription.addAtomListMeasures(distance.createMeasure(), angle.createMeasure());
 		return chainDescription;
 	}
 	
@@ -82,10 +85,12 @@ public class FunctionalTests {
 		GroupDescription groupA = Helper.makeGroupDescription("N");
 		GroupDescription groupB = Helper.makeGroupDescription("C", "O");
 		chainDescription.addGroupDescriptions(groupA, groupB);
-		chainDescription.addAtomListDescriptions(
-				new AtomDistanceRangeDescription(minDistance, maxDistance, pathTo(groupA, "N"), pathTo(groupB, "O")),
-				new AtomAngleRangeDescription(minAngle, maxAngle, pathTo(groupA, "N"), pathTo(groupB, "O"), pathTo(groupB, "C"))
-		);
+		AtomListDescription distance =
+				new AtomDistanceRangeDescription(minDistance, maxDistance, pathTo(groupA, "N"), pathTo(groupB, "O"));
+		AtomListDescription angle =
+				new AtomAngleRangeDescription(minAngle, maxAngle, pathTo(groupA, "N"), pathTo(groupB, "O"), pathTo(groupB, "C"));
+		chainDescription.addAtomListDescriptions(distance, angle);
+		chainDescription.addAtomListMeasures(distance.createMeasure(), angle.createMeasure());
 		return chainDescription;
 	}
 	

@@ -5,6 +5,7 @@ import java.util.List;
 
 import tailor.experiment.api.AtomListCondition;
 import tailor.experiment.api.AtomListDescription;
+import tailor.experiment.api.AtomListMeasure;
 import tailor.experiment.condition.AtomMatcher;
 import tailor.experiment.condition.HBondCondition;
 import tailor.experiment.condition.LabelPartition;
@@ -69,6 +70,11 @@ public class HBondDescription implements AtomListDescription {
 					   hydrogenDescriptionPath.getGroupDescription(), 
 					   acceptorDescriptionPath.getGroupDescription(), 
 					   acceptorAttachedDescriptionPath.getGroupDescription());
+	}
+	
+	@Override
+	public AtomListMeasure createMeasure() {
+		return null;	// TODO
 	}
 
 }

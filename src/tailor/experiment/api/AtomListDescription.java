@@ -19,5 +19,9 @@ public interface AtomListDescription {
 	 */
 	AtomListCondition createCondition();
 	
+	/**
+	 * @return convert this description to a measure across the same atoms
+	 */
+	AtomListMeasure createMeasure();
 
 }

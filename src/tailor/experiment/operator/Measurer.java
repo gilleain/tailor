@@ -21,7 +21,9 @@ public class Measurer extends AbstractPipeableOperator {
 			AtomPartition atomPartition = nextResult.getAtomPartition();
 			for (AtomListMeasure measure : measures) {
 				double measurement = measure.measure(atomPartition);
+				nextResult.addMeasurement(measurement);
 			}
+			sink.put(nextResult);
 		}
 	}
 

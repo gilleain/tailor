@@ -29,7 +29,10 @@ public class Result {
 	
 	private Node root;
 	
-	public Result() {
+	// store measurements
+	private List<Double> measurements = new ArrayList<>();	// TODO
+	
+	private Result() {
 		this.root = null;
 	}
 	
@@ -76,6 +79,10 @@ public class Result {
 			}
 		}
 		return atoms;
+	}
+	
+	public void addMeasurement(double measurement) {
+		this.measurements.add(measurement);	// TODO
 	}
 	
 
@@ -193,6 +200,14 @@ public class Result {
 			counter++;
 		}
 		output.append(")");
+		
+		if (!measurements.isEmpty()) {
+			output.append("\t");
+			output.append(measurements.stream()
+					.map(m -> String.format("%2.2f", m))
+					.collect(Collectors.joining("\t")));
+		}
+		
 		return output.toString();
 	}
 	

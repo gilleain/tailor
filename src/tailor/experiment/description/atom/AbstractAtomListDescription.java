@@ -16,8 +16,11 @@ public abstract class AbstractAtomListDescription implements AtomListDescription
 	
 	private final List<DescriptionPath> atomDescriptionPaths;
 	
+	private final AtomMatcher atomMatcher;
+	
 	public AbstractAtomListDescription(DescriptionPath... atomDescriptionPaths) {
 		this.atomDescriptionPaths = Arrays.asList(atomDescriptionPaths);
+		this.atomMatcher = new AtomMatcher(LabelPartition.fromDescriptionPaths(this.atomDescriptionPaths));
 	}
 
 	public DescriptionPath getAtomDescriptionPath(int index) {
@@ -30,6 +33,6 @@ public abstract class AbstractAtomListDescription implements AtomListDescription
 	}
 
 	public AtomMatcher createMatcher() {
-		return new AtomMatcher(LabelPartition.fromDescriptionPaths(atomDescriptionPaths));
+		return atomMatcher;
 	}
 }

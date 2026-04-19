@@ -7,11 +7,15 @@ import java.util.List;
 import org.junit.Test;
 
 import tailor.experiment.api.AtomListCondition;
+import tailor.experiment.api.AtomListDescription;
+import tailor.experiment.api.AtomListMeasure;
+import tailor.experiment.condition.AtomMatcher;
 import tailor.experiment.condition.AtomPartition;
 import tailor.experiment.description.ChainDescription;
 import tailor.experiment.description.DescriptionPath;
 import tailor.experiment.description.GroupDescription;
 import tailor.experiment.description.atom.AbstractAtomListDescription;
+import tailor.experiment.measure.AbstractAtomListMeasure;
 import tailor.experiment.plan.Plan;
 import tailor.experiment.plan.Planner;
 import tailor.experiment.view.PlanViewer;
@@ -42,6 +46,23 @@ public class TestPlanner {
 		@Override
 		public AtomListCondition createCondition() {
 			return new DummyAtomListCondition();
+		}
+		
+		public AtomListMeasure createMeasure() {
+			return new DummyAtomListMeasure(this.createMatcher());
+		}
+		
+	}
+	
+	private class DummyAtomListMeasure extends AbstractAtomListMeasure {
+
+		public DummyAtomListMeasure(AtomMatcher atomMatcher) {
+			super(atomMatcher);
+		}
+
+		@Override
+		public double measure(List<Atom> atoms) {
+			return 1;
 		}
 		
 	}
@@ -257,6 +278,25 @@ public class TestPlanner {
 		Plan plan = new Planner().plan(chainDescription);
 		Helper.describe(plan);
 		Helper.run(Helper.makeData(List.of("GLY", "SER", "PRO")), plan);
+	}
+	
+	@Test
+	public void testMeasure() {
+		ChainDescription chainDescription = new ChainDescription();
+		GroupDescription groupA = Helper.makeGroupDescription("N", "CA", "C");
+		chainDescription.addGroupDescription(groupA);
+		AtomListDescription atomListDescriptionA = 
+				new DummyAtomListDescription(pathTo(groupA, "N"), pathTo(groupA, "CA"));
+		AtomListDescription atomListDescriptionB = 
+				new DummyAtomListDescription(pathTo(groupA, "CA"), pathTo(groupA, "C"));
+		groupA.addAtomListDescriptions(atomListDescriptionA, atomListDescriptionB);
+		chainDescription.addAtomListMeasures(
+				atomListDescriptionA.createMeasure(), atomListDescriptionB.createMeasure());
+		
+		Plan plan = new Planner().plan(chainDescription);
+		Helper.describe(plan);
+		Helper.run(Helper.makeData(List.of("GLY", "SER", "PRO")), plan);
+		
 	}
 
 }

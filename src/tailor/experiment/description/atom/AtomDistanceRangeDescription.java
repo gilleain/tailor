@@ -1,8 +1,10 @@
 package tailor.experiment.description.atom;
 
 import tailor.experiment.api.AtomListCondition;
+import tailor.experiment.api.AtomListMeasure;
 import tailor.experiment.condition.AtomDistanceRangeCondition;
 import tailor.experiment.description.DescriptionPath;
+import tailor.experiment.measure.AtomDistanceMeasure;
 
 public class AtomDistanceRangeDescription extends AbstractAtomListDescription {
 	
@@ -28,5 +30,10 @@ public class AtomDistanceRangeDescription extends AbstractAtomListDescription {
 	@Override
 	public AtomListCondition createCondition() {
 		return new AtomDistanceRangeCondition(createMatcher(), getMinDistance(), getMaxDistance());
+	}
+	
+	@Override
+	public AtomListMeasure createMeasure() {
+		return new AtomDistanceMeasure(createMatcher());
 	}
 }
