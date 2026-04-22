@@ -1,12 +1,13 @@
 package tailor.msdmotif;
 
-import tailor.condition.atom.AtomTorsionRangeCondition;
+import tailor.api.AtomListDescription;
 import tailor.description.AtomDescription;
 import tailor.description.ChainDescription;
 import tailor.description.Description;
+import tailor.description.DescriptionPath;
 import tailor.description.GroupDescription;
 import tailor.description.ProteinDescription;
-import tailor.experiment.description.DescriptionPath;
+import tailor.description.atom.AtomTorsionRangeDescription;
 
 /**
  * A very crude and limited way to transform tailor.core.Description hierarchies
@@ -33,12 +34,11 @@ public class DescriptionToXmlQueryTranslator {
 		xmlString.append(DescriptionToXmlQueryTranslator.makeDeclaration());
         
 		for (ChainDescription chain : protein.getChainDescriptions()) {
-			for (GroupDescription residue : chain.getGroupDescriptions()) {
-                
-				for (AtomTorsionRangeCondition torsionBoundCondition : residue.getAtomTorsionRangeConditions()) {
-					String name = torsionBoundCondition.getName();
-					double minValue = torsionBoundCondition.getMinValue();
-					double maxValue = torsionBoundCondition.getMaxValue();
+				for (AtomListDescription atomListDescription : chain.getAtomListDescriptions()) {
+					if (atomListDescription instanceof AtomTorsionRangeDescription t) {
+					String name = t.getName();
+					double minValue = t.getMinValue();
+					double maxValue = t.getMaxValue();
 					double range = maxValue - minValue;
 					double midPoint = minValue + (range / 2);	// TODO - XXX?
 					if (range > phiPsiDeviation) {
@@ -111,10 +111,17 @@ public class DescriptionToXmlQueryTranslator {
 		DescriptionPath c = null;
 		DescriptionPath d = null;
         
-		residue.addAtomCondition(new AtomTorsionRangeCondition("phi", -60.0, -40.0, a, b, c, d));
-		residue.addAtomCondition(new AtomTorsionRangeCondition("psi", 80.0, 120.0, a, b, c, d));
+		chain.addAtomListDescriptions(
+				new AtomTorsionRangeDescription("phi", -60.0, -40.0, a, b, c, d),
+				new AtomTorsionRangeDescription("psi", 80.0, 120.0, a, b, c, d)
+		);
 		
 		
 		System.out.println(DescriptionToXmlQueryTranslator.translate(p));
+	}
+
+	public static String translate(ChainDescription description) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

@@ -2,7 +2,7 @@ package tailor.api;
 
 import java.util.List;
 
-import tailor.experiment.description.GroupDescription;
+import tailor.description.GroupDescription;
 
 /**
  * Description for a list of atoms that can create conditions and matchers for filtering.

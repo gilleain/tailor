@@ -25,7 +25,11 @@ import tailor.datasource.xml.description.ChainDescriptionXmlHandler;
 import tailor.datasource.xml.description.DescriptionXmlHandler;
 import tailor.datasource.xml.description.GroupDescriptionXmlHandler;
 import tailor.datasource.xml.description.ProteinDescriptionXmlHandler;
+import tailor.description.AtomDescription;
+import tailor.description.ChainDescription;
 import tailor.description.Description;
+import tailor.description.GroupDescription;
+import tailor.description.ProteinDescription;
 
 
 /**
@@ -36,11 +40,17 @@ public class XmlDescriptionReader {
     
     public class XmlMotifHandler extends DefaultHandler {
         
-        private Description currentDescription;
+    	private ProteinDescription currentProteinDescription;
+    	
+        private ChainDescription currentChainDescription;
         
-        private Description root;
+        private GroupDescription currentGroupDescription;
         
-        private Description currentParent;
+        private AtomDescription currentAtomDescription;	// TODO - don't really need this?
+        
+        private ChainDescription root;
+        
+        private Object currentParent;
         
         private Stack<Description> seenStack;
         
@@ -72,12 +82,12 @@ public class XmlDescriptionReader {
             if (descriptionHandlers.containsKey(qName)) {
                 DescriptionXmlHandler handler = descriptionHandlers.get(qName);
                 try {
-                    currentDescription = handler.create(attrs, currentParent);
-                    seenStack.push(currentDescription);
-                    currentParent = currentDescription;
+                	setCurrent(qName, handler, attrs);
+//                    seenStack.push(currentDescription);
+//                    currentParent = currentDescription;
                     
                     if (root == null) {
-                        root = currentDescription;
+                        root = currentChainDescription;	// TODO?
                     }
                 } catch (DescriptionParseException dpe) {
                     // TODO
@@ -90,6 +100,22 @@ public class XmlDescriptionReader {
             }
         }
         
+        private void setCurrent(String qName, DescriptionXmlHandler handler, Attributes attrs) throws DescriptionParseException {
+        	// TODO - is there a cleaner way to do this?
+        	if (handler instanceof ProteinDescriptionXmlHandler proteinDescriptionXmlHandler) {
+        		currentProteinDescription = (ProteinDescription) proteinDescriptionXmlHandler.create(attrs, null);
+        		currentParent = currentProteinDescription;
+        	} else if (handler instanceof ChainDescriptionXmlHandler chainDescriptionXmlHandler) {
+        		currentChainDescription = (ChainDescription) chainDescriptionXmlHandler.create(attrs, currentProteinDescription);
+        		currentParent = currentChainDescription;
+        	} else if (handler instanceof GroupDescriptionXmlHandler groupDescriptionXmlHandler) {
+        		currentGroupDescription = (GroupDescription) groupDescriptionXmlHandler.create(attrs, currentChainDescription);
+        		currentParent = currentGroupDescription;
+        	} else if (handler instanceof AtomDescriptionXmlHandler atomDescriptionXmlHandler) {
+        		currentAtomDescription = (AtomDescription) atomDescriptionXmlHandler.create(attrs, currentGroupDescription);
+        	}
+        }
+        
         @Override
         public void endElement(String namespaceURI, String sName, String qName) throws SAXException {
             if (descriptionHandlers.containsKey(qName)) {
@@ -98,17 +124,18 @@ public class XmlDescriptionReader {
                     currentParent = seenStack.peek();
                 }
             } else if (conditionHandlers.containsKey(qName)) {
-                conditionHandlers.get(qName).complete(currentParent, pathXmlHandler);
+            	// TODO - how do we check this
+                conditionHandlers.get(qName).complete(currentChainDescription, pathXmlHandler);
             } 
         }
         
-        public Description getDescription() {
+        public ChainDescription getDescription() {
             return this.root;
         }
         
     }
     
-    public Description readDescription(File file) {
+    public ChainDescription readDescription(File file) {
         try {
             SAXParserFactory factory = SAXParserFactory.newInstance();
             SAXParser saxParser = factory.newSAXParser();
@@ -127,7 +154,7 @@ public class XmlDescriptionReader {
         }
     }
     
-    public Description readDescription(InputStream stream) {
+    public ChainDescription readDescription(InputStream stream) {
         try {
             SAXParserFactory factory = SAXParserFactory.newInstance();
             SAXParser saxParser = factory.newSAXParser();

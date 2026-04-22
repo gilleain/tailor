@@ -1,8 +1,8 @@
 package tailor.condition.atom;
 
 import tailor.condition.AtomRangeCondition;
-import tailor.experiment.description.DescriptionPath;
-import tailor.experiment.measure.AtomDistanceMeasure;
+import tailor.description.DescriptionPath;
+import tailor.measure.AtomDistanceMeasure;
 
 public class AtomDistanceRangeCondition extends AtomRangeCondition {
 	

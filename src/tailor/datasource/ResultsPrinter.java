@@ -2,8 +2,8 @@ package tailor.datasource;
 
 import java.util.List;
 
-import tailor.measurement.Measure;
-import tailor.measurement.Measurement;
+import tailor.api.AtomListMeasure;
+import tailor.engine.plan.Result;
 
 /**
  * A results printer is the output sink for results from an Engine. 
@@ -13,7 +13,7 @@ import tailor.measurement.Measurement;
  */
 public interface ResultsPrinter {
 	
-	public void printHeader(List<Measure<? extends Measurement>> measures);
+	public void printHeader(List<AtomListMeasure> measures);
 	
 	public void printResult(Result result);
 	

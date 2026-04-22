@@ -11,8 +11,8 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import tailor.api.Torsion;
-import tailor.condition.atom.AtomTorsionRangeCondition;
 import tailor.description.DescriptionFactory;
+import tailor.description.atom.AtomTorsionRangeDescription;
 
 public class TorsionConditionPropertySheet extends JPanel implements ActionListener {
 	
@@ -118,7 +118,7 @@ public class TorsionConditionPropertySheet extends JPanel implements ActionListe
 		}
 	}
 	
-	public AtomTorsionRangeCondition getCondition(int residueNumber) {
+	public AtomTorsionRangeDescription getCondition(int residueNumber) {
 		double min = Double.parseDouble(this.minValue.getText());
 		double max = Double.parseDouble(this.maxValue.getText());
 		double range = (max - min) / 2;

@@ -8,14 +8,14 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import tailor.api.AtomListCondition;
-import tailor.condition.atom.AtomTorsionRangeCondition;
-import tailor.condition.atom.HBondCondition;
+import tailor.api.AtomListDescription;
 import tailor.description.AtomDescription;
 import tailor.description.ChainDescription;
 import tailor.description.Description;
 import tailor.description.GroupDescription;
 import tailor.description.ProteinDescription;
+import tailor.description.atom.AtomTorsionRangeDescription;
+import tailor.description.atom.HBondDescription;
 import tailor.editor.symbol.HBondArc;
 import tailor.editor.symbol.PeptideHalfSquare;
 import tailor.editor.symbol.ResidueCircle;
@@ -78,7 +78,7 @@ public class ResidueDiagram {
 	
 	public ResidueDiagram(ProteinDescription description) {
 		this();
-		this.createFromDescription(description);
+		this.createFromDescription(description.getChainDescriptions()[0]);
 	}
 	
 	public void toggleLabels() {
@@ -100,42 +100,44 @@ public class ResidueDiagram {
 		}
 	}
 	
-	public void createFromDescription(ProteinDescription description) {
-		this.name = description.getName();
+	public void createFromDescription(ChainDescription chain) {
+//		this.name = description.getName();
 		
-		ChainDescription chain = description.getChainDescription("A");	// TODO >1 chain
-		this.numberOfResidues = chain.size();
+//		ChainDescription chain = description.getChainDescription("A");	// TODO >1 chain
+		this.numberOfResidues = chain.getGroupDescriptions().size();
 		this.createBackbone(this.numberOfResidues);
 		this.fillMap(chain);
-		for (AtomListCondition condition : chain.getConditions()) {
-			if (condition instanceof AtomTorsionRangeCondition t) {
-				this.makeTorsion(t);
-			} else if (condition instanceof HBondCondition) {
-				HBondCondition h = (HBondCondition) condition;
-				this.makeBond(h);
+		for (AtomListDescription atomListDescription : chain.getAtomListDescriptions()) {
+			if (atomListDescription instanceof AtomTorsionRangeDescription torsion) {
+				this.makeTorsion(torsion);
+			} else if (atomListDescription instanceof HBondDescription hBond) {
+				this.makeBond(hBond);
 			}
 		}
 	}
 	
-	public void makeTorsion(AtomTorsionRangeCondition t) {
+	public void makeTorsion(AtomTorsionRangeDescription t) {
 		System.err.println("making torsion");
 		
 		Description firstDesc = null;	// TODO t.getDescriptionA();
 		Description lastDesc =  null;  // TODO t.getDescriptionD();
 		
 		// FIXME ugly hack to map C->O for phi  
-		AtomDescription a = (AtomDescription) firstDesc.getPathEnd();
-		if (a.getName() == "C") {
-			a.setName("O");
-		}
-		AtomDescription d = (AtomDescription) lastDesc.getPathEnd();
-		if (d.getName() == "C") {
-			d.setName("O");
-		}
+//		AtomDescription a = (AtomDescription) firstDesc.getPathEnd();
+//		if (a.getName() == "C") {
+//			a.setName("O");
+//		}
+//		AtomDescription d = (AtomDescription) lastDesc.getPathEnd();
+//		if (d.getName() == "C") {
+//			d.setName("O");
+//		}
+//		
+//		Symbol first = this.reverseLookup((AtomDescription) firstDesc.getPathEnd());
+//		Symbol last = this.reverseLookup((AtomDescription) lastDesc.getPathEnd());
 		
-		Symbol first = this.reverseLookup((AtomDescription) firstDesc.getPathEnd());
-		Symbol last = this.reverseLookup((AtomDescription) lastDesc.getPathEnd());
-		
+		Symbol first = null;
+		Symbol last = null;
+//		
 		if (first == null || last == null) {
 			return;							// FIXME
 		}
@@ -158,7 +160,7 @@ public class ResidueDiagram {
 		}
 	}
 	
-	public void makeBond(HBondCondition h) {
+	public void makeBond(HBondDescription h) {
 		// TODO
 //	    AtomDescription donorAtom = (AtomDescription) h.getDonorAtomDescription().getPathEnd();
 		AtomDescription donorAtom = null;
@@ -193,8 +195,8 @@ public class ResidueDiagram {
 	
 	private void fillMap(ChainDescription chain) {
 		int symbolIndex = 0;
-		for (int groupIndex = 0; groupIndex < chain.size(); groupIndex++) {
-			GroupDescription group = chain.getGroupDescription(groupIndex);
+		for (int groupIndex = 0; groupIndex < chain.getGroupDescriptions().size(); groupIndex++) {
+			GroupDescription group = chain.getGroupDescriptions().get(groupIndex);
 			System.out.println("got group " + group + " index " + groupIndex);
 			Symbol nSymbol = backboneSymbols.get(symbolIndex++);
 			Symbol caSymbol = backboneSymbols.get(symbolIndex++);

@@ -22,8 +22,7 @@ import tailor.category.Category;
 import tailor.category.CategoryChangeListener;
 import tailor.datasource.GuiResultsPrinter;
 import tailor.datasource.xml.XmlDescriptionReader;
-import tailor.description.Description;
-import tailor.description.ProteinDescription;
+import tailor.description.ChainDescription;
 import tailor.engine.Engine;
 import tailor.engine.EngineFactory;
 import tailor.engine.Run;
@@ -94,15 +93,15 @@ public class App implements ActionListener, CategoryChangeListener {
         	EditorDialog descriptionEditor = new EditorDialog(this.frame);
         	
         	if (descriptionEditor.isOkay()) {
-	        	ProteinDescription newDescription = descriptionEditor.getDescription();
-	        	System.out.println("New " + newDescription.toPathString());
+	        	ChainDescription newDescription = descriptionEditor.getDescription();
+	        	System.out.println("New " + newDescription.toString());
 	        	this.descriptionList.add(newDescription);
         	} else {
         		System.out.println("New Motif Cancelled");
         	}
         } else if (command.equals("Edit Description")) {
-        	Description description = this.descriptionList.getSelectedDescription();
-        	Description edited = this.editDescription(description);
+        	ChainDescription description = this.descriptionList.getSelectedDescription();
+        	ChainDescription edited = this.editDescription(description);
         	if (!description.equals(edited)) {
         		this.descriptionList.replace(description, edited);
         	}
@@ -208,10 +207,11 @@ public class App implements ActionListener, CategoryChangeListener {
     }
     
     public void runMSDQuery() {
+    	// TODO - move this out
         System.out.println("run msd!");
-        Description[] descriptions = this.descriptionList.getAllDescriptions();
+        ChainDescription[] descriptions = this.descriptionList.getAllDescriptions();
         
-        for (Description description : descriptions) {
+        for (ChainDescription description : descriptions) {
             String xml = DescriptionToXmlQueryTranslator.translate(description);
             System.out.println(xml);
         }
@@ -223,7 +223,7 @@ public class App implements ActionListener, CategoryChangeListener {
     }
     
     public void createRun() {
-    	Description description = this.descriptionList.getSelectedDescription();
+    	ChainDescription description = this.descriptionList.getSelectedDescription();
     	
         RunDialog runDialog = new RunDialog(this.frame, description);
         runDialog.setVisible(true);
@@ -235,7 +235,7 @@ public class App implements ActionListener, CategoryChangeListener {
             Run run = runDialog.getRun();
             this.addRunToList(run);
             
-            int m = run.getDescriptions().get(0).getMeasures().size();  // TODO : only the first description!
+            int m = run.getDescriptions().get(0).getAtomListMeasures().size();  // TODO : only the first description!
         	FileDataTableModel fileDataTableModel = new FileDataTableModel(m + 2);
         	
         	// TODO : don't want to be making a new engine every time!
@@ -277,10 +277,12 @@ public class App implements ActionListener, CategoryChangeListener {
     	// TODO
     }
     
-    public Description editDescription(Description description) {
+    public ChainDescription editDescription(ChainDescription d) {
     	// make a copy
-    	Description copyOfDescription = 
-    		new ProteinDescription((ProteinDescription)description);	// XXX
+    	// TODO
+//    	Description copyOfDescription = 
+//    		new ProteinDescription((ProteinDescription)description);	// XXX
+    	ChainDescription copyOfDescription = null;
     	
     	// edit the copy
     	EditorDialog descriptionEditor = new EditorDialog(this.frame, copyOfDescription);
@@ -291,13 +293,13 @@ public class App implements ActionListener, CategoryChangeListener {
     		return descriptionEditor.getDescription();
     	} else {
     		// return the original
-    		return description;
+    		return d;
     	}
     }
     
     public void loadMotifFile(File file) throws IOException {
         XmlDescriptionReader reader = new XmlDescriptionReader();
-        Description description = reader.readDescription(file);
+        ChainDescription description = reader.readDescription(file);
         this.descriptionList.add(description);
     }
     

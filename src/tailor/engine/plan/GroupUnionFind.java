@@ -9,8 +9,8 @@ import java.util.Map;
 import java.util.Set;
 
 import tailor.api.AtomListDescription;
-import tailor.experiment.description.GroupDescription;
-import tailor.experiment.description.group.GroupSequenceDescription;
+import tailor.description.GroupDescription;
+import tailor.description.group.GroupSequenceDescription;
 
 /**
  * Union-find over {@link GroupDescription}s, where each outer (cross-group)

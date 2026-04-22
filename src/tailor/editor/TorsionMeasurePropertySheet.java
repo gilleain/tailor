@@ -12,7 +12,7 @@ import javax.swing.JTextField;
 
 import tailor.api.Torsion;
 import tailor.description.DescriptionFactory;
-import tailor.measurement.TorsionMeasure;
+import tailor.measure.AtomTorsionMeasure;
 
 public class TorsionMeasurePropertySheet extends JPanel implements ActionListener {
 	
@@ -106,7 +106,7 @@ public class TorsionMeasurePropertySheet extends JPanel implements ActionListene
 		}
 	}
 	
-	public TorsionMeasure getMeasure(int residueNumber) {
+	public AtomTorsionMeasure getMeasure(int residueNumber) {
 		String torsionName = this.nameField.getText();
 		if (torsionName.startsWith("phi")) {
 		    return descriptionFactory.createPhiMeasure(torsionName, residueNumber, "A");

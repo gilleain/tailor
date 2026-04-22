@@ -10,12 +10,12 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.ListSelectionModel;
 
-import tailor.api.AtomListCondition;
-import tailor.description.Description;
+import tailor.api.AtomListDescription;
+import tailor.description.ChainDescription;
 
 public class ConditionListBox extends JPanel {
 	
-	private JList<AtomListCondition> conditionList;
+	private JList<AtomListDescription> conditionList;	// TODO - rename everything?
 	
 	public ConditionListBox() {
 		
@@ -28,7 +28,7 @@ public class ConditionListBox extends JPanel {
 		this.add(new JScrollPane(this.conditionList));
 	}
 	
-	public void addConditionToList(AtomListCondition condition) {
+	public void addConditionToList(AtomListDescription condition) {
 		this.getListModel().addElement(condition);
 		this.conditionList.setSelectedValue(condition, true);
 		System.err.println("adding " + condition);
@@ -40,12 +40,12 @@ public class ConditionListBox extends JPanel {
 		this.conditionList.setSelectedIndex(this.getListModel().size() - 1);
 	}
 	
-	public DefaultListModel<AtomListCondition> getListModel() { 
-		return (DefaultListModel<AtomListCondition>) this.conditionList.getModel();
+	public DefaultListModel<AtomListDescription> getListModel() { 
+		return (DefaultListModel<AtomListDescription>) this.conditionList.getModel();
 	}
     
-    public void setConditions(Description description) {
-        for (AtomListCondition condition : description.getConditions()) {
+    public void setConditions(ChainDescription chainDescription) {
+        for (AtomListDescription condition : chainDescription.getAtomListDescriptions()) {
             this.addConditionToList(condition);
         }
     }

@@ -1,15 +1,14 @@
 package tailor.datasource.xml.condition;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.xml.sax.Attributes;
 
-import tailor.condition.atom.HBondCondition;
 import tailor.datasource.xml.PathXmlHandler;
-import tailor.description.Description;
-import tailor.experiment.description.DescriptionPath;
+import tailor.description.ChainDescription;
+import tailor.description.DescriptionPath;
+import tailor.description.atom.HBondDescription;
 
 public class HBondConditionXmlHandler implements ConditionXmlHandler {
     
@@ -30,7 +29,7 @@ public class HBondConditionXmlHandler implements ConditionXmlHandler {
     }
 
     @Override
-    public void complete(Description currentParent, PathXmlHandler pathXmlHandler) {
+    public void complete(ChainDescription currentParent, PathXmlHandler pathXmlHandler) {
         // TODO : these data items might not exist / be complete
         double haMax = Double.parseDouble(this.dataStore.get("haMax"));
         double dhaMin = Double.parseDouble(this.dataStore.get("dhaMin"));
@@ -42,7 +41,7 @@ public class HBondConditionXmlHandler implements ConditionXmlHandler {
         DescriptionPath aa = pathXmlHandler.getPath("attached");
         
         // TODO - these dhaMin and haaMin values are wrong
-        HBondCondition hbond = new HBondCondition(haMax, dhaMin, haaMin, List.of(d, h), List.of(d, h, a));
+        HBondDescription hBond = new HBondDescription(haMax, dhaMin, haaMin, d, h, a, aa);
         
         if (this.dataStore.containsKey("isNegated")) {
             boolean isNegated = Boolean.parseBoolean(this.dataStore.get("isNegated"));
@@ -52,7 +51,7 @@ public class HBondConditionXmlHandler implements ConditionXmlHandler {
         }
         
         // add the condition to the parent description
-        currentParent.addCondition(hbond);
+        currentParent.addAtomListDescriptions(hBond);
         
         // don't want to accumulate paths
         pathXmlHandler.clearPaths();

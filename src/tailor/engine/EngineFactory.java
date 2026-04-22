@@ -4,11 +4,11 @@ import java.io.PrintStream;
 
 import tailor.datasource.GuiResultsPrinter;
 import tailor.datasource.StructureSource;
-import tailor.description.Description;
+import tailor.description.ChainDescription;
 
 public class EngineFactory {
 
-	public static Engine getEngine(Description description, GuiResultsPrinter guiResultsPrinter, PrintStream err,
+	public static Engine getEngine(ChainDescription description, GuiResultsPrinter guiResultsPrinter, PrintStream err,
 			StructureSource structureSource) {
 		// TODO Auto-generated method stub
 		

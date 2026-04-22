@@ -10,8 +10,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-import tailor.condition.atom.HBondCondition;
 import tailor.description.DescriptionFactory;
+import tailor.description.atom.HBondDescription;
 
 public class HBondConditionPropertySheet extends JPanel implements ActionListener {
 	
@@ -85,7 +85,7 @@ public class HBondConditionPropertySheet extends JPanel implements ActionListene
 		this.atomDLabel.setText(acceptorResidueNumber + ".C");
 	}
 	
-	public HBondCondition getCondition(int donorNumber, int acceptorNumber) {
+	public HBondDescription getCondition(int donorNumber, int acceptorNumber) {
 		double haMax = Double.parseDouble(this.haMax.getText());
 		double dhaMin = Double.parseDouble(this.dhaMin.getText());
 		double haaMin = Double.parseDouble(this.haaMin.getText());

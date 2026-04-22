@@ -1,287 +1,71 @@
 package tailor.description;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
+import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
-import tailor.api.AtomListCondition;
-import tailor.condition.atom.AtomTorsionRangeCondition;
-import tailor.measurement.Measure;
-import tailor.measurement.Measurement;
-import tailor.structure.Group;
-import tailor.structure.Level;
-import tailor.structure.Structure;
+import tailor.api.AtomListDescription;
 
+public class GroupDescription {
+	
+	private Optional<String> label;
+	
+	// Descriptions of the atoms to find
+	private List<AtomDescription> atomDescriptions;
+	
+	// Descriptions of relationships to find between the atoms (in this group)
+	private List<AtomListDescription> atomListDescriptions;
+	
+	public GroupDescription() {
+		this(null);
+	}
+	
+	public GroupDescription(String label) {
+		this.label = Optional.ofNullable(label);
+		this.atomDescriptions = new ArrayList<>();
+		this.atomListDescriptions = new ArrayList<>();
+	}
+	
+	public void addAtomDescription(AtomDescription atomDescription) {
+		this.atomDescriptions.add(atomDescription);
+	}
+	
+	public void addAtomListDescriptions(AtomListDescription... atomListDescription) {
+		this.atomListDescriptions.addAll(Arrays.asList(atomListDescription));
+	}
+	
+	public List<AtomListDescription> getAtomListDescriptions() {
+		return this.atomListDescriptions;
+	}
+	
+	public Optional<String> getLabel() {
+		return label;
+	}
 
-/**
- * Describes a group of atoms, such as a residue in a protein.
- * 
- * @author maclean
- *
- */
-public class GroupDescription implements Description, Iterable<AtomDescription> {
-    
-    private static final Level level = Level.RESIDUE;
-    
-    private String groupName;
-    
-    private List<AtomDescription> atomDescriptions;
-    
-    private List<AtomListCondition> atomConditions;
-    
-    private List<Measure<? extends Measurement>> atomMeasures;
-    
-    private Map<Integer, Description> descriptionLookup;
-    
-    private int id;
-    
-    /**
-     * A label for a group is some identifier that makes sense in the context of
-     * the pattern, like "i + 1" although note that is just intended as an identifier
-     * and not be parsable as a number
-     */
-    private String label;
-    
-    public GroupDescription() {
-        this.groupName = null;
-        this.atomDescriptions = new ArrayList<>();
-        this.atomMeasures = new ArrayList<>();
-        this.atomConditions = new ArrayList<>();
-        this.descriptionLookup = new HashMap<>();
-    }
-    
-    public GroupDescription(String groupName) {
-        this();
-        this.groupName = groupName;
-    }
-    
-    // XXX multiple constructors - bleh
-    public GroupDescription(String groupName, String label) {
-        this();
-        this.groupName = groupName;
-        this.label = label;
-    }
-    
-    public GroupDescription(GroupDescription groupDescription) {
-    	this(groupDescription.groupName);
-    	for (AtomDescription atomDescription : groupDescription.atomDescriptions) {
-    		this.atomDescriptions.add(new AtomDescription(atomDescription));
-    	}
-    	// TODO : atom conditions? what even are atom conditions?
-    }
-    
-    public void addAtomDescription(AtomDescription atomDescription) {
-        this.atomDescriptions.add(atomDescription);
-        int id = this.id + atomDescriptions.size();
-//        atomDescription.setID(id);
-        this.descriptionLookup.put(id, atomDescription);
-    }
-    
-    public void addAtomDescription(String atomName) {
-    	this.addAtomDescription(new AtomDescription(atomName));
-    }
-    
-    public void addAtomCondition(AtomListCondition condition) {
-        this.atomConditions.add(condition);
-    }
-    
-    public List<AtomDescription> getAtomDescriptions() {
-        return this.atomDescriptions;
-    }
-    
-    public List<AtomTorsionRangeCondition> getTorsionBoundConditions() {
-        List<AtomTorsionRangeCondition> torsions = new ArrayList<>();
-        for (AtomListCondition condition : this.atomConditions) {
-            if (condition instanceof AtomTorsionRangeCondition) {
-                torsions.add((AtomTorsionRangeCondition) condition);
-            }
-        }
-        
-        return torsions;
-    }
-    
-    /**
-     * The basic match : consider only the group name
-     * but not any attached conditions.
-     * 
-     * @param residue the Structure to compare to
-     * @return true if this has no set name or the names match
-     */
-    public boolean nameMatches(Structure residue) {
-        return this.groupName == null 
-            || (residue instanceof Group
-                    && this.groupName.equals(((Group)residue).getName()));
-    }
+	public AtomDescription getAtomDescription(String atomLabel) {
+		return atomDescriptions.stream().filter(a -> a.getLabel().equals(atomLabel)).findFirst().orElseThrow();
+	}
 
-    public boolean nameMatches(String groupName) {
-        return this.groupName.equals(groupName);
-    }
+	public List<AtomDescription> getAtomDescriptions() {
+		return this.atomDescriptions;
+	}
+	
+	public String toString() {
+		return (label.isEmpty()? "*" : label.get()) + "("
+			+ this.atomDescriptions.stream().map(AtomDescription::getLabel).collect(Collectors.joining(","))
+			+ ")";
+	}
+	
+	private int index;	// TODO - currently need this to preserve creation order - could be a better way...
 
-    public AtomDescription getAtomDescription(String atomName) {
-        // TODO : what if multiple matches?
-        
-        for (AtomDescription atomDescription : this.atomDescriptions) {
-            if (atomDescription.nameMatches(atomName)) {
-                
-                // XXX we could return a new object, but why bother?
-                return atomDescription;
-            }
-        }
-        
-        // TODO : what if no matches?
-        System.err.println("no atom with name " + atomName + " in " + this);
-        return null;
-    }
-    
-    public int getID() {
-        return this.id;
-    }
-    
-    public void setID(int id) {
-        this.id = id;
-    }
-
-    public Description getByID(int id) {
-        if (descriptionLookup.containsKey(id)) {
-            return descriptionLookup.get(id);
-        } else {
-            for (AtomDescription atomD : this) {
-                Description d = atomD.getByID(id);
-                if (d != null) {
-                    return d;
-                }
-            }
-        }
-        return null;
-    }
-
-    public Iterator<AtomDescription> iterator() {
-        return atomDescriptions.iterator();
-    }
-
-    public Object clone() {
-    	return new GroupDescription(this);
-    }
-
-    public boolean contains(Description d) {
-        	if (d.getLevel() == GroupDescription.level) {
-        	    // TODO
-    //    		return this.getOffset() == ((GroupDescription) d).getOffset();
-        	    return true;
-        	} else {
-        		for (AtomDescription atom : this.atomDescriptions) {
-        			if (atom.getName().equals(((AtomDescription) d).getName())) {
-        				return true;
-        			}
-        		}
-        		return false;
-        	}
-        }
-
-    public Description shallowCopy() {
-        // XXX TODO UGH - this is now horrible
-        if (this.label == null) {
-            return new GroupDescription(this.groupName);
-        } else {
-            return new GroupDescription(this.groupName, this.label);
-        }
-    }
-
-    public Level getLevel() {
-        return GroupDescription.level;
-    }
-
-    public void addSubDescription(Description subDescription) {
-        if (subDescription instanceof AtomDescription) {
-            this.addAtomDescription((AtomDescription) subDescription);
-        } else {
-            // TODO : type safety
-        }
-    }
-
-    public void addCondition(AtomListCondition condition) {
-        this.atomConditions.add(condition);
-    }
-
-    public List<AtomListCondition> getConditions() {
-        return this.atomConditions;
-    }
-
-    public void addMeasure(Measure<? extends Measurement> measure) {
-        atomMeasures.add(measure);
-    }
-
-    public List<Measure<? extends Measurement>> getMeasures() {
-        return this.atomMeasures;
-    }
-
-    public int size() {
-        return this.atomDescriptions.size();
-    }
-
-    public List<AtomDescription> getSubDescriptions() {
-        return this.atomDescriptions;
-    }
-
-    public Description getSubDescriptionAt(int i) {
-        return atomDescriptions.get(i);
-    }
-
-    public String getName() {
-    	return this.groupName;
-    }
-    
-    public Description getPathEnd() {
-    	if (this.atomDescriptions.size() == 0) {
-    		return this;
-    	} else {
-    		return this.atomDescriptions.get(0).getPathEnd();
-    	}
-    }
-    
-    public String toPathString() {
-        StringBuffer s = new StringBuffer();
-        s.append(label).append("/"); // TODO
-        for (AtomDescription atomDescription : this.atomDescriptions) {
-            s.append(atomDescription.getName());
-        }
-        return s.toString();
-    }
-    
-    public String toXmlPathString() {
-        String s;
-        if (label != null) {
-            s = "<Path =\"" + label + "\" "; 
-        } else {
-            s = "<Path ";   // TODO ?
-        }
-    	 // XXX we assume that there is only one Atom!
-    	return s + this.atomDescriptions.get(0).toXmlPathString();
-    }
-    
-    public String toString() {
-        return "Group " 
-            + ((this.groupName == null)? "" : this.groupName)
-            + 0;    // TODO
-    }
-
-    public void setLabel(String label) {
-        this.label = label;
-    }
-    
-    public String getLabel() {
-        return label;
-    }
-
-    public boolean labelMatches(String groupLabel) {
-        return groupLabel.equals(label);
-    }
-
-	public AtomTorsionRangeCondition[] getAtomTorsionRangeConditions() {
-		// TODO Auto-generated method stub
-		return null;
+	public void setIndex(int index) {
+		this.index = index;
+	}
+	
+	public int getIndex() {
+		return this.index;
 	}
 
 }

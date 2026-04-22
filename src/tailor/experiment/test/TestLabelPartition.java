@@ -7,9 +7,9 @@ import java.util.List;
 import org.junit.Test;
 
 import tailor.condition.LabelPartition;
-import tailor.experiment.description.AtomDescription;
-import tailor.experiment.description.DescriptionPath;
-import tailor.experiment.description.GroupDescription;
+import tailor.description.AtomDescription;
+import tailor.description.DescriptionPath;
+import tailor.description.GroupDescription;
 
 public class TestLabelPartition {
 	

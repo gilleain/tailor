@@ -3,8 +3,8 @@ package tailor.condition.atom;
 import java.util.List;
 
 import tailor.condition.AtomRangeCondition;
-import tailor.experiment.description.DescriptionPath;
-import tailor.experiment.measure.AtomAngleMeasure;
+import tailor.description.DescriptionPath;
+import tailor.measure.AtomAngleMeasure;
 
 public class AtomAngleRangeCondition extends AtomRangeCondition {
 	

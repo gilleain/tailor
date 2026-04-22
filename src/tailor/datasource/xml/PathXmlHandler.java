@@ -6,10 +6,9 @@ import java.util.Map;
 import org.xml.sax.Attributes;
 
 import tailor.description.ChainDescription;
-import tailor.description.Description;
+import tailor.description.DescriptionPath;
 import tailor.description.GroupDescription;
 import tailor.description.ProteinDescription;
-import tailor.experiment.description.DescriptionPath;
 
 public class PathXmlHandler {
     
@@ -27,7 +26,7 @@ public class PathXmlHandler {
         this.pathMap.clear();
     }
     
-    public void create(Attributes attrs, Description currentParent) {
+    public void create(Attributes attrs, Object currentParent) {
 
         // create the path
         DescriptionPath path = null;
@@ -41,7 +40,7 @@ public class PathXmlHandler {
             name = attrs.getValue("name");
             String labelStr = attrs.getValue("label");
             String atomName = attrs.getValue("atom");
-            path = chainDescription.getDescriptionPathByGroupLabel(labelStr, atomName);
+            path = getDescriptionPathByGroupLabel(chainDescription, labelStr, atomName);
         } else if (currentParent instanceof GroupDescription) {
             // TODO : handle paths at the group level
         }
@@ -53,6 +52,10 @@ public class PathXmlHandler {
             System.err.println("adding path " + name + " " + path);
         }
         pathMap.put(name, path);
+    }
+    
+    private DescriptionPath getDescriptionPathByGroupLabel(ChainDescription chain, String labelStr, String atomName) {
+    	return null;	// TODO
     }
 
 }

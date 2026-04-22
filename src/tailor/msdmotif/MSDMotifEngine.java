@@ -19,14 +19,14 @@ import javax.xml.parsers.SAXParserFactory;
 
 import org.xml.sax.SAXException;
 
+import tailor.api.AtomListMeasure;
 import tailor.datasource.StructureSource;
+import tailor.description.ChainDescription;
 import tailor.description.Description;
 import tailor.description.ProteinDescription;
 import tailor.engine.Engine;
 import tailor.engine.Run;
-import tailor.match.Match;
-import tailor.measurement.Measure;
-import tailor.measurement.Measurement;
+import tailor.engine.plan.Result;
 import tailor.structure.Structure;
 
 public class MSDMotifEngine implements Engine {
@@ -54,12 +54,12 @@ public class MSDMotifEngine implements Engine {
     }
 
     public void run(Run run) {
-        for (Description description : run.getDescriptions()) {
+        for (ChainDescription description : run.getDescriptions()) {
             this.runDescription(description);
         }
 	}
 	
-	public void run(ProteinDescription description, List<Measure<? extends Measurement>> measures) {
+	public void run(ProteinDescription description, List<AtomListMeasure> measures) {
 		String outfileName = "tmp.out";	//FIXME
 		
 		String xmlQuery = DescriptionToXmlQueryTranslator.translate(description);
@@ -68,13 +68,13 @@ public class MSDMotifEngine implements Engine {
 	}
 
 	@Override
-    public List<Match> match(Description description, Structure structure) {
+    public List<Result> match(Description description, Structure structure) {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public void runDescription(Description description) {
+    public void runDescription(ChainDescription description) {
         // TODO Auto-generated method stub
         
     }

@@ -24,7 +24,7 @@ public class DescriptionValidator {
      */
     public DescriptionValidator() {
         validators = new ArrayList<>();
-        validators.add(new MeasuresAtTopLevel());
+//        validators.add(new MeasuresAtTopLevel());	// TODO - some other validator?
     }
     
     /**

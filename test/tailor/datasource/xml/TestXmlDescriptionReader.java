@@ -12,25 +12,24 @@ import java.nio.charset.StandardCharsets;
 
 import org.junit.Test;
 
-import tailor.api.AtomListCondition;
-import tailor.condition.atom.AtomDistanceRangeCondition;
-import tailor.condition.atom.AtomTorsionRangeCondition;
-import tailor.condition.atom.HBondCondition;
+import tailor.api.AtomListDescription;
 import tailor.description.AtomDescription;
 import tailor.description.ChainDescription;
-import tailor.description.Description;
 import tailor.description.GroupDescription;
 import tailor.description.ProteinDescription;
+import tailor.description.atom.AtomDistanceRangeDescription;
+import tailor.description.atom.AtomTorsionRangeDescription;
+import tailor.description.atom.HBondDescription;
 
 public class TestXmlDescriptionReader {
     
     @Test
     public void testProteinOnly() {
         String xml = "<ProteinDescription name=\"test\"></ProteinDescription>";
-        Description description = read(xml);
+        ChainDescription description = read(xml);
         assertNotNull(description);
         assertThat(description, instanceOf(ProteinDescription.class));
-        assertTrue(description.getSubDescriptions().isEmpty());
+        assertTrue(description.getGroupDescriptions().isEmpty());
     }
     
     @Test
@@ -38,9 +37,8 @@ public class TestXmlDescriptionReader {
         String xml = "<ProteinDescription name=\"test\">"
                 + "<ChainDescription name=\"A\"></ChainDescription>"
                 + "</ProteinDescription>";
-        Description description = read(xml);
-        ChainDescription chainDescription = (ChainDescription) description.getSubDescriptionAt(0);
-        assertEquals("A", chainDescription.getName());
+        ChainDescription chainDescription = read(xml);
+        assertEquals("A", chainDescription.getLabel().get());
     }
     
     @Test
@@ -51,13 +49,12 @@ public class TestXmlDescriptionReader {
                 + "<GroupDescription label=\"X\"></GroupDescription>\""
                 + "</ChainDescription>"
                 + "</ProteinDescription>";
-        Description description = read(xml);
-        ChainDescription chainDescription = (ChainDescription) description.getSubDescriptionAt(0);
+        ChainDescription chainDescription = read(xml);
         
-        GroupDescription groupDescription1 = (GroupDescription) chainDescription.getSubDescriptionAt(0);
-        assertEquals("GLY", groupDescription1.getName());
+        GroupDescription groupDescription1 = chainDescription.getGroupDescriptions().get(0);
+        assertEquals("GLY", groupDescription1.getLabel().get());
         
-        GroupDescription groupDescription2 = (GroupDescription) chainDescription.getSubDescriptionAt(1);
+        GroupDescription groupDescription2 = chainDescription.getGroupDescriptions().get(1);
         assertEquals("X", groupDescription2.getLabel());
     }
     
@@ -70,11 +67,10 @@ public class TestXmlDescriptionReader {
                 + "</GroupDescription>\""
                 + "</ChainDescription>"
                 + "</ProteinDescription>";
-        Description description = read(xml);
-        ChainDescription chainDescription = (ChainDescription) description.getSubDescriptionAt(0);
-        GroupDescription groupDescription = (GroupDescription) chainDescription.getSubDescriptionAt(0);
-        AtomDescription atomDescription = (AtomDescription) groupDescription.getSubDescriptionAt(0);
-        assertEquals("N", atomDescription.getName());
+        ChainDescription chainDescription = read(xml);
+        GroupDescription groupDescription = chainDescription.getGroupDescriptions().get(0);
+        AtomDescription atomDescription = groupDescription.getAtomDescription("N");
+        assertEquals("N", atomDescription.getLabel());
     }
     
     @Test
@@ -98,18 +94,17 @@ public class TestXmlDescriptionReader {
                 + "</ChainDescription>"
                 + "</ProteinDescription>";
         
-        Description description = read(xml);
-        ChainDescription chainDescription = (ChainDescription) description.getSubDescriptionAt(0);
-        AtomListCondition condition = chainDescription.getConditions().get(0);
-        assertThat(condition, instanceOf(HBondCondition.class));
+        ChainDescription chainDescription = read(xml);
+        AtomListDescription description = chainDescription.getAtomListDescriptions().get(0);
+        assertThat(description, instanceOf(HBondDescription.class));
         
-        HBondCondition hBondCondition = (HBondCondition) condition;
+        HBondDescription hBondDescription = (HBondDescription) description;
         
         // TODO
-//        assertEquals("i + 1", getGroupLabel(hBondCondition.getDonorAtomDescription()));
-//        assertEquals("i + 1", getGroupLabel(hBondCondition.getHydrogenAtomDescription()));
-//        assertEquals("i", getGroupLabel(hBondCondition.getAcceptorAtomDescription()));
-//        assertEquals("i", getGroupLabel(hBondCondition.getAttachedAtomDescription()));
+        assertEquals("i + 1", getGroupLabel(hBondDescription.getGroupDescriptions().get(0)));
+        assertEquals("i + 1", getGroupLabel(hBondDescription.getGroupDescriptions().get(1)));
+        assertEquals("i", getGroupLabel(hBondDescription.getGroupDescriptions().get(2)));
+        assertEquals("i", getGroupLabel(hBondDescription.getGroupDescriptions().get(3)));
     }
     
     @Test
@@ -129,16 +124,15 @@ public class TestXmlDescriptionReader {
                 + "</ChainDescription>"
                 + "</ProteinDescription>";
         
-        Description description = read(xml);
-        ChainDescription chainDescription = (ChainDescription) description.getSubDescriptionAt(0);
-        AtomListCondition condition = chainDescription.getConditions().get(0);
-        assertThat(condition, instanceOf(AtomDistanceRangeCondition.class));
+        ChainDescription chainDescription = read(xml);
+        AtomListDescription condition = chainDescription.getAtomListDescriptions().get(0);
+        assertThat(condition, instanceOf(AtomDistanceRangeDescription.class));
         
-        AtomDistanceRangeCondition distanceCondition = (AtomDistanceRangeCondition) condition;
+        AtomDistanceRangeDescription distanceDescription = (AtomDistanceRangeDescription) condition;
         
         // TODO
-//        assertEquals("i", getGroupLabel(distanceCondition.getDescriptionA()));
-//        assertEquals("i + 1", getGroupLabel(distanceCondition.getDescriptionB()));
+        assertEquals("i", getGroupLabel(distanceDescription.getGroupDescriptions().get(0)));
+        assertEquals("i + 1", getGroupLabel(distanceDescription.getGroupDescriptions().get(0)));
     }
     
     @Test
@@ -166,25 +160,24 @@ public class TestXmlDescriptionReader {
                 + "</ChainDescription>"
                 + "</ProteinDescription>";
         
-        Description description = read(xml);
-        ChainDescription chainDescription = (ChainDescription) description.getSubDescriptionAt(0);
-        AtomListCondition condition = chainDescription.getConditions().get(0);
-        assertThat(condition, instanceOf(AtomTorsionRangeCondition.class));
+        ChainDescription chainDescription = read(xml);
+        AtomListDescription atomListDescription = chainDescription.getAtomListDescriptions().get(0);
+        assertThat(atomListDescription, instanceOf(AtomTorsionRangeDescription.class));
         
-        AtomTorsionRangeCondition torsion = (AtomTorsionRangeCondition) condition;
+        AtomTorsionRangeDescription torsion = (AtomTorsionRangeDescription) atomListDescription;
 
         // TODO
-//        assertEquals("i", getGroupLabel(torsion.getDescriptionA()));
-//        assertEquals("i + 1", getGroupLabel(torsion.getDescriptionB()));
-//        assertEquals("i + 2", getGroupLabel(torsion.getDescriptionC()));
-//        assertEquals("i + 3", getGroupLabel(torsion.getDescriptionD()));
+        assertEquals("i", getGroupLabel(torsion.getGroupDescriptions().get(0)));
+        assertEquals("i + 1", getGroupLabel(torsion.getGroupDescriptions().get(1)));
+        assertEquals("i + 2", getGroupLabel(torsion.getGroupDescriptions().get(2)));
+        assertEquals("i + 3", getGroupLabel(torsion.getGroupDescriptions().get(3)));
     }
     
-    private String getGroupLabel(Description chainDescription) {
-        return ((GroupDescription)chainDescription.getSubDescriptionAt(0)).getLabel();
+    private String getGroupLabel(GroupDescription groupDescription) {
+        return groupDescription.getLabel().get();
     }
     
-    private Description read(String xml) {
+    private ChainDescription read(String xml) {
         XmlDescriptionReader reader = new XmlDescriptionReader();
         return reader.readDescription(
                 new ByteArrayInputStream(xml.getBytes(StandardCharsets.UTF_8)));

@@ -4,7 +4,7 @@ import java.util.logging.Logger;
 
 import tailor.api.AtomListCondition;
 import tailor.api.AtomListMeasure;
-import tailor.experiment.measure.DoubleMeasurement;
+import tailor.measure.DoubleMeasurement;
 
 public class AtomRangeCondition implements AtomListCondition {
 	

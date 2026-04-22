@@ -12,11 +12,11 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.ListSelectionModel;
 
-import tailor.measurement.Measure;
+import tailor.api.AtomListMeasure;
 
 public class MeasureListBox extends JPanel {
 	
-	private JList<Measure<?>> measureList;
+	private JList<AtomListMeasure> measureList;
 	
 	public MeasureListBox() {
 		
@@ -29,7 +29,7 @@ public class MeasureListBox extends JPanel {
 		this.add(new JScrollPane(this.measureList));
 	}
 	
-	public void addMeasureToList(Measure<?> measure) {
+	public void addMeasureToList(AtomListMeasure measure) {
 		this.getListModel().addElement(measure);
 		this.measureList.setSelectedValue(measure, true);
 		System.err.println("adding " + measure);
@@ -41,21 +41,21 @@ public class MeasureListBox extends JPanel {
 		this.measureList.setSelectedIndex(this.getListModel().size() - 1);
 	}
 	
-	public DefaultListModel<Measure<?>> getListModel() { 
-		return (DefaultListModel<Measure<?>>) this.measureList.getModel();
+	public DefaultListModel<AtomListMeasure> getListModel() { 
+		return (DefaultListModel<AtomListMeasure>) this.measureList.getModel();
 	}
 	
-	public List<Measure<?>> getMeasures() {
-		List<Measure<?>> measures = new ArrayList<>();
-		DefaultListModel<Measure<?>> model = this.getListModel();
+	public List<AtomListMeasure> getMeasures() {
+		List<AtomListMeasure> measures = new ArrayList<>();
+		DefaultListModel<AtomListMeasure> model = this.getListModel();
 		for (int i = 0; i < model.size(); i++) {
 			measures.add(model.get(i));
 		}
 		return measures;
 	}
     
-    public void setMeasures(List<Measure<?>> list) {
-        for (Measure<?> measure : list) {
+    public void setMeasures(List<AtomListMeasure> list) {
+        for (AtomListMeasure measure : list) {
             this.addMeasureToList(measure);
         }
     }

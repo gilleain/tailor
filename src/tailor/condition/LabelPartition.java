@@ -7,8 +7,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import tailor.experiment.description.DescriptionPath;
-import tailor.experiment.description.GroupDescription;
+import tailor.description.DescriptionPath;
+import tailor.description.GroupDescription;
 
 public class LabelPartition {
 	

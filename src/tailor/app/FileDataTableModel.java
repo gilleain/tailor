@@ -3,7 +3,7 @@ package tailor.app;
 import java.util.ArrayList;
 import java.util.List;
 
-import tailor.datasource.Result;
+import tailor.engine.plan.Result;
 
 
 /**
@@ -30,7 +30,7 @@ public class FileDataTableModel extends RowBasedTableModel {
         this.data = data;
         if (data.size() > 0) {
         	// XXX : while simple, this could be dangerous if the file format is wrong. 
-            this.numberOfColumns = data.get(0).getNumberOfColumns();
+            this.numberOfColumns = data.get(0).getMeasurements().size();
         } else {
             this.numberOfColumns = 0;
         }
@@ -51,7 +51,7 @@ public class FileDataTableModel extends RowBasedTableModel {
     
     public Object getValueAt(int row, int col) {
         if (row < this.data.size()) {
-            return this.data.get(row).getValueAtColumn(col);
+            return this.data.get(row).getMeasurements().get(col);	// TODO
         } else {
             return null;
         }

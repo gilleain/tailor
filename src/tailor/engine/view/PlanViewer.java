@@ -26,15 +26,15 @@ import tailor.api.AtomListDescription;
 import tailor.api.Operator;
 import tailor.api.PipeableOperator;
 import tailor.api.Sink;
+import tailor.description.ChainDescription;
+import tailor.description.GroupDescription;
+import tailor.description.atom.AtomAngleRangeDescription;
+import tailor.description.atom.AtomDistanceRangeDescription;
 import tailor.engine.operator.CombineResults;
 import tailor.engine.operator.ResultPipe;
 import tailor.engine.plan.Plan;
 import tailor.engine.plan.Planner;
 import tailor.engine.plan.Result;
-import tailor.experiment.description.ChainDescription;
-import tailor.experiment.description.GroupDescription;
-import tailor.experiment.description.atom.AtomAngleRangeDescription;
-import tailor.experiment.description.atom.AtomDistanceRangeDescription;
 import tailor.experiment.test.Helper;
 
 /**

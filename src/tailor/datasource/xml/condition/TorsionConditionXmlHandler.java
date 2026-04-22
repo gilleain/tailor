@@ -5,10 +5,10 @@ import java.util.Map;
 
 import org.xml.sax.Attributes;
 
-import tailor.condition.atom.AtomTorsionRangeCondition;
 import tailor.datasource.xml.PathXmlHandler;
-import tailor.description.Description;
-import tailor.experiment.description.DescriptionPath;
+import tailor.description.ChainDescription;
+import tailor.description.DescriptionPath;
+import tailor.description.atom.AtomTorsionRangeDescription;
 
 public class TorsionConditionXmlHandler implements ConditionXmlHandler {
     
@@ -26,7 +26,7 @@ public class TorsionConditionXmlHandler implements ConditionXmlHandler {
     }
 
     @Override
-    public void complete(Description parent, PathXmlHandler pathXmlHandler) {
+    public void complete(ChainDescription parent, PathXmlHandler pathXmlHandler) {
         String name = this.dataStore.get("name");
         double midPoint = Double.parseDouble(this.dataStore.get("midPoint"));
         double range = Double.parseDouble(this.dataStore.get("range"));
@@ -40,11 +40,11 @@ public class TorsionConditionXmlHandler implements ConditionXmlHandler {
         double minValue = midPoint - range;
         double maxValue = midPoint + range;
         
-        AtomTorsionRangeCondition torsion = 
-                new AtomTorsionRangeCondition(name, minValue, maxValue, pathA, pathB, pathC, pathD);
+        AtomTorsionRangeDescription torsion = 
+                new AtomTorsionRangeDescription(name, minValue, maxValue, pathA, pathB, pathC, pathD);
         
         // add the condition to the parent description
-        parent.addCondition(torsion);
+        parent.addAtomListDescriptions(torsion);
         
         // don't want to accumulate paths
         pathXmlHandler.clearPaths();

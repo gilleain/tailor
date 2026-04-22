@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import tailor.datasource.xml.XmlDescriptionReader;
-import tailor.description.Description;
+import tailor.description.ChainDescription;
 
 public class DescriptionLibrary {
 	
@@ -17,7 +17,7 @@ public class DescriptionLibrary {
 		"descriptions/schellman_loop.xml"
 	};
 	
-	private List<Description> descriptions;
+	private List<ChainDescription> descriptions;
 	
 	/**
 	 * Read all the ".xml" files from {@code directory} and turn them into Descriptions.
@@ -34,14 +34,14 @@ public class DescriptionLibrary {
 				if (fileName.endsWith(".xml")) {
 					File f = new File(directoryName, fileName);
 					System.out.println(f);
-					Description d = reader.readDescription(f);
+					ChainDescription d = reader.readDescription(f);
 					this.descriptions.add(d);
 				}
 			}
 		}
 	}
 	
-	public List<Description> getDescriptions() {
+	public List<ChainDescription> getDescriptions() {
 		return this.descriptions;
 	}
 	
@@ -50,9 +50,9 @@ public class DescriptionLibrary {
 	 * 
 	 * @return an ArrayList of Descriptions from the standard library.
 	 */
-	public static List<Description> getDefaultLibrary() {
+	public static List<ChainDescription> getDefaultLibrary() {
 		try {
-			List<Description> defaultLib = new ArrayList<>();
+			List<ChainDescription> defaultLib = new ArrayList<>();
 			
 			ClassLoader loader = DescriptionLibrary.class.getClassLoader();
 			XmlDescriptionReader reader = new XmlDescriptionReader();
@@ -71,8 +71,8 @@ public class DescriptionLibrary {
 	
 	public static void main(String[] args) {
 //		List<Description> lib = DescriptionLibrary.getDefaultLibrary();
-		List<Description> lib = new DescriptionLibrary("descriptions").getDescriptions();
-		for (Description d : lib) {
+		List<ChainDescription> lib = new DescriptionLibrary("descriptions").getDescriptions();
+		for (ChainDescription d : lib) {
 			System.out.println(d);
 		}
 	}

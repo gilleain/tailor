@@ -16,13 +16,13 @@ import javax.swing.JScrollPane;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
-import tailor.description.Description;
+import tailor.description.ChainDescription;
 
 public class LibraryDialog extends JDialog implements ActionListener, ListSelectionListener {
 	
 	private JLabel directoryLabel;
 	
-	private JList<Description> descriptionList;
+	private JList<ChainDescription> descriptionList;
 	
 	private JButton confirmButton;
 	
@@ -39,7 +39,7 @@ public class LibraryDialog extends JDialog implements ActionListener, ListSelect
 		this.directoryLabel = new JLabel();
 		this.directoryLabel.setHorizontalAlignment(JLabel.CENTER);
 		
-		List<Description> descriptions;
+		List<ChainDescription> descriptions;
 		if (directory != null) {
 			descriptions = new DescriptionLibrary(directory).getDescriptions();
 			this.directoryLabel.setText(directory);
@@ -54,7 +54,7 @@ public class LibraryDialog extends JDialog implements ActionListener, ListSelect
 		final int w = 250;
 		final int h = 100;
 		
-		descriptionList = new JList<>(descriptions.toArray(new Description[] {}));
+		descriptionList = new JList<>(descriptions.toArray(new ChainDescription[0]));
 		descriptionList.setCellRenderer(new DiagramListCellRenderer(w, h, descriptions));
 		descriptionList.addListSelectionListener(this);
 		
@@ -107,8 +107,8 @@ public class LibraryDialog extends JDialog implements ActionListener, ListSelect
 		return this.isOkay;
 	}
 	
-	public Description getDescription() {
-		return (Description) this.descriptionList.getSelectedValue();
+	public ChainDescription getDescription() {
+		return this.descriptionList.getSelectedValue();
 	}
 	
 	public static void main(String[] args) {

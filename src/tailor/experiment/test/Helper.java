@@ -5,12 +5,12 @@ import java.util.List;
 
 import tailor.api.Operator;
 import tailor.api.Sink;
+import tailor.description.AtomDescription;
+import tailor.description.DescriptionPath;
+import tailor.description.GroupDescription;
 import tailor.engine.operator.GroupSource;
 import tailor.engine.plan.Plan;
 import tailor.engine.plan.Result;
-import tailor.experiment.description.AtomDescription;
-import tailor.experiment.description.DescriptionPath;
-import tailor.experiment.description.GroupDescription;
 import tailor.geometry.Vector;
 import tailor.structure.Atom;
 import tailor.structure.Chain;

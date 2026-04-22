@@ -2,14 +2,12 @@ package tailor.engine;
 
 import org.junit.Test;
 
-import tailor.condition.atom.AtomDistanceRangeCondition;
+import tailor.description.AtomDescription;
 import tailor.description.ChainDescription;
-import tailor.description.Description;
 import tailor.description.DescriptionFactory;
-import tailor.description.ProteinDescription;
-import tailor.experiment.description.AtomDescription;
-import tailor.experiment.description.DescriptionPath;
-import tailor.experiment.description.GroupDescription;
+import tailor.description.DescriptionPath;
+import tailor.description.GroupDescription;
+import tailor.description.atom.AtomDistanceRangeDescription;
 
 public class SingleChainTest {
     
@@ -27,11 +25,13 @@ public class SingleChainTest {
         DescriptionPath carbonylOxygen = new DescriptionPath(groupA, new AtomDescription("O"));
         DescriptionPath amineNitrogen = new DescriptionPath(groupB, new AtomDescription("O"));
         
-        chainDescription.addCondition(
-                new AtomDistanceRangeCondition("i.O->(i+3).N", 2.5, 4.5, carbonylOxygen, amineNitrogen));
+        chainDescription.addAtomListDescriptions(
+                new AtomDistanceRangeDescription("i.O->(i+3).N", 2.5, 4.5, carbonylOxygen, amineNitrogen)
+        );
         
-        chainDescription.addMeasure(factory.createPhiMeasure("psi2", 2));
-        chainDescription.addMeasure(factory.createPsiMeasure("phi2", 2));
+        chainDescription.addAtomListMeasures(
+        		factory.createPhiMeasure("psi2", 2), factory.createPsiMeasure("phi2", 2)
+        );
         
         Run run = new Run(filename);
 //        run.addDescription((ProteinDescription)chainDescription);
@@ -51,14 +51,15 @@ public class SingleChainTest {
         // i.O->(i+4).N
         factory.createHBondCondition(3.5, 90, 90, 4, 0);
         
-        Description description = factory.getProduct();
-        description.addMeasure(factory.createPhiMeasure("psi2", 2));
-        description.addMeasure(factory.createPsiMeasure("phi2", 2));
+        ChainDescription description = new ChainDescription("A");
+        description.addAtomListMeasures(
+        		factory.createPhiMeasure("psi2", 2), factory.createPsiMeasure("phi2", 2)
+        );
         
         Run run = new Run(filename);
-        run.addDescription((ProteinDescription)description);
         
         // TODO
+//        run.addDescription((ProteinDescription)description);
 //        Engine engine = EngineFactory.getEngine(description);
 //        engine.run(run);
     }

@@ -4,6 +4,7 @@ import java.util.AbstractMap;
 import java.util.HashMap;
 import java.util.Map;
 
+
 public class DescriptionGenerator {
 
 	public static final Map<String, double[][]> PREDEFINED_BOUNDS = new HashMap<>();
@@ -43,10 +44,10 @@ public class DescriptionGenerator {
 	}
 
 	private static ChainDescription generateBackboneDescription(String name, double[][][] bounds) {
-		ChainDescription chain = new ChainDescription();
-		// TODO
-//		chain.addCondition(new PropertyCondition("chainName", name)); // TODO - very fragile!
-		chain.createResidues(bounds.length + 2);
+		DescriptionFactory df = new DescriptionFactory();
+		ChainDescription chain = new ChainDescription(name);
+		
+		createResidues(chain, bounds.length + 2);
 
 		for (int i = 0; i < bounds.length; i++) {
 			int residueNumber = i + 2;
@@ -58,11 +59,23 @@ public class DescriptionGenerator {
 			double psiCenter = psiBound[0];
 			double psiRange = psiBound[1];
 
-			chain.createPhiBoundCondition(residueNumber, phiCenter, phiRange);
-			chain.createPsiBoundCondition(residueNumber, psiCenter, psiRange);
+			chain.addAtomListDescriptions(
+					df.createPhiCondition(phiCenter, phiRange, residueNumber, ""),	// TODO String param
+					df.createPsiCondition(psiCenter, psiRange, residueNumber, ""));// TODO String param
 		}
 
 		return chain;
+	}
+	
+	private static void createResidues(ChainDescription chain, int numberOfResidues) {
+		for (int index = 0; index < numberOfResidues; index++) {
+			GroupDescription group = new GroupDescription();
+			
+			for (String atomLabel : new String[] { "N", "CA", "C", "O", "H"}) {
+				group.addAtomDescription(new AtomDescription(atomLabel));
+			}
+			chain.addGroupDescription(group);
+		}
 	}
 
 }

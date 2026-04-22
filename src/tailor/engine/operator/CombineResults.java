@@ -8,8 +8,8 @@ import java.util.logging.Logger;
 
 import tailor.api.Sink;
 import tailor.api.Source;
+import tailor.description.group.GroupSequenceDescription;
 import tailor.engine.plan.Result;
-import tailor.experiment.description.group.GroupSequenceDescription;
 
 /**
  * Combine the output from multiple sources, flattening them into a list of results.

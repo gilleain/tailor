@@ -8,18 +8,17 @@ import org.apache.commons.cli.ParseException;
 import tailor.datasource.PDBFileList;
 import tailor.datasource.StructureSource;
 import tailor.datasource.xml.XmlDescriptionReader;
-import tailor.description.Description;
-import tailor.engine.Run;
+import tailor.description.ChainDescription;
 
 public class Matcher {
     
-    private static Description read(String filename) {
+    private static ChainDescription read(String filename) {
         XmlDescriptionReader reader = new XmlDescriptionReader();
         return reader.readDescription(new File(filename));
     }
     
     public static void run(CommandLineHandler args) throws IOException {
-        Description description = null;
+    	ChainDescription description = null;
         if (args.getDescriptionFileName() != null) {
             description = read(args.getDescriptionFileName());
         }
@@ -34,8 +33,9 @@ public class Matcher {
         if (description == null || structureSource == null) return;
         
         
-        Run run = new Run(description, structureSource);
+        
         // TODO
+//        Run run = new Run(description, structureSource);
 //        Engine engine = EngineFactory.getEngine(description);
 //        engine.run(run);
     }

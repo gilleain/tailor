@@ -4,7 +4,6 @@ import org.junit.Test;
 
 import tailor.description.ChainDescription;
 import tailor.description.ProteinDescription;
-import tailor.measurement.DistanceMeasure;
 
 public class MultiChain {
     
@@ -12,19 +11,19 @@ public class MultiChain {
     public void chainCentres() {
         String filename = "structures/1itk.pdb";
         
-        ProteinDescription proteinDescription = new ProteinDescription();
+        ProteinDescription proteinDescription = new ProteinDescription("Test");
         ChainDescription chainADescription = new ChainDescription();
         ChainDescription chainBDescription = new ChainDescription();
         proteinDescription.addChainDescription(chainADescription);
         proteinDescription.addChainDescription(chainBDescription);
         
         // TODO
-        DistanceMeasure distanceMeasure = new DistanceMeasure("D", chainADescription, chainBDescription);
-        
-        proteinDescription.addMeasure(distanceMeasure);
-        Run run = new Run(filename);
-        run.addDescription(proteinDescription);
-        
+//        AtomDistanceMeasure distanceMeasure = new AtomDistanceMeasure("D", chainADescription, chainBDescription);
+//        
+//        proteinDescription.addMeasure(distanceMeasure);
+//        Run run = new Run(filename);
+//        run.addDescription(proteinDescription);
+//        
         // TODO
 //        Engine engine = EngineFactory.getEngine(proteinDescription);
 //        engine.run(run);

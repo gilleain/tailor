@@ -9,7 +9,7 @@ import tailor.description.ProteinDescription;
 public class ProteinDescriptionXmlHandler implements DescriptionXmlHandler {
     
     @Override
-    public Description create(Attributes attrs, Description parent) throws DescriptionParseException {
+    public Description create(Attributes attrs, Object parent) throws DescriptionParseException {
         // XXX do we care about the parent?
         return new ProteinDescription(attrs.getValue("name"));
     }

@@ -1,366 +1,83 @@
 package tailor.description;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
+import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
+import java.util.Optional;
 
-import tailor.api.AtomListCondition;
-import tailor.experiment.description.DescriptionPath;
-import tailor.measurement.Measure;
-import tailor.measurement.Measurement;
-import tailor.structure.Chain;
-import tailor.structure.ChainType;
-import tailor.structure.Level;
-import tailor.structure.Structure;
+import tailor.api.AtomListDescription;
+import tailor.api.AtomListMeasure;
+import tailor.description.group.GroupSequenceDescription;
 
+public class ChainDescription {
+	
+	private Optional<String> label;
+	
+	// Descriptions of the groups to find
+	private List<GroupDescription> groupDescriptions;
+	
+	// Descriptions of relationships to find between the atoms across groups
+	private List<AtomListDescription> atomListDescriptions;
+	
+	// Descriptions of sequence relationships between the groups
+	private List<GroupSequenceDescription> groupSequenceDescriptions;
+	
+	// Measurements to make between atoms across groups
+	private List<AtomListMeasure> atomListMeasures;
 
-/**
- * @author maclean
- *
- */
-public class ChainDescription implements Description, Iterable<GroupDescription> {
-    
-    private static final Level level = Level.CHAIN;
-    
-    private String chainName;
-    
-    private List<GroupDescription> groupDescriptions;
-    
-    private List<AtomListCondition> groupConditions;
-    
-    private List<Measure<? extends Measurement>> groupMeasures;
-    
-    private Map<Integer, Description> descriptionLookup;
-    
-    private int id;
-    
-    private ChainType chainType;	// TODO - can this be final?
-    
-    public ChainDescription() {
-        this.chainName = null;
-        this.groupDescriptions = new ArrayList<>();
-        this.groupConditions = new ArrayList<>();
-        this.groupMeasures = new ArrayList<>();
-        this.descriptionLookup = new HashMap<>();
-    }
-    
-    public ChainDescription(String chainName) {
-        this();
-        this.chainName = chainName;
-    }
-    
-    public ChainDescription(ChainDescription chainDescription) {
-    	this(chainDescription.getName());
-    	for (GroupDescription groupDescription : chainDescription.groupDescriptions) {
-    		this.groupDescriptions.add(new GroupDescription(groupDescription));
-    	}
-    	for (AtomListCondition condition : chainDescription.getConditions()) {
-    	    // TODO ?
-//    		this.groupConditions.add((Condition) condition.clone());
-    	}
-    }
-    
-    public ChainType getChainType() {
-    	return chainType;
-    }
-    
-    public boolean hasName(String name) {
-    	return this.chainName.equals(name);
-    }
-    
-    public void addGroupDescription(GroupDescription groupDescription) {
-        this.groupDescriptions.add(groupDescription);
-        int id = this.id + groupDescriptions.size();
-//        groupDescription.setID(id);
-        this.descriptionLookup.put(id, groupDescription);
-    }
-    
-    public void removeLastGroupDescription() {
-    	GroupDescription g = this.groupDescriptions.remove(this.groupDescriptions.size() - 1);
-    	List<AtomListCondition> toRemove = new ArrayList<>();
-    	for (AtomListCondition condition : this.groupConditions) {
-//    		if (condition.contains(g)) {
-//    			toRemove.add(condition);
-//    		}
-    	}
-    	this.groupConditions.removeAll(toRemove);
-    }
-    
-    public void addGroupCondition(AtomListCondition condition) {
-        this.groupConditions.add(condition);
-    }
-    
-    public List<GroupDescription> getGroupDescriptions() {
-        return this.groupDescriptions;
-    }
-    
-    /**
-     * Get the group description at index <code>groupIndex</code>.
-     * 
-     * @param groupIndex
-     * @return
-     */
-    public GroupDescription getGroupDescription(int groupIndex) {
-        return groupDescriptions.get(groupIndex);
-    }
-    
-    public GroupDescription first() {
-        return this.groupDescriptions.get(0);
-    }
-    
-    public GroupDescription last() {
-        return this.groupDescriptions.get(this.size() - 1);
-    }
-    
-    public ChainDescription getPathByGroupName(String groupName, String atomName) {
-        ChainDescription root = new ChainDescription(this.chainName);
-        
-        // TODO : what if multiple matches...
-        for (GroupDescription groupDescription : this.groupDescriptions) {
-            if (groupDescription.nameMatches(groupName)) {
-                GroupDescription group = 
-                    (GroupDescription) groupDescription.shallowCopy();
-                AtomDescription atom = 
-                    groupDescription.getAtomDescription(atomName);
-                group.addAtomDescription(atom);
-                root.addGroupDescription(group);
-            }
-        }
-        
-        return root;
-    }
-    
-    public ChainDescription getPathByGroupLabel(String groupLabel, String atomName) {
-        ChainDescription root = new ChainDescription(this.chainName);
-        
-        // TODO : what if multiple matches...
-        for (GroupDescription groupDescription : this.groupDescriptions) {
-            if (groupDescription.labelMatches(groupLabel)) {
-                GroupDescription group = 
-                    (GroupDescription) groupDescription.shallowCopy();
-                AtomDescription atom = 
-                    groupDescription.getAtomDescription(atomName);
-                group.addAtomDescription(atom);
-                root.addGroupDescription(group);
-            }
-        }
-        
-        return root;
-    }
-    
-    // TODO - temp method
-    public DescriptionPath getDescriptionPathByGroupLabel(String groupLabel, String atomName) {
-        ChainDescription root = new ChainDescription(this.chainName);
-        
-        // TODO : what if multiple matches...
-        for (GroupDescription groupDescription : this.groupDescriptions) {
-            if (groupDescription.labelMatches(groupLabel)) {
-                GroupDescription group = 
-                    (GroupDescription) groupDescription.shallowCopy();
-                AtomDescription atom = 
-                    groupDescription.getAtomDescription(atomName);
-                group.addAtomDescription(atom);
-                root.addGroupDescription(group);
-            }
-        }
-        
-        return null;	// TODO
-    }
-    
-    public ChainDescription getPath(int groupIndex, String atomName) {
-        ChainDescription root = new ChainDescription(this.chainName);
-        
-        // TODO : what if multiple matches...
-        GroupDescription groupDescription = groupDescriptions.get(groupIndex);
-        
-        GroupDescription group = 
-            (GroupDescription) groupDescription.shallowCopy();
-        AtomDescription atom = new AtomDescription(atomName);
-        group.addAtomDescription(atom);
-        root.addGroupDescription(group);
-        
-        return root;
-    }
-    
-    /**
-     * The basic match : consider only the chain name and not
-     * any attached conditions.
-     * 
-     * @param chain the Structure to compare to
-     * @return true if this has no set chain name or the names are equal
-     */
-    public boolean nameMatches(Structure chain) {
-        return this.chainName == null 
-            || (chain instanceof Chain
-                    && this.chainName.equals(((Chain)chain).getName()));
-    }
-    
-    public int getID() {
-        return this.id;
-    }
-    
-    public void setID(int id) {
-        this.id = id;
-    }
-    
-    public Description getByID(int id) {
-        if (descriptionLookup.containsKey(id)) {
-            return descriptionLookup.get(id);
-        } else {
-            for (GroupDescription groupD : this) {
-                Description d = groupD.getByID(id);
-                if (d != null) {
-                    return d;
-                }
-            }
-        }
-        return null;
-    }
-    
-    @Override
-    public Iterator<GroupDescription> iterator() {
-        return groupDescriptions.iterator();
-    }
-
-    public boolean contains(Description d) {
-    	if (d.getLevel() == ChainDescription.level) {
-    		return this.getName().equals(((ChainDescription) d).getName());
-    	} else {
-    		for (GroupDescription group : this.groupDescriptions) {
-    			if (group.contains(d)) {
-    				return true;
-    			}
-    		}
-    		return false;
-    	}
-    }
-
-    public Object clone() {
-    	return new ChainDescription(this);
-    }
-
-    public Description shallowCopy() {
-        return new ChainDescription(this.chainName);
-    }
-
-    public Level getLevel() {
-        return ChainDescription.level;
-    }
-
-    public String getName() {
-    	return this.chainName;
-    }
-
-    public void addCondition(AtomListCondition condition) {
-        this.groupConditions.add(condition);
-    }
-
-    public List<AtomListCondition> getConditions() {
-        return this.groupConditions;
-    }
-
-    public void addMeasure(Measure<? extends Measurement> measure) {
-        groupMeasures.add(measure);
-    }
-
-    public List<Measure<? extends Measurement>> getMeasures() {
-        return groupMeasures;
-    }
-
-    public void addSubDescription(Description subDescription) {
-        if (subDescription instanceof GroupDescription) {
-            this.addGroupDescription((GroupDescription) subDescription);
-        } else {
-            // TODO : type checking - throw error
-        }
-    }
-
-    public List<GroupDescription> getSubDescriptions() {
-        return this.groupDescriptions;
-    }
-
-    public Description getSubDescriptionAt(int i) {
-        return groupDescriptions.get(i);
-    }
-
-    /**
-     * @return the number of group descriptions in this chain
-     */
-    public int size() {
-        return this.groupDescriptions.size();
-    }
-
-    public Description getPathEnd() {
-    	if (this.groupDescriptions.size() == 0) {
-    		return this;
-    	} else {
-    		return this.groupDescriptions.get(0).getPathEnd();
-    	}
-    }
-    
-    public String toPathString() {
-        StringBuffer s = new StringBuffer();
-        s.append(this.chainName).append("/");
-        for (GroupDescription groupDescription : this.groupDescriptions) {
-            s.append(groupDescription.toPathString());
-        }
-        return s.toString();
-    }
-    
-    public String toXmlPathString() {
-    	// XXX we assume that there is only one Group!
-    	return this.groupDescriptions.get(0).toXmlPathString();
-    }
-    
-    public String toString() {
-        return "Chain " + ((this.chainName == null)? "" : this.chainName);
-    }
-
-    // --- from python code -- // 
-    
-    public GroupDescription selectResidue(int i) {
-		return (GroupDescription)descriptionLookup.get(i - 1);
+	public ChainDescription() {
+		this(null);
 	}
-    
-	public void createResidues(int n) {
-		createResidueFromToInclusive(1, n);
+	
+	public ChainDescription(String label) {
+		this.label = Optional.ofNullable(label);
+		this.groupDescriptions = new ArrayList<>();
+		this.atomListDescriptions = new ArrayList<>();
+		this.groupSequenceDescriptions = new ArrayList<>();
+		this.atomListMeasures = new ArrayList<>();
+	}
+	
+	public Optional<String> getLabel() {
+		return label;
 	}
 
-	public void createResidueFromToInclusive(int i, int j) {
-		for (int x = i - 1; x < j; x++) {
-			createResidueWithBackbone(x);
+	public void addGroupDescription(GroupDescription groupDescription) {
+		groupDescription.setIndex(this.groupDescriptions.size());
+		this.groupDescriptions.add(groupDescription);
+	}
+
+	public void addGroupDescriptions(GroupDescription... groups) {
+		for (GroupDescription group : groups) {
+			addGroupDescription(group);
 		}
 	}
 
-	public void createResidueWithBackbone(int i) {
-		GroupDescription residue = new GroupDescription();
-		
-		// TODO - so many things wrong with this ...
-//		residue.addCondition(new PropertyCondition("position", String.valueOf(i + 1)));
-		residue.setID(i);	// TODO
-
-		for (String atomName : new String[] { "N", "CA", "C", "O", "H" }) {
-			residue.addAtomDescription(atomName);
-		}
-		addGroupDescription(residue);
-	}
-    
-	public void createPhiBoundCondition(int residueNumber, double midPoint, double range) {
-		this.groupConditions.add(
-				DescriptionFactory.createPhiCondition(this, residueNumber, midPoint, range));
+	public List<GroupDescription> getGroupDescriptions() {
+		return this.groupDescriptions;
 	}
 
-	public void createPsiBoundCondition(int residueNumber, double midPoint, double range) {
-		this.groupConditions.add(
-				DescriptionFactory.createPsiCondition(this, residueNumber, midPoint, range));
-		
+	public List<AtomListDescription> getAtomListDescriptions() {
+		return atomListDescriptions;
 	}
 
-	public DescriptionPath getDescriptionPath(int donorNumber, String string) {
-		// TODO Auto-generated method stub
-		return null;
+	public void addAtomListDescriptions(AtomListDescription... atomListDescription) {
+		this.atomListDescriptions.addAll(Arrays.asList(atomListDescription));
 	}
-
+	
+	public void addGroupSequenceDescriptions(GroupSequenceDescription... groupSequenceDescription) {
+		this.groupSequenceDescriptions.addAll(Arrays.asList(groupSequenceDescription));
+	}
+	
+	public List<GroupSequenceDescription> getGroupSequenceDescriptions() {
+		return this.groupSequenceDescriptions;
+	}
+	
+	public void addAtomListMeasures(AtomListMeasure... atomListMeasure) {
+		this.atomListMeasures.addAll(Arrays.asList(atomListMeasure));
+	}
+	
+	public List<AtomListMeasure> getAtomListMeasures() {
+		return this.atomListMeasures;
+	}
+ 
 }

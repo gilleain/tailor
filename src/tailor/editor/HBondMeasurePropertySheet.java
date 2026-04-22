@@ -10,7 +10,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import tailor.description.DescriptionFactory;
-import tailor.measurement.HBondMeasure;
+import tailor.measure.HBondMeasure;
 
 public class HBondMeasurePropertySheet extends JPanel implements ActionListener {
 	

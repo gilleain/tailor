@@ -3,8 +3,8 @@ package tailor.experiment.test;
 import java.util.Arrays;
 import java.util.List;
 
-import tailor.experiment.description.AtomDescription;
-import tailor.experiment.description.GroupDescription;
+import tailor.description.AtomDescription;
+import tailor.description.GroupDescription;
 
 public class DescriptionBuilder {
 	

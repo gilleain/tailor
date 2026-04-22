@@ -3,11 +3,11 @@ package tailor.engine;
 
 import org.junit.Test;
 
-import tailor.experiment.description.AtomDescription;
-import tailor.experiment.description.ChainDescription;
-import tailor.experiment.description.DescriptionPath;
-import tailor.experiment.description.GroupDescription;
-import tailor.experiment.description.atom.AtomDistanceRangeDescription;
+import tailor.description.AtomDescription;
+import tailor.description.ChainDescription;
+import tailor.description.DescriptionPath;
+import tailor.description.GroupDescription;
+import tailor.description.atom.AtomDistanceRangeDescription;
 
 public class CatmatTest {
     

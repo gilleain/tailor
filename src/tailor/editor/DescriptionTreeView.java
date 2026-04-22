@@ -13,16 +13,19 @@ import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
 
+import tailor.description.AtomDescription;
+import tailor.description.ChainDescription;
 import tailor.description.Description;
 import tailor.description.DescriptionFactory;
-import tailor.description.ProteinDescription;
+import tailor.description.DescriptionPath;
+import tailor.description.GroupDescription;
 import tailor.structure.Level;
 
 public class DescriptionTreeView extends JPanel  {
 
 	private JTree descriptionTree;
     
-    private List<Description> descriptions;
+    private List<ChainDescription> descriptions;
     
 	private DefaultTreeModel model;
     
@@ -72,14 +75,14 @@ public class DescriptionTreeView extends JPanel  {
      * 
      * @param description the Description tree to display
      */
-    public DescriptionTreeView(Description description) {
-        this(true);
-        
-        this.addTree(description, 0);
-        this.model.reload();
-    }
-    
-    /**
+    public DescriptionTreeView(ChainDescription description) {
+    	 this(true);
+         
+         this.addTree(description, 0);
+         this.model.reload();
+	}
+
+	/**
      * Count the number of trees in this view.
      * 
      * @return the number of Description trees contained herein.
@@ -103,7 +106,7 @@ public class DescriptionTreeView extends JPanel  {
      * 
      * @param descriptionTree the tree to add
      */
-    public void addDescriptionTree(ProteinDescription descriptionTree) {
+    public void addDescriptionTree(ChainDescription descriptionTree) {
         int position = this.numberOfTrees();
         this.addTree(descriptionTree, position);
     }
@@ -117,8 +120,8 @@ public class DescriptionTreeView extends JPanel  {
      * @param description the root of the tree to add
      * @param index the position to add it at
      */
-    public void addTree(Description description, int index) {
-        System.out.println("adding tree " + description.toPathString());
+    public void addTree(ChainDescription description, int index) {
+        System.out.println("adding tree " + description.toString());
         DefaultMutableTreeNode root = this.getRoot();
         DefaultMutableTreeNode descriptionRoot = new DefaultMutableTreeNode();
         
@@ -136,14 +139,21 @@ public class DescriptionTreeView extends JPanel  {
         System.out.println("new tree size " + this.getTreeSize(index));
     }
     
-    // TODO : the distinction between ProteinDescriptions and Descriptions needs to be sorted out!
-    
-    public void recursivelyAdd(DefaultMutableTreeNode current, Description description) {
-        this.addDescriptionToNode(current, description);
-        for (Description child : description.getSubDescriptions()) {
+    public void recursivelyAdd(DefaultMutableTreeNode current, ChainDescription description) {
+        this.addChainDescriptionToNode(current, description);
+        for (GroupDescription child : description.getGroupDescriptions()) {
             DefaultMutableTreeNode childNode = new DefaultMutableTreeNode();
             current.add(childNode);
             this.recursivelyAdd(childNode, child);
+        }
+    }
+    
+    public void recursivelyAdd(DefaultMutableTreeNode current, GroupDescription description) {
+        this.addGroupDescriptionToNode(current, description);
+        for (AtomDescription child : description.getAtomDescriptions()) {
+            DefaultMutableTreeNode childNode = new DefaultMutableTreeNode();
+            current.add(childNode);
+            this.addAtomDescriptionToNode(current, child);
         }
     }
 
@@ -164,19 +174,18 @@ public class DescriptionTreeView extends JPanel  {
         // FIXME : this doesn't really make sense. Perhaps throw error.
         if (currentlySelectedNode == null) {
             DefaultMutableTreeNode root = this.getRoot();
-            Description description = 
-                DescriptionFactory.createFromLevel(Level.PROTEIN, name);
+            ChainDescription description = new ChainDescription(name);
             this.addDescriptionToNewChildNode(root, description);
         } else {
-            Level currentLevel = 
-                ((Description) currentlySelectedNode.getUserObject()).getLevel();
+            Level currentLevel = getCurrentlySelectedLevel();
             Level childLevel = DescriptionFactory.getSubLevel(currentLevel);
             if (position == -1) {
                 position = currentlySelectedNode.getChildCount();
             }
             Description description = 
                 DescriptionFactory.createFromLevel(childLevel, name);
-            this.addDescriptionToNewChildNode(currentlySelectedNode, description);
+            // TODO
+//            this.addDescriptionToNewChildNode(currentlySelectedNode, description);
         }
     }
 
@@ -186,10 +195,10 @@ public class DescriptionTreeView extends JPanel  {
      * @param node the parent node
      * @param description the user object to add
      */
-    public void addDescriptionToNewChildNode(DefaultMutableTreeNode node, Description description) {
+    public void addDescriptionToNewChildNode(DefaultMutableTreeNode node, ChainDescription description) {
     	DefaultMutableTreeNode childNode = new DefaultMutableTreeNode();
         this.model.insertNodeInto(childNode, node, node.getChildCount());
-    	this.addDescriptionToNode(childNode, description);
+    	this.addChainDescriptionToNode(childNode, description);
         Object parentObject = node.getUserObject();
         
         if (parentObject == null) {
@@ -197,8 +206,9 @@ public class DescriptionTreeView extends JPanel  {
             int descriptionIndex = this.getRoot().getIndex(childNode);
             this.descriptions.add(descriptionIndex, description);
         } else {
-            Description parentDescription = (Description) parentObject;
-            parentDescription.addSubDescription(description);
+        	// TODO?
+//            Description parentDescription = (Description) parentObject;
+//            parentDescription.addSubDescription(description);
         }
     }
 
@@ -210,16 +220,34 @@ public class DescriptionTreeView extends JPanel  {
      * @param node the treenode to add the description to
      * @param description the description to add
      */
-    public void addDescriptionToNode(DefaultMutableTreeNode node, Description description) {
-        node.setUserObject(description);
-        System.out.println("Added user object : " + description);
-        this.model.reload();
-        TreePath path = new TreePath(node.getPath());
-        this.descriptionTree.scrollPathToVisible(path);
-        this.descriptionTree.setSelectionPath(path);
-    }
+    private void addChainDescriptionToNode(DefaultMutableTreeNode node, ChainDescription description) {
+    	 node.setUserObject(description);
+         System.out.println("Added user object : " + description);
+         this.model.reload();
+         TreePath path = new TreePath(node.getPath());
+         this.descriptionTree.scrollPathToVisible(path);
+         this.descriptionTree.setSelectionPath(path);
+	}
 
-    public DefaultMutableTreeNode getRoot() {
+	private void addGroupDescriptionToNode(DefaultMutableTreeNode node, GroupDescription description) {
+		 node.setUserObject(description);
+		 System.out.println("Added user object : " + description);
+		 this.model.reload();
+		 TreePath path = new TreePath(node.getPath());
+		 this.descriptionTree.scrollPathToVisible(path);
+		 this.descriptionTree.setSelectionPath(path);
+	}
+
+	private void addAtomDescriptionToNode(DefaultMutableTreeNode node, AtomDescription description) {
+		 node.setUserObject(description);
+		 System.out.println("Added user object : " + description);
+		 this.model.reload();
+		 TreePath path = new TreePath(node.getPath());
+		 this.descriptionTree.scrollPathToVisible(path);
+		 this.descriptionTree.setSelectionPath(path);
+	}
+
+	public DefaultMutableTreeNode getRoot() {
         Object root = this.model.getRoot();
         if (root == null) {
             root = new DefaultMutableTreeNode();
@@ -276,7 +304,14 @@ public class DescriptionTreeView extends JPanel  {
         if (currentlySelectedNode == null) {
             return null;
         } else {
-            return ((Description) currentlySelectedNode.getUserObject()).getLevel();
+        	Object userObj = currentlySelectedNode.getUserObject();
+        	if (userObj instanceof ChainDescription) {
+        		return Level.CHAIN;
+        	} else if (userObj instanceof GroupDescription) {
+        		return Level.RESIDUE;
+        	} else {
+        		return Level.ATOM;	
+        	} // TODO
         }
 	}
     
@@ -301,47 +336,45 @@ public class DescriptionTreeView extends JPanel  {
      * 
      * @return the root of a new description path
      */
-    public Description createPathToSelected() {
+    public DescriptionPath createPathToSelected() {
         TreePath path = this.descriptionTree.getSelectionPath();
         if (path == null) {
+        	System.err.println("returning null descriptionPathRoot");
             return null;
         } else {
-            Description descriptionPathRoot = null;
-            Description currentLevel = null;
             Object[] pathArray = path.getPath();
+            GroupDescription groupDescription = null;
+            AtomDescription atomDescription = null;
             for (int i = 1; i < pathArray.length; i++) {
                 DefaultMutableTreeNode node = (DefaultMutableTreeNode) pathArray[i];
-                Description description = (Description) node.getUserObject();
-                System.err.println("adding " + description);
-                if (descriptionPathRoot == null) {
-                    descriptionPathRoot = description.shallowCopy();
-                    currentLevel = descriptionPathRoot;
-                } else {
-                    Description copy = description.shallowCopy();
-                    currentLevel.addSubDescription(copy);
-                    currentLevel = copy;
+                Object userObject = node.getUserObject();
+                System.err.println("adding " + userObject);
+                
+                if (userObject instanceof GroupDescription) {
+                	groupDescription = (GroupDescription) userObject;
                 }
+                
+                if (userObject instanceof AtomDescription) {
+                	atomDescription = (AtomDescription) userObject;
+                }
+                
             }
-            if (descriptionPathRoot == null) {
-                System.err.println("returning null descriptionPathRoot");
-            } else {
-                System.err.println("returning " + descriptionPathRoot.toPathString());
-            }
-            return descriptionPathRoot;
+            System.err.println("returning " + groupDescription.toString() + " " + atomDescription.toString());
+            return new DescriptionPath(groupDescription, atomDescription);
         }
     }
 
-    public ProteinDescription[] getAllDescriptions() {
-        ProteinDescription[] proteinDescriptions = new ProteinDescription[this.descriptions.size()];
+    public ChainDescription[] getAllDescriptions() {
+        ChainDescription[] proteinDescriptions = new ChainDescription[this.descriptions.size()];
         for (int i = 0; i < this.descriptions.size(); i++) {
             proteinDescriptions[i] = this.getDescription(i);
         }
         return proteinDescriptions;
     }
     
-    public ProteinDescription getDescription(int index) throws ArrayIndexOutOfBoundsException {
+    public ChainDescription getDescription(int index) throws ArrayIndexOutOfBoundsException {
 //        return this.convertTreeModelToDescription(this.getRoot(), index);
-        return (ProteinDescription) this.descriptions.get(index);
+        return this.descriptions.get(index);
     }
 	
 	public void deleteSelectedDescription() {
@@ -353,5 +386,4 @@ public class DescriptionTreeView extends JPanel  {
 			}
 		}
 	}
-	
 }

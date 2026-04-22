@@ -3,8 +3,9 @@ package tailor.engine;
 import java.util.List;
 
 import tailor.datasource.StructureSource;
+import tailor.description.ChainDescription;
 import tailor.description.Description;
-import tailor.match.Match;
+import tailor.engine.plan.Result;
 import tailor.structure.Structure;
 
 /**
@@ -23,7 +24,7 @@ public interface Engine {
      * @param structure
      * @return
      */
-    public List<Match> match(Description description, Structure structure);
+    public List<Result> match(Description description, Structure structure);
     
     /**
      * @param run
@@ -37,7 +38,7 @@ public interface Engine {
 	 * @param description
 	 * @param measures
 	 */
-	public void runDescription(Description description);
+	public void runDescription(ChainDescription description);
 
     /**
      * Match the description to the structure source and apply the list of 

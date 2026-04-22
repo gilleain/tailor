@@ -5,28 +5,25 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import tailor.api.AtomListCondition;
-import tailor.condition.atom.AtomAngleRangeCondition;
-import tailor.condition.atom.AtomDistanceRangeCondition;
-import tailor.condition.atom.AtomTorsionRangeCondition;
-import tailor.condition.atom.HBondCondition;
+import tailor.api.AtomListDescription;
+import tailor.api.AtomListMeasure;
 import tailor.description.AtomDescription;
 import tailor.description.ChainDescription;
 import tailor.description.Description;
 import tailor.description.DescriptionGenerator;
 import tailor.description.GroupDescription;
-import tailor.measurement.AngleMeasure;
-import tailor.measurement.DistanceMeasure;
-import tailor.measurement.HBondMeasure;
-import tailor.measurement.Measure;
-import tailor.measurement.PropertyMeasure;
-import tailor.measurement.TorsionMeasure;
-import tailor.run.Pipe;
-import tailor.run.Run;
+import tailor.description.atom.AtomAngleRangeDescription;
+import tailor.description.atom.AtomDistanceRangeDescription;
+import tailor.description.atom.AtomTorsionRangeDescription;
+import tailor.description.atom.HBondDescription;
+import tailor.engine.Run;
+import tailor.measure.AtomAngleMeasure;
+import tailor.measure.AtomDistanceMeasure;
+import tailor.measure.AtomTorsionMeasure;
+import tailor.measure.HBondMeasure;
 
 /**
  * Main script parser and translator
@@ -147,39 +144,25 @@ public class Script {
         "float", Double.class
     );
     
-    // Level name to description class mapping
-    private static final Map<String, Class<? extends Description>> LEVEL_NAME_DICT = Map.of(
-        "Chain", ChainDescription.class,
-        "Residue", GroupDescription.class,
-        "Atom", AtomDescription.class
-    );
-    
-    // Description to sub-description mapping
-    private static final Map<Class<? extends Description>, Class<? extends Description>> 
-        DESC_TO_SUB_DESC_MAP = Map.of(
-            ChainDescription.class, GroupDescription.class,
-            GroupDescription.class, AtomDescription.class
-        );
-    
     // Keyword to condition mapping
-    private static final Map<String, Class<? extends AtomListCondition>> KEYWORD_TO_CONDITION_MAP = Map.of(
+    private static final Map<String, Class<? extends AtomListDescription>> KEYWORD_TO_CONDITION_MAP = Map.of(
     		// TODO
 //        "chainID", PropertyCondition.class,
 //        "chainType", PropertyCondition.class,
 //        "position", PropertyCondition.class,
 //        "resname", PropertyCondition.class,
-        "distance-bound", AtomDistanceRangeCondition.class,
-        "angle-bound", AtomAngleRangeCondition.class,
-        "torsion-bound", AtomTorsionRangeCondition.class,
-        "hydrogen-bond", HBondCondition.class
+        "distance-bound", AtomDistanceRangeDescription.class,
+        "angle-bound", AtomAngleRangeDescription.class,
+        "torsion-bound", AtomTorsionRangeDescription.class,
+        "hydrogen-bond", HBondDescription.class
     );
     
     // Measure type mapping
-    private static final Map<String, Class<? extends Measure>> MEASURE_DICT = Map.of(
-        "Property", PropertyMeasure.class,
-        "Distance", DistanceMeasure.class,
-        "Angle", AngleMeasure.class,
-        "Torsion", TorsionMeasure.class,
+    private static final Map<String, Class<? extends AtomListMeasure>> MEASURE_DICT = Map.of(
+//        "Property", PropertyMeasure.class,	// TODO
+        "Distance", AtomDistanceMeasure.class,
+        "Angle", AtomAngleMeasure.class,
+        "Torsion", AtomTorsionMeasure.class,
         "HBond", HBondMeasure.class
     );
     
@@ -298,7 +281,7 @@ public class Script {
      * Translate parsed script into a Run object
      */
     public static Run translate(ParsedScript parsed) {
-        Description motifDescription;
+        ChainDescription motifDescription;
         
         if (parsed.motifDescription != null && parsed.motifDescription.startsWith("PREDEFINED")) {
             motifDescription = lookupMotif(parsed.motifDescription);
@@ -309,11 +292,13 @@ public class Script {
         List<String> filenames = parsed.filenames != null ? 
             parsed.filenames : new ArrayList<>();
         
-        List<Measure> measureList = makeMeasures(motifDescription, parsed.measures);
+        List<AtomListMeasure> measureList = makeMeasures(motifDescription, parsed.measures);
         
-        List<Pipe> pipes = List.of(new Pipe(motifDescription, measureList, System.out));
-        
-        return new Run(pipes, parsed.filepath, filenames);
+        // TODO
+//        List<Pipe> pipes = List.of(new Pipe(motifDescription, measureList, System.out));
+//        
+//        return new Run(pipes, parsed.filepath, filenames);
+        return new Run();
     }
     
     /**
@@ -327,35 +312,25 @@ public class Script {
     /**
      * Create a motif description from parsed levels
      */
-    public static Description makeMotif(List<LevelText> levelTexts) {
-        Description motifDescription = null;
+    public static ChainDescription makeMotif(List<LevelText> levelTexts) {
+    	LevelText first = levelTexts.get(0);	// TODO use a stack?
+    	assert first.levelName.equals("Chain");
+    	ChainDescription chainDescription = new ChainDescription();
+    	// TODO first.properties ...
+    	return makeChainMotif(chainDescription, levelTexts.subList(1, levelTexts.size()));
+    }
+    	
+    private static ChainDescription makeChainMotif(ChainDescription chainDescription, List<LevelText> levelTexts) {	
+        ChainDescription motifDescription = null;
         Description currentLevel = null;
         Class<? extends Description> currentLevelSubType = null;
         
         // Create the Description hierarchy with PropertyConditions
         for (LevelText levelText : levelTexts) {
             try {
-                // Create a Description object of the appropriate type
-                Class<? extends Description> levelClass = LEVEL_NAME_DICT.get(levelText.levelName);
-                Description level = levelClass.getDeclaredConstructor(Map.class)
-                    .newInstance(new HashMap<>());
-                
-                // Add to motif description
-                if (motifDescription == null) {
-                    motifDescription = level;
-                    currentLevel = motifDescription;
-                    currentLevelSubType = DESC_TO_SUB_DESC_MAP.get(levelClass);
-                } else {
-                    if (level.getClass() == currentLevelSubType) {
-                        currentLevel.addSubDescription(level);
-                    }
-                }
-                
                 // Add backbone atoms for Residue level
                 if ("Residue".equals(levelText.levelName)) {
-                    for (String name : Arrays.asList("N", "CA", "C", "O")) {
-                        ((GroupDescription) level).addAtomDescription(name);
-                    }
+                  GroupDescription group = createResidue(new GroupDescription());
                 }
                 
                 // Setup PropertyConditions
@@ -369,27 +344,43 @@ public class Script {
 //                        level.addCondition(new PropertyCondition(key, value));
 //                    }
                 }
-                
             } catch (Exception e) {
                 throw new RuntimeException("Error creating description: " + e.getMessage(), e);
             }
         }
         
         // Second pass: create Conditions that rely on the Description tree
+        doStuff(motifDescription, levelTexts);
+        
+        return motifDescription;
+    }
+    
+    private static GroupDescription createResidue(GroupDescription groupDescription) {
+    	// TODO - use DescriptionFactory?
+    	  for (String name : Arrays.asList("N", "CA", "C", "O")) {
+    		  groupDescription.addAtomDescription(new AtomDescription(name));
+          }
+    	  return groupDescription;
+    }
+    
+    private static void doStuff(ChainDescription chainDescription, List<LevelText> levelTexts) {
+    	
         for (LevelText levelText : levelTexts) {
             for (PropertyText prop : levelText.properties) {
                 String key = prop.attributeName;
                 
-                Class<? extends AtomListCondition> conditionClass = KEYWORD_TO_CONDITION_MAP.get(key);
+                Class<? extends AtomListDescription> conditionClass = KEYWORD_TO_CONDITION_MAP.get(key);
 //                if (conditionClass != null && conditionClass != PropertyCondition.class) {
                 if (conditionClass != null ) { // TODO
                     try {
-                        List<Object> params = makeSelections(motifDescription, prop.selections);
-                        params.addAll(prop.values.subList(prop.selections.size(), prop.values.size()));
+                        List<AtomDescription> params = makeSelections(chainDescription, prop.selections);
+                        
+                        // TODO - adding property values to params?
+//                        params.addAll(prop.values.subList(prop.selections.size(), prop.values.size()));
                         
                         // Create condition instance
-                        AtomListCondition condition = createCondition(conditionClass, params);
-                        motifDescription.addCondition(condition);
+                        AtomListDescription condition = createCondition(conditionClass, params);
+                        chainDescription.addAtomListDescriptions(condition);
                         
                     } catch (Exception e) {
                         throw new RuntimeException("Error creating condition: " + e.getMessage(), e);
@@ -397,26 +388,21 @@ public class Script {
                 }
             }
         }
-        
-        return motifDescription;
     }
     
     /**
      * Create selections from motif definition
      */
-    public static List<Object> makeSelections(Description motifDefinition, 
-                                             List<Selection> selectionTexts) {
-        List<Object> selectionList = new ArrayList<>();
-        
-        // XXX TODO - how do we know this works?
-        ChainDescription chainDescription = (ChainDescription) motifDefinition;
+    public static List<AtomDescription> makeSelections(
+    		ChainDescription chainDescription, List<Selection> selectionTexts) {
+        List<AtomDescription> selectionList = new ArrayList<>();
         
         for (Selection selection : selectionTexts) {
             int residueNumber = selection.residueNumber;
             String atomName = selection.atomName;
             
-            GroupDescription selectedResidue = chainDescription.selectResidue(residueNumber);
-            Description selectedAtom = selectedResidue.getAtomDescription(atomName);
+            GroupDescription selectedResidue = selectGroupByNumber(chainDescription, residueNumber);
+            AtomDescription selectedAtom = selectedResidue.getAtomDescription(atomName);
             
             selectionList.add(selectedAtom);
         }
@@ -424,32 +410,30 @@ public class Script {
         return selectionList;
     }
     
+    private static GroupDescription selectGroupByNumber(ChainDescription chainDescription, int residueNumber) {
+    	// TODO - this matches on 'residueNumber', not index!
+    	return chainDescription.getGroupDescriptions()
+    			.stream().filter(g -> g.getIndex() == residueNumber).findFirst().orElseThrow();
+    }
+    
     /**
      * Create measures from parsed measure text
      */
-    public static List<Measure> makeMeasures(Description motifDefinition, 
-                                            List<MeasureText> measureTexts) {
-        List<Measure> measures = new ArrayList<>();
+    public static List<AtomListMeasure> makeMeasures(
+    		ChainDescription chainDescription, List<MeasureText> measureTexts) {
+        List<AtomListMeasure> measures = new ArrayList<>();
         
-        // XXX TODO - how do we know this works?
-        ChainDescription chainDescription = (ChainDescription) motifDefinition;
         
         for (MeasureText measureText : measureTexts) {
             try {
                 if ("Property".equals(measureText.measureType)) {
-                    PropertyMeasureText pmt = (PropertyMeasureText) measureText;
-                    Description selected = chainDescription.selectResidue(pmt.residueNumber);
-                    Class valueType = TYPE_DICT.get(pmt.valueType);
-                    
-                    Measure measure = new PropertyMeasure(selected, pmt.property, valueType);
-                    measures.add(measure);
-                    
+                    measures.add(createPropertyMeasure(chainDescription, measureText));
                 } else {
                     GeometricMeasureText gmt = (GeometricMeasureText) measureText;
-                    List<Object> selections = makeSelections(motifDefinition, gmt.selections);
+                    List<AtomDescription> selections = makeSelections(chainDescription, gmt.selections);
                     
-                    Class<? extends Measure> measureClass = MEASURE_DICT.get(gmt.measureType);
-                    Measure measure = createMeasure(measureClass, selections);
+                    Class<? extends AtomListMeasure> measureClass = MEASURE_DICT.get(gmt.measureType);
+                    AtomListMeasure measure = createMeasure(measureClass, selections);
                     measures.add(measure);
                 }
             } catch (Exception e) {
@@ -460,11 +444,21 @@ public class Script {
         return measures;
     }
     
+    private static AtomListMeasure createPropertyMeasure(ChainDescription chainDescription, MeasureText measureText) {
+    	// TODO
+//    	 PropertyMeasureText pmt = (PropertyMeasureText) measureText;
+//         Description selected = chainDescription.selectResidue(pmt.residueNumber);
+//         Class valueType = TYPE_DICT.get(pmt.valueType);
+//         
+//         AtomListMeasure measure = new PropertyMeasure(selected, pmt.property, valueType);
+    	return null;
+    }
+    
     /**
      * Helper method to create condition instances
      */
-    private static AtomListCondition createCondition(Class<? extends AtomListCondition> conditionClass, 
-                                            List<Object> params) throws Exception {
+    private static AtomListDescription createCondition(
+    		Class<? extends AtomListDescription> conditionClass, List<AtomDescription> params) throws Exception {
         // Use reflection to find appropriate constructor
         Class<?>[] paramTypes = params.stream()
             .map(Object::getClass)
@@ -477,8 +471,8 @@ public class Script {
     /**
      * Helper method to create measure instances
      */
-    private static Measure createMeasure(Class<? extends Measure> measureClass, 
-                                        List<Object> params) throws Exception {
+    private static AtomListMeasure createMeasure(Class<? extends AtomListMeasure> measureClass, 
+                                        		 List<AtomDescription> params) throws Exception {
         Class<?>[] paramTypes = params.stream()
             .map(Object::getClass)
             .toArray(Class<?>[]::new);

@@ -4,9 +4,9 @@ import java.util.List;
 
 import javax.swing.JProgressBar;
 
+import tailor.api.AtomListMeasure;
 import tailor.app.FileDataTableModel;
-import tailor.measurement.Measure;
-import tailor.measurement.Measurement;
+import tailor.engine.plan.Result;
 
 public class GuiResultsPrinter implements ResultsPrinter {
 	
@@ -24,12 +24,12 @@ public class GuiResultsPrinter implements ResultsPrinter {
 		this.progressBar = progressBar;
 	}
 	
-	public void printHeader(List<Measure<? extends Measurement>> measures) {
+	public void printHeader(List<AtomListMeasure> measures) {
 		String[] headers = new String[measures.size() + 2];
 		headers[0] = "pdbid";
 		headers[1] = "motif";
 		int h = 2;
-		for (Measure<? extends Measurement> measure : measures) {
+		for (AtomListMeasure measure : measures) {
 			headers[h] = measure.getName();
 			h++;
 		}

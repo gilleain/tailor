@@ -17,21 +17,19 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
-import tailor.api.AtomListCondition;
+import tailor.api.AtomListDescription;
+import tailor.api.AtomListMeasure;
 import tailor.api.Torsion;
-import tailor.condition.atom.AtomTorsionRangeCondition;
-import tailor.condition.atom.HBondCondition;
 import tailor.datasource.xml.XmlDescriptionReader;
 import tailor.description.AtomDescription;
 import tailor.description.ChainDescription;
-import tailor.description.Description;
 import tailor.description.DescriptionFactory;
 import tailor.description.GroupDescription;
-import tailor.description.ProteinDescription;
+import tailor.description.atom.AtomTorsionRangeDescription;
+import tailor.description.atom.HBondDescription;
 import tailor.editor.symbol.Symbol;
-import tailor.measurement.HBondMeasure;
-import tailor.measurement.Measure;
-import tailor.measurement.TorsionMeasure;
+import tailor.measure.AtomTorsionMeasure;
+import tailor.measure.HBondMeasure;
 
 public class ResidueDiagramEditor extends JPanel implements SymbolSelectionListener {
 	
@@ -120,6 +118,11 @@ public class ResidueDiagramEditor extends JPanel implements SymbolSelectionListe
 		this.conditionPropertySheetPanel.initialiseTorsionSheet(Torsion.PHI);
 	}
 	
+	public ResidueDiagramEditor(ChainDescription description) {
+		this();
+		setDescription(description);
+	}
+
 	private ChainDescription makeChain(int numberOfResidues) {
 	    this.factory.addChainToProtein("A");
         this.factory.addMultipleResiduesToChain("A", numberOfResidues);
@@ -150,21 +153,19 @@ public class ResidueDiagramEditor extends JPanel implements SymbolSelectionListe
 		}
 	}
 	
-	public void setDescription(Description description) {
-		ProteinDescription p = (ProteinDescription) description;
-		this.canvas.createFromDescription(p);
-		for (ChainDescription chain : p.getChainDescriptions()) {
-			for (AtomListCondition condition : chain.getConditions()) {
-				this.conditionListBox.addConditionToList(condition);
-			}
+	public void setDescription(ChainDescription chainDescription) {
+		this.canvas.createFromDescription(chainDescription);
+		for (AtomListDescription atomListDescription : chainDescription.getAtomListDescriptions()) {
+			this.conditionListBox.addConditionToList(atomListDescription);
 		}
 	}
 	
-	public ProteinDescription getDescription() {
-		return this.factory.getProduct();
+	public ChainDescription getDescription() {
+//		return this.factory.getProduct();
+		return null;	// TODO
 	}
 	
-	public List<Measure<?>> getMeasures() {
+	public List<AtomListMeasure> getMeasures() {
 		return this.measureListBox.getMeasures();
 	}
 	
@@ -192,7 +193,7 @@ public class ResidueDiagramEditor extends JPanel implements SymbolSelectionListe
         ChainDescription chain = factory.getChainDescription("A");  
         
         int index = chain.getGroupDescriptions().size() - 1;
-        GroupDescription group = chain.getGroupDescription(index);
+        GroupDescription group = chain.getGroupDescriptions().get(index);
 		
 		// update the display and the model
 		this.canvas.addResidueToEnd(group);
@@ -214,7 +215,8 @@ public class ResidueDiagramEditor extends JPanel implements SymbolSelectionListe
 		
 		// TODO : >1 chain?
         ChainDescription chain = factory.getChainDescription("A");
-        chain.removeLastGroupDescription();
+        int lastIndex = chain.getGroupDescriptions().size() - 1;
+        chain.getGroupDescriptions().remove(lastIndex);
 		
 		// repaint changes
 		this.canvas.calculateDimensions(6); //FIXME
@@ -251,17 +253,17 @@ public class ResidueDiagramEditor extends JPanel implements SymbolSelectionListe
 			
 
 			String startAtomLabel = this.previouslySelectedSymbol.getLabel();
-			HBondCondition hBondCondition;
+			HBondDescription hBondDescription;
 			if (startAtomLabel.equals("O")) {	// endAtomType must be "N"
 				this.conditionPropertySheetPanel.setHBondSheetResidues(endNum + 1, startNum + 1);
-				hBondCondition = this.conditionPropertySheetPanel.getHBondCondition(endNum, startNum);
+				hBondDescription = this.conditionPropertySheetPanel.getHBondCondition(endNum, startNum);
 			} else {							// endAtomType must be "O"
 				this.conditionPropertySheetPanel.setHBondSheetResidues(startNum + 1, endNum + 1);
-				hBondCondition = this.conditionPropertySheetPanel.getHBondCondition(startNum, endNum);
+				hBondDescription = this.conditionPropertySheetPanel.getHBondCondition(startNum, endNum);
 			}
-			factory.addHBondConditionToChain(hBondCondition, "A");
+			factory.addHBondConditionToChain(hBondDescription, "A");
 
-			this.conditionListBox.addConditionToList(hBondCondition);
+			this.conditionListBox.addConditionToList(hBondDescription);
 			this.diagramPropertyPanel.incrementNumberOfHBondConditions();
 
 			this.canvas.makeBond(this.previouslySelectedSymbol, 
@@ -312,7 +314,7 @@ public class ResidueDiagramEditor extends JPanel implements SymbolSelectionListe
 		int residueNumber = newlySelectedSymbol.getResidueIndex();
 		this.conditionPropertySheetPanel.setTorsionSheetResidue(Torsion.PHI, residueNumber, residueNumber + 1);
 		
-		AtomTorsionRangeCondition torsionCondition = this.conditionPropertySheetPanel.getTorsionCondition(residueNumber);
+		AtomTorsionRangeDescription torsionCondition = this.conditionPropertySheetPanel.getTorsionCondition(residueNumber);
 		// TODO
 //		factory.addPhiConditionToChain(torsionCondition, "A");
 		
@@ -329,7 +331,7 @@ public class ResidueDiagramEditor extends JPanel implements SymbolSelectionListe
 		int residueNumber = newlySelectedSymbol.getResidueIndex();
 		this.measurePropertySheetPanel.setTorsionSheetResidue(Torsion.PHI, residueNumber, residueNumber + 1);
 		
-		TorsionMeasure torsionMeasure = this.measurePropertySheetPanel.getTorsionMeasure(residueNumber);
+		AtomTorsionMeasure torsionMeasure = this.measurePropertySheetPanel.getTorsionMeasure(residueNumber);
 		factory.addTorsionMeasureToChain(torsionMeasure, "A");
 		this.showTorsionMeasure(torsionMeasure);
 		
@@ -340,10 +342,9 @@ public class ResidueDiagramEditor extends JPanel implements SymbolSelectionListe
 		int residueNumber = newlySelectedSymbol.getResidueIndex();
 		this.conditionPropertySheetPanel.setTorsionSheetResidue(Torsion.PSI, residueNumber + 1, residueNumber + 2);
 		
-		AtomTorsionRangeCondition torsionCondition = 
+		AtomTorsionRangeDescription torsionCondition = 
 		        this.conditionPropertySheetPanel.getTorsionCondition(residueNumber);
-		// TODO
-//		factory.addPsiConditionToChain(torsionCondition, "A");
+		factory.addPsiConditionToChain(torsionCondition, "A");
 		this.showTorsionCondition(torsionCondition);
 		
 		// TODO
@@ -357,19 +358,19 @@ public class ResidueDiagramEditor extends JPanel implements SymbolSelectionListe
 		int residueNumber = newlySelectedSymbol.getResidueIndex();
 		this.measurePropertySheetPanel.setTorsionSheetResidue(Torsion.PSI, residueNumber + 1, residueNumber + 2);
 		
-		TorsionMeasure torsionMeasure = this.measurePropertySheetPanel.getTorsionMeasure(residueNumber);
+		AtomTorsionMeasure torsionMeasure = this.measurePropertySheetPanel.getTorsionMeasure(residueNumber);
 		factory.addTorsionMeasureToChain(torsionMeasure, "A");
 		this.showTorsionMeasure(torsionMeasure);
 		
 		this.canvas.makePsi(residueNumber, "\u03C8?", Symbol.Stroke.DOTTED);
 	}
 	
-	private void showTorsionCondition(AtomTorsionRangeCondition torsionCondition) {
+	private void showTorsionCondition(AtomTorsionRangeDescription torsionCondition) {
 		this.conditionListBox.addConditionToList(torsionCondition);
 		this.diagramPropertyPanel.incrementNumberOfTorsionConditions();
 	}
 	
-	private void showTorsionMeasure(TorsionMeasure torsionMeasure) {
+	private void showTorsionMeasure(AtomTorsionMeasure torsionMeasure) {
 		this.measureListBox.addMeasureToList(torsionMeasure);
 		this.diagramPropertyPanel.incrementNumberOfTorsionConditions(); // TODO : FIXME
 	}
@@ -432,8 +433,8 @@ public class ResidueDiagramEditor extends JPanel implements SymbolSelectionListe
 	
 	public void loadMotifFile(File file) {
         XmlDescriptionReader reader = new XmlDescriptionReader();
-        Description description = reader.readDescription(file);
-        this.canvas.createFromDescription((ProteinDescription)description);
+        ChainDescription description = reader.readDescription(file);
+        this.canvas.createFromDescription(description);
     }
 	
 	public void processCommandLineArguments(String[] args) {

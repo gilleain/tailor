@@ -1,8 +1,8 @@
 package tailor.condition.atom;
 
 import tailor.condition.AtomUpperBoundCondition;
-import tailor.experiment.description.DescriptionPath;
-import tailor.experiment.measure.AtomAngleMeasure;
+import tailor.description.DescriptionPath;
+import tailor.measure.AtomAngleMeasure;
 
 public class AtomAngleCondition extends AtomUpperBoundCondition {
 	

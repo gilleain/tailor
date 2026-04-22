@@ -3,79 +3,83 @@ package tailor.datasource.xml;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.Optional;
 
-import tailor.api.AtomListCondition;
+import tailor.api.AtomListDescription;
 import tailor.description.AtomDescription;
 import tailor.description.ChainDescription;
-import tailor.description.Description;
 import tailor.description.GroupDescription;
 import tailor.description.ProteinDescription;
-import tailor.structure.Level;
 
 public class XmlDescriptionWriter {
 	
-	public static void writeToFile(File file, Description description) throws IOException {
+	public static void writeToFile(File file, ChainDescription description) throws IOException {
 		FileWriter writer = new FileWriter(file);
-		XmlDescriptionWriter.writeDescription(description, writer);
+		XmlDescriptionWriter.writeChainDescription(description, writer);
 		writer.flush();
 	}
 	
-	private static void writeDescription(Description description, FileWriter writer) 
-						throws IOException {
-		Level level = description.getLevel(); 
-		if (level == Level.PROTEIN) {
-			ProteinDescription p = (ProteinDescription) description; 
-			writer.write(String.format("<ProteinDescription name=\"%s\">\n", p.getName()));
-			for (ChainDescription chain : p.getChainDescriptions()) {
-				XmlDescriptionWriter.writeDescription(chain, writer);
-			}
-			writer.write("</ProteinDescription>\n");
-		} else if (level == Level.CHAIN) {
-			ChainDescription c = (ChainDescription) description;
-			writer.write("\t");
-			writer.write(String.format("<ChainDescription name=\"%s\">\n", c.getName()));
-			for (GroupDescription group : c.getGroupDescriptions()) {
-				XmlDescriptionWriter.writeDescription(group, writer);
-			}
-			for (AtomListCondition condition : c.getConditions()) {
-				XmlDescriptionWriter.writeCondition(condition, writer);
-			}
-			writer.write("\t</ChainDescription>\n");
-		} else if (level == Level.RESIDUE) {
-			GroupDescription g = (GroupDescription) description;
-			writer.write("\t\t");
-			String name = g.getName();
-			String out;
-			if (name == null) {
-				out = String.format("" +"<GroupDescription name=\"%s\">","*");
-			} else {
-				out = String.format("<GroupDescription name=\"%s\">", name);
-			}
-			writer.write(out + "\n");
-			for (AtomDescription atom : g.getAtomDescriptions()) {
-				XmlDescriptionWriter.writeDescription(atom, writer);
-			}
-			writer.write("\t\t</GroupDescription>\n");
-		} else if (level == Level.ATOM) {
-			AtomDescription a = (AtomDescription) description;
-			writer.write("\t\t\t");
-			writer.write(String.format("<AtomDescription name=\"%s\"/>\n", a.getName()));
+	private static void writeProteinDescription(ProteinDescription p, FileWriter writer) throws IOException {
+		writer.write(String.format("<ProteinDescription name=\"%s\">\n", p.getName()));
+		for (ChainDescription chain : p.getChainDescriptions()) {
+			XmlDescriptionWriter.writeChainDescription(chain, writer);
 		}
+		writer.write("</ProteinDescription>\n");
 	}
 	
-	private static void writeCondition(AtomListCondition condition, FileWriter writer) 
+	private static void writeChainDescription(ChainDescription c, FileWriter writer) throws IOException {
+		writer.write("\t");
+		Optional<String> label = c.getLabel();
+		if (label.isPresent()) {
+			writer.write(String.format("<ChainDescription name=\"%s\">\n", label.get()));
+		} else {
+			writer.write("<ChainDescription>\n");
+		}
+		for (GroupDescription group : c.getGroupDescriptions()) {
+			XmlDescriptionWriter.writeGroupDescription(group, writer);
+		}
+		for (AtomListDescription condition : c.getAtomListDescriptions()) {
+			XmlDescriptionWriter.writeCondition(condition, writer);
+		}
+		writer.write("\t</ChainDescription>\n");
+	}
+	
+	private static void writeGroupDescription(GroupDescription g, FileWriter writer) throws IOException {
+		writer.write("\t\t");
+		Optional<String> label = g.getLabel();
+		String out;
+		if (label.isEmpty()) {
+			out = String.format("" +"<GroupDescription name=\"%s\">","*");
+		} else {
+			out = String.format("<GroupDescription name=\"%s\">", label.get());
+		}
+		writer.write(out + "\n");
+		for (AtomDescription atom : g.getAtomDescriptions()) {
+			XmlDescriptionWriter.writeAtomDescription(atom, writer);
+		}
+		writer.write("\t\t</GroupDescription>\n");
+	}
+	
+	private static void writeAtomDescription(AtomDescription description, FileWriter writer) throws IOException {
+		AtomDescription a = (AtomDescription) description;
+		writer.write("\t\t\t");
+		writer.write(String.format("<AtomDescription name=\"%s\"/>\n", a.getLabel()));
+	}
+	
+	
+	private static void writeCondition(AtomListDescription condition, FileWriter writer) 
 						throws IOException {
 		writer.write(toXML(condition));
 	}
 	
-	private static String toXML(AtomListCondition atomListCondition) {
+	private static String toXML(AtomListDescription atomListCondition) {
 		return null;	// TODO
 	}
 	
 	public static void main(String[] args) {
 		try {
 			XmlDescriptionReader reader = new XmlDescriptionReader(); 
-			Description description = reader.readDescription(new File(args[0]));
+			ChainDescription description = reader.readDescription(new File(args[0]));
 			XmlDescriptionWriter.writeToFile(new File(args[1]), description);
 		} catch (IOException ioe) {
 			System.err.println(ioe);

@@ -6,8 +6,8 @@ import javax.swing.JPanel;
 
 import tailor.api.Torsion;
 import tailor.description.DescriptionFactory;
-import tailor.measurement.HBondMeasure;
-import tailor.measurement.TorsionMeasure;
+import tailor.measure.AtomTorsionMeasure;
+import tailor.measure.HBondMeasure;
 
 public class MeasurePropertySheetPanel extends JPanel {
 	
@@ -45,7 +45,7 @@ public class MeasurePropertySheetPanel extends JPanel {
 		this.torsionSheet.setValues(torsion, start, end);
 	}
 	
-	public TorsionMeasure getTorsionMeasure(int residueNumber) {
+	public AtomTorsionMeasure getTorsionMeasure(int residueNumber) {
 		return this.torsionSheet.getMeasure(residueNumber);
 	}
 	

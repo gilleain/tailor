@@ -12,24 +12,23 @@ import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.ListCellRenderer;
 
-import tailor.description.Description;
-import tailor.description.ProteinDescription;
+import tailor.description.ChainDescription;
 
-public class DiagramListCellRenderer extends JLabel implements ListCellRenderer<Description> {
+public class DiagramListCellRenderer extends JLabel implements ListCellRenderer<ChainDescription> {
 	
 	private final int w;
 	private final int h;
-	private HashMap<Description, ImageIcon> unselectedIconMap;
-	private HashMap<Description, ImageIcon> selectedIconMap;
+	private HashMap<ChainDescription, ImageIcon> unselectedIconMap;
+	private HashMap<ChainDescription, ImageIcon> selectedIconMap;
 	
-	public DiagramListCellRenderer(int w, int h, List<Description> descriptions) {
+	public DiagramListCellRenderer(int w, int h, List<ChainDescription> descriptions) {
 		this.w = w;
 		this.h = h;
 		this.unselectedIconMap = new HashMap<>();
 		this.selectedIconMap = new HashMap<>();
-		for (Description description : descriptions) {
+		for (ChainDescription description : descriptions) {
 			ResidueDiagram diagram = new ResidueDiagram();
-			diagram.createFromDescription((ProteinDescription)description);
+			diagram.createFromDescription(description);
 			diagram.setDrawLabels(false);
 			diagram.fitToSize(w, h);
 			
@@ -65,8 +64,8 @@ public class DiagramListCellRenderer extends JLabel implements ListCellRenderer<
 	}
 	
 	public Component getListCellRendererComponent(
-		       JList<? extends Description> list,
-		       Description value,            // value to display
+		       JList<? extends ChainDescription> list,
+		       ChainDescription value,            // value to display
 		       int index,               // cell index
 		       boolean isSelected,      // is the cell selected
 		       boolean cellHasFocus) {   // the list and the cell have the focus

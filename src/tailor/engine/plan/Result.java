@@ -288,5 +288,9 @@ public class Result {
 		groupNode.children.add(new Node(Level.ATOM, atom));
 	}
 
+	public List<Measurement> getMeasurements() {
+		return this.measurements;
+	}
+
 
 }

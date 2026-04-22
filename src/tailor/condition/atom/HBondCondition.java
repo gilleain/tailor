@@ -4,7 +4,7 @@ import java.util.List;
 
 import tailor.api.AtomListCondition;
 import tailor.condition.AtomPartition;
-import tailor.experiment.description.DescriptionPath;
+import tailor.description.DescriptionPath;
 
 /**
  * Hydrogen bond defined by D-H...A-AA :

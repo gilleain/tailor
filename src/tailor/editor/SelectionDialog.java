@@ -18,7 +18,8 @@ import javax.swing.JRadioButton;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 
-import tailor.description.Description;
+import tailor.description.ChainDescription;
+import tailor.description.DescriptionPath;
 
 
 /**
@@ -37,7 +38,7 @@ public class SelectionDialog extends JDialog implements ActionListener, TreeSele
     
     private JRadioButton[] radioButtons;
     
-    private List<Description> selectedDescriptions;
+    private List<DescriptionPath> selectedDescriptions;
     
     private JComboBox<String> typeSelector;
     
@@ -47,7 +48,7 @@ public class SelectionDialog extends JDialog implements ActionListener, TreeSele
     
     private boolean isComplete;
     
-    public SelectionDialog(Description description, JDialog parent, String title) {
+    public SelectionDialog(ChainDescription description, JDialog parent, String title) {
         super(parent, title, true);
         
         this.tree = new DescriptionTreeView(description);
@@ -125,12 +126,12 @@ public class SelectionDialog extends JDialog implements ActionListener, TreeSele
     
     public void valueChanged(TreeSelectionEvent tse) {
         // ask the tree for a new path object
-        Description path = this.tree.createPathToSelected();
+        DescriptionPath path = this.tree.createPathToSelected();
         
         if (path != null) {
             int buttonIndex = getSelectedRadioButtonIndex();
             this.selectedDescriptions.set(buttonIndex, path);
-            this.radioButtons[buttonIndex].setText(path.toPathString());
+            this.radioButtons[buttonIndex].setText(path.toString());
             this.checkCompletionStatus();
         }
     }
@@ -200,7 +201,7 @@ public class SelectionDialog extends JDialog implements ActionListener, TreeSele
         return (String) this.typeSelector.getSelectedItem();
     }
     
-    public List<Description> getDescriptions() {
+    public List<DescriptionPath> getDescriptions() {
         return this.selectedDescriptions;
     }
     

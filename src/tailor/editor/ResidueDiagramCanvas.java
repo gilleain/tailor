@@ -62,6 +62,11 @@ public class ResidueDiagramCanvas extends JPanel implements MouseListener, Scrol
 		this.calculateDimensions(this.numberOfResiduesInView);
 	}
 	
+	public void createFromDescription(ChainDescription chainDescription) {
+		this.diagram = new ResidueDiagram(chainDescription);
+		this.calculateDimensions(this.numberOfResiduesInView);
+	}
+
 	public AtomDescription getAtomDescriptionFromSymbol(Symbol symbol) {
 		return this.diagram.getAtomDescriptionFromSymbol(symbol);
 	}
@@ -115,8 +120,8 @@ public class ResidueDiagramCanvas extends JPanel implements MouseListener, Scrol
 		
 		ChainDescription chain = factory.getChainDescription("A");	// TODO : >1 chain?
 		int symbolIndex = 0;
-		for (int residueNumber = 0; residueNumber < chain.size(); residueNumber++) {
-			GroupDescription group = chain.getGroupDescription(residueNumber);
+		for (int residueNumber = 0; residueNumber < chain.getGroupDescriptions().size(); residueNumber++) {
+			GroupDescription group = chain.getGroupDescriptions().get(residueNumber);
 			map.put(symbols.get(symbolIndex++), group.getAtomDescription("N"));
 			map.put(symbols.get(symbolIndex++), group.getAtomDescription("CA"));
 			map.put(symbols.get(symbolIndex++), group.getAtomDescription("O"));

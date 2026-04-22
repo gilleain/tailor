@@ -4,13 +4,12 @@ import org.xml.sax.Attributes;
 
 import tailor.datasource.xml.DescriptionParseException;
 import tailor.description.ChainDescription;
-import tailor.description.Description;
 import tailor.description.ProteinDescription;
 
 public class ChainDescriptionXmlHandler implements DescriptionXmlHandler {
     
     @Override
-    public Description create(Attributes attrs, Description parent) throws DescriptionParseException {
+    public ChainDescription create(Attributes attrs, Object parent) throws DescriptionParseException {
         if (parent instanceof ProteinDescription) {
             ProteinDescription proteinDescription = (ProteinDescription) parent; 
             ChainDescription chainDescription = new ChainDescription(attrs.getValue("name"));

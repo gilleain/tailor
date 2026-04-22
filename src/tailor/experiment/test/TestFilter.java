@@ -8,6 +8,7 @@ import org.junit.Test;
 
 import tailor.condition.atom.AtomAngleCondition;
 import tailor.condition.atom.AtomDistanceCondition;
+import tailor.description.GroupDescription;
 import tailor.engine.operator.CombineResults;
 import tailor.engine.operator.FilterAtomResultByCondition;
 import tailor.engine.operator.GroupSource;
@@ -15,7 +16,6 @@ import tailor.engine.operator.PrintAdapter;
 import tailor.engine.operator.PrintResults;
 import tailor.engine.operator.ResultPipe;
 import tailor.engine.operator.ScanAtomResultByLabel;
-import tailor.experiment.description.GroupDescription;
 import tailor.structure.Chain;
 
 public class TestFilter {

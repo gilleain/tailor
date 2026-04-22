@@ -3,8 +3,8 @@ package tailor.condition.atom;
 import java.util.List;
 
 import tailor.condition.AtomUpperBoundCondition;
-import tailor.experiment.description.DescriptionPath;
-import tailor.experiment.measure.AtomDistanceMeasure;
+import tailor.description.DescriptionPath;
+import tailor.measure.AtomDistanceMeasure;
 
 public class AtomDistanceCondition extends AtomUpperBoundCondition {
 	

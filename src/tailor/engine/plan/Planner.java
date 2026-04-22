@@ -12,6 +12,9 @@ import tailor.api.AtomListCondition;
 import tailor.api.AtomListDescription;
 import tailor.api.Operator;
 import tailor.api.PipeableOperator;
+import tailor.description.ChainDescription;
+import tailor.description.GroupDescription;
+import tailor.description.group.GroupSequenceDescription;
 import tailor.engine.operator.CombineResults;
 import tailor.engine.operator.CombineResults.PipeSeqConstraint;
 import tailor.engine.plan.GroupUnionFind.Component;
@@ -20,9 +23,6 @@ import tailor.engine.operator.Measurer;
 import tailor.engine.operator.PrintAdapter;
 import tailor.engine.operator.ResultPipe;
 import tailor.engine.operator.ScanAtomResultByLabel;
-import tailor.experiment.description.ChainDescription;
-import tailor.experiment.description.GroupDescription;
-import tailor.experiment.description.group.GroupSequenceDescription;
 
 /**
  * Converts a {@link ChainDescription} into a pipeline of {@link Operator}

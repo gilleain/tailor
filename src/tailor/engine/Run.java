@@ -7,12 +7,13 @@ import java.util.List;
 
 import tailor.datasource.PDBFileList;
 import tailor.datasource.StructureSource;
-import tailor.description.Description;
-import tailor.description.ProteinDescription;
+import tailor.description.ChainDescription;
 
 public class Run {
 
-	private List<Description> descriptions;
+	// TODO - potentially allow running both ProteinDescriptions and ChainDescriptions?
+	private List<ChainDescription> descriptions;	
+	
 	
 	private StructureSource structureSource;
     
@@ -30,19 +31,23 @@ public class Run {
     	}
     }
 	
-	public Run(ProteinDescription description, String path) throws IOException {
+	public Run(ChainDescription description, String path) throws IOException {
 		this(description, new PDBFileList(path));
 	}
 	
-	public Run(Description description, StructureSource structureSource) throws IOException {
+	public Run(ChainDescription description, StructureSource structureSource) throws IOException {
 	    this.descriptions.add(description);
 	    this.structureSource = structureSource;
 	}
 	
+	public void run() {
+		// TODO - the entrypoint from the Script (was python code)
+	}
+	
 	public int getMeasureCount() {
 	    int count = 0;
-	    for (Description description : this.descriptions) {
-	        count += description.getMeasures().size();
+	    for (ChainDescription description : this.descriptions) {
+	        count += description.getAtomListMeasures().size();
 	    }
 	    return count;
 	}
@@ -51,11 +56,11 @@ public class Run {
 		return this.structureSource;
 	}
     
-    public void addDescription(ProteinDescription description) {
-    	this.descriptions.add(description);
+    public void addDescription(ChainDescription description) {
+//    	this.descriptions.add(description);	// TODO
     }
     
-    public List<Description> getDescriptions() {
+    public List<ChainDescription> getDescriptions() {
     	return this.descriptions;
     }
 

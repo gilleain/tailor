@@ -26,8 +26,7 @@ import tailor.datasource.GuiResultsPrinter;
 import tailor.datasource.StructureSource;
 import tailor.datasource.xml.XmlDescriptionReader;
 import tailor.datasource.xml.XmlDescriptionWriter;
-import tailor.description.Description;
-import tailor.description.ProteinDescription;
+import tailor.description.ChainDescription;
 import tailor.editor.LibraryDialog;
 import tailor.editor.MeasureListBox;
 import tailor.engine.Engine;
@@ -123,8 +122,8 @@ public class RunFrame extends JFrame implements ActionListener, CategoryChangeLi
         	EditorDialog descriptionEditor = new EditorDialog(this);
         	
         	if (descriptionEditor.isOkay()) {
-	        	ProteinDescription newDescription = descriptionEditor.getDescription();
-	        	System.out.println("New " + newDescription.toPathString());
+	        	ChainDescription newDescription = descriptionEditor.getDescription();
+	        	System.out.println("New " + newDescription.toString());
 	        	this.setDescription(newDescription);
 	        	this.measureList.setMeasures(descriptionEditor.getMeasures());
         	} else {
@@ -139,19 +138,19 @@ public class RunFrame extends JFrame implements ActionListener, CategoryChangeLi
         	}
         	libDialog.setVisible(true);
         	if (libDialog.isOkay()) {
-        		Description description = libDialog.getDescription();
+        		ChainDescription description = libDialog.getDescription();
         		this.setDescription(description);
         	}
         } else if (command.equals("Edit Description")) {
-        	Description description = this.descriptionPanel.getDescription();
-        	Description edited = this.editDescription(description);
+        	ChainDescription description = this.descriptionPanel.getDescription();
+        	ChainDescription edited = this.editDescription(description);
         	if (!description.equals(edited)) {
         		this.descriptionPanel.setDescription(edited);
         	}
         } else if (command.equals("Save Description")) {
         	File file = this.chooseFile(false, "Save Description To Xml File");
         	try {
-        		Description description =  this.descriptionPanel.getDescription();
+        		ChainDescription description =  this.descriptionPanel.getDescription();
         		XmlDescriptionWriter.writeToFile(file, description);
         	} catch (IOException ioe) {
         	}
@@ -227,10 +226,9 @@ public class RunFrame extends JFrame implements ActionListener, CategoryChangeLi
 	public void doRun() {
 		if (this.hasDescription) {
 			try {
-			    Description description = descriptionPanel.getDescription();
-			    description.getMeasures().addAll(measureList.getMeasures());
-				Run run = new Run((ProteinDescription)description,
-						          currentRunDirectory.getText());
+			    ChainDescription description = descriptionPanel.getDescription();
+			    description.getAtomListMeasures().addAll(measureList.getMeasures());
+				Run run = new Run(description, currentRunDirectory.getText());
 			
 				int measureCount = run.getMeasureCount();
 				FileDataTableModel fileDataTableModel = new FileDataTableModel(measureCount + 2);
@@ -286,7 +284,7 @@ public class RunFrame extends JFrame implements ActionListener, CategoryChangeLi
 	
 	public void loadMotifFile(File file) throws IOException {
 		XmlDescriptionReader reader = new XmlDescriptionReader();
-		Description description = reader.readDescription(file);
+		ChainDescription description = reader.readDescription(file);
 		this.setDescription(description); 
     }
 	
@@ -303,23 +301,23 @@ public class RunFrame extends JFrame implements ActionListener, CategoryChangeLi
 		// TODO
 	}
 	
-	private void setDescription(Description description) {
+	private void setDescription(ChainDescription description) {
 		this.descriptionPanel.setDescription(description);
         this.hasDescription = true;
         this.menu.setRunItemEnabled(true);
 	}
 	
 	public void fireEditEvent() {
-		Description original = this.descriptionPanel.getDescription();
-		Description edited = this.editDescription(original);
+		ChainDescription original = this.descriptionPanel.getDescription();
+		ChainDescription edited = this.editDescription(original);
 		this.descriptionPanel.setEdited(edited);
 	}
 
-	public Description editDescription(Description description) {
+	public ChainDescription editDescription(ChainDescription description) {
 		
 		// make a copy
-		Description copyOfDescription = 
-			new ProteinDescription((ProteinDescription)description);	// XXX
+		ChainDescription copyOfDescription = null;	// TODO
+//			new ProteinDescription((ProteinDescription)description);	// XXX
 		
 		// edit the copy
 		EditorDialog descriptionEditor = new EditorDialog(this, copyOfDescription);

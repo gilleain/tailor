@@ -21,22 +21,21 @@ import javax.swing.JTextField;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 
-import tailor.description.Description;
-import tailor.description.ProteinDescription;
+import tailor.api.AtomListMeasure;
+import tailor.description.ChainDescription;
+import tailor.description.DescriptionPath;
 import tailor.editor.DescriptionTreeView;
 import tailor.editor.SelectionDialog;
 import tailor.engine.Run;
-import tailor.measurement.AngleMeasure;
-import tailor.measurement.Measure;
-import tailor.measurement.Measurement;
-import tailor.measurement.TorsionMeasure;
+import tailor.measure.AtomAngleMeasure;
+import tailor.measure.AtomTorsionMeasure;
 
 
 public class RunDialog extends JDialog implements ActionListener, TreeSelectionListener {
     
     private DescriptionTreeView treeView;
     
-    private JList<Measure<? extends Measurement>> measureList;
+    private JList<AtomListMeasure> measureList;
     
     private JTextField directoryField; 
     
@@ -46,7 +45,7 @@ public class RunDialog extends JDialog implements ActionListener, TreeSelectionL
     
     private boolean isOkay;
     
-    public RunDialog(Frame parent, Description description) {
+    public RunDialog(Frame parent, ChainDescription description) {
         super(parent, "Create Run", true);
         this.setLayout(new BorderLayout());
         
@@ -114,7 +113,7 @@ public class RunDialog extends JDialog implements ActionListener, TreeSelectionL
         this.setLocation(200, 200);
         
         this.run = new Run();
-        this.run.addDescription((ProteinDescription) description);
+        this.run.addDescription(description);
         
         this.setIsOkay(true);
     }
@@ -125,13 +124,13 @@ public class RunDialog extends JDialog implements ActionListener, TreeSelectionL
     
     public Run getRun() {
         // get the measures from the list and add to the Run
-        DefaultListModel<Measure<? extends Measurement>> model = 
-                (DefaultListModel<Measure<? extends Measurement>>) this.measureList.getModel();
+        DefaultListModel<AtomListMeasure> model = 
+                (DefaultListModel<AtomListMeasure>) this.measureList.getModel();
         for (int i = 0; i < model.size(); i++) {
-            Measure<? extends Measurement> measure = model.get(i);
+        	AtomListMeasure measure = model.get(i);
             // TODO : how do we know which description to add measures to?
-            for (Description description : run.getDescriptions()) {
-                description.addMeasure(measure);
+            for (ChainDescription description : run.getDescriptions()) {
+                description.addAtomListMeasures(measure);
             }
         }
         
@@ -162,26 +161,26 @@ public class RunDialog extends JDialog implements ActionListener, TreeSelectionL
             this.setIsOkay(false);
             this.setVisible(false);
         } else if (command.equals("Add")) {
-            Description description = this.treeView.getDescription(0);
+            ChainDescription description = this.treeView.getDescription(0);
             SelectionDialog selectionDialog = 
                 new SelectionDialog(description, this, "Create Measure");
             selectionDialog.setVisible(true);
             if (selectionDialog.isComplete()) {
-                List<Description> paths = selectionDialog.getDescriptions();
+                List<DescriptionPath> paths = selectionDialog.getDescriptions();
                 String type = selectionDialog.getCurrentlySelectedType();
-                Measure<? extends Measurement> measure;
+                AtomListMeasure measure;
                 if (type.equals("Distance")) {
                     // TODO
                     measure = null;
 //                    measure = new DistanceMeasure(paths.get(0), paths.get(1));
                 } else if (type.equals("Angle")) {
-                    measure = new AngleMeasure(paths.get(0), paths.get(1), paths.get(2));
+                    measure = new AtomAngleMeasure(paths.get(0), paths.get(1), paths.get(2));
                 } else if (type.equals("Torsion")) {
-                    measure = new TorsionMeasure(paths.get(0), paths.get(1), paths.get(2), paths.get(3));
+                    measure = new AtomTorsionMeasure(paths.get(0), paths.get(1), paths.get(2), paths.get(3));
                 } else {
                     return; // just in case
                 }
-                ((DefaultListModel<Measure<? extends Measurement>>) this.measureList.getModel()).addElement(measure);
+                ((DefaultListModel<AtomListMeasure>) this.measureList.getModel()).addElement(measure);
             }
             
         } else if (command.equals("Remove")) {

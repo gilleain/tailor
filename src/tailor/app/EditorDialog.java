@@ -11,23 +11,21 @@ import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-import tailor.description.Description;
-import tailor.description.ProteinDescription;
+import tailor.api.AtomListMeasure;
+import tailor.description.ChainDescription;
 import tailor.editor.ResidueDiagramEditor;
-import tailor.measurement.Measure;
 
 public class EditorDialog extends JDialog implements ActionListener {
 	
 	private ResidueDiagramEditor editor;
 	private boolean isOkay;
 	
-	public EditorDialog(JFrame parent, Description description) {
+	public EditorDialog(JFrame parent, ChainDescription description) {
 		super(parent, "Edit Description", true);
 		
 		this.setLayout(new BorderLayout());
 		
-		this.editor = new ResidueDiagramEditor();
-		this.editor.setDescription(description);	// inelegant!
+		this.editor = new ResidueDiagramEditor(description);
 		
 		this.add(this.editor, BorderLayout.CENTER);
 		this.createButtonPanel();
@@ -79,11 +77,11 @@ public class EditorDialog extends JDialog implements ActionListener {
 		this.add(buttonPanel, BorderLayout.SOUTH);
 	}
 	
-	public ProteinDescription getDescription() {
+	public ChainDescription getDescription() {
 		return this.editor.getDescription();
 	}
 	
-	public List<Measure<?>> getMeasures() {
+	public List<AtomListMeasure> getMeasures() {
 		return this.editor.getMeasures();
 	}
 	

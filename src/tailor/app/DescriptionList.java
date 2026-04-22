@@ -12,12 +12,12 @@ import javax.swing.ListSelectionModel;
 import javax.swing.border.Border;
 import javax.swing.event.ListSelectionListener;
 
-import tailor.description.Description;
+import tailor.description.ChainDescription;
 
 public class DescriptionList extends JPanel {
 	
 	private App app;
-	private JList<Description> list;
+	private JList<ChainDescription> list;
 	
 	public DescriptionList(Border border, App app) {
 		this.list = new JList<>(new DefaultListModel<>());
@@ -42,14 +42,14 @@ public class DescriptionList extends JPanel {
 		this.setBorder(border);
 	}
 	
-	public void replace(Description oldDescription, Description newDescription) {
+	public void replace(ChainDescription oldDescription, ChainDescription newDescription) {
 		this.getListModel().removeElement(oldDescription);
     	this.getListModel().addElement(newDescription);
 	}
 	
 	public void fireEditEvent() {
-		Description d = this.getSelectedDescription();
-        Description edited = this.app.editDescription(d);
+		ChainDescription d = this.getSelectedDescription();
+		ChainDescription edited = this.app.editDescription(d);
         if (!edited.equals(d)) {
         	this.replace(d, edited);
         }
@@ -59,7 +59,7 @@ public class DescriptionList extends JPanel {
 		this.list.addListSelectionListener(listener);
 	}
 	
-	public void add(Description description) {
+	public void add(ChainDescription description) {
 		this.getListModel().addElement(description);
 	}
 	
@@ -67,16 +67,16 @@ public class DescriptionList extends JPanel {
 		this.getListModel().clear();
 	}
 	
-	public Description[] getAllDescriptions() {
-		return (Description[]) this.getListModel().toArray();
+	public ChainDescription[] getAllDescriptions() {
+		return (ChainDescription[]) this.getListModel().toArray();
 	}
 	
-	public Description getSelectedDescription() {
-		return (Description) this.getListModel().getElementAt(this.list.getSelectedIndex());
+	public ChainDescription getSelectedDescription() {
+		return this.getListModel().getElementAt(this.list.getSelectedIndex());
 	}
 
-	 public DefaultListModel<Description> getListModel() {
-		 return (DefaultListModel<Description>) this.list.getModel();
+	 public DefaultListModel<ChainDescription> getListModel() {
+		 return (DefaultListModel<ChainDescription>) this.list.getModel();
 	 }
 
 }

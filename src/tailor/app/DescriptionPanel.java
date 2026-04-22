@@ -6,13 +6,12 @@ import java.awt.event.MouseListener;
 
 import javax.swing.JPanel;
 
-import tailor.description.Description;
-import tailor.description.ProteinDescription;
+import tailor.description.ChainDescription;
 import tailor.editor.ResidueDiagram;
 
 public class DescriptionPanel extends JPanel {
 	
-	private Description description;
+	private ChainDescription description;
 	private ResidueDiagram diagram;
 	
 	public DescriptionPanel(MouseListener listener) {
@@ -40,7 +39,7 @@ public class DescriptionPanel extends JPanel {
 		}
 	}
 	
-	public void setEdited(Description edited) {
+	public void setEdited(ChainDescription edited) {
         if (!edited.equals(this.description)) {
         	this.setDescription(edited);
         	this.repaint();
@@ -51,13 +50,13 @@ public class DescriptionPanel extends JPanel {
 		return this.description != null;
 	}
 	
-	public Description getDescription() {
+	public ChainDescription getDescription() {
 		return this.description;
 	}
 	
-	public void setDescription(Description description) {
+	public void setDescription(ChainDescription description) {
 		this.description = description;
-		this.diagram = new ResidueDiagram((ProteinDescription) description);	// XXX
+		this.diagram = new ResidueDiagram(description);	// XXX
 		this.diagram.setDrawLabels(false);
 		this.diagram.fitToSize(this.getWidth(), this.getHeight());
 		
