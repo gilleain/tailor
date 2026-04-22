@@ -1,4 +1,4 @@
-package tailor.experiment.test;
+package tailor.operator;
 
 import java.util.Arrays;
 import java.util.List;

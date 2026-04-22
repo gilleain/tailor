@@ -1,4 +1,4 @@
-package tailor.experiment.test;
+package tailor.operator;
 
 import org.junit.Test;
 

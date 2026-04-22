@@ -1,7 +1,7 @@
-package tailor.experiment.test;
+package tailor.operator;
 
-import static tailor.experiment.test.DescriptionBuilder.group;
-import static tailor.experiment.test.Helper.pathTo;
+import static tailor.operator.DescriptionBuilder.group;
+import static tailor.operator.Helper.pathTo;
 
 import java.util.ArrayList;
 import java.util.List;

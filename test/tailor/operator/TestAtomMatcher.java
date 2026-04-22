@@ -1,7 +1,7 @@
-package tailor.experiment.test;
+package tailor.operator;
 
 import static org.junit.Assert.assertTrue;
-import static tailor.experiment.test.ResultBuilder.result;
+import static tailor.operator.ResultBuilder.result;
 
 import java.util.List;
 import java.util.Optional;

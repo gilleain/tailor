@@ -1,6 +1,6 @@
-package tailor.experiment.test;
+package tailor.operator;
 
-import static tailor.experiment.test.Helper.pathTo;
+import static tailor.operator.Helper.pathTo;
 
 import java.util.List;
 
@@ -15,10 +15,10 @@ import tailor.description.DescriptionPath;
 import tailor.description.GroupDescription;
 import tailor.engine.plan.Plan;
 import tailor.engine.plan.Planner;
-import tailor.engine.view.PlanViewer;
 import tailor.measure.AbstractAtomListMeasure;
 import tailor.measure.DoubleMeasurement;
 import tailor.structure.Atom;
+import tailor.view.PlanViewer;
 
 public class TestPlanner {
 	

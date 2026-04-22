@@ -1,6 +1,6 @@
-package tailor.experiment.test;
+package tailor.operator;
 
-import static tailor.experiment.test.Helper.pathTo;
+import static tailor.operator.Helper.pathTo;
 
 import java.io.File;
 import java.io.IOException;

@@ -1,4 +1,4 @@
-package tailor.aigen;
+package tailor.view;
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;

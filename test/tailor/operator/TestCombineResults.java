@@ -1,8 +1,8 @@
-package tailor.experiment.test;
+package tailor.operator;
 
 import static org.junit.Assert.assertEquals;
-import static tailor.experiment.test.ResultBuilder.result;
-import static tailor.experiment.test.ResultBuilder.resultList;
+import static tailor.operator.ResultBuilder.result;
+import static tailor.operator.ResultBuilder.resultList;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,8 +13,8 @@ import tailor.engine.operator.CombineResults;
 import tailor.engine.operator.PrintAdapter;
 import tailor.engine.operator.ResultPipe;
 import tailor.engine.plan.Result;
-import tailor.experiment.test.ResultBuilder.ResultGroupBuilder;
-import tailor.experiment.test.ResultBuilder.ResultGroupListBuilder;
+import tailor.operator.ResultBuilder.ResultGroupBuilder;
+import tailor.operator.ResultBuilder.ResultGroupListBuilder;
 
 public class TestCombineResults {
 	

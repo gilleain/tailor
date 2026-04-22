@@ -1,6 +1,6 @@
-package tailor.engine.view;
+package tailor.view;
 
-import static tailor.experiment.test.Helper.pathTo;
+import static tailor.operator.Helper.pathTo;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
@@ -35,7 +35,7 @@ import tailor.engine.operator.ResultPipe;
 import tailor.engine.plan.Plan;
 import tailor.engine.plan.Planner;
 import tailor.engine.plan.Result;
-import tailor.experiment.test.Helper;
+import tailor.operator.Helper;
 
 /**
  * Swing viewer for a Plan. Renders each Operator as a labelled rectangle,
