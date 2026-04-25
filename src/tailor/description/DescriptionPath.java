@@ -19,4 +19,10 @@ public class DescriptionPath {
 		return atomDescription;
 	}
 	
+	public static DescriptionPath getPath(ChainDescription chain, int residueNumber, String atomLabel) {
+		GroupDescription group = chain.getGroupDescriptions().get(residueNumber);
+		AtomDescription atom = group.getAtomDescription(atomLabel);
+		return new DescriptionPath(group, atom);
+	}
+	
 }

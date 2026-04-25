@@ -11,7 +11,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import tailor.api.Torsion;
-import tailor.description.DescriptionFactory;
+import tailor.description.DescriptionFactory.MeasureBuilder;
 import tailor.measure.AtomTorsionMeasure;
 
 public class TorsionMeasurePropertySheet extends JPanel implements ActionListener {
@@ -23,10 +23,10 @@ public class TorsionMeasurePropertySheet extends JPanel implements ActionListene
 	private JLabel atomCLabel;
 	private JLabel atomDLabel;
 	
-	private DescriptionFactory descriptionFactory;
+	private MeasureBuilder measureBuilder;
 	
-	public TorsionMeasurePropertySheet(DescriptionFactory descriptionFactory) {
-	    this.descriptionFactory = descriptionFactory;
+	public TorsionMeasurePropertySheet(MeasureBuilder measureBuilder) {
+	    this.measureBuilder = measureBuilder;
 	    
 		this.setLayout(new BorderLayout());
 		this.add(new JLabel("Torsion Measure", JLabel.CENTER), BorderLayout.NORTH);
@@ -109,9 +109,9 @@ public class TorsionMeasurePropertySheet extends JPanel implements ActionListene
 	public AtomTorsionMeasure getMeasure(int residueNumber) {
 		String torsionName = this.nameField.getText();
 		if (torsionName.startsWith("phi")) {
-		    return descriptionFactory.createPhiMeasure(torsionName, residueNumber, "A");
+		    return measureBuilder.createPhiMeasure("A", residueNumber, torsionName);
 		} else if (torsionName.startsWith("psi")) {
-		    return descriptionFactory.createPsiMeasure(torsionName, residueNumber, "A");
+		    return measureBuilder.createPsiMeasure("A", residueNumber, torsionName);
 		} else {
 		    return null;
 		}

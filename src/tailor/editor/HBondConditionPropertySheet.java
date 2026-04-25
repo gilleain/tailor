@@ -10,7 +10,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-import tailor.description.DescriptionFactory;
+import tailor.description.DescriptionFactory.AtomListDescriptionBuilder;
 import tailor.description.atom.HBondDescription;
 
 public class HBondConditionPropertySheet extends JPanel implements ActionListener {
@@ -24,10 +24,10 @@ public class HBondConditionPropertySheet extends JPanel implements ActionListene
 	private JLabel atomCLabel;
 	private JLabel atomDLabel;
 	
-	private DescriptionFactory descriptionFactory;
+	private AtomListDescriptionBuilder atomListDescriptionBuilder;
 	
-	public HBondConditionPropertySheet(DescriptionFactory descriptionFactory) {
-	    this.descriptionFactory = descriptionFactory;
+	public HBondConditionPropertySheet(AtomListDescriptionBuilder atomListDescriptionBuilder) {
+	    this.atomListDescriptionBuilder = atomListDescriptionBuilder;
 		
 		this.setLayout(new BorderLayout());
 		this.add(new JLabel("Hydrogen Bond", JLabel.CENTER), BorderLayout.NORTH);
@@ -85,13 +85,13 @@ public class HBondConditionPropertySheet extends JPanel implements ActionListene
 		this.atomDLabel.setText(acceptorResidueNumber + ".C");
 	}
 	
-	public HBondDescription getCondition(int donorNumber, int acceptorNumber) {
+	public HBondDescription createHBondDescription(int donorNumber, int acceptorNumber) {
 		double haMax = Double.parseDouble(this.haMax.getText());
 		double dhaMin = Double.parseDouble(this.dhaMin.getText());
 		double haaMin = Double.parseDouble(this.haaMin.getText());
 		
-		return descriptionFactory.createHBondCondition(
-		        haMax, dhaMin, haaMin, donorNumber, acceptorNumber);
+		return atomListDescriptionBuilder.createHBondDescription(
+				"A", haMax, dhaMin, haaMin, donorNumber, acceptorNumber, "HBond");
 	}
 	
 	public void actionPerformed(ActionEvent ae) {

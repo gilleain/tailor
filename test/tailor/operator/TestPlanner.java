@@ -58,7 +58,7 @@ public class TestPlanner {
 	private class DummyAtomListMeasure extends AbstractAtomListMeasure {
 
 		public DummyAtomListMeasure(DescriptionPath... paths) {
-			super(paths);
+			super("dummy", paths);
 		}
 
 		@Override

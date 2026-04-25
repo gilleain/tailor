@@ -1,6 +1,6 @@
 package tailor.operator;
 
-import static tailor.operator.DescriptionBuilder.group;
+import static tailor.description.DescriptionFactory.group;
 import static tailor.operator.Helper.pathTo;
 
 import java.util.ArrayList;

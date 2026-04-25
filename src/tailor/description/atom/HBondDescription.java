@@ -12,6 +12,8 @@ import tailor.measure.HBondMeasure;
 
 public class HBondDescription implements AtomListDescription {
 	
+	private String name;
+	
 	private final double haDistance;
 	
 	private final double minDHAAngle;
@@ -27,6 +29,14 @@ public class HBondDescription implements AtomListDescription {
 	private final DescriptionPath acceptorAttachedDescriptionPath;
 	
 	public HBondDescription(double haDistance, double minDHAAngle, double maxDHAAngle, 
+			DescriptionPath donorDescriptionPath, DescriptionPath hydrogenDescriptionPath,
+			DescriptionPath acceptorDescriptionPath, DescriptionPath acceptorAttachedDescriptionPath) {
+		this("", haDistance, minDHAAngle, maxDHAAngle, 
+				acceptorAttachedDescriptionPath, acceptorAttachedDescriptionPath, 
+				acceptorAttachedDescriptionPath, acceptorAttachedDescriptionPath);
+	}
+	
+	public HBondDescription(String name, double haDistance, double minDHAAngle, double maxDHAAngle, 
 			DescriptionPath donorDescriptionPath, DescriptionPath hydrogenDescriptionPath,
 			DescriptionPath acceptorDescriptionPath, DescriptionPath acceptorAttachedDescriptionPath) {
 		this.haDistance = haDistance;

@@ -9,11 +9,19 @@ import tailor.structure.Atom;
 public class AtomDistanceMeasure extends AbstractAtomListMeasure {
 	
 	public AtomDistanceMeasure(DescriptionPath... descriptionPaths) {
-		super(descriptionPaths);
+		super("", descriptionPaths);
 	}
 	
 	public AtomDistanceMeasure(List<DescriptionPath> atomDistancePaths) {
-		super(atomDistancePaths);
+		super("", atomDistancePaths);
+	}
+	
+	public AtomDistanceMeasure(String name, DescriptionPath... descriptionPaths) {
+		super(name, descriptionPaths);
+	}
+	
+	public AtomDistanceMeasure(String name, List<DescriptionPath> atomDistancePaths) {
+		super(name, atomDistancePaths);
 	}
 
 	@Override

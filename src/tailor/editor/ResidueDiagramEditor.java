@@ -65,7 +65,7 @@ public class ResidueDiagramEditor extends JPanel implements SymbolSelectionListe
 	public ResidueDiagramEditor() {
 		int numberOfResidues = 6;
 		int numberOfResiduesInView = 6;
-		this.factory = new DescriptionFactory();
+		this.factory = new DescriptionFactory("A");	// TODO - default chain name
 		
 		ChainDescription chainDescription = makeChain(numberOfResidues);
 		this.canvas = new ResidueDiagramCanvas(chainDescription, numberOfResiduesInView);
@@ -124,7 +124,6 @@ public class ResidueDiagramEditor extends JPanel implements SymbolSelectionListe
 	}
 
 	private ChainDescription makeChain(int numberOfResidues) {
-	    this.factory.addChainToProtein("A");
         this.factory.addMultipleResiduesToChain("A", numberOfResidues);
         return factory.getChainDescription("A");  // TODO : >1 chain?
 	}
@@ -227,7 +226,11 @@ public class ResidueDiagramEditor extends JPanel implements SymbolSelectionListe
 	}
     
     public boolean canHydrogenBond(AtomDescription a, AtomDescription b) {
-        return this.factory.canHydrogenBond(a, b);
+    	String aName = a.getLabel();
+    	String bName = b.getLabel();
+
+    	return (aName.equals("O") && bName.equals("N")) 
+    			|| (aName.equals("N") && bName.equals("O"));
     }
 	
 	public void makeBondCondition(Symbol newlySelectedSymbol) {
@@ -261,13 +264,12 @@ public class ResidueDiagramEditor extends JPanel implements SymbolSelectionListe
 				this.conditionPropertySheetPanel.setHBondSheetResidues(startNum + 1, endNum + 1);
 				hBondDescription = this.conditionPropertySheetPanel.getHBondCondition(startNum, endNum);
 			}
-			factory.addHBondConditionToChain(hBondDescription, "A");
+			factory.getChainDescription("A").addAtomListDescriptions(hBondDescription);
 
 			this.conditionListBox.addConditionToList(hBondDescription);
 			this.diagramPropertyPanel.incrementNumberOfHBondConditions();
 
-			this.canvas.makeBond(this.previouslySelectedSymbol, 
-					newlySelectedSymbol, Symbol.Stroke.DASHED);
+			this.canvas.makeBond(this.previouslySelectedSymbol, newlySelectedSymbol, Symbol.Stroke.DASHED);
 			this.previouslySelectedSymbol.setSelected(false);
 			this.previouslySelectedSymbol = null;
 		}
@@ -315,8 +317,7 @@ public class ResidueDiagramEditor extends JPanel implements SymbolSelectionListe
 		this.conditionPropertySheetPanel.setTorsionSheetResidue(Torsion.PHI, residueNumber, residueNumber + 1);
 		
 		AtomTorsionRangeDescription torsionCondition = this.conditionPropertySheetPanel.getTorsionCondition(residueNumber);
-		// TODO
-//		factory.addPhiConditionToChain(torsionCondition, "A");
+		factory.getChainDescription("A").addAtomListDescriptions(torsionCondition);
 		
 		this.showTorsionCondition(torsionCondition);
 		
@@ -332,7 +333,7 @@ public class ResidueDiagramEditor extends JPanel implements SymbolSelectionListe
 		this.measurePropertySheetPanel.setTorsionSheetResidue(Torsion.PHI, residueNumber, residueNumber + 1);
 		
 		AtomTorsionMeasure torsionMeasure = this.measurePropertySheetPanel.getTorsionMeasure(residueNumber);
-		factory.addTorsionMeasureToChain(torsionMeasure, "A");
+		factory.getChainDescription("A").addAtomListMeasures(torsionMeasure);
 		this.showTorsionMeasure(torsionMeasure);
 		
 		this.canvas.makePhi(residueNumber, "\u03C6?", Symbol.Stroke.DOTTED);
@@ -344,7 +345,7 @@ public class ResidueDiagramEditor extends JPanel implements SymbolSelectionListe
 		
 		AtomTorsionRangeDescription torsionCondition = 
 		        this.conditionPropertySheetPanel.getTorsionCondition(residueNumber);
-		factory.addPsiConditionToChain(torsionCondition, "A");
+		factory.getChainDescription("A").addAtomListDescriptions(torsionCondition);
 		this.showTorsionCondition(torsionCondition);
 		
 		// TODO
@@ -359,7 +360,7 @@ public class ResidueDiagramEditor extends JPanel implements SymbolSelectionListe
 		this.measurePropertySheetPanel.setTorsionSheetResidue(Torsion.PSI, residueNumber + 1, residueNumber + 2);
 		
 		AtomTorsionMeasure torsionMeasure = this.measurePropertySheetPanel.getTorsionMeasure(residueNumber);
-		factory.addTorsionMeasureToChain(torsionMeasure, "A");
+		factory.getChainDescription("A").addAtomListMeasures(torsionMeasure);
 		this.showTorsionMeasure(torsionMeasure);
 		
 		this.canvas.makePsi(residueNumber, "\u03C8?", Symbol.Stroke.DOTTED);

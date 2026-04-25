@@ -18,6 +18,8 @@ public class GroupDescription {
 	// Descriptions of relationships to find between the atoms (in this group)
 	private List<AtomListDescription> atomListDescriptions;
 	
+	private int index;	// TODO - currently need this to preserve creation order - could be a better way...
+
 	public GroupDescription() {
 		this(null);
 	}
@@ -28,6 +30,14 @@ public class GroupDescription {
 		this.atomListDescriptions = new ArrayList<>();
 	}
 	
+	public void setIndex(int index) {
+		this.index = index;
+	}
+
+	public int getIndex() {
+		return this.index;
+	}
+
 	public void addAtomDescription(AtomDescription atomDescription) {
 		this.atomDescriptions.add(atomDescription);
 	}
@@ -36,6 +46,10 @@ public class GroupDescription {
 		this.atomListDescriptions.addAll(Arrays.asList(atomListDescription));
 	}
 	
+	public void addAtomDescription(String atomLabel) {
+		this.addAtomDescription(new AtomDescription(atomLabel));
+	}
+
 	public List<AtomListDescription> getAtomListDescriptions() {
 		return this.atomListDescriptions;
 	}
@@ -56,16 +70,6 @@ public class GroupDescription {
 		return (label.isEmpty()? "*" : label.get()) + "("
 			+ this.atomDescriptions.stream().map(AtomDescription::getLabel).collect(Collectors.joining(","))
 			+ ")";
-	}
-	
-	private int index;	// TODO - currently need this to preserve creation order - could be a better way...
-
-	public void setIndex(int index) {
-		this.index = index;
-	}
-	
-	public int getIndex() {
-		return this.index;
 	}
 
 }

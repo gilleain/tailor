@@ -9,11 +9,19 @@ import tailor.structure.Atom;
 public class AtomTorsionMeasure extends AbstractAtomListMeasure {
 	
 	public AtomTorsionMeasure(DescriptionPath... descriptionPaths) {
-		super(descriptionPaths);
+		super("", descriptionPaths);
 	}
 	
 	public AtomTorsionMeasure(List<DescriptionPath> descriptionPaths) {
-		super(descriptionPaths);
+		super("", descriptionPaths);
+	}
+	
+	public AtomTorsionMeasure(String name, DescriptionPath... descriptionPaths) {
+		super(name, descriptionPaths);
+	}
+	
+	public AtomTorsionMeasure(String name, List<DescriptionPath> descriptionPaths) {
+		super(name, descriptionPaths);
 	}
 	
 	@Override

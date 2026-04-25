@@ -11,11 +11,18 @@ import tailor.description.GroupDescription;
 
 public class HBondMeasure implements AtomListMeasure {
 	
+	private String name;
+	
 	private AtomDistanceMeasure atomDistanceMeasure;
 	
 	private AtomAngleMeasure atomAngleMeasure;
 
 	public HBondMeasure(List<DescriptionPath> atomDistancePaths, List<DescriptionPath> atomAnglePaths) {
+		this("HBond", atomDistancePaths, atomAnglePaths);
+	}
+
+	public HBondMeasure(String name, List<DescriptionPath> atomDistancePaths, List<DescriptionPath> atomAnglePaths) {
+		this.name = name;
 		this.atomDistanceMeasure = new AtomDistanceMeasure(atomDistancePaths);
 		this.atomAngleMeasure = new AtomAngleMeasure(atomAnglePaths);
 	}
@@ -39,6 +46,6 @@ public class HBondMeasure implements AtomListMeasure {
 
 	@Override
 	public String getName() {
-		return "HBond";	// TODO
+		return name;
 	}
 }

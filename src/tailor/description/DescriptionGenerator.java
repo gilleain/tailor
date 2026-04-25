@@ -4,6 +4,8 @@ import java.util.AbstractMap;
 import java.util.HashMap;
 import java.util.Map;
 
+import tailor.description.DescriptionFactory.AtomListDescriptionBuilder;
+
 
 public class DescriptionGenerator {
 
@@ -43,12 +45,14 @@ public class DescriptionGenerator {
 		return new AbstractMap.SimpleEntry<>(name, generateBackboneDescription(name, bounds));
 	}
 
-	private static ChainDescription generateBackboneDescription(String name, double[][][] bounds) {
-		DescriptionFactory df = new DescriptionFactory();
-		ChainDescription chain = new ChainDescription(name);
+	private static ChainDescription generateBackboneDescription(String chainName, double[][][] bounds) {
+		DescriptionFactory df = new DescriptionFactory(chainName);
+		ChainDescription chain = df.getChainDescription(chainName);
 		
-		createResidues(chain, bounds.length + 2);
+		df.setAddBackboneAmineHydrogens(true);
+		df.addMultipleResiduesToChain(chainName, bounds.length + 2);
 
+		AtomListDescriptionBuilder atomListDescriptionBuilder = df.listDescriptions();
 		for (int i = 0; i < bounds.length; i++) {
 			int residueNumber = i + 2;
 			double[][] bound = bounds[i];
@@ -60,22 +64,12 @@ public class DescriptionGenerator {
 			double psiRange = psiBound[1];
 
 			chain.addAtomListDescriptions(
-					df.createPhiCondition(phiCenter, phiRange, residueNumber, ""),	// TODO String param
-					df.createPsiCondition(psiCenter, psiRange, residueNumber, ""));// TODO String param
+					atomListDescriptionBuilder.createPhiRangeDescription(
+							chainName, phiCenter, phiRange, residueNumber, "phi"),
+					atomListDescriptionBuilder.createPsiRangeDescription(
+							chainName, psiCenter, psiRange, residueNumber, "psi"));
 		}
 
 		return chain;
 	}
-	
-	private static void createResidues(ChainDescription chain, int numberOfResidues) {
-		for (int index = 0; index < numberOfResidues; index++) {
-			GroupDescription group = new GroupDescription();
-			
-			for (String atomLabel : new String[] { "N", "CA", "C", "O", "H"}) {
-				group.addAtomDescription(new AtomDescription(atomLabel));
-			}
-			chain.addGroupDescription(group);
-		}
-	}
-
 }

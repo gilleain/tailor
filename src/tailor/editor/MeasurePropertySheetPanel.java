@@ -22,10 +22,10 @@ public class MeasurePropertySheetPanel extends JPanel {
 		this.cardLayout = new CardLayout(); 
 		this.setLayout(this.cardLayout);
 		
-		this.torsionSheet = new TorsionMeasurePropertySheet(descriptionFactory);
+		this.torsionSheet = new TorsionMeasurePropertySheet(descriptionFactory.measures());
 		this.add(this.torsionSheet, MeasurePropertySheetPanel.TORSION_TAG);
 		
-		this.hBondSheet = new HBondMeasurePropertySheet(descriptionFactory);
+		this.hBondSheet = new HBondMeasurePropertySheet(descriptionFactory.measures());
 		this.add(this.hBondSheet, MeasurePropertySheetPanel.H_BOND_TAG);
 	}
 	

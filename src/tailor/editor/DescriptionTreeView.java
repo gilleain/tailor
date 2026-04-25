@@ -16,7 +16,6 @@ import javax.swing.tree.TreeSelectionModel;
 import tailor.description.AtomDescription;
 import tailor.description.ChainDescription;
 import tailor.description.Description;
-import tailor.description.DescriptionFactory;
 import tailor.description.DescriptionPath;
 import tailor.description.GroupDescription;
 import tailor.structure.Level;
@@ -178,16 +177,30 @@ public class DescriptionTreeView extends JPanel  {
             this.addDescriptionToNewChildNode(root, description);
         } else {
             Level currentLevel = getCurrentlySelectedLevel();
-            Level childLevel = DescriptionFactory.getSubLevel(currentLevel);
+            Level childLevel = getSubLevel(currentLevel);
             if (position == -1) {
                 position = currentlySelectedNode.getChildCount();
             }
-            Description description = 
-                DescriptionFactory.createFromLevel(childLevel, name);
+            Description description = createFromLevel(childLevel, name);
             // TODO
 //            this.addDescriptionToNewChildNode(currentlySelectedNode, description);
         }
     }
+    
+    public Level getLevelBelowCurrentlySelectedLevel() {
+		Level currentLevel = this.getCurrentlySelectedLevel();
+		return getSubLevel(currentLevel);
+	}
+
+	private Description createFromLevel(Level protein, String name) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
+	public Level getSubLevel(Level currentLevel) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
     /**
      * Append a new child node to the parent node and add the description to it. 
@@ -285,12 +298,7 @@ public class DescriptionTreeView extends JPanel  {
 		this.descriptionTree.addTreeSelectionListener(listener);
 	}
 	
-	public Level getLevelBelowCurrentlySelectedLevel() {
-		Level currentLevel = this.getCurrentlySelectedLevel();
-		return DescriptionFactory.getSubLevel(currentLevel);
-	}
-    
-    public DefaultMutableTreeNode getCurrentlySelectedNode() {
+	public DefaultMutableTreeNode getCurrentlySelectedNode() {
         TreePath path = this.descriptionTree.getSelectionPath();
         if (path != null) {
             return (DefaultMutableTreeNode) path.getLastPathComponent();

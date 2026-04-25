@@ -11,7 +11,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import tailor.api.Torsion;
-import tailor.description.DescriptionFactory;
+import tailor.description.DescriptionFactory.AtomListDescriptionBuilder;
 import tailor.description.atom.AtomTorsionRangeDescription;
 
 public class TorsionConditionPropertySheet extends JPanel implements ActionListener {
@@ -25,10 +25,10 @@ public class TorsionConditionPropertySheet extends JPanel implements ActionListe
 	private JLabel atomCLabel;
 	private JLabel atomDLabel;
 
-	private DescriptionFactory descriptionFactory;
+	private AtomListDescriptionBuilder atomListDescriptionBuilder;
 	
-	public TorsionConditionPropertySheet(DescriptionFactory descriptionFactory) {
-	    this.descriptionFactory = descriptionFactory;
+	public TorsionConditionPropertySheet(AtomListDescriptionBuilder atomListDescriptionBuilder) {
+	    this.atomListDescriptionBuilder = atomListDescriptionBuilder;
 	    
 		this.setLayout(new BorderLayout());
 		this.add(new JLabel("Torsion Condition", JLabel.CENTER), BorderLayout.NORTH);
@@ -126,9 +126,9 @@ public class TorsionConditionPropertySheet extends JPanel implements ActionListe
 		String torsionName = this.nameField.getText();
 		
 		if (torsionName.startsWith("phi")) {
-		    return descriptionFactory.createPhiCondition(midPoint, range, residueNumber, "A");
+		    return atomListDescriptionBuilder.createPhiRangeDescription("A", midPoint, range, residueNumber, "phi");
 		} else if (torsionName.startsWith("psi")) {
-		    return descriptionFactory.createPsiCondition(midPoint, range, residueNumber, "A");
+		    return atomListDescriptionBuilder.createPsiRangeDescription("A", midPoint, range, residueNumber, "psi");
 		} else if (torsionName.equals("omega")) {
 		    // XXX this won't work for omega, as we need start/end!
 		    return null; 

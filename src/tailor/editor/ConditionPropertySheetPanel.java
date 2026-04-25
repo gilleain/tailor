@@ -23,10 +23,10 @@ public class ConditionPropertySheetPanel extends JPanel {
 		this.cardLayout = new CardLayout(); 
 		this.setLayout(this.cardLayout);
 		
-		this.torsionSheet = new TorsionConditionPropertySheet(descriptionFactory);
+		this.torsionSheet = new TorsionConditionPropertySheet(descriptionFactory.listDescriptions());
 		this.add(this.torsionSheet, ConditionPropertySheetPanel.TORSION_TAG);
 		
-		this.hBondSheet = new HBondConditionPropertySheet(descriptionFactory);
+		this.hBondSheet = new HBondConditionPropertySheet(descriptionFactory.listDescriptions());
 		this.add(this.hBondSheet, ConditionPropertySheetPanel.H_BOND_TAG);
 	}
 	
@@ -51,7 +51,7 @@ public class ConditionPropertySheetPanel extends JPanel {
 	}
 	
 	public HBondDescription getHBondCondition(int residueStart, int residueEnd) {
-		return this.hBondSheet.getCondition(residueStart, residueEnd);
+		return this.hBondSheet.createHBondDescription(residueStart, residueEnd);
 	}
 
 }

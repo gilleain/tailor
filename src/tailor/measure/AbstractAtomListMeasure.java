@@ -24,11 +24,12 @@ public abstract class AbstractAtomListMeasure implements AtomListMeasure {
 	
 	private String name;
 	
-	public AbstractAtomListMeasure(DescriptionPath... descriptionPaths) {
-		this(Arrays.asList(descriptionPaths));
+	public AbstractAtomListMeasure(String name, DescriptionPath... descriptionPaths) {
+		this(name, Arrays.asList(descriptionPaths));
 	}
 		
-	public AbstractAtomListMeasure(List<DescriptionPath> descriptionPaths) {	
+	public AbstractAtomListMeasure(String name, List<DescriptionPath> descriptionPaths) {	
+		this.name = name;
 		this.atomDescriptionPaths = descriptionPaths;
 		this.atomMatcher = new AtomMatcher(LabelPartition.fromDescriptionPaths(descriptionPaths));
 	}

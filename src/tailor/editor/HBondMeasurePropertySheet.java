@@ -9,7 +9,7 @@ import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import tailor.description.DescriptionFactory;
+import tailor.description.DescriptionFactory.MeasureBuilder;
 import tailor.measure.HBondMeasure;
 
 public class HBondMeasurePropertySheet extends JPanel implements ActionListener {
@@ -19,11 +19,11 @@ public class HBondMeasurePropertySheet extends JPanel implements ActionListener 
 	private JLabel atomCLabel;
 	private JLabel atomDLabel;
 
-	private DescriptionFactory descriptionFactory;
+	private MeasureBuilder measureBuilder;
 	
-	public HBondMeasurePropertySheet(DescriptionFactory descriptionFactory) {
+	public HBondMeasurePropertySheet(MeasureBuilder measureBuilder) {
 		
-	    this.descriptionFactory = descriptionFactory;
+	    this.measureBuilder = measureBuilder;
 	    
 		this.setLayout(new BorderLayout());
 		this.add(new JLabel("Hydrogen Bond Measure", JLabel.CENTER), BorderLayout.NORTH);
@@ -63,7 +63,7 @@ public class HBondMeasurePropertySheet extends JPanel implements ActionListener 
 	}
 	
 	public HBondMeasure getMeasure(int startResidueNumber, int endResidueNumber) {
-		return descriptionFactory.createHBondMeasure(startResidueNumber, endResidueNumber);
+		return measureBuilder.createHBondMeasure("HBond", startResidueNumber, endResidueNumber);
 	}
 	
 	public void actionPerformed(ActionEvent ae) {
