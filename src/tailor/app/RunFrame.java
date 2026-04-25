@@ -31,6 +31,7 @@ import tailor.editor.LibraryDialog;
 import tailor.editor.MeasureListBox;
 import tailor.engine.Engine;
 import tailor.engine.EngineFactory;
+import tailor.engine.EngineFactory.EngineType;
 import tailor.engine.Run;
 
 public class RunFrame extends JFrame implements ActionListener, CategoryChangeListener {
@@ -241,17 +242,11 @@ public class RunFrame extends JFrame implements ActionListener, CategoryChangeLi
 
 				progressDialog.setVisible(true);
 				
-				// TODO : don't want to be making a new engine every time!
 				this.engine = EngineFactory.getEngine(
-	                    description,
-	                    new GuiResultsPrinter(fileDataTableModel), 
-	                    System.err,
-	                    run.getStructureSource()
+	                    run, new GuiResultsPrinter(fileDataTableModel), EngineType.PLAN
 	            );
-//				this.engine.run(run);
 				
 				// FIXME Ack! - this should be done with SwingWorker?
-				engine.setRun(run);
 				Thread engineThread = new Thread() {
 					public void run() {
 						engine.run();

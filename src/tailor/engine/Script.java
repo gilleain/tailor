@@ -1,4 +1,4 @@
-package tailor.script;
+package tailor.engine;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -19,7 +19,7 @@ import tailor.description.atom.AtomAngleRangeDescription;
 import tailor.description.atom.AtomDistanceRangeDescription;
 import tailor.description.atom.AtomTorsionRangeDescription;
 import tailor.description.atom.HBondDescription;
-import tailor.engine.Run;
+import tailor.engine.EngineFactory.EngineType;
 import tailor.measure.AtomAngleMeasure;
 import tailor.measure.AtomDistanceMeasure;
 import tailor.measure.AtomTorsionMeasure;
@@ -184,7 +184,8 @@ public class Script {
             
             ParsedScript parsed = parseScript(fileContent);
             Run run = translate(parsed);
-            run.run();
+            Engine engine = EngineFactory.getEngine(run, new SysoutResultsPrinter(), EngineType.PLAN);
+            engine.run();
             
         } catch (IOException e) {
             System.err.println("Error reading file: " + e.getMessage());

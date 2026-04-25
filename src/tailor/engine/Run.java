@@ -36,13 +36,11 @@ public class Run {
 	}
 	
 	public Run(ChainDescription description, StructureSource structureSource) throws IOException {
+		this.descriptions = new ArrayList<>();
 	    this.descriptions.add(description);
 	    this.structureSource = structureSource;
 	}
 	
-	public void run() {
-		// TODO - the entrypoint from the Script (was python code)
-	}
 	
 	public int getMeasureCount() {
 	    int count = 0;
@@ -55,10 +53,6 @@ public class Run {
 	public StructureSource getStructureSource() {
 		return this.structureSource;
 	}
-    
-    public void addDescription(ChainDescription description) {
-//    	this.descriptions.add(description);	// TODO
-    }
     
     public List<ChainDescription> getDescriptions() {
     	return this.descriptions;

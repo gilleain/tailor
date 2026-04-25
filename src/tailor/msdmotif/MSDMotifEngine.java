@@ -20,14 +20,8 @@ import javax.xml.parsers.SAXParserFactory;
 import org.xml.sax.SAXException;
 
 import tailor.api.AtomListMeasure;
-import tailor.datasource.StructureSource;
-import tailor.description.ChainDescription;
-import tailor.description.Description;
 import tailor.description.ProteinDescription;
 import tailor.engine.Engine;
-import tailor.engine.Run;
-import tailor.engine.plan.Result;
-import tailor.structure.Structure;
 
 public class MSDMotifEngine implements Engine {
 	
@@ -47,18 +41,6 @@ public class MSDMotifEngine implements Engine {
         
     }
 
-    @Override
-    public void setRun(Run run) {
-        // TODO Auto-generated method stub
-        
-    }
-
-    public void run(Run run) {
-        for (ChainDescription description : run.getDescriptions()) {
-            this.runDescription(description);
-        }
-	}
-	
 	public void run(ProteinDescription description, List<AtomListMeasure> measures) {
 		String outfileName = "tmp.out";	//FIXME
 		
@@ -67,23 +49,6 @@ public class MSDMotifEngine implements Engine {
 		this.processResult(outfileName);
 	}
 
-	@Override
-    public List<Result> match(Description description, Structure structure) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public void runDescription(ChainDescription description) {
-        // TODO Auto-generated method stub
-        
-    }
-
-    @Override
-    public void run(Description description, StructureSource source) {
-        // TODO Auto-generated method stub
-        
-    }
 
     public void doQueryFromXmlString(String xmlString, String outputFilename) {
 		try {

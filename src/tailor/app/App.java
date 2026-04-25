@@ -25,6 +25,7 @@ import tailor.datasource.xml.XmlDescriptionReader;
 import tailor.description.ChainDescription;
 import tailor.engine.Engine;
 import tailor.engine.EngineFactory;
+import tailor.engine.EngineFactory.EngineType;
 import tailor.engine.Run;
 import tailor.msdmotif.DescriptionToXmlQueryTranslator;
 import tailor.msdmotif.MSDMotifResultTableModel;
@@ -238,16 +239,12 @@ public class App implements ActionListener, CategoryChangeListener {
             int m = run.getDescriptions().get(0).getAtomListMeasures().size();  // TODO : only the first description!
         	FileDataTableModel fileDataTableModel = new FileDataTableModel(m + 2);
         	
-        	// TODO : don't want to be making a new engine every time!
         	this.engine = EngineFactory.getEngine(
-        	        description,
-        			new GuiResultsPrinter(fileDataTableModel), 
-        			System.err,
-        			run.getStructureSource()
+        		run, new GuiResultsPrinter(fileDataTableModel), EngineType.PLAN
         	);
             
             this.resultTable.setModel(fileDataTableModel);
-            this.engine.run(run);
+            this.engine.run();
         }
     }
     

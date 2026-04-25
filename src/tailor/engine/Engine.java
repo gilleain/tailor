@@ -1,13 +1,5 @@
 package tailor.engine;
 
-import java.util.List;
-
-import tailor.datasource.StructureSource;
-import tailor.description.ChainDescription;
-import tailor.description.Description;
-import tailor.engine.plan.Result;
-import tailor.structure.Structure;
-
 /**
  * An engine matches a description to a structure source, and applies a list 
  * of measures to the results. 
@@ -17,40 +9,31 @@ import tailor.structure.Structure;
  */
 public interface Engine {
     
-    /**
-     * Match a description to a structure
-     * 
-     * @param description
-     * @param structure
-     * @return
-     */
-    public List<Result> match(Description description, Structure structure);
-    
-    /**
-     * @param run
-     */
-    public void run(Run run);
-
-    /**
-	 * Match the description to the structure source previously set, and
-	 * apply the list of measures to the results.
-	 * 
-	 * @param description
-	 * @param measures
-	 */
-	public void runDescription(ChainDescription description);
-
-    /**
-     * Match the description to the structure source and apply the list of 
-     * measures to the results.
-     * 
-     * @param description
-     * @param measures
-     * @param source
-     */
-    public void run(Description description, StructureSource source);
-
-    public void setRun(Run run);
+//    /**
+//     * @param run
+//     */
+//    public void run(Run run);
+//
+//    /**
+//	 * Match the description to the structure source previously set, and
+//	 * apply the list of measures to the results.
+//	 * 
+//	 * @param description
+//	 * @param measures
+//	 */
+//	public void runDescription(ChainDescription description);
+//
+//    /**
+//     * Match the description to the structure source and apply the list of 
+//     * measures to the results.
+//     * 
+//     * @param description
+//     * @param measures
+//     * @param source
+//     */
+//    public void run(Description description, StructureSource source);
+//
+//    public void setRun(Run run);
     
     public void run();
 }

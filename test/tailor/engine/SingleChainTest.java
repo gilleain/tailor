@@ -1,30 +1,35 @@
 package tailor.engine;
 
+import java.io.IOException;
+
 import org.junit.Test;
 
-import tailor.description.AtomDescription;
 import tailor.description.ChainDescription;
 import tailor.description.DescriptionFactory;
 import tailor.description.DescriptionFactory.MeasureBuilder;
 import tailor.description.DescriptionPath;
 import tailor.description.GroupDescription;
 import tailor.description.atom.AtomDistanceRangeDescription;
+import tailor.description.group.GroupSequenceDescription;
+import tailor.engine.EngineFactory.EngineType;
 
 public class SingleChainTest {
     
     
     @Test
-    public void simpleHBondTest() {
+    public void simpleHBondTest() throws IOException {
         String filename = "structures/2bop.pdb";
         
         DescriptionFactory factory = new DescriptionFactory("A");
-        factory.addResidues(4);
+        factory.addResidues(3);
         ChainDescription chainDescription = factory.getChainDescription("A");
-        GroupDescription groupA = new GroupDescription();
-        GroupDescription groupB = new GroupDescription();
-        
-        DescriptionPath carbonylOxygen = new DescriptionPath(groupA, new AtomDescription("O"));
-        DescriptionPath amineNitrogen = new DescriptionPath(groupB, new AtomDescription("O"));
+        GroupDescription group0 = chainDescription.getGroupDescriptions().get(0);
+        GroupDescription group1 = chainDescription.getGroupDescriptions().get(1);
+        GroupDescription group2 = chainDescription.getGroupDescriptions().get(2);
+        chainDescription.addGroupSequenceDescriptions(new GroupSequenceDescription(group0, group1, 1));
+        chainDescription.addGroupSequenceDescriptions(new GroupSequenceDescription(group1, group2, 1));
+        DescriptionPath carbonylOxygen = DescriptionPath.getPath(chainDescription, 0, "N");
+        DescriptionPath amineNitrogen = DescriptionPath.getPath(chainDescription, 1, "O");
         
         chainDescription.addAtomListDescriptions(
                 new AtomDistanceRangeDescription("i.O->(i+3).N", 2.5, 4.5, carbonylOxygen, amineNitrogen)
@@ -36,12 +41,9 @@ public class SingleChainTest {
         	measureBuilder.createPsiMeasure("A", 2, "phi2")
         );
         
-        Run run = new Run(filename);
-//        run.addDescription((ProteinDescription)chainDescription);
-        
-        // TODO
-//        Engine engine = EngineFactory.getEngine(description);
-//        engine.run(run);
+        Run run = new Run(chainDescription, filename);
+        Engine engine = EngineFactory.getEngine(run, new SysoutResultsPrinter(), EngineType.PLAN);
+        engine.run();
     }
     
     @Test

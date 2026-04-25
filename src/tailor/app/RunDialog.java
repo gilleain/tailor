@@ -6,7 +6,6 @@ import java.awt.Frame;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
@@ -41,7 +40,7 @@ public class RunDialog extends JDialog implements ActionListener, TreeSelectionL
     
     private JList<String> filenameList;
     
-    private Run run;
+    private ChainDescription chainDescription;
     
     private boolean isOkay;
     
@@ -112,9 +111,6 @@ public class RunDialog extends JDialog implements ActionListener, TreeSelectionL
         this.pack();
         this.setLocation(200, 200);
         
-        this.run = new Run();
-        this.run.addDescription(description);
-        
         this.setIsOkay(true);
     }
     
@@ -128,22 +124,20 @@ public class RunDialog extends JDialog implements ActionListener, TreeSelectionL
                 (DefaultListModel<AtomListMeasure>) this.measureList.getModel();
         for (int i = 0; i < model.size(); i++) {
         	AtomListMeasure measure = model.get(i);
-            // TODO : how do we know which description to add measures to?
-            for (ChainDescription description : run.getDescriptions()) {
-                description.addAtomListMeasures(measure);
-            }
+        	chainDescription.addAtomListMeasures(measure);
         }
         
         // get the directory
         String directory = this.directoryField.getText();
         try {
-            this.run.setPath(new File(directory));
+            return new Run(chainDescription, directory);
         } catch (IOException ioe) {
             // FIXME
             System.err.println(ioe);
+            return null;
         }
         
-        return this.run;
+       
     }
     
     private void setIsOkay(boolean isOkay) {

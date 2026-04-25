@@ -1,24 +1,19 @@
 package tailor.engine;
 
-import java.io.PrintStream;
-
-import tailor.datasource.GuiResultsPrinter;
-import tailor.datasource.StructureSource;
-import tailor.description.ChainDescription;
+import tailor.api.ResultsPrinter;
 
 public class EngineFactory {
-
-	public static Engine getEngine(ChainDescription description, GuiResultsPrinter guiResultsPrinter, PrintStream err,
-			StructureSource structureSource) {
-		// TODO Auto-generated method stub
-		
-		// use structure source as input
-		
-		// Create Plan using Planner
-		
-		// Add gui results printer as output
-		
-		return null;
+	
+	public static enum EngineType {
+		PLAN,		// Planner-based engine
+		MSD			// TODO - the MSD motif engine?
+	};
+	
+	public static Engine getEngine(Run run, ResultsPrinter resultsPrinter, EngineType engineType) {
+		if (engineType == EngineType.PLAN) {
+			return new PlanEngine(run, resultsPrinter);
+		} else {
+			throw new IllegalStateException("Unknonwn engine type " + engineType);
+		}
 	}
-
 }

@@ -5,6 +5,7 @@ import java.util.List;
 import javax.swing.JProgressBar;
 
 import tailor.api.AtomListMeasure;
+import tailor.api.ResultsPrinter;
 import tailor.app.FileDataTableModel;
 import tailor.engine.plan.Result;
 

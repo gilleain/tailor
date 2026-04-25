@@ -1,8 +1,7 @@
-package tailor.datasource;
+package tailor.api;
 
 import java.util.List;
 
-import tailor.api.AtomListMeasure;
 import tailor.engine.plan.Result;
 
 /**
