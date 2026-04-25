@@ -10,6 +10,7 @@ import tailor.api.Sink;
 import tailor.datasource.StructureSource;
 import tailor.description.ChainDescription;
 import tailor.engine.operator.GroupSource;
+import tailor.engine.operator.ResultsPrinterAdapter;
 import tailor.engine.plan.Plan;
 import tailor.engine.plan.Planner;
 import tailor.engine.plan.Result;
@@ -31,8 +32,12 @@ public class PlanEngine implements Engine {
 	}
 	
 	private Plan makePlan(Run run) {
-		ChainDescription chainDescription = run.getDescriptions().get(0);	// TODO
-		return new Planner().plan(chainDescription);
+		ChainDescription chainDescription = getChainDescription();
+		return new Planner().plan(chainDescription, false);
+	}
+	
+	private ChainDescription getChainDescription() {
+		return run.getDescriptions().get(0);	// TODO
 	}
 
 	@Override
@@ -59,6 +64,8 @@ public class PlanEngine implements Engine {
 		List<Operator> fullPipeline = new ArrayList<>();
 		fullPipeline.add(groupSource);
 		fullPipeline.addAll(plan.getOperators());
+		Operator resOperator = new ResultsPrinterAdapter(resultsPrinter, plan.getOutputPoint(), getChainDescription());
+		fullPipeline.add(resOperator);
 
 		for (Operator operator : fullPipeline) {
 			operator.run();

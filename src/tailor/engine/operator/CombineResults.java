@@ -160,7 +160,7 @@ public class CombineResults extends AbstractOperator {
 				return true;
 			} else {
 				if (minSeparation != null) {
-					System.out.println(sep + "  < " + minSeparation + " " + last + " " + candidate);
+//					System.out.println(sep + "  < " + minSeparation + " " + last + " " + candidate);
 				}
 			}
     	}

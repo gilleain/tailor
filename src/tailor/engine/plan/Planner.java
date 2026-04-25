@@ -17,12 +17,12 @@ import tailor.description.GroupDescription;
 import tailor.description.group.GroupSequenceDescription;
 import tailor.engine.operator.CombineResults;
 import tailor.engine.operator.CombineResults.PipeSeqConstraint;
-import tailor.engine.plan.GroupUnionFind.Component;
 import tailor.engine.operator.FilterAtomResultByCondition;
 import tailor.engine.operator.Measurer;
 import tailor.engine.operator.PrintAdapter;
 import tailor.engine.operator.ResultPipe;
 import tailor.engine.operator.ScanAtomResultByLabel;
+import tailor.engine.plan.GroupUnionFind.Component;
 
 /**
  * Converts a {@link ChainDescription} into a pipeline of {@link Operator}
@@ -30,6 +30,10 @@ import tailor.engine.operator.ScanAtomResultByLabel;
 public class Planner {
 	
 	public Plan plan(ChainDescription chainDescription) {
+		return plan(chainDescription, true);
+	}
+		
+    public Plan plan(ChainDescription chainDescription, boolean withPrintOutput) {	// TODO	
 		Plan plan = new Plan();
 		
 		// this is needed at the moment for getting label partitions matching correctly
@@ -92,7 +96,9 @@ public class Planner {
 		}
 		
 		// Wrap the output in a print (for now)
-		plan.addOperator(new PrintAdapter("*", current));
+		if (withPrintOutput) {
+			plan.addOperator(new PrintAdapter("*", current));
+		}
 		return plan;
 	}
 	

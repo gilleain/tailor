@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import tailor.api.Operator;
+import tailor.api.PipeableOperator;
 import tailor.api.Sink;
 import tailor.engine.operator.ResultPipe;
 import tailor.engine.operator.ScanAtomResultByLabel;
@@ -68,5 +69,9 @@ public class Plan {
 		String operatorIdString = String.valueOf(operatorId);
 		operatorId++;
 		return operatorIdString;
+	}
+
+	public ResultPipe getOutputPoint() {
+		return (ResultPipe) ((PipeableOperator<?, ?>) operators.get(operators.size() - 1)).getSink(); // TODO ugh
 	}
 }

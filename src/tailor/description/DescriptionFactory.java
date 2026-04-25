@@ -7,6 +7,7 @@ import java.util.List;
 
 import tailor.description.atom.AtomTorsionRangeDescription;
 import tailor.description.atom.HBondDescription;
+import tailor.description.group.GroupSequenceDescription;
 import tailor.measure.AtomTorsionMeasure;
 import tailor.measure.HBondMeasure;
 
@@ -28,20 +29,24 @@ public class DescriptionFactory {
 		this.chain = new ChainDescription(chainName);
 	}
 	
-	public void addResidueToChain(String chainLabel) {
-		addResidueToChain(chainLabel, null);
+	public GroupDescription addResidueToChain(String chainLabel) {
+		return addResidueToChain(chainLabel, null);
 	}
 
-	public void addResidueToChain(String chainLabel, String groupLabel) {
+	public GroupDescription addResidueToChain(String chainLabel, String groupLabel) {
+		return addResidueToChain(getChainDescription(chainLabel), groupLabel);
+	}
+	
+	public GroupDescription addResidueToChain(ChainDescription chainToAddTo, String groupLabel) {	
 		// TODO - select chain
 		if (groupLabel == null) {
-			addResidue(chain, new GroupDescription());	
+			return addResidue(chainToAddTo, new GroupDescription());
 		} else {
-			addResidue(chain, new GroupDescription(groupLabel));
+			return addResidue(chainToAddTo, new GroupDescription(groupLabel));
 		}
 	}
 	
-	private void addResidue(ChainDescription chain, GroupDescription residue) {
+	private GroupDescription addResidue(ChainDescription chain, GroupDescription residue) {
 	    chain.addGroupDescription(residue);
 		residue.addAtomDescription("N");
 		if (addBackboneAmineHydrogens) {
@@ -50,8 +55,22 @@ public class DescriptionFactory {
 		residue.addAtomDescription("CA");
 		residue.addAtomDescription("C");
 		residue.addAtomDescription("O");
+		return residue;
 	}
 
+	public void addResiduesAsSegment(int numberToAdd) {
+		String chainLabel = "A";
+		ChainDescription chainToAddTo = getChainDescription(chainLabel);
+		GroupDescription prevGroup = null;
+		for (int index = 0; index < numberToAdd; index++) {
+			GroupDescription group = addResidueToChain(chainToAddTo, "");
+			if (prevGroup != null) {
+				chainToAddTo.addGroupSequenceDescriptions(new GroupSequenceDescription(prevGroup, group, 1));
+			}
+			prevGroup = group;
+		}
+	}
+	
 	public void addResidues(int numberToAdd) {
 		addMultipleResiduesToChain("A", numberToAdd);
 	}
