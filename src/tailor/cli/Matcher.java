@@ -5,10 +5,13 @@ import java.io.IOException;
 
 import org.apache.commons.cli.ParseException;
 
-import tailor.datasource.PDBFileList;
-import tailor.datasource.StructureSource;
 import tailor.datasource.xml.XmlDescriptionReader;
 import tailor.description.ChainDescription;
+import tailor.engine.Engine;
+import tailor.engine.EngineFactory;
+import tailor.engine.EngineFactory.EngineType;
+import tailor.engine.Run;
+import tailor.engine.SysoutResultsPrinter;
 
 public class Matcher {
     
@@ -18,26 +21,23 @@ public class Matcher {
     }
     
     public static void run(CommandLineHandler args) throws IOException {
-    	ChainDescription description = null;
+    	ChainDescription chainDescription = null;
         if (args.getDescriptionFileName() != null) {
-            description = read(args.getDescriptionFileName());
+        	chainDescription = read(args.getDescriptionFileName());
         }
         
-        StructureSource structureSource = null;
-        if (args.getStructureSourceFileName() != null) {
-            structureSource = new PDBFileList(args.getStructureSourceFileName(), null);
+        String path = null;
+        if (args.getStructureSourceFileName() != null) {	
+            path = args.getStructureSourceFileName();
         }
         
         // XXX TODO - error
         System.err.println("Matching " + args.getDescriptionFileName() + " to " + args.getStructureSourceFileName());
-        if (description == null || structureSource == null) return;
+        if (chainDescription == null || path == null) return;
         
-        
-        
-        // TODO
-//        Run run = new Run(description, structureSource);
-//        Engine engine = EngineFactory.getEngine(description);
-//        engine.run(run);
+        Run run = new Run(chainDescription, path);
+        Engine engine = EngineFactory.getEngine(run, new SysoutResultsPrinter(), EngineType.PLAN);
+        engine.run();
     }
     
     public static void main(String[] args) throws ParseException, IOException {

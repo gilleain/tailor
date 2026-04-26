@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import tailor.api.Operator;
-import tailor.api.PipeableOperator;
 import tailor.api.Sink;
 import tailor.engine.operator.ResultPipe;
 import tailor.engine.operator.ScanAtomResultByLabel;
@@ -23,6 +22,8 @@ public class Plan {
 	 * connect the structure source to
 	 */
 	private List<Operator> startPoints;
+	
+	private ResultPipe outputPoint;
 	
 	public Plan() {
 		this.operators = new ArrayList<>();
@@ -72,6 +73,11 @@ public class Plan {
 	}
 
 	public ResultPipe getOutputPoint() {
-		return (ResultPipe) ((PipeableOperator<?, ?>) operators.get(operators.size() - 1)).getSink(); // TODO ugh
+//		return (ResultPipe) ((PipeableOperator<?, ?>) operators.get(operators.size() - 1)).getSink(); // TODO ugh
+		return outputPoint;
+	}
+
+	public void setOutputPoint(ResultPipe output) {
+		this.outputPoint = output;
 	}
 }

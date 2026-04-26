@@ -98,6 +98,8 @@ public class Planner {
 		// Wrap the output in a print (for now)
 		if (withPrintOutput) {
 			plan.addOperator(new PrintAdapter("*", current));
+		} else {
+			plan.setOutputPoint(current);
 		}
 		return plan;
 	}
