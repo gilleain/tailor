@@ -52,10 +52,10 @@ public class TestXmlDescriptionReader {
         ChainDescription chainDescription = read(xml);
         
         GroupDescription groupDescription1 = chainDescription.getGroupDescriptions().get(0);
-        assertEquals("GLY", groupDescription1.getLabel().get());
+        assertEquals("GLY", groupDescription1.getName().get());
         
         GroupDescription groupDescription2 = chainDescription.getGroupDescriptions().get(1);
-        assertEquals("X", groupDescription2.getLabel());
+        assertEquals("X", groupDescription2.getLabel().get());
     }
     
     @Test
@@ -132,7 +132,7 @@ public class TestXmlDescriptionReader {
         
         // TODO
         assertEquals("i", getGroupLabel(distanceDescription.getGroupDescriptions().get(0)));
-        assertEquals("i + 1", getGroupLabel(distanceDescription.getGroupDescriptions().get(0)));
+        assertEquals("i + 1", getGroupLabel(distanceDescription.getGroupDescriptions().get(1)));
     }
     
     @Test

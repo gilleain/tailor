@@ -1,6 +1,6 @@
 package tailor.description;
 
-import static tailor.description.DescriptionPath.getPath;
+import static tailor.description.DescriptionPath.getPathByNumber;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -158,28 +158,28 @@ public class DescriptionFactory {
 		public HBondMeasure createHBondMeasure(String chainName, int donorNumber, int acceptorNumber) {
 			ChainDescription currentChain = getChainDescription(chainName);
 
-			DescriptionPath a = getPath(currentChain, donorNumber, "N");
-			DescriptionPath b = getPath(currentChain, donorNumber, "H");
-			DescriptionPath c = getPath(currentChain, acceptorNumber, "O");
-			DescriptionPath d = getPath(currentChain, acceptorNumber, "C");
+			DescriptionPath a = getPathByNumber(currentChain, donorNumber, "N");
+			DescriptionPath b = getPathByNumber(currentChain, donorNumber, "H");
+			DescriptionPath c = getPathByNumber(currentChain, acceptorNumber, "O");
+			DescriptionPath d = getPathByNumber(currentChain, acceptorNumber, "C");
 
 			return new HBondMeasure(List.of("HODist", "NOCAngle"), List.of(b, c), List.of( a, c, d));
 		}
 		
 		private AtomTorsionMeasure createPhi(ChainDescription chain, int residueNumber, String measureName) {
-	        DescriptionPath a = getPath(chain, residueNumber - 1, "C");
-	        DescriptionPath b = getPath(chain, residueNumber, "N");
-	        DescriptionPath c = getPath(chain, residueNumber, "CA");
-	        DescriptionPath d = getPath(chain, residueNumber, "C");
+	        DescriptionPath a = getPathByNumber(chain, residueNumber - 1, "C");
+	        DescriptionPath b = getPathByNumber(chain, residueNumber, "N");
+	        DescriptionPath c = getPathByNumber(chain, residueNumber, "CA");
+	        DescriptionPath d = getPathByNumber(chain, residueNumber, "C");
 	        
 			return new AtomTorsionMeasure(measureName, a, b, c, d);
 		}
 		
 		public AtomTorsionMeasure createPsi(ChainDescription chain, int residueNumber, String measureName) {
-			DescriptionPath a = getPath(chain, residueNumber, "N");
-			DescriptionPath b = getPath(chain, residueNumber, "CA");
-			DescriptionPath c = getPath(chain, residueNumber, "C");
-			DescriptionPath d = getPath(chain, residueNumber + 1, "N");
+			DescriptionPath a = getPathByNumber(chain, residueNumber, "N");
+			DescriptionPath b = getPathByNumber(chain, residueNumber, "CA");
+			DescriptionPath c = getPathByNumber(chain, residueNumber, "C");
+			DescriptionPath d = getPathByNumber(chain, residueNumber + 1, "N");
 		    
 			return new AtomTorsionMeasure(measureName, a, b, c, d);
 		}
@@ -217,30 +217,30 @@ public class DescriptionFactory {
 				int donorNumber, int acceptorNumber, String listDescriptionName) {
 			ChainDescription currentChain = getChainDescription(chainName);
 
-			DescriptionPath a = getPath(currentChain, donorNumber, "N");
-			DescriptionPath b = getPath(currentChain, donorNumber, "H");
-			DescriptionPath c = getPath(currentChain, acceptorNumber, "O");
-			DescriptionPath d = getPath(currentChain, acceptorNumber, "C");	// TODO
+			DescriptionPath a = getPathByNumber(currentChain, donorNumber, "N");
+			DescriptionPath b = getPathByNumber(currentChain, donorNumber, "H");
+			DescriptionPath c = getPathByNumber(currentChain, acceptorNumber, "O");
+			DescriptionPath d = getPathByNumber(currentChain, acceptorNumber, "C");	// TODO
 
 			return new HBondDescription(List.of("HODist", "NOCAngle"), haMax, dhaMin, dhaMax, a, b, c, d);
 		}
 		
 		private AtomTorsionRangeDescription createPhi(
 				ChainDescription chain, int residueNumber, double midPoint, double range, String measureName) {
-	        DescriptionPath a = getPath(chain, residueNumber - 1, "C");
-	        DescriptionPath b = getPath(chain, residueNumber, "N");
-	        DescriptionPath c = getPath(chain, residueNumber, "CA");
-	        DescriptionPath d = getPath(chain, residueNumber, "C");
+	        DescriptionPath a = getPathByNumber(chain, residueNumber - 1, "C");
+	        DescriptionPath b = getPathByNumber(chain, residueNumber, "N");
+	        DescriptionPath c = getPathByNumber(chain, residueNumber, "CA");
+	        DescriptionPath d = getPathByNumber(chain, residueNumber, "C");
 	        
 			return new AtomTorsionRangeDescription(measureName, midPoint - range, midPoint + range, a, b, c, d);
 		}
 		
 		public AtomTorsionRangeDescription createPsi(
 				ChainDescription chain, int residueNumber, double midPoint, double range, String measureName) {
-			DescriptionPath a = getPath(chain, residueNumber, "N");
-			DescriptionPath b = getPath(chain, residueNumber, "CA");
-			DescriptionPath c = getPath(chain, residueNumber, "C");
-			DescriptionPath d = getPath(chain, residueNumber + 1, "N");
+			DescriptionPath a = getPathByNumber(chain, residueNumber, "N");
+			DescriptionPath b = getPathByNumber(chain, residueNumber, "CA");
+			DescriptionPath c = getPathByNumber(chain, residueNumber, "C");
+			DescriptionPath d = getPathByNumber(chain, residueNumber + 1, "N");
 		    
 			return new AtomTorsionRangeDescription(measureName, midPoint - range, midPoint + range, a, b, c, d);
 		}

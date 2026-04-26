@@ -116,13 +116,23 @@ public class XmlDescriptionReader {
         	}
         }
         
+        private void setCurrentParent(String qName, DescriptionXmlHandler handler) {
+        	// TODO - is there a cleaner way to do this?
+        	if (handler instanceof ProteinDescriptionXmlHandler) {
+        		// end
+        	} else if (handler instanceof ChainDescriptionXmlHandler) {
+        		currentParent = currentProteinDescription;
+        	} else if (handler instanceof GroupDescriptionXmlHandler) {
+        		currentParent = currentChainDescription;
+        	} else if (handler instanceof AtomDescriptionXmlHandler) {
+        		currentParent = currentGroupDescription;
+        	}
+        }
+        
         @Override
         public void endElement(String namespaceURI, String sName, String qName) throws SAXException {
             if (descriptionHandlers.containsKey(qName)) {
-                seenStack.pop();
-                if (!seenStack.isEmpty()) {
-                    currentParent = seenStack.peek();
-                }
+            	setCurrentParent(qName, descriptionHandlers.get(qName));
             } else if (conditionHandlers.containsKey(qName)) {
             	// TODO - how do we check this
                 conditionHandlers.get(qName).complete(currentChainDescription, pathXmlHandler);

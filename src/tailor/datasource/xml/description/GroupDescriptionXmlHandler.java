@@ -10,8 +10,8 @@ public class GroupDescriptionXmlHandler implements DescriptionXmlHandler {
     
     public GroupDescription create(Attributes attrs, Object parent) throws DescriptionParseException {
     	if (parent instanceof ChainDescription chainDescription) {
-	    	String labelStr = attrs.getValue("label");
-	    	String nameStr = attrs.getValue("name");
+    		String nameStr = attrs.getValue("name");
+    		String labelStr = attrs.getValue("label");
 	
 	    	GroupDescription groupDescription;
 	    	if (nameStr == null) {
@@ -21,8 +21,7 @@ public class GroupDescriptionXmlHandler implements DescriptionXmlHandler {
 	    	}
 	
 	    	if (labelStr != null) {
-	//    		groupDescription.setLabel(labelStr);
-	    		// TODO
+	    		groupDescription.setLabel(labelStr);
 	    	}
 	    	chainDescription.addGroupDescription(groupDescription);
 	    	return groupDescription;

@@ -46,12 +46,12 @@ public class XmlDescriptionWriter {
 	
 	private static void writeGroupDescription(GroupDescription g, FileWriter writer) throws IOException {
 		writer.write("\t\t");
-		Optional<String> label = g.getLabel();
+		Optional<String> name = g.getName();
 		String out;
-		if (label.isEmpty()) {
+		if (name.isEmpty()) {
 			out = String.format("" +"<GroupDescription name=\"%s\">","*");
 		} else {
-			out = String.format("<GroupDescription name=\"%s\">", label.get());
+			out = String.format("<GroupDescription name=\"%s\">", name.get());
 		}
 		writer.write(out + "\n");
 		for (AtomDescription atom : g.getAtomDescriptions()) {

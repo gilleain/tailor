@@ -19,8 +19,16 @@ public class DescriptionPath {
 		return atomDescription;
 	}
 	
-	public static DescriptionPath getPath(ChainDescription chain, int residueNumber, String atomLabel) {
+	public static DescriptionPath getPathByNumber(ChainDescription chain, int residueNumber, String atomLabel) {
 		GroupDescription group = chain.getGroupDescriptions().get(residueNumber);
+		AtomDescription atom = group.getAtomDescription(atomLabel);
+		return new DescriptionPath(group, atom);
+	}
+	
+	public static DescriptionPath getPathByLabel(ChainDescription chain, String residueName, String atomLabel) {
+		GroupDescription group = chain.getGroupDescriptions()
+				.stream()
+				.filter(g -> g.getLabel().isPresent() && g.getLabel().get().equals(residueName)).findFirst().get();
 		AtomDescription atom = group.getAtomDescription(atomLabel);
 		return new DescriptionPath(group, atom);
 	}

@@ -23,8 +23,8 @@ public class SingleChainTest {
         factory.addResiduesAsSegment(3);
         ChainDescription chainDescription = factory.getChainDescription("A");
 
-        DescriptionPath carbonylOxygen = DescriptionPath.getPath(chainDescription, 0, "N");
-        DescriptionPath amineNitrogen = DescriptionPath.getPath(chainDescription, 1, "O");
+        DescriptionPath carbonylOxygen = DescriptionPath.getPathByNumber(chainDescription, 0, "N");
+        DescriptionPath amineNitrogen = DescriptionPath.getPathByNumber(chainDescription, 1, "O");
         
         chainDescription.addAtomListDescriptions(
                 new AtomDistanceRangeDescription("i.O->(i+3).N", 2.5, 4.5, carbonylOxygen, amineNitrogen)

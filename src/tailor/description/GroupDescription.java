@@ -10,6 +10,8 @@ import tailor.api.AtomListDescription;
 
 public class GroupDescription {
 	
+	private Optional<String> name;
+	
 	private Optional<String> label;
 	
 	// Descriptions of the atoms to find
@@ -24,8 +26,9 @@ public class GroupDescription {
 		this(null);
 	}
 	
-	public GroupDescription(String label) {
-		this.label = Optional.ofNullable(label);
+	public GroupDescription(String name) {
+		this.name = Optional.ofNullable(name);
+		this.label = Optional.empty();
 		this.atomDescriptions = new ArrayList<>();
 		this.atomListDescriptions = new ArrayList<>();
 	}
@@ -36,6 +39,10 @@ public class GroupDescription {
 
 	public int getIndex() {
 		return this.index;
+	}
+	
+	public void setLabel(String label) {
+		this.label = Optional.of(label);
 	}
 
 	public void addAtomDescription(AtomDescription atomDescription) {
@@ -56,6 +63,10 @@ public class GroupDescription {
 	
 	public Optional<String> getLabel() {
 		return label;
+	}
+	
+	public Optional<String> getName() {
+		return name;
 	}
 
 	public AtomDescription getAtomDescription(String atomLabel) {

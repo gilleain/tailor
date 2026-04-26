@@ -1,5 +1,7 @@
 package tailor.datasource.xml;
 
+import static tailor.description.DescriptionPath.getPathByLabel;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -40,7 +42,7 @@ public class PathXmlHandler {
             name = attrs.getValue("name");
             String labelStr = attrs.getValue("label");
             String atomName = attrs.getValue("atom");
-            path = getDescriptionPathByGroupLabel(chainDescription, labelStr, atomName);
+            path = getPathByLabel(chainDescription, labelStr, atomName);
         } else if (currentParent instanceof GroupDescription) {
             // TODO : handle paths at the group level
         }
@@ -54,8 +56,6 @@ public class PathXmlHandler {
         pathMap.put(name, path);
     }
     
-    private DescriptionPath getDescriptionPathByGroupLabel(ChainDescription chain, String labelStr, String atomName) {
-    	return null;	// TODO
-    }
+  
 
 }
