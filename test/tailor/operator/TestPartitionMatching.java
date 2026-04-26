@@ -12,13 +12,14 @@ import tailor.condition.AtomMatcher;
 import tailor.condition.AtomMatcher.Match;
 import tailor.condition.AtomPartition;
 import tailor.condition.LabelPartition;
+import tailor.condition.LabelPartition.LabelledPart;
 import tailor.structure.Atom;
 
 public class TestPartitionMatching {
 
 	@Test
 	public void testLeftBlank() {
-		LabelPartition q = new LabelPartition(List.of(pl(), pl("O"), pl("C")));
+		LabelPartition q = new LabelPartition(List.of(pl(1, "O"), pl(2, "C")));
 		AtomPartition t = new AtomPartition(
 				List.of(pa(new Atom("N")), 
 						pa(new Atom("N"), new Atom("O")), 
@@ -29,7 +30,7 @@ public class TestPartitionMatching {
 
 	@Test
 	public void testMiddleBlank() {
-		LabelPartition q = new LabelPartition(List.of(pl("N"), pl(), pl("C")));
+		LabelPartition q = new LabelPartition(List.of(pl(0, "N"), pl(2, "C")));
 		AtomPartition t = new AtomPartition(
 				List.of(pa(new Atom("N")), 
 						pa(new Atom("N"), new Atom("O")), 
@@ -40,7 +41,7 @@ public class TestPartitionMatching {
 	
 	@Test
 	public void testRightBlank() {
-		LabelPartition q = new LabelPartition(List.of(pl("N"), pl("O"), pl()));
+		LabelPartition q = new LabelPartition(List.of(pl(0, "N"), pl(1, "O")));
 		AtomPartition t = new AtomPartition(
 				List.of(pa(new Atom("N")), 
 						pa(new Atom("O"), new Atom("C")), 
@@ -56,8 +57,8 @@ public class TestPartitionMatching {
 		assertTrue(match.isPresent());
 	}
 	
-	private List<String> pl(String... labels) {
-		return Arrays.asList(labels);
+	private LabelledPart pl(int index, String... labels) {
+		return new LabelledPart(index, Arrays.asList(labels));
 	}
 	
 	private List<Atom> pa(Atom... atoms) {

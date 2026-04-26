@@ -2,76 +2,134 @@ package tailor.condition;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Comparator;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import tailor.description.DescriptionPath;
 import tailor.description.GroupDescription;
 
 public class LabelPartition {
 	
-	private final List<List<String>> parts;
-	
-	@SafeVarargs
-	public LabelPartition(List<String>... parts) {
-		this(Arrays.asList(parts));
+	public interface Part {
+		int getIndex();
+		int getSize();
+		List<String> getElements();
 	}
 	
-	public LabelPartition(List<List<String>> parts) {
-		this.parts = parts;
+	// part with no members, for clarity
+	public static class EmptyPart implements Part {
+		int index;
+		
+		public EmptyPart(int index) {
+			this.index = index;
+		}
+		
+		public int getIndex() {
+			return this.index;
+		}
+		
+		public int getSize() {
+			return 0;
+		}
+		
+		public List<String> getElements() {
+			return List.of();
+		}
+		
+		public String toString() {
+			return index + ":[]";
+		}
+	}	
+	
+	public static class LabelledPart extends EmptyPart {
+		private List<String> elements;
+		
+		public LabelledPart(int index, List<String> elements) {
+			super(index);
+			this.elements = elements;
+		}
+		
+		public int getSize() {
+			return elements.size();
+		}
+		
+		public List<String> getElements() {
+			return this.elements;
+		}
+		
+		public String toString() {
+			return index + ":[" +  elements.stream().collect(Collectors.joining(",")) + "]";
+		}
+		
+	}
+	
+	private final List<Part> parts;
+	
+	@SafeVarargs
+	public LabelPartition(List<String>... partsAsStrings) {
+		// TODO - this uses the order of the parts as given, which is risky ..
+		this.parts = new ArrayList<>();
+		int index = 0;
+		for (List<String> partAsStrings : partsAsStrings) {
+			if (partAsStrings.isEmpty()) {
+				parts.add(new EmptyPart(index));
+			} else {
+				parts.add(new LabelledPart(index, partAsStrings));
+			}
+		}
+	}
+	
+	public LabelPartition(List<Part> parts) {
+		this.parts =  parts;
 	}
 
 	public static LabelPartition fromDescriptionPaths(DescriptionPath... descriptionPaths) {
 		return LabelPartition.fromDescriptionPaths(Arrays.asList(descriptionPaths));
 	}
 	
-	// TODO - calling this method twice on the same list of paths reverses the matcher!!
 	public static LabelPartition fromDescriptionPaths(List<DescriptionPath> descriptionPaths) {
-		Map<GroupDescription, List<String>> partition = new HashMap<>();
+		Map<GroupDescription, List<String>> partition = new LinkedHashMap<>();
 		
 		for (DescriptionPath descriptionPath : descriptionPaths) {
 			GroupDescription groupDescription = descriptionPath.getGroupDescription();
-			List<String> atomLabels;
-			if (partition.containsKey(groupDescription)) {
-				atomLabels = partition.get(groupDescription);
-			} else {
-				atomLabels = new ArrayList<>();
-				partition.put(groupDescription, atomLabels);
-			}
-			atomLabels.add(descriptionPath.getAtomDescription().getLabel());
+			List<String> part = partition.computeIfAbsent(groupDescription, _ -> new ArrayList<>());
+			part.add(descriptionPath.getAtomDescription().getLabel());
 		}
-		List<List<String>> parts = new ArrayList<>();
-		List<GroupDescription> keys = new ArrayList<>(partition.keySet());
-		keys.sort(Comparator.comparing(GroupDescription::getIndex));
-		
-		int index = 0;
-		for (GroupDescription groupDescription : keys) {
-			int groupIndex = groupDescription.getIndex();
-			
-			if (groupIndex > index) {
-				while (groupIndex != index) {
-					parts.add(new ArrayList<>());
-					index++;
-				}
-			}
-			parts.add(partition.get(groupDescription));
-			index++;
+		List<Part> parts = new ArrayList<>();
+		for (GroupDescription groupDescription : partition.keySet()) {
+			parts.add(new LabelledPart(groupDescription.getIndex(), partition.get(groupDescription)));
 		}
+
 		return new LabelPartition(parts);
 	}
 	
 	public int totalElements() {
-		return parts.stream().map(List::size).reduce(0, Integer::sum);
+		return parts.stream().map(Part::getSize).reduce(0, Integer::sum);
 	}
 	
 	public int numberOfParts() {
 		return this.parts.size();
 	}
 	
-	public List<String> getPart(int index) {
+	public Part getPart(int index) {
 		return this.parts.get(index);
+	}
+	
+	public boolean equals(Object o) {
+		if (o instanceof LabelPartition other) {
+			for (int index = 0; index < parts.size(); index++) {
+				if (index > other.parts.size() - 1) return false;
+				List<String> otherElements = other.parts.get(index).getElements();
+				if (!parts.get(index).getElements().equals(otherElements)) {
+					return false;
+				}
+			}
+		} else {
+			return false;
+		}
+		return true;
 	}
 	
 	public String toString() {

@@ -50,10 +50,10 @@ public class SingleChainTest {
         factory.setAddBackboneAmineHydrogens(true);
         factory.addResiduesAsSegment(5);
         // i.O->(i+4).N
-        HBondDescription hBond = factory.listDescriptions().createHBondDescription(chainLabel, 3.5, 90, 90, 4, 0, "HBond");
+        HBondDescription hBond = factory.listDescriptions().createHBondDescription(chainLabel, 3.5, 110, 180, 4, 0, "HBond");
         
         ChainDescription chainDescription = factory.getChainDescription("A");
-//        chainDescription.addAtomListDescriptions(hBond);
+        chainDescription.addAtomListDescriptions(hBond);
         MeasureBuilder measureBuilder = factory.measures();
         chainDescription.addAtomListMeasures(
         	measureBuilder.createPhiMeasure("A", 2, "phi2"), 

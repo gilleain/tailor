@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.logging.Logger;
 
+import tailor.condition.LabelPartition.Part;
 import tailor.structure.Atom;
 
 public class AtomMatcher {
@@ -66,9 +67,10 @@ public class AtomMatcher {
 	private Match findMatch(AtomPartition resultAtoms) {
 		List<Atom> atomMatches = new ArrayList<>();
 		for (int partIndex = 0; partIndex < atomLabels.numberOfParts(); partIndex++) {
-			List<String> part = atomLabels.getPart(partIndex);
-			List<Atom> atomPart = resultAtoms.getPart(partIndex);
-			for (String atomLabel : part) {	
+			Part part = atomLabels.getPart(partIndex);
+			int originalPartIndex = part.getIndex();	// the index of the part in the original order
+			List<Atom> atomPart = resultAtoms.getPart(originalPartIndex);
+			for (String atomLabel : part.getElements()) {	
 				Atom atom = findAtom(atomLabel, atomPart);
 				if (atom == null) {
 					return new Match(atomMatches);
