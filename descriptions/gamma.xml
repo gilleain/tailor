@@ -1,0 +1,24 @@
+<ProteinDescription name="310Helix">
+	<ChainDescription name="A">
+		<GroupDescription label="i">
+			<AtomDescription name="N"/>
+			<AtomDescription name="H"/>
+			<AtomDescription name="CA"/>
+			<AtomDescription name="C"/>
+			<AtomDescription name="O"/>
+		</GroupDescription>
+		<GroupDescription label="i + 1">
+			<AtomDescription name="N"/>
+			<AtomDescription name="H"/>
+			<AtomDescription name="CA"/>
+			<AtomDescription name="C"/>
+			<AtomDescription name="O"/>
+		</GroupDescription>
+		<HBondCondition haMax="2.5" dhaMin="90.0" haaMin="180.0">
+			<Path name="donor" label="i + 1" atom="N"/>
+			<Path name="hydrogen" label="i + 1" atom="H"/>
+			<Path name="acceptor" label="i" atom="O"/>
+			<Path name="attached" label="i" atom="C"/>
+		</HBondCondition>
+	</ChainDescription>
+</ProteinDescription>

@@ -45,4 +45,10 @@ public class ResultsPrinterAdapter implements Operator {
 		
 	}
 
+	@Override
+	public void clear() {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

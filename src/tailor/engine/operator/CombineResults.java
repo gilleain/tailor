@@ -54,6 +54,14 @@ public class CombineResults extends AbstractOperator {
 		}
 	}
 	
+	@Override
+	public void clear() {
+		for (Source source : sources) {
+			source.clear();
+		}
+		output.clear();
+	}
+
 	// TODO - not great - is there another way to do this?
 	public void setId(String id) {
 		super.setId(id);
@@ -97,7 +105,12 @@ public class CombineResults extends AbstractOperator {
 	private List<Result> getAll(Source<Result> source) {
 		List<Result> resultList = new ArrayList<>();
 		while (source.hasNext()) {
-			resultList.add(source.getNext());
+			try {
+				resultList.add(source.getNext());
+			} catch (Exception e) {
+				// TODO
+				System.err.println("CME ");
+			}
 		}
 		return resultList;
 	}

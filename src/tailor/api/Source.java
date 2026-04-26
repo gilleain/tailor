@@ -5,6 +5,8 @@ package tailor.api;
  */
 public interface Source<T> {
 	
+	void clear();
+	
 	/**
 	 * The size of the T that is returned.
 	 * TODO - why do we need this?

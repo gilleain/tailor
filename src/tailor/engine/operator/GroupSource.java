@@ -47,4 +47,10 @@ public class GroupSource implements Operator {
 		
 	}
 
+	@Override
+	public void clear() {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

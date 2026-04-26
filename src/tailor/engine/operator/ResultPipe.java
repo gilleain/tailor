@@ -25,6 +25,9 @@ public class ResultPipe implements Source<Result>, Sink<Result> {
 		this.resultIterator = null;
 	}
 
+	public void clear() {
+		this.results.clear();
+	}
 
 	@Override
 	public void put(Result item) {

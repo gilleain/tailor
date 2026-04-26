@@ -7,6 +7,8 @@ public interface Sink<T> {
 	
 	void put(T item);
 	
+	void clear();
+	
 	/**
 	 * @return the id of the sink operator
 	 */

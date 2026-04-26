@@ -28,4 +28,9 @@ public class CaptorAdapter extends AbstractOperator {
 		return "Purely intended for tests";
 	}
 
+	@Override
+	public void clear() {
+		
+	}
+
 }

@@ -13,4 +13,6 @@ public interface Operator {
 	
 	void setId(String id);
 	
+	void clear();
+	
 }

@@ -10,6 +10,12 @@ public abstract class AbstractPipeableOperator extends AbstractOperator implemen
 	protected Source<Result> source;
 	
 	protected Sink<Result> sink;
+	
+	public void clear() {
+		source.clear();
+		sink.clear();
+	}
+	
 
 	@Override
 	public void setSource(Source<Result> source) {

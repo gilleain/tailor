@@ -36,6 +36,12 @@ public class Plan {
 		}
 	}
 	
+	public void clear() {
+		for (Operator operator : this.operators) {
+			operator.clear();
+		}
+	}
+	
 	public List<Operator> getOperators() {
 		return this.operators;
 	}

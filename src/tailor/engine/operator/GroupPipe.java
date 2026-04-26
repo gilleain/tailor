@@ -47,4 +47,10 @@ public class GroupPipe implements Source<Group> {
 		
 	}
 
+	@Override
+	public void clear() {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

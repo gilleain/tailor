@@ -28,6 +28,7 @@ public class PlanEngine implements Engine {
 	public PlanEngine(Run run, ResultsPrinter resultsPrinter) {
 		this.run = run;
 		this.plan = makePlan(run);
+		System.err.println("Plan "); plan.describe();
 		this.resultsPrinter = resultsPrinter;
 	}
 	
@@ -48,7 +49,7 @@ public class PlanEngine implements Engine {
 				Structure str = structureSource.next();
 				for (Structure subStr : str.getSubstructures()) { // TODO ugh
 					Chain chain = (Chain) subStr;
-					runChain(chain); // TODO - want to be cleverer with handling chains
+					runChain(str.getName(), chain); // TODO - want to be cleverer with handling chains
 				}
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
@@ -57,8 +58,9 @@ public class PlanEngine implements Engine {
 		}
 	}
 	
-	private void runChain(Chain chain) {
-		System.err.println("Running chain " + chain.getName());
+	private void runChain(String structureName, Chain chain) {
+		plan = makePlan(run);	// TODO - why is this necessary?
+		System.err.println("Running chain " + structureName + " " + chain.getName());
 		List<Sink<Result>> inputs = plan.getInputPipes();
 		GroupSource groupSource = new GroupSource(chain, inputs);
 		List<Operator> fullPipeline = new ArrayList<>();
@@ -70,6 +72,7 @@ public class PlanEngine implements Engine {
 		for (Operator operator : fullPipeline) {
 			operator.run();
 		}
+		plan.clear();
 	}
 
 }

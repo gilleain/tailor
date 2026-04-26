@@ -35,4 +35,9 @@ public class PrintAdapter extends AbstractOperator {
 		return "Print id[" + getId() + "]";
 	}
 
+	@Override
+	public void clear() {
+		
+	}
+
 }
