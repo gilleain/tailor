@@ -12,6 +12,7 @@ import tailor.api.AtomListMeasure;
 import tailor.datasource.PDBReader;
 import tailor.description.AtomValueRangeDescription;
 import tailor.description.ChainDescription;
+import tailor.description.DescriptionFactory;
 import tailor.description.GroupDescription;
 import tailor.description.atom.AtomAngleRangeDescription;
 import tailor.description.atom.AtomDistanceRangeDescription;
@@ -28,6 +29,32 @@ import tailor.structure.Structure;
 public class FunctionalTests {
 	
 	private static final String DATA_DIR = "data";
+	
+	private ChainDescription hairpinTurn() {
+		double minAngle = 100;	
+		double maxAngle = 180;
+		double maxDistance = 2.5; 
+		DescriptionFactory factory = new DescriptionFactory("A");
+		factory.setAddBackboneAmineHydrogens(true);
+		factory.addResiduesAsSegment(5);
+		
+		ChainDescription chain = factory.getChainDescription("A");
+		chain.addAtomListDescriptions(
+//			factory.listDescriptions().createHBondDescription("A", maxDistance, minAngle, maxAngle, 0, 4, "i.CO->i+4.HN"),
+//			factory.listDescriptions().createHBondDescription("A", maxDistance, minAngle, maxAngle, 0, 5, "i.CO->i+5.HN")
+		);
+		chain.addAtomListMeasures(
+			factory.measures().createPhiMeasure("A", 1, "phi1"),
+			factory.measures().createPsiMeasure("A", 1, "psi1"),
+			factory.measures().createPhiMeasure("A", 2, "phi2"),
+			factory.measures().createPsiMeasure("A", 2, "psi2"),
+			factory.measures().createPhiMeasure("A", 3, "phi3"),
+			factory.measures().createPsiMeasure("A", 4, "psi3"),
+			factory.measures().createHBondMeasure("A", 3, 0),	//	i+3.CO->iHN
+			factory.measures().createHBondMeasure("A", 0, 4)    //	i.CO->i+4HN
+		);
+		return chain;
+	}
 	
 	private ChainDescription makeHBondON() {
 		double minAngle = 120;	// Generous angle
@@ -156,6 +183,12 @@ public class FunctionalTests {
 	public void hairpinNOBondTest() throws IOException {
 		String filename = "hairpin.pdb";
 		run(filename, makeNO());
+	}
+	
+	@Test
+	public void hairpinTurnTest() throws IOException {
+		String filename = "hairpin.pdb";
+		run(filename, hairpinTurn());
 	}
 	
 	@Test

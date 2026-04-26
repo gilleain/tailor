@@ -214,7 +214,8 @@ public class DescriptionFactory {
 
 		public HBondDescription createHBondDescription(
 				String chainName, double haMax, double dhaMin, double dhaMax, 
-				int donorNumber, int acceptorNumber, String listDescriptionName) {
+				int donorNumber, int acceptorNumber,
+				String listDescriptionName) {// TODO - unused
 			ChainDescription currentChain = getChainDescription(chainName);
 
 			DescriptionPath a = getPathByNumber(currentChain, donorNumber, "N");
