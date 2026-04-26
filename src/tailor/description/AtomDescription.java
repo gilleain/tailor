@@ -11,5 +11,9 @@ public class AtomDescription {
 	public String getLabel() {
 		return this.label;
 	}
+	
+	public String toString() {
+		return this.label;
+	}
 
 }

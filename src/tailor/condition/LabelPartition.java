@@ -14,6 +14,11 @@ public class LabelPartition {
 	
 	private final List<List<String>> parts;
 	
+	@SafeVarargs
+	public LabelPartition(List<String>... parts) {
+		this(Arrays.asList(parts));
+	}
+	
 	public LabelPartition(List<List<String>> parts) {
 		this.parts = parts;
 	}

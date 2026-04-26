@@ -2,6 +2,7 @@ package tailor.description;
 
 import static tailor.description.DescriptionPath.getPath;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -91,7 +92,13 @@ public class DescriptionFactory {
 
 	public static class GroupBuilder {
 		private String groupLabel = null;
-		private List<String> atomLabels;
+		private List<String> atomLabels = new ArrayList<>();
+		private Integer index;
+		
+		public GroupBuilder withIndex(int index) {
+			this.index = index;
+			return this;
+		}
 		
 		public GroupBuilder withGroupLabel(String label) {
 			this.groupLabel = label;
@@ -107,6 +114,9 @@ public class DescriptionFactory {
 			GroupDescription groupDescription = new GroupDescription(groupLabel);
 			for (String atomLabel : atomLabels) {
 				groupDescription.addAtomDescription(new AtomDescription(atomLabel));
+			}
+			if (index != null) {
+				groupDescription.setIndex(index);
 			}
 			return groupDescription;
 		}
@@ -151,9 +161,9 @@ public class DescriptionFactory {
 			DescriptionPath a = getPath(currentChain, donorNumber, "N");
 			DescriptionPath b = getPath(currentChain, donorNumber, "H");
 			DescriptionPath c = getPath(currentChain, acceptorNumber, "O");
-			DescriptionPath d = getPath(currentChain, acceptorNumber, "C");	// TODO
+			DescriptionPath d = getPath(currentChain, acceptorNumber, "C");
 
-			return new HBondMeasure(List.of("HODist", "NHOAngle"), List.of(b, c), List.of( a, b, c));
+			return new HBondMeasure(List.of("HODist", "NOCAngle"), List.of(b, c), List.of( a, c, d));
 		}
 		
 		private AtomTorsionMeasure createPhi(ChainDescription chain, int residueNumber, String measureName) {
@@ -203,7 +213,7 @@ public class DescriptionFactory {
 		}
 
 		public HBondDescription createHBondDescription(
-				String chainName, double haMax, double dhaMin, double haaMin, 
+				String chainName, double haMax, double dhaMin, double dhaMax, 
 				int donorNumber, int acceptorNumber, String listDescriptionName) {
 			ChainDescription currentChain = getChainDescription(chainName);
 
@@ -212,7 +222,7 @@ public class DescriptionFactory {
 			DescriptionPath c = getPath(currentChain, acceptorNumber, "O");
 			DescriptionPath d = getPath(currentChain, acceptorNumber, "C");	// TODO
 
-			return new HBondDescription(List.of("HODist", "NHOAngle"), haMax, dhaMin, haaMin, a, b, c, d);
+			return new HBondDescription(List.of("HODist", "NOCAngle"), haMax, dhaMin, dhaMax, a, b, c, d);
 		}
 		
 		private AtomTorsionRangeDescription createPhi(

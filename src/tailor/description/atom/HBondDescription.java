@@ -16,9 +16,9 @@ public class HBondDescription implements AtomListDescription {
 	
 	private final double haDistance;
 	
-	private final double minDHAAngle;
+	private final double minDAAAngle;
 
-	private final double maxDHAAngle;
+	private final double maxDAAAngle;
 	
 	private final DescriptionPath donorDescriptionPath;
 	
@@ -28,39 +28,37 @@ public class HBondDescription implements AtomListDescription {
 	
 	private final DescriptionPath acceptorAttachedDescriptionPath;
 	
-	public HBondDescription(double haDistance, double minDHAAngle, double maxDHAAngle, 
+	public HBondDescription(double haDistance, double minDAAAngle, double maxDAAAngle, 
 			DescriptionPath donorDescriptionPath, DescriptionPath hydrogenDescriptionPath,
 			DescriptionPath acceptorDescriptionPath, DescriptionPath acceptorAttachedDescriptionPath) {
-		this(List.of(""), haDistance, minDHAAngle, maxDHAAngle, 
-				acceptorAttachedDescriptionPath, acceptorAttachedDescriptionPath, 
-				acceptorAttachedDescriptionPath, acceptorAttachedDescriptionPath);
+		this(List.of(""), haDistance, minDAAAngle, maxDAAAngle, 
+				donorDescriptionPath, hydrogenDescriptionPath, acceptorDescriptionPath, acceptorAttachedDescriptionPath);
 	}
 	
-	public HBondDescription(List<String> names, double haDistance, double minDHAAngle, double maxDHAAngle, 
+	public HBondDescription(List<String> names, double haDistance, double minDAAAngle, double maxDAAAngle, 
 			DescriptionPath donorDescriptionPath, DescriptionPath hydrogenDescriptionPath,
 			DescriptionPath acceptorDescriptionPath, DescriptionPath acceptorAttachedDescriptionPath) {
 		this.names = names;
 		this.haDistance = haDistance;
-		this.minDHAAngle = minDHAAngle;
-		this.maxDHAAngle = maxDHAAngle;
+		this.minDAAAngle = minDAAAngle;
+		this.maxDAAAngle = maxDAAAngle;
 		this.donorDescriptionPath = donorDescriptionPath;
 		this.hydrogenDescriptionPath = hydrogenDescriptionPath;
 		this.acceptorDescriptionPath = acceptorDescriptionPath;
-		// TODO - not actually using this one!
 		this.acceptorAttachedDescriptionPath = acceptorAttachedDescriptionPath;
 	}
 
 	@Override
 	public AtomListCondition createCondition() {
-		return new HBondCondition(haDistance, minDHAAngle, maxDHAAngle, getDHPaths(), getDHAPaths());
+		return new HBondCondition(haDistance, minDAAAngle, maxDAAAngle, getDHPaths(), getDAAAPaths());
 	}
 	
 	private List<DescriptionPath> getDHPaths() {
 		return List.of(hydrogenDescriptionPath, acceptorDescriptionPath);
 	}
 	
-	private List<DescriptionPath>  getDHAPaths() {
-		return List.of(donorDescriptionPath, hydrogenDescriptionPath, acceptorDescriptionPath);
+	private List<DescriptionPath>  getDAAAPaths() {
+		return List.of(donorDescriptionPath, acceptorDescriptionPath, acceptorAttachedDescriptionPath);
 	}
 
 	@Override
@@ -73,7 +71,7 @@ public class HBondDescription implements AtomListDescription {
 	
 	@Override
 	public AtomListMeasure createMeasure() {
-		return new HBondMeasure(names, getDHPaths(), getDHAPaths());
+		return new HBondMeasure(names, getDHPaths(), getDAAAPaths());
 	}
 
 }

@@ -1,6 +1,7 @@
 package tailor.operator;
 
 import static org.junit.Assert.assertEquals;
+import static tailor.description.DescriptionFactory.group;
 
 import java.util.List;
 
@@ -15,13 +16,8 @@ public class TestLabelPartition {
 	
 	@Test
 	public void testFromTwoDescriptionPaths() {
-		GroupDescription gd1 = new GroupDescription();
-		gd1.setIndex(0);
-		DescriptionPath dp1 = new DescriptionPath(gd1, new AtomDescription("O"));
-		
-		GroupDescription gd2 = new GroupDescription();
-		gd2.setIndex(2);
-		DescriptionPath dp2 = new DescriptionPath(gd2, new AtomDescription("C"));
+		DescriptionPath dp1 = new DescriptionPath(group().withIndex(0).build(), new AtomDescription("O"));
+		DescriptionPath dp2 = new DescriptionPath(group().withIndex(2).build(), new AtomDescription("C"));
 		
 		LabelPartition l = LabelPartition.fromDescriptionPaths(List.of(dp1, dp2));
 		System.out.println(l);
@@ -30,17 +26,9 @@ public class TestLabelPartition {
 	
 	@Test
 	public void testFromThreeDescriptionPaths() {
-		GroupDescription gd1 = new GroupDescription();
-		gd1.setIndex(0);
-		DescriptionPath dp1 = new DescriptionPath(gd1, new AtomDescription("N"));
-		
-		GroupDescription gd2 = new GroupDescription();
-		gd2.setIndex(2);
-		DescriptionPath dp2 = new DescriptionPath(gd2, new AtomDescription("C"));
-		
-		GroupDescription gd3 = new GroupDescription();
-		gd3.setIndex(5);
-		DescriptionPath dp3 = new DescriptionPath(gd3, new AtomDescription("O"));
+		DescriptionPath dp1 = new DescriptionPath(group().withIndex(0).build(), new AtomDescription("N"));
+		DescriptionPath dp2 = new DescriptionPath(group().withIndex(2).build(), new AtomDescription("C"));
+		DescriptionPath dp3 = new DescriptionPath(group().withIndex(5).build(), new AtomDescription("O"));
 		
 		LabelPartition l = LabelPartition.fromDescriptionPaths(List.of(dp1, dp2, dp3));
 		System.out.println(l);
@@ -49,16 +37,26 @@ public class TestLabelPartition {
 	
 	@Test
 	public void testFromEmptyInitial() {
-		GroupDescription gd1 = new GroupDescription();
-		gd1.setIndex(1);
-		DescriptionPath dp1 = new DescriptionPath(gd1, new AtomDescription("N"));
-		
-		GroupDescription gd2 = new GroupDescription();
-		gd2.setIndex(2);
-		DescriptionPath dp2 = new DescriptionPath(gd2, new AtomDescription("C"));
+		DescriptionPath dp1 = new DescriptionPath(group().withIndex(1).build(), new AtomDescription("N"));
+		DescriptionPath dp2 = new DescriptionPath(group().withIndex(2).build(), new AtomDescription("C"));
 		
 		LabelPartition l = LabelPartition.fromDescriptionPaths(List.of(dp1, dp2));
 		System.out.println(l);
 		assertEquals("3 parts", 3, l.numberOfParts());
 	}
+	
+	@Test
+	public void testFromOutOfOrderPaths() {
+		GroupDescription gp1 = group().withIndex(4).build();
+		GroupDescription gp2 = group().withIndex(0).build();
+		DescriptionPath dp1 = new DescriptionPath(gp1, new AtomDescription("C"));
+		DescriptionPath dp2 = new DescriptionPath(gp1, new AtomDescription("O"));
+		DescriptionPath dp3 = new DescriptionPath(gp2, new AtomDescription("N"));
+		
+		LabelPartition l = LabelPartition.fromDescriptionPaths(List.of(dp1, dp2, dp3));
+		System.out.println(l);
+		assertEquals("5 parts", 5, l.numberOfParts());
+		assertEquals("Last part", List.of("O", "C"), l.getPart(4));
+	}
+	
 }

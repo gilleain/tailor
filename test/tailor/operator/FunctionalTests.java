@@ -37,9 +37,11 @@ public class FunctionalTests {
 		GroupDescription groupA = Helper.makeGroupDescription("C", "O");
 		GroupDescription groupB = Helper.makeGroupDescription("H", "N", "CA", "C");
 		chainDescription.addGroupDescriptions(groupA, groupB);
+//		System.out.println("Making hbond");
 		HBondDescription hBond = new HBondDescription(
 				maxDistance, minAngle, maxAngle, 
 				pathTo(groupA, "C"), pathTo(groupA, "O"), pathTo(groupB, "H"), pathTo(groupB, "N"));
+//		System.out.println("Making measure");
 		AtomListMeasure phi = new AtomTorsionMeasure(
 				pathTo(groupA, "C"), pathTo(groupB, "N"), pathTo(groupB, "CA"), pathTo(groupB, "C")
 		);
@@ -56,9 +58,11 @@ public class FunctionalTests {
 		GroupDescription groupA = Helper.makeGroupDescription("H", "N", "C");
 		GroupDescription groupB = Helper.makeGroupDescription("C", "O", "N", "CA");
 		chainDescription.addGroupDescriptions(groupA, groupB);
+//		System.out.println("Making hbond");
 		HBondDescription hBond = new HBondDescription(
 				maxDistance, minAngle, maxAngle, 
 				pathTo(groupA, "N"), pathTo(groupA, "H"), pathTo(groupB, "O"), pathTo(groupB, "C"));
+//		System.out.println("Making measure");
 		AtomListMeasure phi = new AtomTorsionMeasure(
 				pathTo(groupA, "C"), pathTo(groupB, "N"), pathTo(groupB, "CA"), pathTo(groupB, "C")
 		);

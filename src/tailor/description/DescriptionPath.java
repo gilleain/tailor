@@ -25,4 +25,9 @@ public class DescriptionPath {
 		return new DescriptionPath(group, atom);
 	}
 	
+	public String toString() {
+		String groupLabel = this.groupDescription.getLabel().orElse("*");
+		return groupLabel + "/" + this.atomDescription;
+	}
+	
 }

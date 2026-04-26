@@ -10,8 +10,8 @@ import org.junit.Test;
 
 import tailor.condition.AtomMatcher;
 import tailor.condition.AtomMatcher.Match;
-import tailor.engine.plan.Result;
 import tailor.condition.LabelPartition;
+import tailor.engine.plan.Result;
 
 public class TestAtomMatcher {
 	
@@ -21,7 +21,7 @@ public class TestAtomMatcher {
 	@Test
 	public void testAllMatchDistinctAtomsInOneGroup() {
 		Result resultInput = result().withGroups("ASP").withAtoms("N", "CA", "C", "O").build();
-		AtomMatcher matcher = new AtomMatcher(new LabelPartition(List.of(List.of("N", "CA", "C", "O"))));
+		AtomMatcher matcher = new AtomMatcher(new LabelPartition(List.of("N", "CA", "C", "O")));
 		Optional<Match> match = matcher.containedIn(resultInput.getAtomPartition());
 		assertTrue(match.isPresent());
 		System.out.println(match.get());
@@ -33,7 +33,7 @@ public class TestAtomMatcher {
 	@Test
 	public void testPartialMatchDistinctAtomsInOneGroup() {
 		Result resultInput = result().withGroups("ASP").withAtoms("N", "CA", "C", "O").build();
-		AtomMatcher matcher = new AtomMatcher(new LabelPartition(List.of(List.of("C", "O"))));
+		AtomMatcher matcher = new AtomMatcher(new LabelPartition(List.of("C", "O")));
 		Optional<Match> match = matcher.containedIn(resultInput.getAtomPartition());
 		assertTrue(match.isPresent());
 		System.out.println(match.get());
@@ -46,7 +46,19 @@ public class TestAtomMatcher {
 	public void testAllMatchDistinctAtomsInMultipleGroups() {
 		Result resultInput = result().withGroups("GLY", "ASP", "SER", "HIS").withAtoms("N", "CA", "C", "O").build();
 		AtomMatcher matcher = new AtomMatcher(
-				new LabelPartition(List.of(List.of("N"), List.of("CA"), List.of("C"), List.of("O"))));
+				new LabelPartition(List.of("N"), List.of("CA"), List.of("C"), List.of("O")));
+		Optional<Match> match = matcher.containedIn(resultInput.getAtomPartition());
+		assertTrue(match.isPresent());
+		System.out.println(match.get());
+	}
+	
+	/**
+	 * Input result has multiple groups with distinct atoms, and the atom match has to be ordered.
+	 */
+	@Test
+	public void testAllMatchDistinctAtomsOrderedInMultipleGroups() {
+		Result resultInput = result().withGroups("GLY", "ASP", "SER", "HIS").withAtoms("N", "CA", "C", "O").build();
+		AtomMatcher matcher = new AtomMatcher(new LabelPartition(List.of("N", "C"), List.of("O")));
 		Optional<Match> match = matcher.containedIn(resultInput.getAtomPartition());
 		assertTrue(match.isPresent());
 		System.out.println(match.get());
@@ -56,8 +68,7 @@ public class TestAtomMatcher {
 	public void testAllMatchDistinctSetsAtomsInMultipleGroups() {
 		Result resultInput = result().withGroups("GLY").withAtoms("C", "O")
 									 .withGroups("ASP").withAtom("N").build();
-		AtomMatcher matcher = new AtomMatcher(
-				new LabelPartition(List.of(List.of("C", "O"), List.of("N"))));
+		AtomMatcher matcher = new AtomMatcher(new LabelPartition(List.of("C", "O"), List.of("N")));
 		Optional<Match> match = matcher.containedIn(resultInput.getAtomPartition());
 		assertTrue(match.isPresent());
 		System.out.println(match.get());
@@ -69,7 +80,7 @@ public class TestAtomMatcher {
 	@Test
 	public void testPartialMatchDistinctAtomsInMultipleGroups() {
 		Result resultInput = result().withGroups("GLY", "ASP", "SER", "HIS").withAtoms("N", "CA", "C", "O").build();
-		AtomMatcher matcher = new AtomMatcher(new LabelPartition(List.of(List.of("CA"), List.of("O"))));
+		AtomMatcher matcher = new AtomMatcher(new LabelPartition(List.of("CA"), List.of("O")));
 		Optional<Match> match = matcher.containedIn(resultInput.getAtomPartition());
 		assertTrue(match.isPresent());
 		System.out.println(match.get());
@@ -82,7 +93,7 @@ public class TestAtomMatcher {
 	public void testAllMatchSameAtomsInMultipleGroups() {
 		Result resultInput = result().withGroups("GLY", "ASP", "SER", "HIS").withAtoms("O", "O", "O", "O").build();
 		AtomMatcher matcher = new AtomMatcher(
-				new LabelPartition(List.of(List.of("O"), List.of("O"), List.of("O"), List.of("O"))));
+				new LabelPartition(List.of("O"), List.of("O"), List.of("O"), List.of("O")));
 		Optional<Match> match = matcher.containedIn(resultInput.getAtomPartition());
 		assertTrue(match.isPresent());
 		System.out.println(match.get());
@@ -94,8 +105,7 @@ public class TestAtomMatcher {
 	@Test
 	public void testPartialMatchSameAtomsInMultipleGroups() {
 		Result resultInput = result().withGroups("GLY", "ASP", "SER", "HIS").withAtoms("O", "O", "O", "O").build();
-		AtomMatcher matcher = new AtomMatcher(
-				new LabelPartition(List.of(List.of("O"), List.of("O"))));
+		AtomMatcher matcher = new AtomMatcher(new LabelPartition(List.of("O"), List.of("O")));
 		Optional<Match> match = matcher.containedIn(resultInput.getAtomPartition());
 		assertTrue(match.isPresent());
 		System.out.println(match.get());

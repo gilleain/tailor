@@ -15,15 +15,15 @@ public class HBondCondition implements AtomListCondition {
 	
 	private AtomDistanceCondition haDistanceCondition;
 	
-	private AtomAngleRangeCondition dhaAngleRangeCondition;
+	private AtomAngleRangeCondition daaAngleRangeCondition;
 	
-	public HBondCondition(double haDistance, double minDHAAngle, double maxDHAAngle,
+	public HBondCondition(double haDistance, double minDAAAngle, double maxDAAAngle,
 			List<DescriptionPath> distancePaths, List<DescriptionPath> anglePaths) {
 		this.haDistanceCondition = new AtomDistanceCondition(haDistance, distancePaths);
-		this.dhaAngleRangeCondition = new AtomAngleRangeCondition(minDHAAngle, maxDHAAngle, anglePaths);
+		this.daaAngleRangeCondition = new AtomAngleRangeCondition(minDAAAngle, maxDAAAngle, anglePaths);
 	}
 
 	public boolean accept(AtomPartition atoms) {
-		return haDistanceCondition.accept(atoms) && dhaAngleRangeCondition.accept(atoms);
+		return haDistanceCondition.accept(atoms) && daaAngleRangeCondition.accept(atoms);
 	}
 }
