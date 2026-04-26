@@ -2,6 +2,7 @@ package tailor.measure;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import tailor.api.AtomListMeasure;
 import tailor.api.Measurement;
@@ -11,18 +12,18 @@ import tailor.description.GroupDescription;
 
 public class HBondMeasure implements AtomListMeasure {
 	
-	private String name;
+	private List<String> names;	// names of each part of the measure
 	
 	private AtomDistanceMeasure atomDistanceMeasure;
 	
 	private AtomAngleMeasure atomAngleMeasure;
 
 	public HBondMeasure(List<DescriptionPath> atomDistancePaths, List<DescriptionPath> atomAnglePaths) {
-		this("HBond", atomDistancePaths, atomAnglePaths);
+		this(List.of("HBond"), atomDistancePaths, atomAnglePaths);
 	}
 
-	public HBondMeasure(String name, List<DescriptionPath> atomDistancePaths, List<DescriptionPath> atomAnglePaths) {
-		this.name = name;
+	public HBondMeasure(List<String> names, List<DescriptionPath> atomDistancePaths, List<DescriptionPath> atomAnglePaths) {
+		this.names = names;
 		this.atomDistanceMeasure = new AtomDistanceMeasure(atomDistancePaths);
 		this.atomAngleMeasure = new AtomAngleMeasure(atomAnglePaths);
 	}
@@ -46,6 +47,6 @@ public class HBondMeasure implements AtomListMeasure {
 
 	@Override
 	public String getName() {
-		return name;
+		return names.stream().collect(Collectors.joining("\t"));
 	}
 }

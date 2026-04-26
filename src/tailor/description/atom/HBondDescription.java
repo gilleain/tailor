@@ -12,7 +12,7 @@ import tailor.measure.HBondMeasure;
 
 public class HBondDescription implements AtomListDescription {
 	
-	private String name;
+	private List<String> names;
 	
 	private final double haDistance;
 	
@@ -31,14 +31,15 @@ public class HBondDescription implements AtomListDescription {
 	public HBondDescription(double haDistance, double minDHAAngle, double maxDHAAngle, 
 			DescriptionPath donorDescriptionPath, DescriptionPath hydrogenDescriptionPath,
 			DescriptionPath acceptorDescriptionPath, DescriptionPath acceptorAttachedDescriptionPath) {
-		this("", haDistance, minDHAAngle, maxDHAAngle, 
+		this(List.of(""), haDistance, minDHAAngle, maxDHAAngle, 
 				acceptorAttachedDescriptionPath, acceptorAttachedDescriptionPath, 
 				acceptorAttachedDescriptionPath, acceptorAttachedDescriptionPath);
 	}
 	
-	public HBondDescription(String name, double haDistance, double minDHAAngle, double maxDHAAngle, 
+	public HBondDescription(List<String> names, double haDistance, double minDHAAngle, double maxDHAAngle, 
 			DescriptionPath donorDescriptionPath, DescriptionPath hydrogenDescriptionPath,
 			DescriptionPath acceptorDescriptionPath, DescriptionPath acceptorAttachedDescriptionPath) {
+		this.names = names;
 		this.haDistance = haDistance;
 		this.minDHAAngle = minDHAAngle;
 		this.maxDHAAngle = maxDHAAngle;
@@ -72,7 +73,7 @@ public class HBondDescription implements AtomListDescription {
 	
 	@Override
 	public AtomListMeasure createMeasure() {
-		return new HBondMeasure(getDHPaths(), getDHAPaths());
+		return new HBondMeasure(names, getDHPaths(), getDHAPaths());
 	}
 
 }

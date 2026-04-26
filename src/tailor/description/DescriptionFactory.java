@@ -153,7 +153,7 @@ public class DescriptionFactory {
 			DescriptionPath c = getPath(currentChain, acceptorNumber, "O");
 			DescriptionPath d = getPath(currentChain, acceptorNumber, "C");	// TODO
 
-			return new HBondMeasure("HBond", List.of(b, c), List.of( a, b, c));
+			return new HBondMeasure(List.of("HODist", "NHOAngle"), List.of(b, c), List.of( a, b, c));
 		}
 		
 		private AtomTorsionMeasure createPhi(ChainDescription chain, int residueNumber, String measureName) {
@@ -212,7 +212,7 @@ public class DescriptionFactory {
 			DescriptionPath c = getPath(currentChain, acceptorNumber, "O");
 			DescriptionPath d = getPath(currentChain, acceptorNumber, "C");	// TODO
 
-			return new HBondDescription("HBond", haMax, dhaMin, haaMin, a, b, c, d);
+			return new HBondDescription(List.of("HODist", "NHOAngle"), haMax, dhaMin, haaMin, a, b, c, d);
 		}
 		
 		private AtomTorsionRangeDescription createPhi(
