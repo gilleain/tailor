@@ -4,6 +4,7 @@ import java.util.List;
 
 import tailor.description.DescriptionPath;
 import tailor.geometry.Geometry;
+import tailor.measurement.DoubleMeasurement;
 import tailor.structure.Atom;
 
 public class AtomAngleMeasure extends AbstractAtomListMeasure {

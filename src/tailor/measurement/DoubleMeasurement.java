@@ -1,4 +1,4 @@
-package tailor.measure;
+package tailor.measurement;
 
 import tailor.api.Measurement;
 
@@ -20,5 +20,10 @@ public class DoubleMeasurement implements Measurement {
 	
 	public String toString() {
 		return String.format("%2.2f", value);
+	}
+
+	@Override
+	public double getValue(String id) {
+		return value;
 	}
 }

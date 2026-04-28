@@ -19,4 +19,8 @@ public class AtomDistanceRangeDescription extends AtomValueRangeDescription {
 		super(minDistance, maxDistance, new AtomDistanceMeasure(atomDescriptionA, atomDescriptionB));
 		this.name = name;
 	}
+	
+	public String getName() {
+		return this.name;
+	}
 }

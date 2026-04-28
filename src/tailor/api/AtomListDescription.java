@@ -2,6 +2,7 @@ package tailor.api;
 
 import java.util.List;
 
+import tailor.condition.AtomPartition;
 import tailor.description.GroupDescription;
 
 /**
@@ -14,14 +15,16 @@ public interface AtomListDescription {
 	 */
 	List<GroupDescription> getGroupDescriptions();
 	
-	/**
-	 * @return the corresponding condition for this description
-	 */
-	AtomListCondition createCondition();
-	
+//	/**
+//	 * @return the corresponding condition for this description
+//	 */
+//	AtomListCondition createCondition();
+//	
 	/**
 	 * @return convert this description to a measure across the same atoms
 	 */
 	AtomListMeasure createMeasure();
+	
+	boolean apply(AtomPartition atomPartition);
 
 }

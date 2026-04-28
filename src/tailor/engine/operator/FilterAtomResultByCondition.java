@@ -3,7 +3,7 @@ package tailor.engine.operator;
 import java.util.List;
 import java.util.logging.Logger;
 
-import tailor.api.AtomListCondition;
+import tailor.api.AtomListDescription;
 import tailor.condition.AtomPartition;
 import tailor.engine.plan.Result;
 
@@ -11,10 +11,10 @@ public class FilterAtomResultByCondition extends AbstractPipeableOperator {
 	
 	private Logger logger = Logger.getLogger(FilterAtomResultByCondition.class.getName());
 	
-	private List<AtomListCondition> conditions;
+	private List<AtomListDescription> listDescriptions;
 	
-	public FilterAtomResultByCondition(List<AtomListCondition> conditions) {
-		this.conditions = conditions;
+	public FilterAtomResultByCondition(List<AtomListDescription> listDescriptions) {
+		this.listDescriptions = listDescriptions;
 	}
 	
 	public void run() {
@@ -24,9 +24,9 @@ public class FilterAtomResultByCondition extends AbstractPipeableOperator {
 			Result nextResult = source.getNext();
 			boolean isAccepted = true;
 			AtomPartition atomPartition = nextResult.getAtomPartition();
-			for (AtomListCondition condition : conditions) {
-				if (!condition.accept(atomPartition)) {
-					logger.fine(condition + " failed for " + atomPartition + " of " + nextResult);
+			for (AtomListDescription listDescription : listDescriptions) {
+				if (!listDescription.apply(atomPartition)) {
+					logger.fine(listDescription + " failed for " + atomPartition + " of " + nextResult);
 					isAccepted = false;
 					break;
 				}
@@ -45,7 +45,7 @@ public class FilterAtomResultByCondition extends AbstractPipeableOperator {
 	
 	@Override
 	public String description() {
-		List<String> conditionNames = conditions.stream().map(c -> c.getClass().getSimpleName()).toList();
-		return "Filter: id[" + getId() + "] conditions:" + conditionNames;
+		List<String> listDescriptionNames = listDescriptions.stream().map(c -> c.getClass().getSimpleName()).toList();
+		return "Filter: id[" + getId() + "] on:" + listDescriptionNames;
 	}
 }

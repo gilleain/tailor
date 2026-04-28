@@ -2,11 +2,11 @@ package tailor.condition;
 
 import java.util.logging.Logger;
 
-import tailor.api.AtomListCondition;
-import tailor.api.AtomListMeasure;
-import tailor.measure.DoubleMeasurement;
+import tailor.api.Measurement;
+import tailor.api.MeasurementCondition;
+import tailor.measurement.DoubleMeasurement;
 
-public class AtomRangeCondition implements AtomListCondition {
+public class RangeCondition implements MeasurementCondition {
 	
 	private Logger logger = Logger.getLogger(this.getClass().getName());
 	
@@ -14,16 +14,13 @@ public class AtomRangeCondition implements AtomListCondition {
 	
 	private final double maxValue;
 	
-	private final AtomListMeasure measure;
-
-	public AtomRangeCondition(double minValue, double maxValue, AtomListMeasure measure) {
+	public RangeCondition(double minValue, double maxValue) {
 		this.minValue = minValue;
 		this.maxValue = maxValue;
-		this.measure = measure;
 	}
 
-	public boolean accept(AtomPartition atomPartition) {
-		double actualValue = ((DoubleMeasurement) measure.measure(atomPartition)).getValue();
+	public boolean accept(Measurement measurement) {
+		double actualValue = ((DoubleMeasurement) measurement).getValue();
 		boolean isInRange = minValue < actualValue && actualValue < maxValue;
 		logger.fine("Value " + ((isInRange)? "IS" : "NOT") + " between " 
 				+ minValue + op(minValue, actualValue) + actualValue + op(actualValue, maxValue) + maxValue);

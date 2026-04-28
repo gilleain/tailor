@@ -6,9 +6,9 @@ import java.util.List;
 
 import org.junit.Test;
 
-import tailor.condition.atom.AtomAngleCondition;
-import tailor.condition.atom.AtomDistanceCondition;
 import tailor.description.GroupDescription;
+import tailor.description.atom.AtomAngleDescription;
+import tailor.description.atom.AtomDistanceDescription;
 import tailor.engine.operator.CombineResults;
 import tailor.engine.operator.FilterAtomResultByCondition;
 import tailor.engine.operator.GroupSource;
@@ -49,8 +49,8 @@ public class TestFilter {
 		
 		GroupDescription groupA = Helper.makeGroupDescription("O");
 		GroupDescription groupB = Helper.makeGroupDescription("N");
-		AtomDistanceCondition condition = new AtomDistanceCondition(
-				distance, List.of(Helper.pathTo(groupA, "O"), Helper.pathTo(groupB, "N")));
+		AtomDistanceDescription condition = new AtomDistanceDescription(
+				distance, Helper.pathTo(groupA, "O"), Helper.pathTo(groupB, "N"));
 		FilterAtomResultByCondition filter = new FilterAtomResultByCondition(List.of(condition));
 		filter.setSource(onPipe);
 		ResultPipe end = new ResultPipe();
@@ -79,8 +79,8 @@ public class TestFilter {
 		scanTriple.setSink(triplePipe);
 		
 		GroupDescription group = Helper.makeGroupDescription("C", "CA", "N");
-		AtomAngleCondition condition = 
-				new AtomAngleCondition(angle, pathTo(group, "N"), pathTo(group, "CA"), pathTo(group, "C"));
+		AtomAngleDescription condition = 
+				new AtomAngleDescription(angle, pathTo(group, "N"), pathTo(group, "CA"), pathTo(group, "C"));
 		FilterAtomResultByCondition filter = new FilterAtomResultByCondition(List.of(condition));
 		filter.setSource(triplePipe);
 		filter.setSink(new PrintResults());

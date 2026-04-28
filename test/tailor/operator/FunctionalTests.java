@@ -49,7 +49,7 @@ public class FunctionalTests {
 			factory.measures().createPhiMeasure("A", 2, "phi2"),
 			factory.measures().createPsiMeasure("A", 2, "psi2"),
 			factory.measures().createPhiMeasure("A", 3, "phi3"),
-			factory.measures().createPsiMeasure("A", 4, "psi3"),
+			factory.measures().createPsiMeasure("A", 3, "psi3"),
 			factory.measures().createHBondMeasure("A", 3, 0),	//	i+3.CO->iHN
 			factory.measures().createHBondMeasure("A", 0, 4)    //	i.CO->i+4HN
 		);

@@ -6,7 +6,6 @@ import java.util.List;
 
 import org.junit.Test;
 
-import tailor.api.AtomListCondition;
 import tailor.api.AtomListDescription;
 import tailor.api.AtomListMeasure;
 import tailor.condition.AtomPartition;
@@ -16,20 +15,11 @@ import tailor.description.GroupDescription;
 import tailor.engine.plan.Plan;
 import tailor.engine.plan.Planner;
 import tailor.measure.AbstractAtomListMeasure;
-import tailor.measure.DoubleMeasurement;
+import tailor.measurement.DoubleMeasurement;
 import tailor.structure.Atom;
 import tailor.view.PlanViewer;
 
 public class TestPlanner {
-	
-	private class DummyAtomListCondition implements AtomListCondition {
-
-		@Override
-		public boolean accept(AtomPartition atomPartition) {
-			return true;
-		}
-		
-	}
 	
 	private class DummyAtomListDescription implements AtomListDescription {
 		
@@ -39,10 +29,6 @@ public class TestPlanner {
 			this.measure = new DummyAtomListMeasure(paths);
 		}
 
-		@Override
-		public AtomListCondition createCondition() {
-			return new DummyAtomListCondition();
-		}
 		
 		public AtomListMeasure createMeasure() {
 			return this.measure;
@@ -51,6 +37,11 @@ public class TestPlanner {
 		@Override
 		public List<GroupDescription> getGroupDescriptions() {
 			return this.measure.getGroupDescriptions();
+		}
+
+		@Override
+		public boolean apply(AtomPartition atomPartition) {
+			return true;
 		}
 		
 	}

@@ -8,7 +8,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.Stack;
 
-import tailor.api.AtomListCondition;
 import tailor.api.AtomListDescription;
 import tailor.api.Operator;
 import tailor.api.PipeableOperator;
@@ -209,9 +208,7 @@ public class Planner {
 	 * @return the output pipe from the filter
 	 */
 	private ResultPipe addFilter(ResultPipe previousOutput, Set<AtomListDescription> atomListDescriptions, Plan plan) {
-		List<AtomListCondition> conditions = 
-				atomListDescriptions.stream().map(AtomListDescription::createCondition).toList();
-		FilterAtomResultByCondition filter = new FilterAtomResultByCondition(conditions);
+		FilterAtomResultByCondition filter = new FilterAtomResultByCondition(new ArrayList<>(atomListDescriptions));
 		
 		ResultPipe filterOutput = new ResultPipe();
 		filter.setSink(filterOutput);
