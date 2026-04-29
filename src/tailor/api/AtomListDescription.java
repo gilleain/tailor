@@ -15,16 +15,15 @@ public interface AtomListDescription {
 	 */
 	List<GroupDescription> getGroupDescriptions();
 	
-//	/**
-//	 * @return the corresponding condition for this description
-//	 */
-//	AtomListCondition createCondition();
-//	
 	/**
 	 * @return convert this description to a measure across the same atoms
 	 */
 	AtomListMeasure createMeasure();
 	
+	/**
+	 * 
+	 * @return the result of applying this description to the atoms
+	 */
 	boolean apply(AtomPartition atomPartition);
 
 }

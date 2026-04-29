@@ -10,24 +10,15 @@ import tailor.condition.UpperBoundCondition;
 
 public class AtomUpperBoundDescription implements AtomListDescription {
 	
-//	private final double value;
-	
 	private final UpperBoundCondition condition;
 	
 	private final AtomListMeasure measure;
 	
 	public AtomUpperBoundDescription(double value, AtomListMeasure measure) {
-//		this.value = value;
 		this.condition = new UpperBoundCondition(value);
 		this.measure = measure;
 	}
-	
 
-//	@Override
-//	public AtomListCondition createCondition() {
-//		return new AtomUpperBoundCondition(this.value);
-//	}
-	
 	@Override
 	public AtomListMeasure createMeasure() {
 		return this.measure;
