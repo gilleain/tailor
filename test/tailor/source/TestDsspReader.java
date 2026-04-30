@@ -35,14 +35,14 @@ public class TestDsspReader {
     
     public void p(SSE sse, int index) {
         System.out.println(sse.getClass().getSimpleName() + " " + index
-                + " " + sse.getFirst().getId() 
-                + "-" + sse.getLast().getId());
+                + " " + sse.getFirst().getNumber() 
+                + "-" + sse.getLast().getNumber());
     }
     
     private boolean isStrand(SSE sse, int start, int end) {
         return sse instanceof Strand 
-                && sse.getFirst().getId().equals(String.valueOf(start))
-                && sse.getLast().getId().equals(String.valueOf(end));
+                && sse.getFirst().getNumber().equals(String.valueOf(start))
+                && sse.getLast().getNumber().equals(String.valueOf(end));
     }
 
 }

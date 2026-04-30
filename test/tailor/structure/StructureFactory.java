@@ -31,7 +31,7 @@ public class StructureFactory {
     public static String[] atoms(char one) {
         switch (one) {
             case 'A': return new String[] {"N", "CA", "C", "O", "H", "HA", "CB", "1HB", "2HB", "3HB"};
-            case 'C': return new String[] {"N", "CA", "C", "O", "HA"};
+            case 'C': return new String[] {"N", "CA", "C", "O", "HA"}; // TODO - rest of this ...
             case 'D': return new String[] {"N", "CA", "C", "O", "HA"};
             case 'E': return new String[] {"N", "CA", "C", "O", "HA"};
             case 'F': return new String[] {"N", "CA", "C", "O", "HA"};
@@ -59,8 +59,7 @@ public class StructureFactory {
         Chain chain = new Chain();
         for (int i = 0; i < seq.length(); i++) {
             String name = oneToThree(seq.charAt(i));
-            Group residue = new Group();
-            residue.setId(name);
+            Group residue = new Group(i, name);
             chain.addGroup(residue);
         }
         return chain;

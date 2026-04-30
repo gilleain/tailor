@@ -126,7 +126,7 @@ public class Result {
 	private boolean isMatch(Node thisGroupNode, Node otherGroupNode) {
 		Group gN = (Group) thisGroupNode.o;
 		Group gM = (Group) otherGroupNode.o;
-		boolean groupIdsEqual = gN.getResidueName().equals(gM.getResidueName()) 
+		boolean groupIdsEqual = gN.getName().equals(gM.getName()) 
 							  && gN.getResidueId().getResseq() == gM.getResidueId().getResseq();
 		boolean atomsEqual = atomString(gN).equals(atomString(gM));
 		return groupIdsEqual && atomsEqual;
@@ -193,7 +193,7 @@ public class Result {
 		int numberOfChildren = this.root.children.size();
 		for (Node child : this.root.children) {
 			Group g = (Group)child.o;
-			output.append(g.getResidueName()).append(g.getNumber()).append("/");
+			output.append(g.getName()).append(g.getNumber()).append("/");
 			addAtoms(child, output);
 			if (numberOfChildren > 0 && counter < numberOfChildren - 1) {
 				output.append("|");
@@ -248,7 +248,7 @@ public class Result {
 			Group gN = (Group) n.o;
 			for (Node m : other.root.children) {
 				Group gM = (Group) m.o;
-				if (gN.getResidueName().equals(gM.getResidueName()) && gN.getNumber() == gM.getNumber()) {
+				if (gN.getName().equals(gM.getName()) && gN.getNumber() == gM.getNumber()) {
 					return true;
 				}
 			}

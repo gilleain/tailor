@@ -40,9 +40,7 @@ public class TestPDBWriter {
         Chain chain = new Chain();
         int numberOfResidues = 10;
         for (int index = 0; index < numberOfResidues; index++) {
-            Group group = new Group();
-            group.setNumber(index);
-            group.setId("GLY");
+            Group group = new Group(index, "GLY");
             group.addAtom(randomAtom("N"));
             group.addAtom(randomAtom("CA"));
             chain.addGroup(group);

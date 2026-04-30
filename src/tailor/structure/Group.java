@@ -14,11 +14,9 @@ public class Group implements Structure {
     
     private final Map<String, Atom> atomMap;
 
-    private String id;
+    private String name;
     
     private ResidueID  residueId;	// TODO
-    
-    private String residueName;
     
     private int index;
     
@@ -37,11 +35,11 @@ public class Group implements Structure {
     	this(residueId, residueName, "");
     }
     
-    public Group(ResidueID residueId, String residueName, String segmentId) {
+    public Group(ResidueID residueId, String name, String segmentId) {
     	this();
     	// TODO - store these things
     	this.residueId = residueId;
-    	this.residueName = residueName;
+    	this.name = name;
     }
     
 
@@ -82,19 +80,8 @@ public class Group implements Structure {
     public ResidueID getResidueId() {
     	return this.residueId;
     }
+   
     
-    public String getResidueName() {
-    	return this.residueName;
-    }
-
-    public String getId() {
-        // TODO : why ID and name...
-        return id;
-    }
-    
-    public void setId(String id) {
-        this.id = id;
-    }
     
     public int getIndex() {
         return index;
@@ -106,7 +93,7 @@ public class Group implements Structure {
 
     @Override
     public String getName() {
-        return id;
+        return name;
     }
 
     public void setNumber(int number) {
@@ -142,6 +129,6 @@ public class Group implements Structure {
     }
     
     public String toString() {
-        return id + atomMap;
+        return name + atomMap;
     }
 }

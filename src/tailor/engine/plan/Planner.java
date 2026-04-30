@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.Stack;
 
@@ -41,11 +42,16 @@ public class Planner {
 		// Go through the group descriptions in the chain, making scanners
 		Map<GroupDescription, PipeableOperator<Result, Result>> scannerMap = new HashMap<>();
 		for (GroupDescription groupDescription : chainDescription.getGroupDescriptions()) {
-			List<String> labels = groupDescription.getAtomDescriptions().stream().map(a -> a.getLabel()).toList();
-			PipeableOperator<Result, Result> scanByLabel = new ScanAtomResultByLabel(labels);
-			scannerMap.put(groupDescription, scanByLabel);
-			// add to the list of starts
-			plan.addStart(scanByLabel);
+			Optional<String> groupName = groupDescription.getName(); 
+			if (groupName.isPresent()) {
+				// FIXME - add FilterGroupByDescription first, then the atom filter
+			} else {
+				List<String> labels = groupDescription.getAtomDescriptions().stream().map(a -> a.getLabel()).toList();
+				PipeableOperator<Result, Result> scanByLabel = new ScanAtomResultByLabel(labels);
+				scannerMap.put(groupDescription, scanByLabel);
+				// add to the list of starts
+				plan.addStart(scanByLabel);
+			}
 		}
 		
 		// Extract and categorise the atom list descriptions

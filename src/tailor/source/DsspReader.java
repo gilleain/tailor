@@ -58,9 +58,8 @@ public class DsspReader {
     }
 
     private static Group parseGroup(String record) {
-        Group group = new Group();
         String pdbNumber = record.substring(5, 10).trim();
-        group.setId(pdbNumber);
+        Group group = new Group(Integer.valueOf(pdbNumber), "");
         group.addAtom(parseAtom(record));
         return group;
     }

@@ -21,9 +21,8 @@ public class StructureBuilder {
     }
     
     public StructureBuilder group(String groupName) {
-        currentGroup = new Group();
+        currentGroup = new Group(1, groupName);	// TODO - number
         groups.add(currentGroup);
-        currentGroup.setId(groupName);
         return this;
     }
     

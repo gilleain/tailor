@@ -88,10 +88,8 @@ public class PDBReader {
 	    
 	    public static Group createResidue(String residueNumber, String residueName, int chainIndex) {
 //            System.out.println("residue " + residueNumber + " " + residueName + " " + chainIndex);
-	    	Group residue = new Group();
+	    	Group residue = new Group(Integer.valueOf(residueNumber), residueName);
             residue.setIndex(chainIndex);
-	    	residue.setNumber(Integer.valueOf(residueNumber));
-	    	residue.setId(residueName);
 	    	return residue;
 	    }
 }
