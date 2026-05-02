@@ -74,11 +74,18 @@ public class Plan {
 	}
 	
 	public ResultPipe addOperatorReturnPipe(PipeableOperator<Result, Result> operator) {
+		return this.addOperatorReturnPipe(operator, null);
+	}
+		
+    public ResultPipe addOperatorReturnPipe(PipeableOperator<Result, Result> operator, ResultPipe sourcePipe) {
 		this.operators.add(operator);
-		ResultPipe output = new ResultPipe();
+		ResultPipe outputPipe = new ResultPipe();
 		operator.setId(getOperatorId());
-		operator.setSink(output);
-		return output;
+		operator.setSink(outputPipe);
+		if (sourcePipe != null) {
+			operator.setSource(sourcePipe);
+		}
+		return outputPipe;
 	}
 	
 	private String getOperatorId() {
@@ -88,7 +95,6 @@ public class Plan {
 	}
 
 	public ResultPipe getOutputPoint() {
-//		return (ResultPipe) ((PipeableOperator<?, ?>) operators.get(operators.size() - 1)).getSink(); // TODO ugh
 		return outputPoint;
 	}
 

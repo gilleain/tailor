@@ -99,13 +99,17 @@ public class FunctionalTests {
 	}
 	
 	private ChainDescription makeON() {
+		return makeON(null, null);
+	}
+	
+	private ChainDescription makeON(String groupAName, String groupBName) {
 		double minAngle = 145;
 		double maxAngle = 180;
 		double minDistance = 2.7;
 		double maxDistance = 3.4;
 		ChainDescription chainDescription = new ChainDescription();
-		GroupDescription groupA = Helper.makeGroupDescription("C", "O");
-		GroupDescription groupB = Helper.makeGroupDescription("N");
+		GroupDescription groupA = Helper.makeGroupDescriptionWithName(groupAName, "C", "O");
+		GroupDescription groupB = Helper.makeGroupDescriptionWithName(groupBName, "N");
 		chainDescription.addGroupDescriptions(groupA, groupB);
 		AtomListDescription distance = 
 				new AtomValueRangeDescription(minDistance, maxDistance, 
@@ -167,7 +171,7 @@ public class FunctionalTests {
 	@Test
 	public void helixONBondTest() throws IOException {
 		String filename = "helix.pdb";
-		run(filename, makeON());
+		run(filename, makeON(null, "LEU"));
 	}
 	
 	@Test

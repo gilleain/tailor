@@ -1,7 +1,5 @@
 package tailor.view;
 
-import static tailor.operator.Helper.pathTo;
-
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -22,20 +20,20 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.SwingUtilities;
 
-import tailor.api.AtomListDescription;
 import tailor.api.Operator;
 import tailor.api.PipeableOperator;
 import tailor.api.Sink;
-import tailor.description.ChainDescription;
-import tailor.description.GroupDescription;
-import tailor.description.atom.AtomAngleRangeDescription;
-import tailor.description.atom.AtomDistanceRangeDescription;
+import tailor.description.DescriptionFactory;
 import tailor.engine.operator.CombineResults;
+import tailor.engine.operator.FilterAtomResultByCondition;
+import tailor.engine.operator.Measurer;
+import tailor.engine.operator.PrintAdapter;
+import tailor.engine.operator.PrintResults;
 import tailor.engine.operator.ResultPipe;
+import tailor.engine.operator.ScanAtomResultByLabel;
 import tailor.engine.plan.Plan;
 import tailor.engine.plan.Planner;
 import tailor.engine.plan.Result;
-import tailor.operator.Helper;
 
 /**
  * Swing viewer for a Plan. Renders each Operator as a labelled rectangle,
@@ -44,22 +42,11 @@ import tailor.operator.Helper;
 public class PlanViewer extends JFrame {
 	
 	public static void main(String[] args) {
-		double minAngle = 145;
-		double maxAngle = 180;
-		double minDistance = 2.7;
-		double maxDistance = 3.4;
-		ChainDescription chainDescription = new ChainDescription();
-		GroupDescription groupA = Helper.makeGroupDescription("C", "O");
-		GroupDescription groupB = Helper.makeGroupDescription("N");
-		chainDescription.addGroupDescriptions(groupA, groupB);
-		AtomListDescription distance = 
-				new AtomDistanceRangeDescription(minDistance, maxDistance, pathTo(groupA, "O"), pathTo(groupB, "N"));
-		AtomListDescription angle = 
-				new AtomAngleRangeDescription(minAngle, maxAngle, pathTo(groupA, "C"), pathTo(groupA, "O"), pathTo(groupB, "N"));
-		chainDescription.addAtomListDescriptions(distance, angle);
-		chainDescription.addAtomListMeasures(distance.createMeasure(), angle.createMeasure());	
+		DescriptionFactory df = new DescriptionFactory("A");
+		df.addResidueToChainWithoutAtoms("A", "GLY").addAtomDescription("N");
+		df.addResidueToChainWithoutAtoms("A", "HIS").addAtomDescription("O");
 		
-		Plan plan = new Planner().plan(chainDescription);
+		Plan plan = new Planner().plan(df.getChainDescription("A"));
 		PlanViewer.show(plan);
 	}
 
@@ -92,9 +79,20 @@ public class PlanViewer extends JFrame {
         private final Map<String, Rectangle> positions = new LinkedHashMap<>();
         /** directed edges as {sourceId, sinkId} pairs */
         private final List<Edge> edges = new ArrayList<>();
+        
+        private final Map<Class, Color> colorMap;
 
         PlanPanel(Plan plan) {
             setBackground(Color.WHITE);
+            
+            colorMap = new HashMap<>();
+            colorMap.put(FilterAtomResultByCondition.class, Color.BLUE);
+            colorMap.put(ScanAtomResultByLabel.class, Color.GREEN);
+            colorMap.put(FilterAtomResultByCondition.class, Color.MAGENTA);
+            colorMap.put(CombineResults.class, Color.PINK);
+            colorMap.put(PrintAdapter.class, Color.RED);
+            colorMap.put(PrintResults.class, Color.RED);
+            colorMap.put(Measurer.class, Color.GRAY);
 
             for (Operator op : plan.getOperators()) {
                 idToOp.put(op.getId(), op);
@@ -257,16 +255,9 @@ public class PlanViewer extends JFrame {
             }
         }
 
-        private static Color colorFor(Operator op) {
-            if (op == null) return Color.LIGHT_GRAY;
-            return switch (op.getClass().getSimpleName()) {
-                case "ScanAtomResultByLabel"        -> new Color(173, 216, 230); // light blue
-                case "FilterAtomResultByCondition"  -> new Color(144, 238, 144); // light green
-                case "CombineResults"               -> new Color(255, 218, 185); // peach/orange
-                case "PrintAdapter", "PrintResults" -> new Color(216, 191, 216); // lavender
-                case "Measurer"  					-> new Color(120, 202, 170); // ???
-                default                             -> new Color(220, 220, 220); // light grey
-            };
+        private Color colorFor(Operator op) {
+            if (op == null || !colorMap.containsKey(op.getClass())) return Color.LIGHT_GRAY;
+            return colorMap.get(op.getClass());
         }
 
         private static String truncate(String s, FontMetrics fm, int maxWidth) {

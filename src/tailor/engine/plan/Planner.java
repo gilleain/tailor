@@ -54,8 +54,7 @@ public class Planner {
 								new PropertyEquals(groupName.get()), new GroupNameMeasure()));
 				ResultPipe groupFilterOut = plan.addStart(filterGroupByDescription);
 				PipeableOperator<Result, Result> scanByLabel = addAtomScanner(plan, groupDescription);
-				scanByLabel.setSource(groupFilterOut);
-				output = plan.addOperatorReturnPipe(scanByLabel);
+				output = plan.addOperatorReturnPipe(scanByLabel, groupFilterOut);
 			} else {
 				PipeableOperator<Result, Result> scanByLabel = addAtomScanner(plan, groupDescription);
 				output = plan.addStart(scanByLabel);
@@ -109,10 +108,7 @@ public class Planner {
 		// Add measures, if any
 		if (!chainDescription.getAtomListMeasures().isEmpty()) {
 			Measurer measurer = new Measurer(chainDescription.getAtomListMeasures());
-			plan.addOperator(measurer);
-			measurer.setSource(current);
-			current = new ResultPipe();
-			measurer.setSink(current);
+			current = plan.addOperatorReturnPipe(measurer, current);
 		}
 		
 		// Wrap the output in a print (for now)
@@ -181,7 +177,7 @@ public class Planner {
 				
 				Set<AtomListDescription> atomListDescriptions = component.atomListDescriptions();
 				if (!component.atomListDescriptions().isEmpty()) {	// trivially, this should always be true
-					ResultPipe filterOutput = addFilter(combinedOutput, atomListDescriptions, plan);
+					ResultPipe filterOutput = addFilter(plan, combinedOutput, atomListDescriptions);
 					combinedOutputPipes.add(filterOutput);
 				} else {
 					combinedOutputPipes.add(combinedOutput);
@@ -203,7 +199,7 @@ public class Planner {
 		// for groups that have inner conditions, create a filter and connect to the scanner
 		if (innerGroupDescriptions.containsKey(groupDescription)) {
 			Set<AtomListDescription> atomListDescriptions = innerGroupDescriptions.get(groupDescription);
-			ResultPipe filterOutput = addFilter(startPoint, atomListDescriptions, plan);
+			ResultPipe filterOutput = addFilter(plan, startPoint, atomListDescriptions);
 			return filterOutput;
 		} else {
 			return startPoint;
@@ -224,23 +220,15 @@ public class Planner {
 	
 	/**
 	 * Add a filter between a subset of the atoms in a group or set of groups
-	 * 
+	 *
+	 * @param plan the plan so far
 	 * @param previousOutput the input for the filter, which is the output from the previous step
 	 * @param atomListDescriptions all condition descriptions to add
-	 * @param pipeline the pipeline so far
+
 	 * @return the output pipe from the filter
 	 */
-	private ResultPipe addFilter(ResultPipe previousOutput, Set<AtomListDescription> atomListDescriptions, Plan plan) {
+	private ResultPipe addFilter(Plan plan, ResultPipe previousOutput, Set<AtomListDescription> atomListDescriptions) {
 		FilterAtomResultByCondition filter = new FilterAtomResultByCondition(new ArrayList<>(atomListDescriptions));
-		
-		ResultPipe filterOutput = new ResultPipe();
-		filter.setSink(filterOutput);
-		
-		// TODO - nasty hidden effect here where we have to call this before setSource to ensure ids
-		// are set correctly!
-		plan.addOperator(filter);
-		filter.setSource(previousOutput);
-		
-		return filterOutput;
+		return plan.addOperatorReturnPipe(filter, previousOutput);
 	}
 }
