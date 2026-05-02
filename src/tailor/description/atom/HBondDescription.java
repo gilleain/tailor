@@ -8,6 +8,7 @@ import tailor.api.Measurement;
 import tailor.condition.AtomPartition;
 import tailor.condition.RangeCondition;
 import tailor.condition.UpperBoundCondition;
+import tailor.description.AtomDescription;
 import tailor.description.DescriptionPath;
 import tailor.description.GroupDescription;
 import tailor.measure.HBondMeasure;
@@ -83,5 +84,13 @@ public class HBondDescription implements AtomListDescription {
 		Measurement m = measure.measure(atomPartition);
 		return haDistanceCondition.accept(new DoubleMeasurement( m.getValue("d") )) 
 				&& daaAngleRangeCondition.accept(new DoubleMeasurement( m.getValue("a")));
+	}
+	
+	public AtomDescription getDonorAtomDescription() {
+		return donorDescriptionPath.getAtomDescription();
+	}
+	
+	public AtomDescription getAcceptorAtomDescription() {
+		return acceptorDescriptionPath.getAtomDescription();
 	}
 }

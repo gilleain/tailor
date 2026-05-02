@@ -68,8 +68,8 @@ public class ResidueDiagramCanvas extends JPanel implements MouseListener, Scrol
 		this.calculateDimensions(this.numberOfResiduesInView);
 	}
 
-	public AtomDescription getAtomDescriptionFromSymbol(Symbol symbol) {
-		return this.diagram.getAtomDescriptionFromSymbol(symbol);
+	public List<AtomDescription> getAtomDescriptionFromSymbol(Symbol symbol) {
+		return this.diagram.getAtomDescriptionsFromSymbol(symbol);
 	}
 	
 	public boolean canScaleDiagramUp() {

@@ -136,12 +136,11 @@ public abstract class Symbol {
 	public boolean contains(double x, double y) {
 		return this.shape.contains(x, y);
 	}
+	
+	protected abstract void setFill(Graphics2D g2, Color color);
 
 	public void draw(Graphics2D g2) {
-		if (!(this instanceof HBondArc)) { // FIXME : must be a better way...
-			g2.setColor(Color.WHITE);
-			g2.fill(this.getShape());
-		}
+		setFill(g2, Color.WHITE);
 		
 		if (this.isSelected) {
 			g2.setColor(Color.RED);

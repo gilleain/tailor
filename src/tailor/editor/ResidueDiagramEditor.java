@@ -241,10 +241,13 @@ public class ResidueDiagramEditor extends JPanel implements SymbolSelectionListe
 			this.canvas.repaint();
 		} else {
 			
-			AtomDescription selectedAtomDescription = 
+			List<AtomDescription> selectedAtomDescriptionList = 
 				this.canvas.getAtomDescriptionFromSymbol(newlySelectedSymbol);
-			AtomDescription previousAtomDescription = 
+			List<AtomDescription> previousAtomDescriptionList = 
 				this.canvas.getAtomDescriptionFromSymbol(this.previouslySelectedSymbol);
+			
+			AtomDescription selectedAtomDescription = getAtomFromList( selectedAtomDescriptionList);
+			AtomDescription previousAtomDescription = getAtomFromList(previousAtomDescriptionList);
 			
 			// bail out if incompatible partners have been selected
 			if (!this.canHydrogenBond(selectedAtomDescription, previousAtomDescription)) {
@@ -275,15 +278,23 @@ public class ResidueDiagramEditor extends JPanel implements SymbolSelectionListe
 		}
 	}
 	
+	private AtomDescription getAtomFromList(List<AtomDescription> atomDescriptionList) {
+		return atomDescriptionList.size() == 1? atomDescriptionList.get(0) :
+					atomDescriptionList.stream().filter(a -> a.getLabel().equals("O")).findFirst().orElseThrow();
+	}
+	
 	public void makeBondMeasure(Symbol newlySelectedSymbol) {
 		if (this.previouslySelectedSymbol == null) {
 			this.previouslySelectedSymbol = newlySelectedSymbol;
 		} else {
 			
-			AtomDescription selectedAtomDescription = 
+			List<AtomDescription> selectedAtomDescriptionList = 
 				this.canvas.getAtomDescriptionFromSymbol(newlySelectedSymbol);
-			AtomDescription previousAtomDescription = 
+			List<AtomDescription> previousAtomDescriptionList =
 				this.canvas.getAtomDescriptionFromSymbol(this.previouslySelectedSymbol);
+			
+			AtomDescription selectedAtomDescription = getAtomFromList( selectedAtomDescriptionList);
+			AtomDescription previousAtomDescription = getAtomFromList(previousAtomDescriptionList);
 			
 			// bail out if incompatible partners have been selected
 			if (!this.canHydrogenBond(selectedAtomDescription, previousAtomDescription)) {

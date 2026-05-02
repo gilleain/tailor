@@ -1,6 +1,7 @@
 package tailor.view.symbol;
 
 import java.awt.Color;
+import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.Shape;
@@ -12,6 +13,12 @@ public class PeptideHalfSquare extends Symbol {
 	public PeptideHalfSquare(String label, int residueIndex, int x, int y, int diameter) {
 		super(residueIndex, x, y, diameter, label);
 		this.setDrawLabel(true);
+	}
+	
+	@Override
+	protected void setFill(Graphics2D g2, Color color) {
+		g2.setColor(Color.WHITE);
+		g2.fill(this.getShape());
 	}
 	
 	public void reshape(int centerX, int centerY, int size) {
@@ -35,5 +42,10 @@ public class PeptideHalfSquare extends Symbol {
 	public Color getColor() {
 		return Color.BLACK;
 	}
+	
+	public String toString() {
+		return "PeptideHalfSquare at " + getCenter();
+	}
+	
 
 }

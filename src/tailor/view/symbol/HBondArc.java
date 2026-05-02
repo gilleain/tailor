@@ -1,6 +1,7 @@
 package tailor.view.symbol;
 
 import java.awt.Color;
+import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Shape;
 import java.awt.geom.Arc2D;
@@ -18,6 +19,11 @@ public class HBondArc extends Symbol {
 		this.setStroke(strokeType);
 	}
 	
+	@Override
+	protected void setFill(Graphics2D g2, Color color) {
+		// no fill
+	}
+
 	public boolean contains(Symbol symbol) {
 		return this.right == symbol || this.left == symbol;
 	}
@@ -61,6 +67,12 @@ public class HBondArc extends Symbol {
 			case -5: return Color.WHITE;
 			default : return Color.YELLOW;
 		}
+	}
+	
+	public String toString() {
+		Point leftTopCenter = this.left.getTopCenter();
+		Point rightTopCenter = this.right.getTopCenter();
+		return "HBondArc from " + leftTopCenter + " to " + rightTopCenter;
 	}
 
 }

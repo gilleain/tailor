@@ -7,11 +7,11 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import tailor.api.AtomListDescription;
 import tailor.description.AtomDescription;
 import tailor.description.ChainDescription;
-import tailor.description.Description;
 import tailor.description.GroupDescription;
 import tailor.description.ProteinDescription;
 import tailor.description.atom.AtomTorsionRangeDescription;
@@ -49,7 +49,7 @@ public class ResidueDiagram {
 	private ArrayList<Symbol> torsionSymbols;
 	private ArrayList<Symbol> hBondSymbols;
 	
-	private HashMap<Symbol, Object> symbolToObjectMap;
+	private Map<Symbol, List<AtomDescription>> symbolToObjectMap;
 	
 	private boolean shouldDrawLabels;
 	
@@ -71,9 +71,7 @@ public class ResidueDiagram {
 		this();
 		this.numberOfResidues = chainDescription.getGroupDescriptions().size();
 		this.name = "New Motif";
-		this.createBackbone(numberOfResidues);
-		
-		this.fillMap(chainDescription);
+		this.createFromDescription(chainDescription);
 	}
 	
 	public ResidueDiagram(ProteinDescription description) {
@@ -119,25 +117,11 @@ public class ResidueDiagram {
 	public void makeTorsion(AtomTorsionRangeDescription t) {
 		System.err.println("making torsion");
 		
-		Description firstDesc = null;	// TODO t.getDescriptionA();
-		Description lastDesc =  null;  // TODO t.getDescriptionD();
+		AtomDescription firstDescription = t.getFirstAtomDescription();
+		AtomDescription lastDescription = t.getLastAtomDescription();
+		Symbol first = this.reverseLookup(firstDescription);
+		Symbol last = this.reverseLookup(lastDescription);
 		
-		// FIXME ugly hack to map C->O for phi  
-//		AtomDescription a = (AtomDescription) firstDesc.getPathEnd();
-//		if (a.getName() == "C") {
-//			a.setName("O");
-//		}
-//		AtomDescription d = (AtomDescription) lastDesc.getPathEnd();
-//		if (d.getName() == "C") {
-//			d.setName("O");
-//		}
-//		
-//		Symbol first = this.reverseLookup((AtomDescription) firstDesc.getPathEnd());
-//		Symbol last = this.reverseLookup((AtomDescription) lastDesc.getPathEnd());
-		
-		Symbol first = null;
-		Symbol last = null;
-//		
 		if (first == null || last == null) {
 			return;							// FIXME
 		}
@@ -160,18 +144,15 @@ public class ResidueDiagram {
 		}
 	}
 	
-	public void makeBond(HBondDescription h) {
-		// TODO
-//	    AtomDescription donorAtom = (AtomDescription) h.getDonorAtomDescription().getPathEnd();
-		AtomDescription donorAtom = null;
+	public void makeBond(HBondDescription hBondDescription) {
+		AtomDescription donorAtom = hBondDescription.getDonorAtomDescription();
 		Symbol donor = this.reverseLookup(donorAtom);
 		
-//		AtomDescription acceptorAtom = (AtomDescription) h.getAcceptorAtomDescription().getPathEnd();
-		AtomDescription acceptorAtom = null;
+		AtomDescription acceptorAtom = hBondDescription.getAcceptorAtomDescription();
 		Symbol acceptor = this.reverseLookup(acceptorAtom);
 		
 		if (donor == null || acceptor == null) {
-		    return;   // TODO
+		    return;   // TODO ?
 		}
 		
 		if (donor.getResidueIndex() < acceptor.getResidueIndex()) {
@@ -182,14 +163,14 @@ public class ResidueDiagram {
 	}
 	
 	private Symbol reverseLookup(AtomDescription atom) {
-		for (Symbol s : this.symbolToObjectMap.keySet()) {
-			Object p = this.symbolToObjectMap.get(s);
-			if (p.equals(atom)) {
-				System.err.println(" mapped to " + s);
-				return s;
+		for (Symbol symbol : this.symbolToObjectMap.keySet()) {
+			List<AtomDescription> atoms = this.symbolToObjectMap.get(symbol);
+			if (atoms.contains(atom)) {
+				System.err.println(atom + " mapped to " + symbol);
+				return symbol;
 			}
 		}
-		System.err.println(" no mapping!");
+		System.err.println(" no mapping! for " + atom + " in " + this.symbolToObjectMap );
 		return null;	// TODO : throw exception?
 	}
 	
@@ -201,14 +182,12 @@ public class ResidueDiagram {
 			Symbol nSymbol = backboneSymbols.get(symbolIndex++);
 			Symbol caSymbol = backboneSymbols.get(symbolIndex++);
 			Symbol oSymbol = backboneSymbols.get(symbolIndex++);
-			symbolToObjectMap.put(nSymbol, group.getAtomDescription("N"));
-			symbolToObjectMap.put(caSymbol, group.getAtomDescription("CA"));
-			symbolToObjectMap.put(oSymbol, group.getAtomDescription("O"));
+			addSymbolMappings(nSymbol, caSymbol, oSymbol, group);
 		}
 	}
 	
-	public AtomDescription getAtomDescriptionFromSymbol(Symbol symbol) {
-		return (AtomDescription) this.symbolToObjectMap.get(symbol);
+	public List<AtomDescription> getAtomDescriptionsFromSymbol(Symbol symbol) {
+		return this.symbolToObjectMap.get(symbol);
 	}
 	
 	/**
@@ -291,14 +270,17 @@ public class ResidueDiagram {
 		g.drawString(this.name, 10, 20);
 		
 		for (Symbol s : this.backboneSymbols) {
+			System.err.println("Drawing " + s);
 			s.draw(g2);
 		}
 		
 		for (Symbol s : this.torsionSymbols) {
+			System.err.println("Drawing " + s);
 			s.draw(g2);
 		}
 		
 		for (Symbol s : this.hBondSymbols) {
+			System.err.println("Drawing " + s);
 			s.draw(g2);
 		}
 	}
@@ -446,9 +428,19 @@ public class ResidueDiagram {
 		this.relayout();
 
 		// now, map the new symbols to their AtomDescription counterparts
-		this.symbolToObjectMap.put(nSymbol, group.getAtomDescription("N"));
-		this.symbolToObjectMap.put(caSymbol, group.getAtomDescription("CA"));
-		this.symbolToObjectMap.put(oSymbol, group.getAtomDescription("O"));
+		addSymbolMappings(nSymbol, caSymbol, oSymbol, group);
+	}
+	
+	private void addSymbolMappings(Symbol nSymbol, Symbol caSymbol, Symbol oSymbol, GroupDescription group) {
+		addSymbolMapping(nSymbol, group.getAtomDescription("N"));
+		addSymbolMapping(caSymbol,group.getAtomDescription("CA"));
+		addSymbolMapping(oSymbol, group.getAtomDescription("O"));
+		// Note mapping both O and C to the oSymbol
+		addSymbolMapping(oSymbol, group.getAtomDescription("C"));
+	}
+	
+	private void addSymbolMapping(Symbol symbol, AtomDescription atomDescription) {
+		this.symbolToObjectMap.computeIfAbsent(symbol, _ -> new ArrayList<>()).add(atomDescription);
 	}
 	
 	public void removeResidueFromEnd() {
@@ -593,6 +585,7 @@ public class ResidueDiagram {
 	}
 	
 	public void makeBond(Symbol start, Symbol end, Symbol.Stroke strokeType) {
+		System.err.println("Adding Stroke " + strokeType + " between " + start + " and " + end);
 		this.hBondSymbols.add(
 				new HBondArc((PeptideHalfSquare) start, (PeptideHalfSquare) end, strokeType));
 	}

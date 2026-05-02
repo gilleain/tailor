@@ -1,6 +1,7 @@
 package tailor.view.symbol;
 
 import java.awt.Color;
+import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Shape;
 import java.awt.geom.Rectangle2D;
@@ -21,6 +22,12 @@ public class TorsionBox extends Symbol {
 		this.setDrawLabel(true);
 		this.setStroke(strokeType);
 		this.setDiameter(size);
+	}
+	
+	@Override
+	protected void setFill(Graphics2D g2, Color color) {
+		g2.setColor(Color.WHITE);
+		g2.fill(this.getShape());
 	}
 	
 	public boolean contains(Symbol symbol) {
@@ -46,6 +53,10 @@ public class TorsionBox extends Symbol {
 
 	public Color getColor() {
 		return Color.BLACK;
+	}
+	
+	public String toString() {
+		return "TorsionBox at " + getCenter();
 	}
 }
 

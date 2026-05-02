@@ -54,5 +54,17 @@
 			<Path name="acceptor" label="i + 1" atom="O"/>
 			<Path name="attached" label="i + 1" atom="C"/>
 		</HBondCondition>
+		<TorsionCondition name="phi1" midPoint="90" range="10">
+			<Path name="a" label="i" atom="C"/>
+			<Path name="b" label="i + 1" atom="N"/>
+			<Path name="c" label="i + 1" atom="CA"/>
+			<Path name="d" label="i + 1" atom="C"/>
+		</TorsionCondition>
+		<TorsionCondition name="psi1" midPoint="90" range="10">
+			<Path name="a" label="i + 1" atom="N"/>
+			<Path name="b" label="i + 1" atom="CA"/>
+			<Path name="c" label="i + 1" atom="C"/>
+			<Path name="d" label="i + 2" atom="N"/>
+		</TorsionCondition>
 	</ChainDescription>
 </ProteinDescription>

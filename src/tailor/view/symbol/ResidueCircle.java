@@ -1,6 +1,7 @@
 package tailor.view.symbol;
 
 import java.awt.Color;
+import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Shape;
 import java.awt.geom.Ellipse2D;
@@ -11,6 +12,12 @@ public class ResidueCircle extends Symbol {
 	public ResidueCircle(int x, int y, int diameter, int residueIndex, int residueNumber) {
 		super(residueIndex, x, y, diameter, String.valueOf(residueNumber));
 		this.setDrawLabel(true);
+	}
+	
+	@Override
+	protected void setFill(Graphics2D g2, Color color) {
+		g2.setColor(Color.WHITE);
+		g2.fill(this.getShape());
 	}
 	
 	public void reshape(int centerX, int centerY, int size) {
@@ -28,6 +35,10 @@ public class ResidueCircle extends Symbol {
 	
 	public Color getColor() {
 		return Color.BLACK;
+	}
+	
+	public String toString() {
+		return "ResidueCircle at " + getCenter();
 	}
 	
 }
