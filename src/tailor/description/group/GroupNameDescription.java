@@ -24,5 +24,9 @@ public class GroupNameDescription {
 		PropertyMeasurement propertyMeasurement = groupNameMeasure.measure(group);
 		return propertyEquals.accept(propertyMeasurement);
 	}
+	
+	public String toString() {
+		return "GroupName" + this.propertyEquals.toString();
+	}
 
 }

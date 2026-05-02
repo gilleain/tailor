@@ -10,6 +10,7 @@ import tailor.api.AtomListDescription;
 import tailor.api.AtomListMeasure;
 import tailor.condition.AtomPartition;
 import tailor.description.ChainDescription;
+import tailor.description.DescriptionFactory;
 import tailor.description.DescriptionPath;
 import tailor.description.GroupDescription;
 import tailor.engine.plan.Plan;
@@ -57,6 +58,27 @@ public class TestPlanner {
 			return new DoubleMeasurement(1);
 		}
 		
+	}
+	
+	
+	@Test
+	public void testOneNamedGroupOneUnnamed() {
+		DescriptionFactory df = new DescriptionFactory("A");
+		df.addResidueToChainWithoutAtoms("A", "GLY").addAtomDescription("N");
+		df.addResidueToChainWithoutAtoms("A").addAtomDescription("O");
+		
+		Plan plan = new Planner().plan(df.getChainDescription("A"));
+		Helper.describe(plan);
+	}
+	
+	@Test
+	public void testTwoNamedGroups() {
+		DescriptionFactory df = new DescriptionFactory("A");
+		df.addResidueToChainWithoutAtoms("A", "GLY").addAtomDescription("N");
+		df.addResidueToChainWithoutAtoms("A", "HIS").addAtomDescription("O");
+		
+		Plan plan = new Planner().plan(df.getChainDescription("A"));
+		Helper.describe(plan);
 	}
 	
 	@Test

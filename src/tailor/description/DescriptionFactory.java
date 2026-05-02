@@ -47,6 +47,18 @@ public class DescriptionFactory {
 		}
 	}
 	
+	public GroupDescription addResidueToChainWithoutAtoms(String chainLabel) {
+		GroupDescription groupDescription = new GroupDescription();
+		chain.addGroupDescription(groupDescription);
+		return groupDescription;
+	}
+	
+	public GroupDescription addResidueToChainWithoutAtoms(String chainLabel, String groupName) {
+		GroupDescription groupDescription = new GroupDescription(groupName);
+		chain.addGroupDescription(groupDescription);
+		return groupDescription;
+	}
+
 	private GroupDescription addResidue(ChainDescription chain, GroupDescription residue) {
 	    chain.addGroupDescription(residue);
 		residue.addAtomDescription("N");

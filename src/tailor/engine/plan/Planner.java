@@ -12,17 +12,21 @@ import java.util.Stack;
 import tailor.api.AtomListDescription;
 import tailor.api.Operator;
 import tailor.api.PipeableOperator;
+import tailor.condition.PropertyEquals;
 import tailor.description.ChainDescription;
 import tailor.description.GroupDescription;
+import tailor.description.group.GroupNameDescription;
 import tailor.description.group.GroupSequenceDescription;
 import tailor.engine.operator.CombineResults;
 import tailor.engine.operator.CombineResults.PipeSeqConstraint;
 import tailor.engine.operator.FilterAtomResultByCondition;
+import tailor.engine.operator.FilterGroupByDescription;
 import tailor.engine.operator.Measurer;
 import tailor.engine.operator.PrintAdapter;
 import tailor.engine.operator.ResultPipe;
 import tailor.engine.operator.ScanAtomResultByLabel;
 import tailor.engine.plan.GroupUnionFind.Component;
+import tailor.measure.GroupNameMeasure;
 
 /**
  * Converts a {@link ChainDescription} into a pipeline of {@link Operator}
@@ -40,18 +44,23 @@ public class Planner {
 		labelDescription(chainDescription);
 		
 		// Go through the group descriptions in the chain, making scanners
-		Map<GroupDescription, PipeableOperator<Result, Result>> scannerMap = new HashMap<>();
+		Map<GroupDescription, ResultPipe> startPointMap = new HashMap<>();
 		for (GroupDescription groupDescription : chainDescription.getGroupDescriptions()) {
-			Optional<String> groupName = groupDescription.getName(); 
+			Optional<String> groupName = groupDescription.getName();
+			ResultPipe output;
 			if (groupName.isPresent()) {
-				// FIXME - add FilterGroupByDescription first, then the atom filter
+				FilterGroupByDescription filterGroupByDescription = new FilterGroupByDescription(
+						new GroupNameDescription(
+								new PropertyEquals(groupName.get()), new GroupNameMeasure()));
+				ResultPipe groupFilterOut = plan.addStart(filterGroupByDescription);
+				PipeableOperator<Result, Result> scanByLabel = addAtomScanner(plan, groupDescription);
+				scanByLabel.setSource(groupFilterOut);
+				output = plan.addStart(scanByLabel);
 			} else {
-				List<String> labels = groupDescription.getAtomDescriptions().stream().map(a -> a.getLabel()).toList();
-				PipeableOperator<Result, Result> scanByLabel = new ScanAtomResultByLabel(labels);
-				scannerMap.put(groupDescription, scanByLabel);
-				// add to the list of starts
-				plan.addStart(scanByLabel);
+				PipeableOperator<Result, Result> scanByLabel = addAtomScanner(plan, groupDescription);
+				output = plan.addStart(scanByLabel);
 			}
+			startPointMap.put(groupDescription, output);
 		}
 		
 		// Extract and categorise the atom list descriptions
@@ -79,14 +88,20 @@ public class Planner {
 		}
 		
 		// Join the scanners with combiners
-		Stack<ResultPipe> combinedOutputPipes = join(plan, chainDescription, innerGroupDescriptions, outerGroupDescriptions, scannerMap);
+		Stack<ResultPipe> combinedOutputPipes = 
+				join(plan, chainDescription, innerGroupDescriptions, outerGroupDescriptions, startPointMap);
 		
 		// Reduce the output pipes by joining
 		ResultPipe current = combinedOutputPipes.pop();
 		while (!combinedOutputPipes.isEmpty()) {
 			ResultPipe next = combinedOutputPipes.pop();
 			ResultPipe output = new ResultPipe();
-			CombineResults combiner = new CombineResults(List.of(current, next), output);
+			CombineResults combiner;
+			if (current.getSourceId().compareTo(next.getSourceId()) < 0) {
+				combiner = new CombineResults(List.of(current, next), output);
+			} else {
+				combiner = new CombineResults(List.of(next, current), output);
+			}
 			plan.addOperator(combiner);
 			current = output;
 		}
@@ -108,6 +123,11 @@ public class Planner {
 		}
 		return plan;
 	}
+    
+    private PipeableOperator<Result, Result> addAtomScanner(Plan plan, GroupDescription groupDescription) {
+    	List<String> labels = groupDescription.getAtomDescriptions().stream().map(a -> a.getLabel()).toList();
+		return new ScanAtomResultByLabel(labels);
+    }
 	
 	private void labelDescription(ChainDescription chainDescription) {	// TODO - expand on this?
 		int index = 0;
@@ -134,7 +154,7 @@ public class Planner {
 			ChainDescription chainDescription,
 			Map<GroupDescription, Set<AtomListDescription>> innerGroupDescriptions,
 			Map<AtomListDescription, List<GroupDescription>> outerGroupDescriptions, 
-			Map<GroupDescription, PipeableOperator<Result, Result>> scannerMap) {
+			Map<GroupDescription, ResultPipe> startPointMap) {
 		
 		
 		// Find connected components of the graph where vertices are groups and edges 
@@ -150,7 +170,7 @@ public class Planner {
 			List<ResultPipe> componentOutputResultPipes = new ArrayList<>();
 			Map<GroupDescription, ResultPipe> groupDescriptionToOutputPipeMap = new HashMap<>();
 			for (GroupDescription groupDescription : component.groupDescriptions()) {
-				ResultPipe groupOutput = handleComponentGroup(plan, groupDescription, scannerMap, innerGroupDescriptions);
+				ResultPipe groupOutput = handleComponentGroup(plan, groupDescription, startPointMap, innerGroupDescriptions);
 				componentOutputResultPipes.add(groupOutput);
 				groupDescriptionToOutputPipeMap.put(groupDescription, groupOutput);
 			}
@@ -176,20 +196,17 @@ public class Planner {
 	
 	private ResultPipe handleComponentGroup(
 			Plan plan,GroupDescription groupDescription,
-			Map<GroupDescription, PipeableOperator<Result, Result>> scannerMap,
+			Map<GroupDescription, ResultPipe> startPointMap,
 			Map<GroupDescription, Set<AtomListDescription>> innerGroupDescriptions) {
-		PipeableOperator<Result, Result> scanner = scannerMap.get(groupDescription);
-
-		ResultPipe scannerOutput = new ResultPipe();
-		scanner.setSink(scannerOutput);
+		ResultPipe startPoint = startPointMap.get(groupDescription);
 
 		// for groups that have inner conditions, create a filter and connect to the scanner
 		if (innerGroupDescriptions.containsKey(groupDescription)) {
 			Set<AtomListDescription> atomListDescriptions = innerGroupDescriptions.get(groupDescription);
-			ResultPipe filterOutput = addFilter(scannerOutput, atomListDescriptions, plan);
+			ResultPipe filterOutput = addFilter(startPoint, atomListDescriptions, plan);
 			return filterOutput;
 		} else {
-			return scannerOutput;
+			return startPoint;
 		}
 	}
 	
