@@ -100,8 +100,11 @@ public class Result {
 	}
 	
 	public List<Group> getGroups() {
-		// TODO Auto-generated method stub
-		return null;
+		List<Group> groups = new ArrayList<>();
+		for (Node groupNode : this.root.children) {
+			groups.add((Group) groupNode.o);
+		}
+		return groups;
 	}
 
 	public boolean equals(Result other) {

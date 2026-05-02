@@ -7,7 +7,6 @@ import tailor.api.Operator;
 import tailor.api.PipeableOperator;
 import tailor.api.Sink;
 import tailor.engine.operator.ResultPipe;
-import tailor.engine.operator.ScanAtomResultByLabel;
 
 /**
  * A plan is a directed graph of operators that carry out a search.
@@ -54,9 +53,10 @@ public class Plan {
 	public List<Sink<Result>> getInputPipes() {
 		List<Sink<Result>> inputs = new ArrayList<Sink<Result>>();
 		for (Operator start : this.startPoints) {
-			if (start instanceof ScanAtomResultByLabel scanOperator) {
+			if (start instanceof PipeableOperator) {
+				PipeableOperator<Result, Result> pipeableOperator = (PipeableOperator<Result, Result>) start;
 				ResultPipe input = new ResultPipe();
-				scanOperator.setSource(input);
+				pipeableOperator.setSource(input);
 				inputs.add(input);
 			}
 		}

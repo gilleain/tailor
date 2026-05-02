@@ -25,6 +25,7 @@ public class FilterGroupByDescription extends AbstractPipeableOperator {
 			// TODO
 			Group group0 = groups.get(0);
 			if (groupNameDescription.apply(group0)) {
+				logger.info("Accepting " + nextResult);
 				sink.put(nextResult);
 			}
 		}

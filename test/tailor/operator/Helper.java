@@ -48,7 +48,16 @@ public class Helper {
 	}
 	
 	public static GroupDescription makeGroupDescription(String... atomLabels) {
-		GroupDescription groupDescription = new GroupDescription();
+		return makeGroupDescriptionWithName(null, atomLabels);
+	}
+	
+	public static GroupDescription makeGroupDescriptionWithName(String groupName, String... atomLabels) {
+		GroupDescription groupDescription;
+	    if (groupName == null) {
+	    	groupDescription = new GroupDescription();
+	    } else {
+	    	groupDescription = new GroupDescription(groupName);
+	    }
 		for (String atomLabel : atomLabels) {
 			groupDescription.addAtomDescription(new AtomDescription(atomLabel));
 		}

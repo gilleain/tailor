@@ -55,7 +55,7 @@ public class Planner {
 				ResultPipe groupFilterOut = plan.addStart(filterGroupByDescription);
 				PipeableOperator<Result, Result> scanByLabel = addAtomScanner(plan, groupDescription);
 				scanByLabel.setSource(groupFilterOut);
-				output = plan.addStart(scanByLabel);
+				output = plan.addOperatorReturnPipe(scanByLabel);
 			} else {
 				PipeableOperator<Result, Result> scanByLabel = addAtomScanner(plan, groupDescription);
 				output = plan.addStart(scanByLabel);

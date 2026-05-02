@@ -118,14 +118,18 @@ public class FunctionalTests {
 	}
 	
 	private ChainDescription makeNO() {
+		return this.makeNO(null, null);
+	}
+	
+	private ChainDescription makeNO(String groupAName, String groupBName) {
 		double minAngle = 145;
 		double maxAngle = 180;
 		double minDistance = 2.7;
 		double maxDistance = 3.0;
 		
 		ChainDescription chainDescription = new ChainDescription();
-		GroupDescription groupA = Helper.makeGroupDescription("N");
-		GroupDescription groupB = Helper.makeGroupDescription("C", "O");
+		GroupDescription groupA = Helper.makeGroupDescriptionWithName(groupAName, "N");
+		GroupDescription groupB = Helper.makeGroupDescriptionWithName(groupBName, "C", "O");
 		chainDescription.addGroupDescriptions(groupA, groupB);
 		AtomListDescription distance =
 				new AtomDistanceRangeDescription(minDistance, maxDistance, pathTo(groupA, "N"), pathTo(groupB, "O"));
@@ -182,7 +186,7 @@ public class FunctionalTests {
 	@Test
 	public void hairpinNOBondTest() throws IOException {
 		String filename = "hairpin.pdb";
-		run(filename, makeNO());
+		run(filename, makeNO("VAL", null));
 	}
 	
 	@Test
