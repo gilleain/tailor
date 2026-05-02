@@ -39,7 +39,7 @@ import tailor.engine.plan.Result;
  * Swing viewer for a Plan. Renders each Operator as a labelled rectangle,
  * connected left-to-right by lines representing ResultPipe data flow.
  */
-public class PlanViewer extends JFrame {
+public class PlanFrame extends JFrame {
 	
 	public static void main(String[] args) {
 		DescriptionFactory df = new DescriptionFactory("A");
@@ -47,14 +47,14 @@ public class PlanViewer extends JFrame {
 		df.addResidueToChainWithoutAtoms("A", "HIS").addAtomDescription("O");
 		
 		Plan plan = new Planner().plan(df.getChainDescription("A"));
-		PlanViewer.show(plan);
+		PlanFrame.show(plan);
 	}
 
     public static void show(Plan plan) {
-        SwingUtilities.invokeLater(() -> new PlanViewer(plan).setVisible(true));
+        SwingUtilities.invokeLater(() -> new PlanFrame(plan).setVisible(true));
     }
 
-    public PlanViewer(Plan plan) {
+    public PlanFrame(Plan plan) {
         super("Plan Viewer");
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         PlanPanel panel = new PlanPanel(plan);

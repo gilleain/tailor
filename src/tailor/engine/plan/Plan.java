@@ -78,9 +78,9 @@ public class Plan {
 	}
 		
     public ResultPipe addOperatorReturnPipe(PipeableOperator<Result, Result> operator, ResultPipe sourcePipe) {
-		this.operators.add(operator);
+		addOperator(operator);
+		
 		ResultPipe outputPipe = new ResultPipe();
-		operator.setId(getOperatorId());
 		operator.setSink(outputPipe);
 		if (sourcePipe != null) {
 			operator.setSource(sourcePipe);

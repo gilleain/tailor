@@ -102,6 +102,7 @@ public class Planner {
 				combiner = new CombineResults(List.of(next, current), output);
 			}
 			plan.addOperator(combiner);
+			output.registerSource(combiner); // TODO
 			current = output;
 		}
 		
@@ -173,7 +174,9 @@ public class Planner {
 			// join these if there are more than one
 			if (componentOutputResultPipes.size() > 1) {
 				ResultPipe combinedOutput = new ResultPipe();
-				plan.addOperator(makeCombiner(groupDescriptionToOutputPipeMap, combinedOutput, component));
+				CombineResults combiner = makeCombiner(groupDescriptionToOutputPipeMap, combinedOutput, component);
+				plan.addOperator(combiner);
+				combinedOutput.registerSource(combiner); // TODO
 				
 				Set<AtomListDescription> atomListDescriptions = component.atomListDescriptions();
 				if (!component.atomListDescriptions().isEmpty()) {	// trivially, this should always be true

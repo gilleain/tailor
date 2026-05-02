@@ -18,7 +18,7 @@ import tailor.engine.plan.Planner;
 import tailor.measure.AbstractAtomListMeasure;
 import tailor.measurement.DoubleMeasurement;
 import tailor.structure.Atom;
-import tailor.view.PlanViewer;
+import tailor.view.PlanFrame;
 
 public class TestPlanner {
 	
@@ -275,7 +275,7 @@ public class TestPlanner {
 		Plan plan = new Planner().plan(chainDescription);
 		Helper.describe(plan);
 //		Helper.run(Helper.makeData(List.of("GLY", "SER", "PRO", "HIS")), plan);
-		PlanViewer.show(plan);
+		PlanFrame.show(plan);
 	}
 	
 	@Test
