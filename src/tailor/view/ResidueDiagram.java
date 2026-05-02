@@ -1,4 +1,4 @@
-package tailor.editor;
+package tailor.view;
 
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -16,11 +16,11 @@ import tailor.description.GroupDescription;
 import tailor.description.ProteinDescription;
 import tailor.description.atom.AtomTorsionRangeDescription;
 import tailor.description.atom.HBondDescription;
-import tailor.editor.symbol.HBondArc;
-import tailor.editor.symbol.PeptideHalfSquare;
-import tailor.editor.symbol.ResidueCircle;
-import tailor.editor.symbol.Symbol;
-import tailor.editor.symbol.TorsionBox;
+import tailor.view.symbol.HBondArc;
+import tailor.view.symbol.PeptideHalfSquare;
+import tailor.view.symbol.ResidueCircle;
+import tailor.view.symbol.Symbol;
+import tailor.view.symbol.TorsionBox;
 
 public class ResidueDiagram {
 	

@@ -1,6 +1,6 @@
 package tailor.editor;
 
-import tailor.editor.symbol.Symbol;
+import tailor.view.symbol.Symbol;
 
 
 public class SymbolSelectionEvent {

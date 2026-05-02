@@ -8,6 +8,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import tailor.view.ResidueDiagram;
+
 public class DiagramPropertyPanel extends JPanel {
 	
 	private JTextField nameField;

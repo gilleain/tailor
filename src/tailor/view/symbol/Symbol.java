@@ -1,4 +1,4 @@
-package tailor.editor.symbol;
+package tailor.view.symbol;
 
 import java.awt.BasicStroke;
 import java.awt.Color;

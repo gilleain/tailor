@@ -7,7 +7,7 @@ import java.awt.event.MouseListener;
 import javax.swing.JPanel;
 
 import tailor.description.ChainDescription;
-import tailor.editor.ResidueDiagram;
+import tailor.view.ResidueDiagram;
 
 public class DescriptionPanel extends JPanel {
 	

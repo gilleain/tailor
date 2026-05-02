@@ -19,7 +19,8 @@ import tailor.description.ChainDescription;
 import tailor.description.DescriptionFactory;
 import tailor.description.GroupDescription;
 import tailor.description.ProteinDescription;
-import tailor.editor.symbol.Symbol;
+import tailor.view.ResidueDiagram;
+import tailor.view.symbol.Symbol;
 
 public class ResidueDiagramCanvas extends JPanel implements MouseListener, Scrollable {
 	

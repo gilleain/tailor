@@ -27,9 +27,9 @@ import tailor.description.DescriptionFactory;
 import tailor.description.GroupDescription;
 import tailor.description.atom.AtomTorsionRangeDescription;
 import tailor.description.atom.HBondDescription;
-import tailor.editor.symbol.Symbol;
 import tailor.measure.AtomTorsionMeasure;
 import tailor.measure.HBondMeasure;
+import tailor.view.symbol.Symbol;
 
 public class ResidueDiagramEditor extends JPanel implements SymbolSelectionListener {
 	

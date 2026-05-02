@@ -13,6 +13,7 @@ import javax.swing.JList;
 import javax.swing.ListCellRenderer;
 
 import tailor.description.ChainDescription;
+import tailor.view.ResidueDiagram;
 
 public class DiagramListCellRenderer extends JLabel implements ListCellRenderer<ChainDescription> {
 	
