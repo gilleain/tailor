@@ -1,5 +1,7 @@
 package tailor.cli;
 
+import java.util.Optional;
+
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.OptionBuilder;
@@ -11,7 +13,7 @@ public class CommandLineHandler {
     
     private Options options;
     
-    private String descriptionFileName;
+    private Optional<String> descriptionFileName;
     
     private String structureSourceFileName;
     
@@ -45,7 +47,9 @@ public class CommandLineHandler {
         }
         
         if (line.hasOption('d')) {
-            descriptionFileName = line.getOptionValue('d');
+            descriptionFileName = Optional.of(line.getOptionValue('d'));
+        } else {
+        	descriptionFileName = Optional.empty();
         }
         
         if (line.hasOption('s')) {
@@ -59,7 +63,7 @@ public class CommandLineHandler {
         System.err.println("Help");
     }
 
-    public String getDescriptionFileName() {
+    public Optional<String> getDescriptionFileName() {
         return descriptionFileName;
     }
 

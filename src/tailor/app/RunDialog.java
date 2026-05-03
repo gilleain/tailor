@@ -17,6 +17,7 @@ import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.SwingUtilities;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 
@@ -157,7 +158,9 @@ public class RunDialog extends JDialog implements ActionListener, TreeSelectionL
             ChainDescription description = this.treeView.getDescription(0);
             SelectionDialog selectionDialog = 
                 new SelectionDialog(description, this, "Create Measure");
-            selectionDialog.setVisible(true);
+            selectionDialog.setLocationRelativeTo(this);
+            SwingUtilities.invokeLater(() -> selectionDialog.setVisible(true));
+            
             if (selectionDialog.isComplete()) {
                 List<DescriptionPath> paths = selectionDialog.getDescriptions();
                 String type = selectionDialog.getCurrentlySelectedType();

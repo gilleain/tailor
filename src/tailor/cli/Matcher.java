@@ -22,8 +22,8 @@ public class Matcher {
     
     public static void run(CommandLineHandler args) throws IOException {
     	ChainDescription chainDescription = null;
-        if (args.getDescriptionFileName() != null) {
-        	chainDescription = read(args.getDescriptionFileName());
+        if (args.getDescriptionFileName().isPresent()) {
+        	chainDescription = read(args.getDescriptionFileName().get());
         }
         
         String path = null;

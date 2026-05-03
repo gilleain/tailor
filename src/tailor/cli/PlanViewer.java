@@ -16,8 +16,8 @@ public class PlanViewer {
 		CommandLineHandler handler = new CommandLineHandler().processArguments(args);
 		
 		ChainDescription chainDescription = null;
-        if (handler.getDescriptionFileName() != null) {
-        	chainDescription = read(handler.getDescriptionFileName());
+        if (handler.getDescriptionFileName().isPresent()) {
+        	chainDescription = read(handler.getDescriptionFileName().get());
         }
        
         Plan plan = new Planner().plan(chainDescription);

@@ -19,8 +19,11 @@ import javax.swing.JScrollPane;
 import javax.swing.SwingUtilities;
 import javax.swing.border.Border;
 
+import org.apache.commons.cli.ParseException;
+
 import tailor.category.Category;
 import tailor.category.CategoryChangeListener;
+import tailor.cli.CommandLineHandler;
 import tailor.datasource.GuiResultsPrinter;
 import tailor.datasource.xml.XmlDescriptionReader;
 import tailor.description.ChainDescription;
@@ -304,11 +307,12 @@ public class App implements ActionListener, CategoryChangeListener {
         this.descriptionList.add(description);
     }
     
-    public void processCommandLineArguments(String[] args) {
-        String fileTypeFlag = args[0];
-        if (fileTypeFlag.equals("--xml-motif")) {
+    public void processCommandLineArguments(String[] args) throws ParseException {
+    	CommandLineHandler handler = new CommandLineHandler().processArguments(args);
+        
+        if (handler.getDescriptionFileName().isPresent()) {
             try {
-                this.loadMotifFile(new File(args[1]));
+                this.loadMotifFile(new File(handler.getDescriptionFileName().get()));
             } catch (IOException ioe) {
                 System.err.println(ioe);
             }
@@ -317,8 +321,9 @@ public class App implements ActionListener, CategoryChangeListener {
     
     /**
      * @param args
+     * @throws ParseException 
      */
-    public static void main(String[] args) {
+    public static void main(String[] args) throws ParseException {
         App tailorApp = new App();
         if (args.length > 0) {
             tailorApp.processCommandLineArguments(args);

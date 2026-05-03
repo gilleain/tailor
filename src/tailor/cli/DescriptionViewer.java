@@ -59,8 +59,8 @@ public class DescriptionViewer {
 	        System.err.println("Starting...");
 	        CommandLineHandler handler = new CommandLineHandler().processArguments(args);
 	        
-	        if (handler.getDescriptionFileName() != null) {
-	        	final ChainDescription chainDescription = read(handler.getDescriptionFileName());
+	        if (handler.getDescriptionFileName().isPresent()) {
+	        	final ChainDescription chainDescription = read(handler.getDescriptionFileName().get());
 	        	SwingUtilities.invokeLater(() -> new DescriptionFrame(chainDescription).setVisible(true));
 	        } else {
 	        	System.err.println("Please provide a description file");
