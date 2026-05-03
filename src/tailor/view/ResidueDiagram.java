@@ -126,17 +126,16 @@ public class ResidueDiagram {
 			return;							// FIXME
 		}
 		
-		String torsionLabel = "";	// TODO - "min < letterSymbol < max"
-		String letterSymbol = "";	// TODO - phi psi etc
+		String torsionLabel = String.format("%s < %s < %s", t.getMinValue(), t.getName(), t.getMaxValue()) ;
+		int track = this.getTrackFromString(t.getName());	// bit fragile, but not sure of a better way
 		
-		this.makeTorsion(-1, torsionLabel, first, last, 
-				this.getTrackFromString(letterSymbol), Symbol.Stroke.DASHED);
+		this.makeTorsion(-1, torsionLabel, first, last, track, Symbol.Stroke.DASHED);
 	}
 	
 	public int getTrackFromString(String s) {
-		if (s.contains("\u03C6")) {
+		if (s.contains("phi")) {	// this is not great, of course, but ...
 			return 2;
-		} else if (s.contains("\u03C8")) {
+		} else if (s.contains("psi")) {
 			return 3;
 		} // TODO : omega!
 		else {

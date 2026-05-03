@@ -16,6 +16,7 @@ import javax.swing.JFrame;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.SwingUtilities;
 import javax.swing.border.Border;
 
 import tailor.category.Category;
@@ -81,8 +82,10 @@ public class App implements ActionListener, CategoryChangeListener {
         
         this.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.frame.pack();
-        this.frame.setLocation(100, 100);
-        this.frame.setVisible(true);
+        this.frame.setLocationRelativeTo(null);
+        
+        
+        SwingUtilities.invokeLater(() -> this.frame.setVisible(true));
         
         this.engine = null;
     }
@@ -90,7 +93,7 @@ public class App implements ActionListener, CategoryChangeListener {
     public void actionPerformed(ActionEvent ae) {
         String command = ae.getActionCommand();
         
-        if (command.equals("New Description")) {
+        if (command.equals(MainMenu.NEW_DESCRIPTION)) {
         	EditorDialog descriptionEditor = new EditorDialog(this.frame);
         	
         	if (descriptionEditor.isOkay()) {
@@ -100,13 +103,13 @@ public class App implements ActionListener, CategoryChangeListener {
         	} else {
         		System.out.println("New Motif Cancelled");
         	}
-        } else if (command.equals("Edit Description")) {
+        } else if (command.equals(MainMenu.EDIT_DESCRIPTION)) {
         	ChainDescription description = this.descriptionList.getSelectedDescription();
         	ChainDescription edited = this.editDescription(description);
         	if (!description.equals(edited)) {
         		this.descriptionList.replace(description, edited);
         	}
-        } else if (command.equals("Open Description")) {
+        } else if (command.equals(MainMenu.OPEN_DESCRIPTION)) {
             File file = this.chooseFile(true, true);
             if (file != null) {
                 try {
@@ -116,7 +119,7 @@ public class App implements ActionListener, CategoryChangeListener {
                     System.err.println(ioe);
                 }
             }
-        } else if (command.equals("Open Plot Window")) {
+        } else if (command.equals(MainMenu.OPEN_PLOT_WINDOW)) {
         	PlotFrame plotFrame = new PlotFrame(this);
         	plotFrame.setVisible(true);
         } else if (command.equals("Add Columns To Plot")) {
@@ -143,18 +146,18 @@ public class App implements ActionListener, CategoryChangeListener {
 //                this.msdDataSource.processResult(file, model);	FIXME
                 this.resultTable.setModel(model);
             }
-        } else if (command.equals("Save Results")) {
+        } else if (command.equals(MainMenu.SAVE_RESULTS)) {
             File saveFile = this.chooseFile(false, false);
             this.writeTextFile(saveFile);
-        } else if (command.equals("Create Run")){
+        } else if (command.equals(MainMenu.CREATE_RUN)){
             this.createRun();
         } else if (command.equals("Run MSD Query")) {
             this.runMSDQuery();
         } else if (command.equals("Run File Query")) {
             this.runFileQuery();
-        } else if (command.equals("Close")) {
+        } else if (command.equals(MainMenu.CLOSE)) {
             this.close();
-        } else if (command.equals("Quit")) {
+        } else if (command.equals(MainMenu.QUIT)) {
             this.quit();
         }
     }
@@ -227,9 +230,10 @@ public class App implements ActionListener, CategoryChangeListener {
     	ChainDescription description = this.descriptionList.getSelectedDescription();
     	
         RunDialog runDialog = new RunDialog(this.frame, description);
+        runDialog.setLocationRelativeTo(this.frame);
         runDialog.setVisible(true);
         
-        System.err.println("Dialog" + runDialog.isOkay());
+        System.err.println("Dialog " + runDialog.isOkay());
         
         if (runDialog.isOkay()) {
         	System.err.println("getting run");
@@ -278,11 +282,11 @@ public class App implements ActionListener, CategoryChangeListener {
     	// make a copy
     	// TODO
 //    	Description copyOfDescription = 
-//    		new ProteinDescription((ProteinDescription)description);	// XXX
-    	ChainDescription copyOfDescription = null;
+//    		new ProteinDescription((ProteinDescription)description);
+    	ChainDescription copyOfDescription = null;	// FIXME
     	
     	// edit the copy
-    	EditorDialog descriptionEditor = new EditorDialog(this.frame, copyOfDescription);
+    	EditorDialog descriptionEditor = new EditorDialog(this.frame, d);
     	
     	// the "okay" button was pressed
     	if (descriptionEditor.isOkay()) {

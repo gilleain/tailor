@@ -44,7 +44,7 @@ public class RunDialog extends JDialog implements ActionListener, TreeSelectionL
     
     private boolean isOkay;
     
-    public RunDialog(Frame parent, ChainDescription description) {
+    public RunDialog(Frame parent, ChainDescription chainDescription) {
         super(parent, "Create Run", true);
         this.setLayout(new BorderLayout());
         
@@ -54,7 +54,8 @@ public class RunDialog extends JDialog implements ActionListener, TreeSelectionL
         labelPanel.add(new JLabel("Measures", JLabel.CENTER));
         this.add(labelPanel, BorderLayout.NORTH);
         
-        this.treeView = new DescriptionTreeView(description);
+        this.chainDescription = chainDescription;
+        this.treeView = new DescriptionTreeView(chainDescription);
         this.treeView.addTreeSelectionListener(this);
         this.add(this.treeView, BorderLayout.WEST);
         
@@ -78,7 +79,7 @@ public class RunDialog extends JDialog implements ActionListener, TreeSelectionL
         
         JPanel filePanel = new JPanel(new BorderLayout());
         // TODO : make this relative to current directory
-        this.directoryField = new JTextField("/Users/maclean/development/projects/tailor/structures");
+        this.directoryField = new JTextField(".");
         this.directoryField.setBorder(BorderFactory.createCompoundBorder(
                 BorderFactory.createTitledBorder("Directory"),
                 BorderFactory.createEmptyBorder(1, 1, 1, 1)));
@@ -136,8 +137,6 @@ public class RunDialog extends JDialog implements ActionListener, TreeSelectionL
             System.err.println(ioe);
             return null;
         }
-        
-       
     }
     
     private void setIsOkay(boolean isOkay) {
