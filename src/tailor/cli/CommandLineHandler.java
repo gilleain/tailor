@@ -15,19 +15,23 @@ public class CommandLineHandler {
     
     private Optional<String> descriptionFileName;
     
-    private String structureSourceFileName;
+    private Optional<String> structureSourceFileName;
+    
+    private Optional<String> resultsFileName;
     
     public CommandLineHandler() {
         options = new Options();
         options.addOption(opt("h", "Print help"));
         options.addOption(opt("d", "description", "Motif description"));
         options.addOption(opt("s", "source", "Structure source"));
+        options.addOption(opt("r", "results", "Results file"));
     }
     
     @SuppressWarnings("static-access")
     private Option opt(String o, String desc) {
         return OptionBuilder.withDescription(desc).create(o);
     }
+    
     
     @SuppressWarnings("static-access")
     private Option opt(String o, String argName, String desc) {
@@ -53,7 +57,15 @@ public class CommandLineHandler {
         }
         
         if (line.hasOption('s')) {
-            structureSourceFileName = line.getOptionValue('s');   
+            structureSourceFileName = Optional.of(line.getOptionValue('s'));   
+        } else {
+        	structureSourceFileName = Optional.empty();
+        }
+        
+        if (line.hasOption('r')) {
+            resultsFileName = Optional.of(line.getOptionValue('r'));
+        } else {
+        	resultsFileName = Optional.empty();
         }
         
         return this;
@@ -67,8 +79,12 @@ public class CommandLineHandler {
         return descriptionFileName;
     }
 
-    public String getStructureSourceFileName() {
+    public Optional<String> getStructureSourceFileName() {
         return structureSourceFileName;
+    }
+    
+    public Optional<String> getResultsFileName() {
+        return resultsFileName;
     }
 
 }

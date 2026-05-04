@@ -27,8 +27,8 @@ public class Matcher {
         }
         
         String path = null;
-        if (args.getStructureSourceFileName() != null) {	
-            path = args.getStructureSourceFileName();
+        if (args.getStructureSourceFileName().isPresent()) {	
+            path = args.getStructureSourceFileName().get();
         }
         
         // XXX TODO - error

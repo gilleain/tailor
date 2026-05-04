@@ -23,6 +23,7 @@ public class SimpleTableModel extends RowBasedTableModel {
 	}
 
 	public SimpleTableModel(File file) throws IOException {
+		this();
 		BufferedReader bufferedReader = null;
 		try {
 		    bufferedReader = new BufferedReader(new FileReader(file));
