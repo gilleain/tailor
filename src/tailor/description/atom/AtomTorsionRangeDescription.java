@@ -7,8 +7,6 @@ import tailor.measure.AtomTorsionMeasure;
 
 public class AtomTorsionRangeDescription extends AtomValueRangeDescription {
 	
-	private String name;
-	
 	private DescriptionPath atomDescriptionA;
 	
 	private DescriptionPath atomDescriptionD;
@@ -23,17 +21,12 @@ public class AtomTorsionRangeDescription extends AtomValueRangeDescription {
 	public AtomTorsionRangeDescription(String name, double minAngle, double maxAngle,
 			DescriptionPath atomDescriptionA, DescriptionPath atomDescriptionB, 
 			DescriptionPath atomDescriptionC, DescriptionPath atomDescriptionD) {
-		super(minAngle, maxAngle, 
-				new AtomTorsionMeasure(atomDescriptionA, atomDescriptionB, atomDescriptionC, atomDescriptionD));
-		this.name = name;
+		super(name, minAngle, maxAngle, 
+				new AtomTorsionMeasure(name, atomDescriptionA, atomDescriptionB, atomDescriptionC, atomDescriptionD));
 		this.atomDescriptionA = atomDescriptionA;
 		this.atomDescriptionD = atomDescriptionD;
 	}
 
-	public String getName() {
-		return this.name;
-	}
-	
 	public AtomDescription getFirstAtomDescription() {
 		return atomDescriptionA.getAtomDescription();
 	}

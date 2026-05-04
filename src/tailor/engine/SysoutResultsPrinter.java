@@ -1,6 +1,7 @@
 package tailor.engine;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import tailor.api.AtomListMeasure;
@@ -10,6 +11,16 @@ import tailor.engine.plan.Result;
 public class SysoutResultsPrinter implements ResultsPrinter {
 	
 	private int counter = 0;
+	
+	private final Optional<String> structureId;
+	
+	public SysoutResultsPrinter() {
+		this(null);
+	}
+	
+	public SysoutResultsPrinter(String structureId) {
+		this.structureId = Optional.ofNullable(structureId);
+	}
 
 	@Override
 	public void printHeader(List<AtomListMeasure> measures) {
@@ -21,7 +32,11 @@ public class SysoutResultsPrinter implements ResultsPrinter {
 
 	@Override
 	public void printResult(Result result) {
-		System.out.println(counter + "\t" + result);
+		if (structureId.isPresent()) {
+			System.out.println(structureId.get() + result);
+		} else {
+			System.out.println(counter + "\t" + result);
+		}
 		counter++;
 	}
 

@@ -10,13 +10,23 @@ import tailor.condition.RangeCondition;
 
 public class AtomValueRangeDescription implements AtomListDescription  {
 	
+	private String name;
+	
 	private final RangeCondition condition;
 	
 	private final AtomListMeasure measure;
 	
 	public AtomValueRangeDescription(double minValue, double maxValue, AtomListMeasure measure) {
+		this("", minValue, maxValue, measure);
+	}
+	
+	public AtomValueRangeDescription(String name, double minValue, double maxValue, AtomListMeasure measure) {
 		this.condition = new RangeCondition(minValue, maxValue);
 		this.measure = measure;
+	}
+
+	public String getName() {
+		return this.name;
 	}
 
 	@Override

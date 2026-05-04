@@ -9,6 +9,7 @@ import org.junit.Test;
 
 import tailor.api.AtomListDescription;
 import tailor.api.AtomListMeasure;
+import tailor.api.Operator;
 import tailor.datasource.PDBReader;
 import tailor.description.AtomValueRangeDescription;
 import tailor.description.ChainDescription;
@@ -19,6 +20,8 @@ import tailor.description.atom.AtomDistanceRangeDescription;
 import tailor.description.atom.AtomTorsionRangeDescription;
 import tailor.description.atom.HBondDescription;
 import tailor.description.group.GroupSequenceDescription;
+import tailor.engine.SysoutResultsPrinter;
+import tailor.engine.operator.ResultsPrinterAdapter;
 import tailor.engine.plan.Plan;
 import tailor.engine.plan.Planner;
 import tailor.measure.AtomDistanceMeasure;
@@ -158,10 +161,10 @@ public class FunctionalTests {
 		chainDescription.addGroupSequenceDescriptions(
 				new GroupSequenceDescription(groupA, groupB, 1), new GroupSequenceDescription(groupB, groupC, 1));
 		AtomListDescription phi = new AtomTorsionRangeDescription(
-				minPhiAngle, maxPhiAngle, pathTo(groupA, "C"), pathTo(groupB, "N"), pathTo(groupB, "CA"), pathTo(groupB, "C")
+				"phi1", minPhiAngle, maxPhiAngle, pathTo(groupA, "C"), pathTo(groupB, "N"), pathTo(groupB, "CA"), pathTo(groupB, "C")
 		);
 		AtomListDescription psi = new AtomTorsionRangeDescription(
-				minPsiAngle, maxPsiAngle, pathTo(groupB, "N"), pathTo(groupB, "CA"), pathTo(groupB, "C"), pathTo(groupC, "N")
+				"psi1", minPsiAngle, maxPsiAngle, pathTo(groupB, "N"), pathTo(groupB, "CA"), pathTo(groupB, "C"), pathTo(groupC, "N")
 		);
 		chainDescription.addAtomListDescriptions(phi, psi);
 		chainDescription.addAtomListMeasures(phi.createMeasure(), psi.createMeasure());
@@ -226,14 +229,16 @@ public class FunctionalTests {
 	}
 	
 	private void run(String filename, ChainDescription chainDescription) throws IOException {
-		Plan plan = new Planner().plan(chainDescription);
+		Plan plan = new Planner().plan(chainDescription, false);
 		plan.describe();
 		
 		Structure structure = PDBReader.read(new File(DATA_DIR, filename));
+		SysoutResultsPrinter printer = new SysoutResultsPrinter(structure.getName());
 		for (Structure chainStructure : structure.getSubstructures()) {
 			Chain chain = (Chain) chainStructure;
+			Operator resOperator = new ResultsPrinterAdapter(printer, plan.getOutputPoint(), chainDescription);
 			// TODO - do we have to reset?
-			Helper.run(chain, plan);
+			Helper.run(chain, plan, resOperator);
 		}
 	}
 

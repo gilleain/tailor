@@ -19,11 +19,17 @@ import tailor.structure.Group;
 public class Helper {
 	
 	protected static void run(Chain chain, Plan plan) {
+		Helper.run(chain, plan, null);
+	}
+	protected static void run(Chain chain, Plan plan, Operator printer) {	
 		List<Sink<Result>> inputs = plan.getInputPipes();
 		GroupSource groupSource = new GroupSource(chain, inputs);
 		List<Operator> fullPipeline = new ArrayList<>();
 		fullPipeline.add(groupSource);
 		fullPipeline.addAll(plan.getOperators());
+		if (printer != null) {
+			fullPipeline.add(printer);
+		}
 
 		Helper.runAll(fullPipeline);
 	}
