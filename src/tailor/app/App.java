@@ -80,7 +80,7 @@ public class App implements ActionListener, CategoryChangeListener {
         this.resultTable.setBorder(border);
      
         this.frame.add(this.resultTable, BorderLayout.CENTER);
-        this.jMolPanel = new JmolPanel(this.resultTable);
+        this.jMolPanel = new JmolPanel(this.resultTable, null);
         this.frame.add(this.jMolPanel, BorderLayout.EAST);
         
         this.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -263,6 +263,10 @@ public class App implements ActionListener, CategoryChangeListener {
     public void readFromTextFile(File file) {
         try {
             this.resultTable.setModel(new SimpleTableModel(file));
+            
+            // TODO
+            this.jMolPanel.setStructureDirectory(null);
+            
         } catch (IOException ioe) {
         	this.handleError(ioe.toString());
         }

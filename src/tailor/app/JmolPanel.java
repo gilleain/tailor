@@ -36,73 +36,80 @@ public class JmolPanel extends JPanel implements ActionListener, ListSelectionLi
 	
 	private File structureDirectory;
     
-	public JmolPanel(ResultTable resultTable) {
-      this.setLayout(new BorderLayout());
-      
-      JToolBar controlPanel = new JToolBar();
-      controlPanel.setLayout(new GridLayout(2, 3));
-      controlPanel.setFloatable(false);
-      
-      JToggleButton sidechainToggle = new JToggleButton("Sidechains");
-      sidechainToggle.setActionCommand("SIDECHAIN TOGGLE");
-      sidechainToggle.addActionListener(this);
-      controlPanel.add(sidechainToggle);
-      
-      JToggleButton backboneHBondsToggle = new JToggleButton("Backbone HBonds");
-      backboneHBondsToggle.setActionCommand("BACKBONE HBOND TOGGLE");
-      backboneHBondsToggle.addActionListener(this);
-      controlPanel.add(backboneHBondsToggle);
-      
-      JToggleButton labelsToggle = new JToggleButton("Labels");
-      labelsToggle.setActionCommand("LABELS TOGGLE");
-      labelsToggle.addActionListener(this);
-      controlPanel.add(labelsToggle);
-      
-      ButtonGroup pickingGroup = new ButtonGroup();
-      
-      JToggleButton pickDistanceToggle = new JToggleButton("Pick Distance");
-      pickDistanceToggle.setActionCommand("PICK DISTANCE");
-      pickDistanceToggle.addActionListener(this);
-      pickingGroup.add(pickDistanceToggle);
-      controlPanel.add(pickDistanceToggle);
-      
-      JToggleButton pickAngleToggle = new JToggleButton("Pick Angle");
-      pickAngleToggle.setActionCommand("PICK ANGLE");
-      pickAngleToggle.addActionListener(this);
-      pickingGroup.add(pickAngleToggle);
-      controlPanel.add(pickAngleToggle);
-      
-      JToggleButton pickTorsionToggle = new JToggleButton("Pick Torsion");
-      pickTorsionToggle.setActionCommand("PICK TORSION");
-      pickTorsionToggle.addActionListener(this);
-      pickingGroup.add(pickTorsionToggle);
-      controlPanel.add(pickTorsionToggle);
-      
-      this.add(controlPanel, BorderLayout.NORTH);
-      
-      JmolCanvas canvas = new JmolCanvas();
-      this.viewer = canvas.viewer;
-      this.add(canvas, BorderLayout.CENTER);
-      
-      // XXX a hack to let the MultipleAnalysisPanel avoid setting the listener
-      if (resultTable != null) {
-    	  this.resultTable = resultTable;
-    	  this.resultTable.addListSelectionListener(this);
-      }
-      
-      this.currentlyLoadedId = null;
-      this.currentlySelectedMotif = null;
-      this.currentSelection = null;
-      
-		// XXX TODO FIXME
-      this.structureDirectory = new File("/Users/maclean/research/phd/structures");
+	public JmolPanel(String structureDirectory) {
+      this(null, structureDirectory);
     }
+	
+	public JmolPanel(ResultTable resultTable, String structureDirectory) {
+	      this.setLayout(new BorderLayout());
+	      
+	      setupControls();
+	      
+	      JmolCanvas canvas = new JmolCanvas();
+	      this.viewer = canvas.viewer;
+	      this.add(canvas, BorderLayout.CENTER);
+	      
+	      // Only register the result table as a listener if present
+	      if (resultTable != null) {
+	    	  this.resultTable = resultTable;
+	    	  this.resultTable.addListSelectionListener(this);
+	      }
+	      
+	      this.currentlyLoadedId = null;
+	      this.currentlySelectedMotif = null;
+	      this.currentSelection = null;
+	      
+	      this.structureDirectory = new File(structureDirectory);
+	    }
+	
+	private void setupControls() {
+		  JToolBar controlPanel = new JToolBar();
+	      controlPanel.setLayout(new GridLayout(2, 3));
+	      controlPanel.setFloatable(false);
+	      
+	      JToggleButton sidechainToggle = new JToggleButton("Sidechains");
+	      sidechainToggle.setActionCommand("SIDECHAIN TOGGLE");
+	      sidechainToggle.addActionListener(this);
+	      controlPanel.add(sidechainToggle);
+	      
+	      JToggleButton backboneHBondsToggle = new JToggleButton("Backbone HBonds");
+	      backboneHBondsToggle.setActionCommand("BACKBONE HBOND TOGGLE");
+	      backboneHBondsToggle.addActionListener(this);
+	      controlPanel.add(backboneHBondsToggle);
+	      
+	      JToggleButton labelsToggle = new JToggleButton("Labels");
+	      labelsToggle.setActionCommand("LABELS TOGGLE");
+	      labelsToggle.addActionListener(this);
+	      controlPanel.add(labelsToggle);
+	      
+	      ButtonGroup pickingGroup = new ButtonGroup();
+	      
+	      JToggleButton pickDistanceToggle = new JToggleButton("Pick Distance");
+	      pickDistanceToggle.setActionCommand("PICK DISTANCE");
+	      pickDistanceToggle.addActionListener(this);
+	      pickingGroup.add(pickDistanceToggle);
+	      controlPanel.add(pickDistanceToggle);
+	      
+	      JToggleButton pickAngleToggle = new JToggleButton("Pick Angle");
+	      pickAngleToggle.setActionCommand("PICK ANGLE");
+	      pickAngleToggle.addActionListener(this);
+	      pickingGroup.add(pickAngleToggle);
+	      controlPanel.add(pickAngleToggle);
+	      
+	      JToggleButton pickTorsionToggle = new JToggleButton("Pick Torsion");
+	      pickTorsionToggle.setActionCommand("PICK TORSION");
+	      pickTorsionToggle.addActionListener(this);
+	      pickingGroup.add(pickTorsionToggle);
+	      controlPanel.add(pickTorsionToggle);
+	      
+	      this.add(controlPanel, BorderLayout.NORTH);
+	}
 	
 	public void setStructureDirectory(File structureDirectory) {
 		this.structureDirectory = structureDirectory;
 	}
 	
-	public File findFileForId(String id) throws FileNotFoundException {
+	private File findFileForId(String id) throws FileNotFoundException {
 		File file = new File(this.structureDirectory, id.toLowerCase() + ".pdb");
 		
 		if (file.exists()) {
@@ -152,11 +159,17 @@ public class JmolPanel extends JPanel implements ActionListener, ListSelectionLi
 		if (this.currentlySelectedMotif != null && this.currentlySelectedMotif.equals(motifString)) {
 			return;
 		}
-		
+
 		String chainLetter = motifString.substring(motifString.indexOf(".") + 1, motifString.indexOf(" "));
 		String residueString = motifString.substring(motifString.indexOf(" ") + 1);
 		String start = residueString.substring(3, residueString.indexOf("-"));
 		String end = residueString.substring(residueString.indexOf("-") + 4);
+		
+		selectMotif(chainLetter, start, end);
+		this.currentlySelectedMotif = motifString;
+	}
+		
+	public void selectMotif(String chainLetter, String start, String end) {	
 		
 		// this is a hack to get around not always having the correct chain letter. The results set a default
 		// of chain "A" if there is no chain, but this messes things up...
@@ -167,9 +180,9 @@ public class JmolPanel extends JPanel implements ActionListener, ListSelectionLi
 						+ "; zoom (selected) 0;" + this.displayScriptFragment;
 		
 		System.out.println(script);
-		
 		this.viewer.evalString(script);
-		this.currentlySelectedMotif = motifString;
+		System.out.println("Finished script");
+		
 		this.currentSelection = selection;
 	}
 	

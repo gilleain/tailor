@@ -32,6 +32,7 @@ import tailor.structure.Structure;
 public class FunctionalTests {
 	
 	private static final String DATA_DIR = "data";
+	private static final String BAB_FILE = "3iwl.pdb";
 	
 	private ChainDescription hairpinTurn() {
 		double minAngle = 100;	
@@ -211,21 +212,17 @@ public class FunctionalTests {
 	
 	@Test
 	public void betaAlphaBetaTest_NOBond() throws IOException {
-		String filename = "3iwl_clean.pdb";
-		run(filename, makeNO());
+		run(BAB_FILE, makeNO());
 	}
 	
 	@Test
 	public void betaAlphaBetaTest_ONBond() throws IOException {
-		String filename = "3iwl_clean.pdb";
-		run(filename, makeON());
+		run(BAB_FILE, makeON());
 	}
 	
 	@Test
 	public void betaAlphaBetaTest_PhiPsi() throws IOException {
-		
-		String filename = "3iwl_clean.pdb";
-		run(filename, makeAlphaPhiPsi());
+		run(BAB_FILE, makeAlphaPhiPsi());
 	}
 	
 	private void run(String filename, ChainDescription chainDescription) throws IOException {
