@@ -31,4 +31,14 @@ public class Terminus extends BackboneSegment {
         return this.toString();
     }
 
+	@Override
+	public String toCompactString() {
+		return this.toString();
+	}
+
+	@Override
+	public Type getType() {
+		return Type.TERMINUS;
+	}
+
 }

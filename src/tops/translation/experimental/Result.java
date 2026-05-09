@@ -1,0 +1,110 @@
+package tops.translation.experimental;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import javax.vecmath.Point3d;
+
+import tops.translation.model.BackboneSegment;
+import tops.translation.model.Chain;
+import tops.translation.model.Residue;
+
+public class Result {
+	
+	private class CRef {
+		public Chain chain;
+		public List<RRef> residueRefs = new ArrayList<>();
+		public List<SRef> segmentRefs = new ArrayList<>();
+		public CRef(Chain chain) {
+			this.chain = chain;
+		}
+	}
+	
+	private class SRef {
+		public BackboneSegment segment;
+		public List<RRef> residueRefs = new ArrayList<>();
+		public SRef(BackboneSegment segment) {
+			this.segment = segment;
+		}
+	}
+	
+	private class RRef {
+		public Residue residue;
+		public List<ARef> atomRefs = new ArrayList<>();
+		public RRef(Residue residue) {
+			this.residue = residue;
+		}
+	}
+	
+	private class ARef {
+		public String atomName;
+		public Point3d point;
+	}
+	
+	private CRef root;
+	
+	public Result(Chain chain) {
+		this.root = new CRef(chain);
+	}
+
+	public Result(Chain chain, Residue... residues) {
+		this(chain);
+		for (Residue residue : residues) {
+			RRef residueRef = new RRef(residue);
+			this.root.residueRefs.add(residueRef);
+			// TODO - atoms?
+		}
+	}
+	
+	public Result(Chain chain, BackboneSegment... segments) {
+		this(chain);
+		for (BackboneSegment segment : segments) {
+			SRef segmentRef = new SRef(segment);
+			this.root.segmentRefs.add(segmentRef);
+			// TODO - residues and atoms?
+		}
+	}
+	
+	public List<BackboneSegment> getSegments() {
+		List<BackboneSegment> segments = new ArrayList<>();
+		for (SRef segmentRef : this.root.segmentRefs) {
+			segments.add(segmentRef.segment);
+		}
+		return segments;
+	}
+
+	public Result copy() {
+		Result copy = new Result(this.root.chain);
+		for (SRef sRef : this.root.segmentRefs) {
+			copy.root.segmentRefs.add(new SRef(sRef.segment));
+		}
+		// TODO ?
+		return copy;
+	}
+	
+	public Result merge(Result other) {
+		for (SRef otherS : other.root.segmentRefs) {
+			SRef sCopy = new SRef(otherS.segment);
+			this.root.segmentRefs.add(sCopy);
+			// TODO
+		}
+		return this;
+	}
+
+	public boolean greaterThanOrEqual(Result other) {
+		for (SRef sRef : this.root.segmentRefs) {
+			for (SRef sRefOther : other.root.segmentRefs) {
+				if (sRef.segment.getNumber() >= sRefOther.segment.getNumber()) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+	
+	public String toString() {
+		String segments = this.root.segmentRefs.stream().map(s -> s.segment.toCompactString()).collect(Collectors.joining("|"));
+		return root.chain.getLabel() + "/" + segments;	// TODO
+	}
+}

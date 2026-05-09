@@ -75,6 +75,7 @@ public class Chain implements Iterable<BackboneSegment> {
             Point3d lastC       = lastResidue.getCoordinates("C");
             Point3d lastO       = lastResidue.getCoordinates("O");
             Point3d currN       =     residue.getCoordinates("N");
+            if (lastC == null || lastO == null) return;	// TODO - handle non-protein chains better ...
 
             Vector3d OC = new Vector3d();
             OC.sub(lastC, lastO);

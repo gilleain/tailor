@@ -41,10 +41,20 @@ public class Helix extends RepetitiveStructure {
     }
 
     public String toString() {
-        return "Helix : " + this.firstResidue() + " - " + this.lastResidue();
+        return "Helix (" + this.number + ") : " + this.firstResidue() + " - " + this.lastResidue();
     }
 
     public String toFullString() {
-        return "Helix : " + this.orientation + " " + this.firstResidue() + " - " + this.lastResidue() + " " + this.axis;
+        return "Helix (" + this.number + ") : " + this.orientation + " " + this.firstResidue() + " - " + this.lastResidue() + " " + this.axis;
     }
+
+	@Override
+	public String toCompactString() {
+		return "H(" + this.number + ")[" + this.firstResidue().getPDBNumber() + ":" + this.lastResidue().getPDBNumber() + "]";
+	}
+
+	@Override
+	public Type getType() {
+		return Type.HELIX;
+	}
 }

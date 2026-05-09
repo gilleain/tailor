@@ -11,6 +11,15 @@ import javax.vecmath.Point3d;
 import translation.Axis;
 
 public abstract class BackboneSegment implements Comparable<BackboneSegment>, Iterable<Residue> {
+	
+	// TODO - not exhaustive of possible types, 
+	// 'OTHER' is doing a lot of heavy lifting here 
+	public enum Type {
+		TERMINUS,
+		STRAND,
+		HELIX,
+		OTHER
+	}
 
     protected int number;
 
@@ -32,8 +41,13 @@ public abstract class BackboneSegment implements Comparable<BackboneSegment>, It
     }
 
     public abstract String toFullString();
+    
+    public abstract String toCompactString();
 
+    @Deprecated // use getType instead
     public abstract char getTypeChar();
+    
+    public abstract Type getType();
 
     public int compareTo(BackboneSegment other) {
         try {

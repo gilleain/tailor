@@ -41,10 +41,20 @@ public class Strand extends RepetitiveStructure {
     }
 
     public String toString() {
-        return "Strand : " + this.firstResidue() + " - " + this.lastResidue();
+        return "Strand (" + this.number + ") : " + this.firstResidue() + " - " + this.lastResidue();
     }
 
     public String toFullString() {
-        return "Strand : " + this.orientation + " " + this.firstResidue() + " - " + this.lastResidue() + " " + this.axis;
+        return "Strand (" + this.number + ") : " + this.orientation + " " + this.firstResidue() + " - " + this.lastResidue() + " " + this.axis;
     }
+    
+    @Override
+	public String toCompactString() {
+		return "E(" + this.number + ")[" + this.firstResidue().getPDBNumber() + ":" + this.lastResidue().getPDBNumber() + "]";
+	}
+
+	@Override
+	public Type getType() {
+		return Type.STRAND;
+	}
 }

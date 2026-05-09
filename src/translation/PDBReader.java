@@ -1,6 +1,7 @@
 package translation;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -13,12 +14,16 @@ import tops.translation.model.Residue;
 public class PDBReader {
 
     public static Protein read(String filename) throws IOException {
+    	return PDBReader.read(new File(filename));
+    }
+    
+    public static Protein read(File file) throws IOException {	
         List<String> atomRecords;
         String pdbID = "Unknown";
 
         BufferedReader bufferer = null;
         try {
-            bufferer = new BufferedReader(new FileReader(filename));
+            bufferer = new BufferedReader(new FileReader(file));
             String line;
             atomRecords = new ArrayList<>();
             while ((line = bufferer.readLine()) != null) {

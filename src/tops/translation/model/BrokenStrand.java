@@ -2,6 +2,7 @@ package tops.translation.model;
 
 import java.util.Iterator;
 import java.util.SortedSet;
+import java.util.stream.Collectors;
 
 import javax.vecmath.Vector3d;
 
@@ -56,6 +57,15 @@ public class BrokenStrand extends BackboneSegment {
         return s.toString();
     }
 
+    @Override
+	public String toCompactString() {
+		return this.strands.stream().map(BackboneSegment::toCompactString).collect(Collectors.joining(", "));
+	}
+
+	public Type getType() {
+    	return Type.STRAND;
+    }
+    
     public char getTypeChar() {
         return 'E';
     }

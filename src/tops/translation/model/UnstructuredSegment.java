@@ -17,12 +17,24 @@ public class UnstructuredSegment extends BackboneSegment {
 
     @Override
     public String toString() {
-        return "Unstructured from " + this.firstResidue().getPDBNumber()
+        return "Unstructured (" + this.number + ") from " + this.firstResidue().getPDBNumber()
                 + " to " + this.lastResidue().getPDBNumber();
     }
+    
+    @Override
+	public String toCompactString() {
+		return "U(" + this.number + ")[" + this.firstResidue().getPDBNumber() + " to " + this.lastResidue().getPDBNumber() + "]";
+	}
 
     @Override
     public String toFullString() {
         return this.toString();
     }
+
+	@Override
+	public Type getType() {
+		return Type.OTHER;
+	}
+
+	
 }

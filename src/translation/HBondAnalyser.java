@@ -12,6 +12,7 @@ import java.util.logging.Logger;
 
 import javax.vecmath.Point3d;
 
+import tops.translation.model.BackboneSegment;
 import tops.translation.model.Chain;
 import tops.translation.model.HBond;
 import tops.translation.model.Protein;
@@ -51,6 +52,7 @@ public class HBondAnalyser {
 
     public HBondAnalyser() {
         this.properties = new Properties();
+        setDefaultProperties();
     }
 
     public HBondAnalyser(Properties properties) {
@@ -212,6 +214,14 @@ public class HBondAnalyser {
         chain.sortBackboneSegments();
         chain.mergeHelices();
         chain.addTerminii();
+        
+        // TODO
+        int bbIndex = 0;
+        Iterator<BackboneSegment> i = chain.backboneSegmentIterator();
+        while (i.hasNext()) {
+        	i.next().setNumber(bbIndex);
+        	bbIndex++;
+        }
     }
 
     public List<Tag> convertBondsToTags(Residue residue) {
