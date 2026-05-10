@@ -11,24 +11,48 @@ import tailor.condition.AtomPartition;
 import tailor.structure.Atom;
 import tailor.structure.Chain;
 import tailor.structure.Group;
-import tailor.structure.Level;
 
 /**
  * A result is a subtree of a structure that may be a part of a final result from a plan.
  */
 public class Result {
 	
-	private class Node {
-		public Level level;
-		public Object o;
-		public List<Node> children = new ArrayList<>();
-		public Node(Level level, Object o) {
-			this.level = level;
-			this.o = o;
+	private class CRef {
+		public Chain chain;
+		public List<GRef> groupRefs = new ArrayList<>();
+//		public List<SRef> segmentRefs = new ArrayList<>(); // TODO
+		public CRef(Chain chain) {
+			this.chain = chain;
 		}
 	}
 	
-	private Node root;
+//	private class SRef {	// TODO
+//		public BackboneSegment segment;
+//		public List<RRef> residueRefs = new ArrayList<>();
+//		public SRef(BackboneSegment segment) {
+//			this.segment = segment;
+//		}
+//	}
+	
+	private class GRef {
+		public Group group;
+		public List<ARef> atomRefs = new ArrayList<>();
+		public GRef(Group group) {
+			this.group = group;
+		}
+		public Group getGroup() {
+			return this.group;
+		}
+	}
+	
+	private class ARef {	// TODO - could consider removing this ...
+		public Atom atom;
+		public ARef(Atom atom) {
+			this.atom = atom;
+		}
+	}
+	
+	private CRef root;
 	
 	// store measurements
 	private List<Measurement> measurements = new ArrayList<>();	// TODO
@@ -42,41 +66,41 @@ public class Result {
 	}
 		
 	public Result(Chain chain, List<Group> groups) {	
-		this.root = new Node(Level.CHAIN, chain);
+		this.root = new CRef(chain);
 		for (Group group : groups) {
-			Node groupNode = new Node(Level.RESIDUE, group);
-			this.root.children.add(groupNode);
+			GRef groupNode = new GRef(group);
+			this.root.groupRefs.add(groupNode);
 			// Note this makes a ref to _every_ atom in the group
 			for (Atom atom : group.getAtoms()) {
-				groupNode.children.add(new Node(Level.ATOM, atom));
+				groupNode.atomRefs.add(new ARef(atom));
 			}
 		}
 	}
 	
 	public Result(Chain chain, Group group, Atom atom) {
 		// ... 
-		this.root = new Node(Level.CHAIN, chain);
-		Node groupNode = new Node(Level.RESIDUE, group);
-		this.root.children.add(groupNode);
-		groupNode.children.add(new Node(Level.ATOM, atom));
+		this.root = new CRef(chain);
+		GRef groupNode = new GRef(group);
+		this.root.groupRefs.add(groupNode);
+		groupNode.atomRefs.add(new ARef(atom));
 	}
 	
 	public Result(Chain chain, Group group, List<Atom> atoms) {
 		// ... 
-		this.root = new Node(Level.CHAIN, chain);
-		Node groupNode = new Node(Level.RESIDUE, group);
-		this.root.children.add(groupNode);
+		this.root = new CRef(chain);
+		GRef groupNode = new GRef(group);
+		this.root.groupRefs.add(groupNode);
 		for (Atom atom : atoms) {
-			groupNode.children.add(new Node(Level.ATOM, atom));
+			groupNode.atomRefs.add(new ARef(atom));
 		}
 	}
 	
 	public List<Atom> getAtoms() {
 		// TODO - does this make sense?
 		List<Atom> atoms = new ArrayList<>();
-		for (Node groupNode : this.root.children) {
-			for (Node atomNode : groupNode.children) {
-				atoms.add((Atom)atomNode.o);
+		for (GRef groupNode : this.root.groupRefs) {
+			for (ARef atomNode : groupNode.atomRefs) {
+				atoms.add(atomNode.atom);
 			}
 		}
 		return atoms;
@@ -89,10 +113,10 @@ public class Result {
 
 	public AtomPartition getAtomPartition() {
 		List<List<Atom>> atomParts = new ArrayList<>();
-		for (Node groupNode : this.root.children) {
+		for (GRef groupNode : this.root.groupRefs) {
 			List<Atom> atoms = new ArrayList<>();
-			for (Node atomNode : groupNode.children) {
-				atoms.add((Atom)atomNode.o);
+			for (ARef atomNode : groupNode.atomRefs) {
+				atoms.add(atomNode.atom);
 			}
 			atomParts.add(atoms);
 		}
@@ -100,15 +124,11 @@ public class Result {
 	}
 	
 	public List<Group> getGroups() {
-		List<Group> groups = new ArrayList<>();
-		for (Node groupNode : this.root.children) {
-			groups.add((Group) groupNode.o);
-		}
-		return groups;
+		return this.root.groupRefs.stream().map(GRef::getGroup).toList();
 	}
 
 	public boolean equals(Result other) {
-		for (Node groupNode : this.root.children) {
+		for (GRef groupNode : this.root.groupRefs) {
 			if (noMatch(groupNode, other)) {
 				return false;
 			}
@@ -116,9 +136,9 @@ public class Result {
 		return true;
 	}
 	
-	private boolean noMatch(Node thisGroupNode, Result other) {
+	private boolean noMatch(GRef thisGroupNode, Result other) {
 		// TODO - would not need this if nodes were ordered...
-		for (Node otherGroupNode : other.root.children) {
+		for (GRef otherGroupNode : other.root.groupRefs) {
 			if (isMatch(thisGroupNode, otherGroupNode)) {
 				return false;
 			}
@@ -126,9 +146,9 @@ public class Result {
 		return true;
 	}
 	
-	private boolean isMatch(Node thisGroupNode, Node otherGroupNode) {
-		Group gN = (Group) thisGroupNode.o;
-		Group gM = (Group) otherGroupNode.o;
+	private boolean isMatch(GRef thisGroupNode, GRef otherGroupNode) {
+		Group gN = thisGroupNode.group;
+		Group gM = otherGroupNode.group;
 		boolean groupIdsEqual = gN.getName().equals(gM.getName()) 
 							  && gN.getResidueId().getResseq() == gM.getResidueId().getResseq();
 		boolean atomsEqual = atomString(gN).equals(atomString(gM));
@@ -141,36 +161,36 @@ public class Result {
 
 	public Result merge(Result anotherResult) {
 		// merge anotherResult with this one
-		for (Node child : anotherResult.root.children) {
-			Node groupCopy = new Node(Level.RESIDUE, child.o);
-			for (Node atom : child.children) {
-				groupCopy.children.add(new Node(Level.ATOM, atom.o));
+		for (GRef groupRef : anotherResult.root.groupRefs) {
+			GRef groupCopy = new GRef(groupRef.group);
+			for (ARef atomRef : groupRef.atomRefs) {
+				groupCopy.atomRefs.add(new ARef(atomRef.atom));
 			}
-			this.root.children.add(groupCopy);
+			this.root.groupRefs.add(groupCopy);
 			// TODO - use a data structure that maintains sort order?
-			this.root.children.sort(groupComparator);
+			this.root.groupRefs.sort(groupComparator);
 		}
 		
 		return this;
 	}
 	
-	private Comparator<Node> groupComparator = new Comparator<Result.Node>() {
+	private Comparator<GRef> groupComparator = new Comparator<Result.GRef>() {
 		
 		@Override
-		public int compare(Node n, Node m) {
-			return ((Group)n.o).getNumber().compareTo(((Group)m.o).getNumber());
+		public int compare(GRef n, GRef m) {
+			return n.group.getNumber().compareTo(m.group.getNumber());
 		}
 	};
 	
 	public Result copy() {
 		Result copy = new Result();
-		copy.root = new Node(Level.CHAIN, this.root.o);
-		for (Node child : root.children) {
-			Node groupCopy = new Node(Level.RESIDUE, child.o);
-			for (Node atom : child.children) {
-				groupCopy.children.add(new Node(Level.ATOM, atom.o));
+		copy.root = new CRef(this.root.chain);
+		for (GRef child : root.groupRefs) {
+			GRef groupCopy = new GRef(child.group);
+			for (ARef atomRef : child.atomRefs) {
+				groupCopy.atomRefs.add(new ARef(atomRef.atom));
 			}
-			copy.root.children.add(groupCopy);	
+			copy.root.groupRefs.add(groupCopy);
 		}
 		
 		return copy;
@@ -178,11 +198,11 @@ public class Result {
 	
 	public Result copyWithoutAtoms() {
 		Result copy = new Result();
-		copy.root = new Node(Level.CHAIN, this.root.o);
+		copy.root = new CRef(this.root.chain);
 		// merge anotherResult with this one
-		for (Node child : root.children) {
-			Node groupCopy = new Node(Level.RESIDUE, child.o);
-			copy.root.children.add(groupCopy);	
+		for (GRef child : root.groupRefs) {
+			GRef groupCopy = new GRef(child.group);
+			copy.root.groupRefs.add(groupCopy);	
 		}
 		
 		return copy;
@@ -190,12 +210,11 @@ public class Result {
 	
 	public String toString() {
 		StringBuffer output = new StringBuffer();
-		Chain chain = (Chain)this.root.o;
-		output.append(chain.getName()).append("(");
+		output.append(this.root.chain.getName()).append("(");
 		int counter = 0;
-		int numberOfChildren = this.root.children.size();
-		for (Node child : this.root.children) {
-			Group g = (Group)child.o;
+		int numberOfChildren = this.root.groupRefs.size();
+		for (GRef child : this.root.groupRefs) {
+			Group g = child.group;
 			output.append(g.getName()).append(g.getNumber()).append("/");
 			addAtoms(child, output);
 			if (numberOfChildren > 0 && counter < numberOfChildren - 1) {
@@ -215,11 +234,11 @@ public class Result {
 		return output.toString();
 	}
 	
-	private void addAtoms(Node group, StringBuffer output) {
+	private void addAtoms(GRef group, StringBuffer output) {
 		int counter = 0;
-		int numberOfChildren = group.children.size();
-		for (Node leaf : group.children) {
-			Atom a = (Atom)leaf.o;
+		int numberOfChildren = group.atomRefs.size();
+		for (ARef leaf : group.atomRefs) {
+			Atom a = leaf.atom;
 			if (counter == numberOfChildren - 1) {
 				output.append(a.getName());
 			} else {
@@ -233,11 +252,9 @@ public class Result {
 	public boolean greaterThanOrEqual(Result other) {
 		// TODO combine with the hasSameGroup
 		// or .. do we even need to as same group would be equal?
-		for (Node n : this.root.children) {
-			Group gN = (Group) n.o;
-			for (Node m : other.root.children) {
-				Group gM = (Group) m.o;
-				if (gN.getNumber() >= gM.getNumber()) {
+		for (GRef n : this.root.groupRefs) {
+			for (GRef m : other.root.groupRefs) {
+				if (n.group.getNumber() >= m.group.getNumber()) {
 					return true;
 				}
 			}
@@ -247,11 +264,10 @@ public class Result {
 	
 	// TODO - simplify or ...
 	public boolean hasSameGroup(Result other) {
-		for (Node n : this.root.children) {
-			Group gN = (Group) n.o;
-			for (Node m : other.root.children) {
-				Group gM = (Group) m.o;
-				if (gN.getName().equals(gM.getName()) && gN.getNumber() == gM.getNumber()) {
+		for (GRef n : this.root.groupRefs) {
+			for (GRef m : other.root.groupRefs) {
+				if (n.group.getName().equals(m.group.getName()) 
+						&& n.group.getNumber() == n.group.getNumber()) {
 					return true;
 				}
 			}
@@ -260,7 +276,7 @@ public class Result {
 	}
 	
 	public Group lastGroup() {
-		return (Group)this.root.children.get(this.root.children.size() - 1).o;
+		return this.root.groupRefs.get(this.root.groupRefs.size() - 1).group;
 	}
 	
 
@@ -269,31 +285,30 @@ public class Result {
 	}
 	
 	public void add(Group group, List<Atom> atoms) {
-		Node groupNode = new Node(Level.RESIDUE, group);
-		this.root.children.add(groupNode);
+		GRef groupNode = new GRef(group);
+		this.root.groupRefs.add(groupNode);
 		for (Atom atom : atoms) {
-			groupNode.children.add(new Node(Level.ATOM, atom));
+			groupNode.atomRefs.add(new ARef(atom));
 		}
 	}
 	
 	public void addAtomToGroup(Group group, Atom atom) {
-		for (Node groupNode : this.root.children) {
-			Group groupO = (Group)groupNode.o;
+		for (GRef groupNode : this.root.groupRefs) {
+			Group groupO = groupNode.group;
 			if (groupO == group) {
-				groupNode.children.add(new Node(Level.ATOM, atom));
+				groupNode.atomRefs.add(new ARef(atom));
 			}
 		}
 	}
 
 	public void addAtom(Atom atom) {
 		// TODO - always add to the first we find?
-		Node groupNode = this.root.children.get(0);
-		groupNode.children.add(new Node(Level.ATOM, atom));
+		GRef groupNode = this.root.groupRefs.get(0);
+		groupNode.atomRefs.add(new ARef(atom));
 	}
 
 	public List<Measurement> getMeasurements() {
 		return this.measurements;
 	}
-
 
 }
