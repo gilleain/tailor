@@ -13,6 +13,10 @@ import javax.vecmath.Vector3d;
 //import cern.jet.math.Functions;
 
 public class Geometer {
+	
+	public static double distance(Point3d a, Point3d b) {
+		return a.distance(b);
+	}
 
     public static Plane leastSquarePlane(List<Point3d> points) {
         Axis a = Geometer.leastSquareAxis(points);

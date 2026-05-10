@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 
 import javax.vecmath.Point3d;
 
+import tailor.condition.SegmentPartition;
 import tops.translation.model.BackboneSegment;
 import tops.translation.model.Chain;
 import tops.translation.model.Residue;
@@ -26,6 +27,9 @@ public class Result {
 		public List<RRef> residueRefs = new ArrayList<>();
 		public SRef(BackboneSegment segment) {
 			this.segment = segment;
+		}
+		public BackboneSegment getSegment() {
+			return segment;
 		}
 	}
 	
@@ -73,6 +77,17 @@ public class Result {
 		}
 		return segments;
 	}
+
+	public SegmentPartition getSegmentPartition() {
+		List<List<BackboneSegment>> parts = new ArrayList<>();
+		parts.add(getSegments(root));
+		return new SegmentPartition(parts);
+	}
+	
+	private List<BackboneSegment> getSegments(CRef cRef) {
+		return cRef.segmentRefs.stream().map(SRef::getSegment).toList();
+	}
+	
 
 	public Result copy() {
 		Result copy = new Result(this.root.chain);

@@ -2,6 +2,8 @@ package tops.translation.experimental;
 
 import java.util.Stack;
 
+import tailor.api.SegmentListDescription;
+
 public class Planner {
 	
 	public Plan makePlan(ChainDescription chainDescription) {
@@ -21,6 +23,12 @@ public class Planner {
 			Pipe nextOutput = outputs.pop();
 			Pipe combinedOutput = plan.addOperator(new Combiner(nextOutput, currentOutput));	// TODO - hack reversing here
 			currentOutput = combinedOutput;
+		}
+		
+		// TODO - need to work out where to put these filters ...
+		for (SegmentListDescription segmentListDescription : chainDescription.getSegmentListDescription()) {
+			FilterSegmentByDescription filter = new FilterSegmentByDescription(currentOutput, segmentListDescription);
+			currentOutput = plan.addOperator(filter);
 		}
 		
 		plan.setOutputPipe(currentOutput);

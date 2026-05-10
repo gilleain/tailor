@@ -74,16 +74,16 @@ public class Axis {
         if (this.start == null) {
             return "[], []";
         } else {
-            //String startS = String.format("(%.2f, %.2f, %.2f)", this.start.x, this.start.y, this.start.z);
-            //String endS = String.format("(%.2f, %.2f, %.2f)", this.end.x, this.end.y, this.end.z);
+            String startS = String.format("(%.2f, %.2f, %.2f)", this.start.x, this.start.y, this.start.z);
+            String endS = String.format("(%.2f, %.2f, %.2f)", this.end.x, this.end.y, this.end.z);
 
-            //String centroidS = String.format("(%.2f, %.2f, %.2f)", this.centroid.x, this.centroid.y, this.centroid.z);
-            //String axisS = String.format("(%.2f, %.2f, %.2f)", this.axisVector.x, this.axisVector.y, this.axisVector.z);
+            String centroidS = String.format("(%.2f, %.2f, %.2f)", this.centroid.x, this.centroid.y, this.centroid.z);
+            String axisS = String.format("(%.2f, %.2f, %.2f)", this.axisVector.x, this.axisVector.y, this.axisVector.z);
 
             //return String.format("[%s, %s]", centroidS, axisS);
-            //return String.format("[%s, %s], [%s, %s]", startS, endS, centroidS, axisS);
+            return String.format("[%s, %s], [%s, %s]", startS, endS, centroidS, axisS);
             
-            return "";
+//            return "";
         }
     }
 

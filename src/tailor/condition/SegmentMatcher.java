@@ -37,7 +37,7 @@ public class SegmentMatcher {
 		public String toString() {
 			String output = "|";
 			for (BackboneSegment segment : segments) {
-				output += segment.getTypeChar();
+				output += segment.getType().getTypeString();
 				output += "|";
 			}
 			return isComplete + output;
@@ -70,25 +70,36 @@ public class SegmentMatcher {
 			Part part = atomLabels.getPart(partIndex);
 			int originalPartIndex = part.getIndex();	// the index of the part in the original order
 			List<BackboneSegment> resultPart = result.getPart(originalPartIndex);
+			int indexFrom = 0;
 			for (String label : part.getElements()) {	
-				BackboneSegment item = find(label, resultPart);
-				if (item == null) {
+				int index = findIndex(label, indexFrom, resultPart);
+				if (index == -1) {
 					return new Match(matches);
 				} else {
+					BackboneSegment item = resultPart.get(index);
 					matches.add(item);
+					indexFrom = index + 1;
 				}
 			}	
 		}
 		return new Match(matches).setComplete();
 	}
 	
-	private BackboneSegment find(String label, List<BackboneSegment> resultPart) {
+	// Search for a match in the part, starting from the index 'indexFrom', returning the matching index 
+	private int findIndex(String label, int indexFrom, List<BackboneSegment> resultPart) {
+		int index = 0;
 		for (BackboneSegment item : resultPart) {
-			if (item.getType() .equals(label)) {
-				return item;
+			if (index < indexFrom) {
+				index++;
+				continue;
+			} else {
+				if (item.getType().getTypeString().equals(label)) {
+					return index;
+				}
+				index++;
 			}
 		}
-		return null;
+		return -1;
 	}
 	
 	public String toString() {

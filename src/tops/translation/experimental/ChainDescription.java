@@ -7,6 +7,8 @@ import tailor.api.SegmentListDescription;
 
 public class ChainDescription {
 	
+	private int index;	// index of description in the list
+	
 	private List<SegmentDescription> segments;
 	
 	private List<SegmentListDescription> segmentListDescriptions;
@@ -16,6 +18,14 @@ public class ChainDescription {
 		this.segmentListDescriptions = new ArrayList<>();
 	}
 	
+	public int getIndex() {
+		return index;
+	}
+
+	public void setIndex(int index) {
+		this.index = index;
+	}
+
 	public List<SegmentDescription> getSegments() {
 		return segments;
 	}

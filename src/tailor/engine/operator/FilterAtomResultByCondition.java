@@ -22,16 +22,8 @@ public class FilterAtomResultByCondition extends AbstractOperator {
 		int filterOutCount = 0;
 		while (source.hasNext()) {
 			Result nextResult = source.getNext();
-			boolean isAccepted = true;
 			AtomPartition atomPartition = nextResult.getAtomPartition();
-			for (AtomListDescription listDescription : listDescriptions) {
-				if (!listDescription.apply(atomPartition)) {
-					logger.fine(listDescription + " failed for " + atomPartition + " of " + nextResult);
-					isAccepted = false;
-					break;
-				}
-			}
-			if (isAccepted) {
+			if (isAccepted(atomPartition)) {
 				logger.fine("Filtering IN " + nextResult);
 				sink.put(nextResult);
 				filterInCount++;
@@ -41,6 +33,16 @@ public class FilterAtomResultByCondition extends AbstractOperator {
 			}
 		}
 		logger.info(description() + " filtered: IN " + filterInCount + " OUT " + filterOutCount);
+	}
+	
+	private boolean isAccepted(AtomPartition atomPartition) {
+		for (AtomListDescription listDescription : listDescriptions) {
+			if (!listDescription.apply(atomPartition)) {
+				logger.fine(listDescription + " failed for " + atomPartition);
+				return false;
+			}
+		}
+		return true;
 	}
 	
 	@Override

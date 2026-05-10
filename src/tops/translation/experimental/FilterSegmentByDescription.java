@@ -1,0 +1,57 @@
+package tops.translation.experimental;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.logging.Logger;
+
+import tailor.api.SegmentListDescription;
+import tailor.condition.SegmentPartition;
+
+public class FilterSegmentByDescription extends AbstractOperator {
+	
+	private Logger logger = Logger.getLogger(FilterSegmentByDescription.class.getName());
+	
+	private List<SegmentListDescription> listDescriptions;
+	
+	private Pipe input;
+	
+	public FilterSegmentByDescription(Pipe input, SegmentListDescription... listDescriptions) {
+		this(input, Arrays.asList(listDescriptions));
+	}
+	
+	public FilterSegmentByDescription(Pipe input, List<SegmentListDescription> listDescriptions) {
+		this.input = input;
+		this.listDescriptions = listDescriptions;
+	}
+
+	@Override
+	public void run() {
+		int filterInCount = 0;
+		int filterOutCount = 0;
+		while (input.hasNext()) {
+			Result result = input.getNext();
+			SegmentPartition segmentPartition = result.getSegmentPartition();
+			if (isAccepted(segmentPartition)) {
+				getOutput().put(result);
+				filterInCount++;
+			} else {
+				filterOutCount++;
+			}
+		}
+		logger.info(description() + " filtered: IN " + filterInCount + " OUT " + filterOutCount);
+	}
+	
+	public String description() {
+		return "Filter";	// TODO
+	}
+	
+	private boolean isAccepted(SegmentPartition segmentPartition) {
+		for (SegmentListDescription segmentListDescription : listDescriptions) {
+			if (!segmentListDescription.apply(segmentPartition)) {
+				return false;
+			}
+		}
+		return true;
+	}
+
+}

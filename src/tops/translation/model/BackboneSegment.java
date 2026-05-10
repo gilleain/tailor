@@ -249,6 +249,7 @@ public abstract class BackboneSegment implements Comparable<BackboneSegment>, It
             this.axis = new Axis(start, end);
             this.axis.setStart(start);
             this.axis.setEnd(end);
+//            System.err.println("Calculated axis for " + this.toCompactString() + " as " + this.axis);
         } catch (NoSuchElementException n) {
             // do nothing?
             System.out.println("NoSuchElementException for " + this);

@@ -39,12 +39,20 @@ public class FunctionalTests {
 	}
 	
 	private ChainDescription bab() {
+		double minDistance = 6;
 		ChainDescription chainDescription = new ChainDescription();
 		chainDescription.addSegment(new SegmentDescription(STRAND));
 		chainDescription.addSegment(new SegmentDescription(HELIX));
 		chainDescription.addSegment(new SegmentDescription(STRAND));
+		chainDescription.addSegmentListDescription(
+				new SegmentCentroidDistance(
+						minDistance, getPathTo(chainDescription, 0), getPathTo(chainDescription, 2)));
 		
 		return chainDescription;
+	}
+	
+	private SegmentDescriptionPath getPathTo(ChainDescription chainDescription, int segmentDescriptionIndex) {
+		return new SegmentDescriptionPath(chainDescription, chainDescription.getSegments().get(segmentDescriptionIndex));
 	}
 	
 	private Protein read(String filename) throws IOException {
