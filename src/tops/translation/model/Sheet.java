@@ -1,5 +1,9 @@
 package tops.translation.model;
 
+import static tops.translation.model.BackboneSegment.Orientation.DOWN;
+import static tops.translation.model.BackboneSegment.Orientation.NONE;
+import static tops.translation.model.BackboneSegment.Orientation.UP;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
@@ -10,6 +14,7 @@ import java.util.logging.Logger;
 import javax.vecmath.Point3d;
 import javax.vecmath.Vector3d;
 
+import tops.translation.model.BackboneSegment.Orientation;
 import translation.Axis;
 import translation.Geometer;
 
@@ -178,8 +183,8 @@ public class Sheet {
         Iterator<BackboneSegment> iterator = this.iterator();
         while (iterator.hasNext()) {
             BackboneSegment strand = iterator.next();
-            if (strand.getOrientation().equals("None")) {
-                strand.setOrientation("UP");
+            if (strand.getOrientation() == Orientation.NONE) {
+                strand.setOrientation(Orientation.UP);
             }
 
             Iterator<BackboneSegment> partnerIterator = this.getPartnerIterator(strand);
@@ -188,7 +193,7 @@ public class Sheet {
                 this.assignOrientations(strand, partner);
 
                 // add to the average vector, or subtract if DOWN
-                if (partner.getOrientation().equals("UP")) {
+                if (partner.getOrientation() == Orientation.UP) {
                     sheetVector.add(partner.getAxis().getAxisVector());
                 } else {
                     sheetVector.sub(partner.getAxis().getAxisVector());
@@ -204,10 +209,10 @@ public class Sheet {
     private void assignOrientations(BackboneSegment strand, BackboneSegment partner) {
         char relativeOrientation = strand.getRelativeOrientation(partner);
         if (relativeOrientation == 'P') {
-            String strandOrientation = strand.getOrientation();
-            if (strandOrientation.equals("None")) {
-                String partnerOrientation = partner.getOrientation();
-                if (partnerOrientation.equals("None")) {
+            Orientation strandOrientation = strand.getOrientation();
+            if (strandOrientation == NONE) {
+                Orientation partnerOrientation = partner.getOrientation();
+                if (partnerOrientation == NONE) {
                     Logger.getLogger("translation.FoldAnalyser").info("No orientation known for " + strand + " and " + partner);
                 } else {
                     Logger.getLogger("translation.FoldAnalyser").info("Assigning orientation : " + partnerOrientation + " to " + strand);
@@ -218,21 +223,21 @@ public class Sheet {
                 partner.setOrientation(strandOrientation);
             }
         } else {
-            String strandOrientation = strand.getOrientation();
-            if (strandOrientation.equals("None")) {
-                String partnerOrientation = partner.getOrientation();
-                if (partnerOrientation.equals("None")) {
+        	Orientation strandOrientation = strand.getOrientation();
+            if (strandOrientation == NONE) {
+            	Orientation partnerOrientation = partner.getOrientation();
+                if (partnerOrientation == NONE) {
                     Logger.getLogger("translation.FoldAnalyser").info("No orientation known for " + strand + " and " + partner);
                 } else {
                     Logger.getLogger("translation.FoldAnalyser").info("Assigning orientation : " + partnerOrientation + " to " + strand);
                     strand.setOrientation(partnerOrientation);
                 }
-            } else if (strandOrientation.equals("UP")) {
+            } else if (strandOrientation == UP) {
                 Logger.getLogger("translation.FoldAnalyser").info("Assigning orientation : UP to " + partner);
-                partner.setOrientation("DOWN");
-            } else if (strandOrientation.equals("DOWN")) {
+                partner.setOrientation(DOWN);
+            } else if (strandOrientation== DOWN) {
                 Logger.getLogger("translation.FoldAnalyser").info("Assigning orientation : DOWN to " + partner);
-                partner.setOrientation("UP");
+                partner.setOrientation(UP);
             }
         }
     }

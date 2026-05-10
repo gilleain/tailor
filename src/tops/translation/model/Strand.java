@@ -17,14 +17,6 @@ public class Strand extends RepetitiveStructure {
         super(first);
     }
 
-    public char getTypeChar() {
-        if (this.orientation.equals("UP")) {
-            return 'E';
-        } else {
-            return 'e';
-        }
-    }
-
     public static boolean torsionsMatch(Residue r) {
         return RepetitiveStructure.torsionsMatch(r, Strand.phiMin, Strand.phiMax, Strand.psiMin, Strand.psiMax);
     }

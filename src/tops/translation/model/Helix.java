@@ -17,14 +17,6 @@ public class Helix extends RepetitiveStructure {
         super(first);
     }
 
-    public char getTypeChar() {
-        if (this.orientation.equals("UP")) {
-            return 'H';
-        } else {
-            return 'h';
-        }
-    }
-
     public static boolean torsionsMatch(Residue r) {
         return RepetitiveStructure.torsionsMatch(r, Helix.phiMin, Helix.phiMax, Helix.psiMin, Helix.psiMax);
     }

@@ -11,11 +11,6 @@ public class UnstructuredSegment extends BackboneSegment {
     }
 
     @Override
-    public char getTypeChar() {
-        return 'U';
-    }
-
-    @Override
     public String toString() {
         return "Unstructured (" + this.number + ") from " + this.firstResidue().getPDBNumber()
                 + " to " + this.lastResidue().getPDBNumber();
@@ -35,6 +30,5 @@ public class UnstructuredSegment extends BackboneSegment {
 	public Type getType() {
 		return Type.OTHER;
 	}
-
 	
 }

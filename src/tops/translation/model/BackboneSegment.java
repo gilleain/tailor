@@ -15,10 +15,25 @@ public abstract class BackboneSegment implements Comparable<BackboneSegment>, It
 	// TODO - not exhaustive of possible types, 
 	// 'OTHER' is doing a lot of heavy lifting here 
 	public enum Type {
-		TERMINUS,
-		STRAND,
-		HELIX,
-		OTHER
+		NTERMINUS("N"),
+		CTERMINUS("C"),
+		STRAND("E"),
+		HELIX("H"),
+		OTHER("O");
+		
+		private final String typeString;
+		Type(String typeString) {
+			this.typeString = typeString;
+		}
+		public String getTypeString() {
+			return typeString;
+		}
+	}
+	
+	public enum Orientation {
+		UP,
+		DOWN,
+		NONE;
 	}
 
     protected int number;
@@ -27,12 +42,12 @@ public abstract class BackboneSegment implements Comparable<BackboneSegment>, It
 
     protected Axis axis;
 
-    protected String orientation;
+    protected Orientation orientation;
 
     public BackboneSegment() {
         this.residues = new TreeSet<>();
         this.axis = null;
-        this.orientation = "None";
+        this.orientation = Orientation.NONE;
     }
 
     public BackboneSegment(Residue first) {
@@ -44,9 +59,6 @@ public abstract class BackboneSegment implements Comparable<BackboneSegment>, It
     
     public abstract String toCompactString();
 
-    @Deprecated // use getType instead
-    public abstract char getTypeChar();
-    
     public abstract Type getType();
 
     public int compareTo(BackboneSegment other) {
@@ -154,14 +166,15 @@ public abstract class BackboneSegment implements Comparable<BackboneSegment>, It
     }
 
     public char getTopsSymbol() {
-        if (this.getOrientation().equals("UP")) {
-            return Character.toUpperCase(this.getTypeChar());
+    	char typeChar = this.getType().getTypeString().charAt(0);
+        if (this.getOrientation() == Orientation.UP) {
+            return Character.toUpperCase(typeChar);
         } else {
-            return Character.toLowerCase(this.getTypeChar());
+            return Character.toLowerCase(typeChar);
         }
     }
 
-    public String getOrientation() {
+    public Orientation getOrientation() {
         return this.orientation;
     }
 
@@ -249,13 +262,13 @@ public abstract class BackboneSegment implements Comparable<BackboneSegment>, It
         // System.out.println("Angle of " + this + " with axis " + axis + " is "
         // + angle);
         if (angle > 90) {
-            this.orientation = "DOWN";
+            this.orientation = Orientation.DOWN;
         } else {
-            this.orientation = "UP";
+            this.orientation = Orientation.UP;
         }
     }
 
-    public void setOrientation(String orientation) {
+    public void setOrientation(Orientation orientation) {
         this.orientation = orientation;
     }
 

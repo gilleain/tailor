@@ -11,6 +11,7 @@ import java.util.Map;
 import javax.vecmath.Point3d;
 import javax.vecmath.Vector3d;
 
+import tops.translation.model.BackboneSegment.Type;
 import translation.Axis;
 import translation.ChainDomainMap;
 import translation.Geometer;
@@ -149,11 +150,11 @@ public class Chain implements Iterable<BackboneSegment> {
         }
 
         if (!(this.backboneSegments.get(0) instanceof Terminus)) {
-            this.backboneSegments.add(0, new Terminus("N Terminus", 'N'));
+            this.backboneSegments.add(0, new Terminus("N Terminus", Type.NTERMINUS));
         }
 
         if (!(this.backboneSegments.get(this.backboneSegments.size() - 1) instanceof Terminus)) {
-            this.backboneSegments.add(new Terminus("C Terminus", 'C'));
+            this.backboneSegments.add(new Terminus("C Terminus", Type.CTERMINUS));
         }
     }
 
@@ -438,8 +439,8 @@ public class Chain implements Iterable<BackboneSegment> {
             backboneSegmentIterator = this.backboneSegments.iterator();
         } else {
             List<BackboneSegment> segmentsFilteredByDomain = domain.filter(this.backboneSegments);
-            segmentsFilteredByDomain.add(0, new Terminus("N Terminus", 'N'));
-            segmentsFilteredByDomain.add(new Terminus("C Terminus", 'C'));
+            segmentsFilteredByDomain.add(0, new Terminus("N Terminus", Type.NTERMINUS));
+            segmentsFilteredByDomain.add(new Terminus("C Terminus", Type.CTERMINUS));
             backboneSegmentIterator = segmentsFilteredByDomain.iterator();
         }
 

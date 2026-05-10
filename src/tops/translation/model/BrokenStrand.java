@@ -66,7 +66,4 @@ public class BrokenStrand extends BackboneSegment {
     	return Type.STRAND;
     }
     
-    public char getTypeChar() {
-        return 'E';
-    }
 }

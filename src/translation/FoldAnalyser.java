@@ -16,6 +16,7 @@ import javax.vecmath.Point3d;
 import javax.vecmath.Vector3d;
 
 import tops.translation.model.BackboneSegment;
+import tops.translation.model.BackboneSegment.Orientation;
 import tops.translation.model.Chain;
 import tops.translation.model.Protein;
 import tops.translation.model.Residue;
@@ -178,7 +179,7 @@ public class FoldAnalyser {
             // ignore n-terminus
             segments.next();
             BackboneSegment firstSegment = (BackboneSegment) segments.next();
-            firstSegment.setOrientation("UP");
+            firstSegment.setOrientation(Orientation.UP);
             Axis firstAxis = firstSegment.getAxis();
             while (segments.hasNext()) {
                 BackboneSegment segment = (BackboneSegment) segments.next();

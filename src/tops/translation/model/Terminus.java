@@ -4,21 +4,17 @@ public class Terminus extends BackboneSegment {
 
     private String label;
 
-    private char typeChar;
+    private Type type;
 
-    public Terminus(String label, char typeChar) {
+    public Terminus(String label, Type type) {
         this.label = label;
-        this.typeChar = typeChar;
+        assert type == Type.NTERMINUS || type == Type.CTERMINUS;
+        this.type = type;
     }
 
     @Override
-    public char getTypeChar() {
-        return this.typeChar;
-    }
-
-    @Override
-    public String getOrientation() {
-        return "UP";
+    public Orientation getOrientation() {
+        return Orientation.UP;	// ??
     }
 
     @Override
@@ -38,7 +34,7 @@ public class Terminus extends BackboneSegment {
 
 	@Override
 	public Type getType() {
-		return Type.TERMINUS;
+		return type;
 	}
 
 }

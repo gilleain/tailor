@@ -13,6 +13,7 @@ import javax.vecmath.Point3d;
 import javax.vecmath.Vector3d;
 
 import tops.translation.model.BackboneSegment;
+import tops.translation.model.BackboneSegment.Type;
 import tops.translation.model.Chain;
 import tops.translation.model.HBond;
 import tops.translation.model.Helix;
@@ -547,7 +548,7 @@ public class StructureFinder {
 
     public void convertTorsionsToRepetitiveStructure(Chain chain) {
         Iterator<Residue> residueIterator = chain.residueIterator();
-        Terminus nterminus = new Terminus("N Terminus", 'N');
+        Terminus nterminus = new Terminus("N Terminus", Type.NTERMINUS);
         chain.addBackboneSegment(nterminus);
         BackboneSegment currentBackboneSegment = new UnstructuredSegment();
 
@@ -560,7 +561,7 @@ public class StructureFinder {
             currentBackboneSegment = nextBackboneSegment;
         }
         chain.addBackboneSegment(currentBackboneSegment);       //store the final segment
-        chain.addBackboneSegment(new Terminus("C Terminus", 'C'));    //and add a C Terminus for luck
+        chain.addBackboneSegment(new Terminus("C Terminus", Type.CTERMINUS));    //and add a C Terminus for luck
     }
 
     public void calculateHBondPartners(Chain c) {
@@ -702,12 +703,12 @@ public class StructureFinder {
     }
 
     public void buildSSES(Chain chain) {
-        chain.addBackboneSegment(new Terminus("N Terminus", 'N'));
+        chain.addBackboneSegment(new Terminus("N Terminus", Type.NTERMINUS));
         this.buildHelices(chain);
         this.buildStrands(chain);
         //this.buildLoops(chain);
         chain.sortBackboneSegments();
-        chain.addBackboneSegment(new Terminus("C Terminus", 'C'));    //and add a C Terminus for luck
+        chain.addBackboneSegment(new Terminus("C Terminus", Type.CTERMINUS));    //and add a C Terminus for luck
     }
 
     public void buildHelices(Chain chain) {
