@@ -1,6 +1,7 @@
 package tops.translation.experimental;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import tailor.api.SegmentListDescription;
@@ -38,8 +39,8 @@ public class ChainDescription {
 		return segmentListDescriptions;
 	}
 
-	public void addSegmentListDescription(SegmentListDescription segmentListDescription) {
-		this.segmentListDescriptions.add(segmentListDescription);
+	public void addSegmentListDescriptions(SegmentListDescription... segmentListDescription) {
+		this.segmentListDescriptions.addAll(Arrays.asList(segmentListDescription));
 	}
 
 }

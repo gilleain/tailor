@@ -39,14 +39,19 @@ public class FunctionalTests {
 	}
 	
 	private ChainDescription bab() {
-		double minDistance = 6;
+		double minDistance = 13;
 		ChainDescription chainDescription = new ChainDescription();
 		chainDescription.addSegment(new SegmentDescription(STRAND));
 		chainDescription.addSegment(new SegmentDescription(HELIX));
 		chainDescription.addSegment(new SegmentDescription(STRAND));
-		chainDescription.addSegmentListDescription(
+		chainDescription.addSegmentListDescriptions(
 				new SegmentCentroidDistance(
-						minDistance, getPathTo(chainDescription, 0), getPathTo(chainDescription, 2)));
+						minDistance, getPathTo(chainDescription, 0), getPathTo(chainDescription, 1)
+				),
+				new SegmentCentroidDistance(
+						minDistance, getPathTo(chainDescription, 1), getPathTo(chainDescription, 2)
+				)
+		);
 		
 		return chainDescription;
 	}
