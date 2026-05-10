@@ -1,14 +1,16 @@
 package tailor.description.atom;
 
-import tailor.description.AtomUpperBoundDescription;
+import tailor.condition.UpperBoundCondition;
+import tailor.description.AtomValueDescription;
 import tailor.description.DescriptionPath;
 import tailor.measure.AtomAngleMeasure;
 
-public class AtomAngleDescription extends AtomUpperBoundDescription {
+public class AtomAngleDescription extends AtomValueDescription {
 	
 	public AtomAngleDescription(
 			double angle, DescriptionPath atomDescriptionA, DescriptionPath atomDescriptionB, DescriptionPath atomDescriptionC) {
-		super(angle, new AtomAngleMeasure(atomDescriptionA, atomDescriptionB, atomDescriptionC));
+		super(new UpperBoundCondition(angle), 
+			  new AtomAngleMeasure(atomDescriptionA, atomDescriptionB, atomDescriptionC));
 	}
 	
 }

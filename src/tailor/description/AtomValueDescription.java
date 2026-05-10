@@ -5,17 +5,17 @@ import java.util.List;
 import tailor.api.AtomListDescription;
 import tailor.api.AtomListMeasure;
 import tailor.api.Measurement;
+import tailor.api.MeasurementCondition;
 import tailor.condition.AtomPartition;
-import tailor.condition.UpperBoundCondition;
 
-public class AtomUpperBoundDescription implements AtomListDescription {
+public class AtomValueDescription implements AtomListDescription {
 	
-	private final UpperBoundCondition condition;
+	private final MeasurementCondition condition;
 	
 	private final AtomListMeasure measure;
 	
-	public AtomUpperBoundDescription(double value, AtomListMeasure measure) {
-		this.condition = new UpperBoundCondition(value);
+	public AtomValueDescription(MeasurementCondition condition, AtomListMeasure measure) {
+		this.condition = condition;
 		this.measure = measure;
 	}
 
@@ -23,7 +23,6 @@ public class AtomUpperBoundDescription implements AtomListDescription {
 	public AtomListMeasure createMeasure() {
 		return this.measure;
 	}
-
 
 	@Override
 	public List<GroupDescription> getGroupDescriptions() {
