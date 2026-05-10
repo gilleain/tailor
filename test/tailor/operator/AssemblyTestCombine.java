@@ -6,8 +6,8 @@ import org.junit.Test;
 
 import tailor.engine.operator.CombineResults;
 import tailor.engine.operator.GroupSource;
-import tailor.engine.operator.PrintResults;
-import tailor.engine.operator.ResultPipe;
+import tailor.engine.operator.PrintAdapter;
+import tailor.engine.operator.Pipe;
 import tailor.engine.operator.ScanAtomResultByLabel;
 import tailor.structure.Chain;
 
@@ -19,26 +19,26 @@ public class AssemblyTestCombine {
 	 */ 
 	@Test
 	public void testCombineResultsToPairs() {
-		PrintResults sink = new PrintResults();
 		Chain chain = Helper.makeData(3);
-		ResultPipe resultPipe1 = new ResultPipe();
-		ResultPipe resultPipe2 = new ResultPipe();
+		Pipe resultPipe1 = new Pipe();
+		Pipe resultPipe2 = new Pipe();
 		GroupSource groupSource = new GroupSource(chain, List.of(resultPipe1, resultPipe2));
 
-		ResultPipe oPipe = new ResultPipe();
+		Pipe oPipe = new Pipe();
 		ScanAtomResultByLabel scanO = new ScanAtomResultByLabel(List.of("O"));
-		scanO.setSource(resultPipe1);
-		scanO.setSink(oPipe);
+		scanO.setInput(resultPipe1);
+		scanO.setOutput(oPipe);
 		
-		ResultPipe nPipe = new ResultPipe();
+		Pipe nPipe = new Pipe();
 		ScanAtomResultByLabel scanN = new ScanAtomResultByLabel(List.of("N"));
-		scanN.setSource(resultPipe2);
-		scanN.setSink(nPipe);
+		scanN.setInput(resultPipe2);
+		scanN.setOutput(nPipe);
 		
-		CombineResults combineON = new CombineResults(List.of(oPipe, nPipe), sink);
+		Pipe output = new Pipe();
+		CombineResults combineON = new CombineResults(List.of(oPipe, nPipe), output);
 		
 		// run the pipeline
-		Helper.runAll(List.of(groupSource, scanO, scanN, combineON));
+		Helper.runAll(List.of(groupSource, scanO, scanN, combineON, new PrintAdapter(output)));
 	}
 	
 	/**
@@ -49,35 +49,35 @@ public class AssemblyTestCombine {
 	 */
 	@Test
 	public void testCombineResultsToTriples() {
-		PrintResults sink = new PrintResults();
 		Chain chain = Helper.makeData(3);
-		ResultPipe resultPipe1 = new ResultPipe();
-		ResultPipe resultPipe2 = new ResultPipe();
-		ResultPipe resultPipe3 = new ResultPipe();
+		Pipe resultPipe1 = new Pipe();
+		Pipe resultPipe2 = new Pipe();
+		Pipe resultPipe3 = new Pipe();
 		GroupSource groupSource = new GroupSource(chain, List.of(resultPipe1, resultPipe2, resultPipe3));
 
-		ResultPipe oPipe = new ResultPipe();
+		Pipe oPipe = new Pipe();
 		ScanAtomResultByLabel scanO = new ScanAtomResultByLabel(List.of("O"));
-		scanO.setSource(resultPipe1);
-		scanO.setSink(oPipe);
+		scanO.setInput(resultPipe1);
+		scanO.setOutput(oPipe);
 		
-		ResultPipe nPipe = new ResultPipe();
+		Pipe nPipe = new Pipe();
 		ScanAtomResultByLabel scanN = new ScanAtomResultByLabel(List.of("N"));
-		scanN.setSource(resultPipe2);
-		scanN.setSink(nPipe);
+		scanN.setInput(resultPipe2);
+		scanN.setOutput(nPipe);
 		
-		ResultPipe resultON = new ResultPipe();
+		Pipe resultON = new Pipe();
 		CombineResults combineON = new CombineResults(List.of(oPipe, nPipe), resultON);
 		
-		ResultPipe caPipe = new ResultPipe();
+		Pipe caPipe = new Pipe();
 		ScanAtomResultByLabel scanCA = new ScanAtomResultByLabel(List.of("CA"));
-		scanCA.setSource(resultPipe3);
-		scanCA.setSink(caPipe);
+		scanCA.setInput(resultPipe3);
+		scanCA.setOutput(caPipe);
 		
-		CombineResults combineONCa = new CombineResults(List.of(resultON, caPipe), sink);
+		Pipe output = new Pipe();
+		CombineResults combineONCa = new CombineResults(List.of(resultON, caPipe), output);
 		
 		// run the pipeline
-		Helper.runAll(List.of(groupSource, scanO, scanN, combineON, scanCA, combineONCa));
+		Helper.runAll(List.of(groupSource, scanO, scanN, combineON, scanCA, combineONCa, new PrintAdapter(output)));
 	}
 	
 	/**
@@ -87,26 +87,26 @@ public class AssemblyTestCombine {
 	 */
 	@Test
 	public void testCombineAtomLists() {
-		PrintResults sink = new PrintResults();
 		Chain chain = Helper.makeData(3);
-		ResultPipe resultPipe1 = new ResultPipe();
-		ResultPipe resultPipe2 = new ResultPipe();
+		Pipe resultPipe1 = new Pipe();
+		Pipe resultPipe2 = new Pipe();
 		GroupSource groupSource = new GroupSource(chain, List.of(resultPipe1, resultPipe2));
 
-		ResultPipe n_ca_Pipe = new ResultPipe();
+		Pipe n_ca_Pipe = new Pipe();
 		ScanAtomResultByLabel scanNCa = new ScanAtomResultByLabel(List.of("N", "CA"));
-		scanNCa.setSource(resultPipe1);
-		scanNCa.setSink(n_ca_Pipe);
+		scanNCa.setInput(resultPipe1);
+		scanNCa.setOutput(n_ca_Pipe);
 		
-		ResultPipe c_o_Pipe = new ResultPipe();
+		Pipe c_o_Pipe = new Pipe();
 		ScanAtomResultByLabel scanCO = new ScanAtomResultByLabel(List.of("C", "O"));
-		scanCO.setSource(resultPipe2);
-		scanCO.setSink(c_o_Pipe);
+		scanCO.setInput(resultPipe2);
+		scanCO.setOutput(c_o_Pipe);
 		
-		CombineResults combineNCACO = new CombineResults(List.of(n_ca_Pipe, c_o_Pipe), sink);
+		Pipe output = new Pipe();
+		CombineResults combineNCACO = new CombineResults(List.of(n_ca_Pipe, c_o_Pipe), output);
 		
 		// run the pipeline
-		Helper.runAll(List.of(groupSource, scanNCa, scanCO, combineNCACO));
+		Helper.runAll(List.of(groupSource, scanNCa, scanCO, combineNCACO, new PrintAdapter(output)));
 	}
 	
 }

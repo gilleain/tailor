@@ -7,7 +7,7 @@ import tailor.api.AtomListDescription;
 import tailor.condition.AtomPartition;
 import tailor.engine.plan.Result;
 
-public class FilterAtomResultByCondition extends AbstractPipeableOperator {
+public class FilterAtomResultByCondition extends AbstractOperator {
 	
 	private Logger logger = Logger.getLogger(FilterAtomResultByCondition.class.getName());
 	
@@ -48,4 +48,5 @@ public class FilterAtomResultByCondition extends AbstractPipeableOperator {
 		List<String> listDescriptionNames = listDescriptions.stream().map(c -> c.getClass().getSimpleName()).toList();
 		return "Filter: id[" + getId() + "] on:" + listDescriptionNames;
 	}
+	
 }

@@ -5,7 +5,7 @@ import java.util.List;
 import tailor.engine.plan.Result;
 import tailor.structure.Atom;
 
-public class ScanAtomResultByLabel extends AbstractPipeableOperator {
+public class ScanAtomResultByLabel extends AbstractOperator {
 	
 	// Atom labels to search for // TODO - could be a general condition
 	private List<String> atomLabels;

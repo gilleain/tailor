@@ -6,8 +6,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
 
-import tailor.api.Sink;
-import tailor.api.Source;
 import tailor.description.group.GroupSequenceDescription;
 import tailor.engine.plan.Result;
 
@@ -18,9 +16,9 @@ public class CombineResults extends AbstractOperator {
 	
 	private static Logger logger = Logger.getLogger(CombineResults.class.getName());
 	
-	private List<ResultPipe> sources;
+	private List<Pipe> sources;
 	
-	private Sink<Result> output;
+	private Pipe output;	// TODO - duplicating parent sink
 	
 	/**
 	 * Mapping between the end point index of an input source, and the separation (gap) 
@@ -29,34 +27,29 @@ public class CombineResults extends AbstractOperator {
 	
 	// Holds the association between two input pipes, and a sequence constraint
 	// TODO - could consider just using the end ...
-	public record PipeSeqConstraint(ResultPipe start, ResultPipe end, GroupSequenceDescription groupSeqDescription) {}
+	public record PipeSeqConstraint(Pipe start, Pipe end, GroupSequenceDescription groupSeqDescription) {}
 	
 	
 	// TODO - tidy constructors
-	public CombineResults(List<ResultPipe> sources, ResultPipe output) {
+	public CombineResults(List<Pipe> sources, Pipe output) {
 		this.sources = sources;
 		this.output = output;
 		output.registerSource(this);
 		this.gapMap = new HashMap<>();
 	}
 	
-	public CombineResults(List<ResultPipe> sources, Sink<Result> output) {
-		this.sources = sources;
-		this.output = output;
-		this.gapMap = new HashMap<>();
-	}
 	
-	public CombineResults(List<ResultPipe> sources, Sink<Result> output, List<PipeSeqConstraint> pipeToSeqenceConstraints) {
+	public CombineResults(List<Pipe> sources, Pipe output, List<PipeSeqConstraint> pipeToSeqenceConstraints) {
 		this(sources, output);
 		for (PipeSeqConstraint pipeSeqConstraint : pipeToSeqenceConstraints) {
-			ResultPipe end = pipeSeqConstraint.end();
+			Pipe end = pipeSeqConstraint.end();
 			gapMap.put(sources.indexOf(end), pipeSeqConstraint.groupSeqDescription().getSeparation());
 		}
 	}
 	
 	@Override
 	public void clear() {
-		for (Source source : sources) {
+		for (Pipe source : sources) {
 			source.clear();
 		}
 		output.clear();
@@ -65,22 +58,22 @@ public class CombineResults extends AbstractOperator {
 	// TODO - not great - is there another way to do this?
 	public void setId(String id) {
 		super.setId(id);
-		for (ResultPipe source : sources) {
+		for (Pipe source : sources) {
 			source.registerSink(this);
 		}
 	}
 	
-	public List<ResultPipe> getSources() {
+	public List<Pipe> getSources() {
 		return this.sources;
 	}
 
-	public Sink<Result> getOutput() {
+	public Pipe getOutput() {
 		return this.output;
 	}
 
 	public String description() {
 		return "Combine id:[" + getId() + "]"
-				+ " sources:" + sources.stream().map(Source::getSourceId).toList() 
+				+ " sources:" + sources.stream().map(Pipe::getSourceId).toList() 
 				+ " to:[" + output.getSinkId() + "]";
 	}
 
@@ -90,7 +83,7 @@ public class CombineResults extends AbstractOperator {
 		// we want: <(1, 4, 7), (1, 4, 8), (1, 4, 9), (1, 5, 7) ...> 
 		
 		List<List<Result>> sourceBuffers = new ArrayList<>();	// TODO - avoid caching
-		for (Source<Result> source : sources) {
+		for (Pipe source : sources) {
 			sourceBuffers.add(getAll(source));
 		}
 		
@@ -102,7 +95,7 @@ public class CombineResults extends AbstractOperator {
 		logger.info(description() + " output " + counter + " results");
 	}
 	
-	private List<Result> getAll(Source<Result> source) {
+	private List<Result> getAll(Pipe source) {
 		List<Result> resultList = new ArrayList<>();
 		while (source.hasNext()) {
 			try {

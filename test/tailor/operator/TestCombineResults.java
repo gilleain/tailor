@@ -11,7 +11,7 @@ import org.junit.Test;
 
 import tailor.engine.operator.CombineResults;
 import tailor.engine.operator.PrintAdapter;
-import tailor.engine.operator.ResultPipe;
+import tailor.engine.operator.Pipe;
 import tailor.engine.plan.Result;
 import tailor.operator.ResultBuilder.ResultGroupBuilder;
 import tailor.operator.ResultBuilder.ResultGroupListBuilder;
@@ -25,9 +25,9 @@ public class TestCombineResults {
 	 */
 	@Test
 	public void testCombineSingles() {
-		ResultPipe input1 = put(resultList().withGroups("GLY", "SER", "ASP").withAtom("N"));
-		ResultPipe input2 = put(resultList().withGroups("GLY", "SER", "ASP").withAtom("O"));
-		ResultPipe output = new ResultPipe();
+		Pipe input1 = put(resultList().withGroups("GLY", "SER", "ASP").withAtom("N"));
+		Pipe input2 = put(resultList().withGroups("GLY", "SER", "ASP").withAtom("O"));
+		Pipe output = new Pipe();
 		
 		CombineResults combine = new CombineResults(List.of(input1, input2), output);
 		combine.run();
@@ -45,15 +45,15 @@ public class TestCombineResults {
 	 */
 	@Test
 	public void combineSimilarPairs() {
-		ResultPipe input1 = put(
+		Pipe input1 = put(
 				result().startAt(1).withGroups("GLY", "SER").withAtoms("N", "O"),
 				result().startAt(2).withGroups("SER", "ASP").withAtoms("N", "O"),
 				result().startAt(3).withGroups("ASP", "HIS").withAtoms("N", "O"));
-		ResultPipe input2 = put(
+		Pipe input2 = put(
 				result().startAt(1).withGroups("GLY", "SER").withAtoms("O", "N"),
 				result().startAt(2).withGroups("SER", "ASP").withAtoms("O", "N"),
 				result().startAt(3).withGroups("ASP", "HIS").withAtoms("O", "N"));
-		ResultPipe output = new ResultPipe();
+		Pipe output = new Pipe();
 		
 		CombineResults combine = new CombineResults(List.of(input1, input2), output);
 		combine.run();
@@ -67,15 +67,15 @@ public class TestCombineResults {
 	 */
 	@Test
 	public void combineDisimilarPairs() {
-		ResultPipe input1 = put(
+		Pipe input1 = put(
 				result().startAt(1).withGroups("GLY", "SER").withAtoms("N", "C"),
 				result().startAt(2).withGroups("SER", "ASP").withAtoms("N", "C"),
 				result().startAt(3).withGroups("ASP", "HIS").withAtoms("N", "C"));
-		ResultPipe input2 = put(
+		Pipe input2 = put(
 				result().startAt(1).withGroups("GLY", "SER").withAtoms("O", "CA"),
 				result().startAt(2).withGroups("SER", "ASP").withAtoms("O", "CA"),
 				result().startAt(3).withGroups("ASP", "HIS").withAtoms("O", "CA"));
-		ResultPipe output = new ResultPipe();
+		Pipe output = new Pipe();
 		
 		CombineResults combine = new CombineResults(List.of(input1, input2), output);
 		combine.run();
@@ -84,14 +84,14 @@ public class TestCombineResults {
 		printer.run();
 	}
 	
-	private ResultPipe put(ResultGroupListBuilder builder) {
-		ResultPipe pipe = new ResultPipe();
+	private Pipe put(ResultGroupListBuilder builder) {
+		Pipe pipe = new Pipe();
 		builder.build().stream().forEach(pipe::put);
 		return pipe;
 	}
 	
-	private ResultPipe put(ResultGroupBuilder... builders) {
-		ResultPipe pipe = new ResultPipe();
+	private Pipe put(ResultGroupBuilder... builders) {
+		Pipe pipe = new Pipe();
 		for (ResultGroupBuilder builder : builders) {
 			pipe.put(builder.build());
 		}

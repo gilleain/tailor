@@ -11,7 +11,6 @@ import java.util.Stack;
 
 import tailor.api.AtomListDescription;
 import tailor.api.Operator;
-import tailor.api.PipeableOperator;
 import tailor.condition.PropertyEquals;
 import tailor.description.ChainDescription;
 import tailor.description.GroupDescription;
@@ -22,8 +21,8 @@ import tailor.engine.operator.CombineResults.PipeSeqConstraint;
 import tailor.engine.operator.FilterAtomResultByCondition;
 import tailor.engine.operator.FilterGroupByDescription;
 import tailor.engine.operator.Measurer;
+import tailor.engine.operator.Pipe;
 import tailor.engine.operator.PrintAdapter;
-import tailor.engine.operator.ResultPipe;
 import tailor.engine.operator.ScanAtomResultByLabel;
 import tailor.engine.plan.GroupUnionFind.Component;
 import tailor.measure.GroupNameMeasure;
@@ -33,6 +32,7 @@ import tailor.measure.GroupNameMeasure;
  */
 public class Planner {
 	
+
 	public Plan plan(ChainDescription chainDescription) {
 		return plan(chainDescription, true);
 	}
@@ -43,22 +43,10 @@ public class Planner {
 		// this is needed at the moment for getting label partitions matching correctly
 		labelDescription(chainDescription);
 		
-		// Go through the group descriptions in the chain, making scanners
-		Map<GroupDescription, ResultPipe> startPointMap = new HashMap<>();
+		// Go through the group descriptions in the chain, making scanners/group filters
+		Map<GroupDescription, Pipe> startPointMap = new HashMap<>();
 		for (GroupDescription groupDescription : chainDescription.getGroupDescriptions()) {
-			Optional<String> groupName = groupDescription.getName();
-			ResultPipe output;
-			if (groupName.isPresent()) {
-				FilterGroupByDescription filterGroupByDescription = new FilterGroupByDescription(
-						new GroupNameDescription(
-								new PropertyEquals(groupName.get()), new GroupNameMeasure()));
-				ResultPipe groupFilterOut = plan.addStart(filterGroupByDescription);
-				PipeableOperator<Result, Result> scanByLabel = addAtomScanner(plan, groupDescription);
-				output = plan.addOperatorReturnPipe(scanByLabel, groupFilterOut);
-			} else {
-				PipeableOperator<Result, Result> scanByLabel = addAtomScanner(plan, groupDescription);
-				output = plan.addStart(scanByLabel);
-			}
+			Pipe output = addGroupOperators(plan, groupDescription);
 			startPointMap.put(groupDescription, output);
 		}
 		
@@ -87,14 +75,14 @@ public class Planner {
 		}
 		
 		// Join the scanners with combiners
-		Stack<ResultPipe> combinedOutputPipes = 
+		Stack<Pipe> combinedOutputPipes = 
 				join(plan, chainDescription, innerGroupDescriptions, outerGroupDescriptions, startPointMap);
 		
 		// Reduce the output pipes by joining
-		ResultPipe current = combinedOutputPipes.pop();
+		Pipe current = combinedOutputPipes.pop();
 		while (!combinedOutputPipes.isEmpty()) {
-			ResultPipe next = combinedOutputPipes.pop();
-			ResultPipe output = new ResultPipe();
+			Pipe next = combinedOutputPipes.pop();
+			Pipe output = new Pipe();
 			CombineResults combiner;
 			if (current.getSourceId().compareTo(next.getSourceId()) < 0) {
 				combiner = new CombineResults(List.of(current, next), output);
@@ -121,7 +109,23 @@ public class Planner {
 		return plan;
 	}
     
-    private PipeableOperator<Result, Result> addAtomScanner(Plan plan, GroupDescription groupDescription) {
+    // Create a filter by group name then atom scanner, or just an atom scanner
+    private Pipe addGroupOperators(Plan plan, GroupDescription groupDescription) {
+    	Optional<String> groupName = groupDescription.getName();
+    	if (groupName.isPresent()) {
+			FilterGroupByDescription filterGroupByDescription = new FilterGroupByDescription(
+					new GroupNameDescription(
+							new PropertyEquals(groupName.get()), new GroupNameMeasure()));
+			Pipe groupFilterOut = plan.addStart(filterGroupByDescription);
+			Operator scanByLabel = addAtomScanner(plan, groupDescription);
+			return plan.addOperatorReturnPipe(scanByLabel, groupFilterOut);
+		} else {
+			Operator scanByLabel = addAtomScanner(plan, groupDescription);
+			return plan.addStart(scanByLabel);
+		}
+    }
+    
+    private Operator addAtomScanner(Plan plan, GroupDescription groupDescription) {
     	List<String> labels = groupDescription.getAtomDescriptions().stream().map(a -> a.getLabel()).toList();
 		return new ScanAtomResultByLabel(labels);
     }
@@ -146,12 +150,12 @@ public class Planner {
 		}
 	}
 	
-	private Stack<ResultPipe> join(
+	private Stack<Pipe> join(
 			Plan plan,
 			ChainDescription chainDescription,
 			Map<GroupDescription, Set<AtomListDescription>> innerGroupDescriptions,
 			Map<AtomListDescription, List<GroupDescription>> outerGroupDescriptions, 
-			Map<GroupDescription, ResultPipe> startPointMap) {
+			Map<GroupDescription, Pipe> startPointMap) {
 		
 		
 		// Find connected components of the graph where vertices are groups and edges 
@@ -162,61 +166,61 @@ public class Planner {
 		groupUnionFind.union(outerAtomListDescriptions, chainDescription.getGroupSequenceDescriptions());
 		
 		// The scanner for each group in a component needs to be joined together
-		Stack<ResultPipe> combinedOutputPipes = new Stack<>();
+		Stack<Pipe> combinedOutputPipes = new Stack<>();
 		for (Component component : groupUnionFind.getComponents()) {
-			List<ResultPipe> componentOutputResultPipes = new ArrayList<>();
-			Map<GroupDescription, ResultPipe> groupDescriptionToOutputPipeMap = new HashMap<>();
+			List<Pipe> componentOutputResultPipes = new ArrayList<>();
+			Map<GroupDescription, Pipe> groupDescriptionToOutputPipeMap = new HashMap<>();
 			for (GroupDescription groupDescription : component.groupDescriptions()) {
-				ResultPipe groupOutput = handleComponentGroup(plan, groupDescription, startPointMap, innerGroupDescriptions);
+				Pipe groupOutput = handleComponentGroup(plan, groupDescription, startPointMap, innerGroupDescriptions);
 				componentOutputResultPipes.add(groupOutput);
 				groupDescriptionToOutputPipeMap.put(groupDescription, groupOutput);
 			}
 			// join these if there are more than one
 			if (componentOutputResultPipes.size() > 1) {
-				ResultPipe combinedOutput = new ResultPipe();
+				Pipe combinedOutput = new Pipe();
 				CombineResults combiner = makeCombiner(groupDescriptionToOutputPipeMap, combinedOutput, component);
 				plan.addOperator(combiner);
 				combinedOutput.registerSource(combiner); // TODO
 				
 				Set<AtomListDescription> atomListDescriptions = component.atomListDescriptions();
 				if (!component.atomListDescriptions().isEmpty()) {	// trivially, this should always be true
-					ResultPipe filterOutput = addFilter(plan, combinedOutput, atomListDescriptions);
+					Pipe filterOutput = addFilter(plan, combinedOutput, atomListDescriptions);
 					combinedOutputPipes.add(filterOutput);
 				} else {
 					combinedOutputPipes.add(combinedOutput);
 				}
 			} else {
-				combinedOutputPipes.add((ResultPipe) componentOutputResultPipes.get(0));
+				combinedOutputPipes.add((Pipe) componentOutputResultPipes.get(0));
 			}
 		}
 		
 		return combinedOutputPipes;
 	}
 	
-	private ResultPipe handleComponentGroup(
+	private Pipe handleComponentGroup(
 			Plan plan,GroupDescription groupDescription,
-			Map<GroupDescription, ResultPipe> startPointMap,
+			Map<GroupDescription, Pipe> startPointMap,
 			Map<GroupDescription, Set<AtomListDescription>> innerGroupDescriptions) {
-		ResultPipe startPoint = startPointMap.get(groupDescription);
+		Pipe startPoint = startPointMap.get(groupDescription);
 
 		// for groups that have inner conditions, create a filter and connect to the scanner
 		if (innerGroupDescriptions.containsKey(groupDescription)) {
 			Set<AtomListDescription> atomListDescriptions = innerGroupDescriptions.get(groupDescription);
-			ResultPipe filterOutput = addFilter(plan, startPoint, atomListDescriptions);
+			Pipe filterOutput = addFilter(plan, startPoint, atomListDescriptions);
 			return filterOutput;
 		} else {
 			return startPoint;
 		}
 	}
 	
-	private CombineResults makeCombiner(Map<GroupDescription, ResultPipe> groupDescriptionToOutputPipeMap, ResultPipe combinedOutput, Component component) {
+	private CombineResults makeCombiner(Map<GroupDescription, Pipe> groupDescriptionToOutputPipeMap, Pipe combinedOutput, Component component) {
 		List<CombineResults.PipeSeqConstraint> seqConstraints = new ArrayList<>();
 		for (GroupSequenceDescription groupSequenceDescription : component.groupSequenceDescriptions()) {
-			ResultPipe startPipe = groupDescriptionToOutputPipeMap.get(groupSequenceDescription.getStart());
-			ResultPipe endPipe = groupDescriptionToOutputPipeMap.get(groupSequenceDescription.getEnd());
+			Pipe startPipe = groupDescriptionToOutputPipeMap.get(groupSequenceDescription.getStart());
+			Pipe endPipe = groupDescriptionToOutputPipeMap.get(groupSequenceDescription.getEnd());
 			seqConstraints.add(new PipeSeqConstraint(startPipe, endPipe, groupSequenceDescription));
 		}
-		List<ResultPipe> inputs = new ArrayList<>(groupDescriptionToOutputPipeMap.values());
+		List<Pipe> inputs = new ArrayList<>(groupDescriptionToOutputPipeMap.values());
 		inputs.sort((a, b) -> a.getSourceId().compareTo(b.getSourceId())); // sort on source ids - bit hacky
 		return new CombineResults(inputs, combinedOutput, seqConstraints);
 	}
@@ -230,7 +234,7 @@ public class Planner {
 
 	 * @return the output pipe from the filter
 	 */
-	private ResultPipe addFilter(Plan plan, ResultPipe previousOutput, Set<AtomListDescription> atomListDescriptions) {
+	private Pipe addFilter(Plan plan, Pipe previousOutput, Set<AtomListDescription> atomListDescriptions) {
 		FilterAtomResultByCondition filter = new FilterAtomResultByCondition(new ArrayList<>(atomListDescriptions));
 		return plan.addOperatorReturnPipe(filter, previousOutput);
 	}

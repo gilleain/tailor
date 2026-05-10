@@ -6,14 +6,13 @@ import java.util.List;
 
 import tailor.api.Operator;
 import tailor.api.ResultsPrinter;
-import tailor.api.Sink;
 import tailor.datasource.StructureSource;
 import tailor.description.ChainDescription;
 import tailor.engine.operator.GroupSource;
+import tailor.engine.operator.Pipe;
 import tailor.engine.operator.ResultsPrinterAdapter;
 import tailor.engine.plan.Plan;
 import tailor.engine.plan.Planner;
-import tailor.engine.plan.Result;
 import tailor.structure.Chain;
 import tailor.structure.Structure;
 
@@ -61,7 +60,7 @@ public class PlanEngine implements Engine {
 	private void runChain(String structureName, Chain chain) {
 		plan = makePlan(run);	// TODO - why is this necessary?
 		System.err.println("Running chain " + structureName + " " + chain.getName());
-		List<Sink<Result>> inputs = plan.getInputPipes();
+		List<Pipe> inputs = plan.getInputPipes();
 		GroupSource groupSource = new GroupSource(chain, inputs);
 		List<Operator> fullPipeline = new ArrayList<>();
 		fullPipeline.add(groupSource);

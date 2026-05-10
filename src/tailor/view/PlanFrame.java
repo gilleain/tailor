@@ -21,19 +21,15 @@ import javax.swing.JScrollPane;
 import javax.swing.SwingUtilities;
 
 import tailor.api.Operator;
-import tailor.api.PipeableOperator;
-import tailor.api.Sink;
 import tailor.description.DescriptionFactory;
 import tailor.engine.operator.CombineResults;
 import tailor.engine.operator.FilterAtomResultByCondition;
 import tailor.engine.operator.Measurer;
 import tailor.engine.operator.PrintAdapter;
-import tailor.engine.operator.PrintResults;
-import tailor.engine.operator.ResultPipe;
+import tailor.engine.operator.Pipe;
 import tailor.engine.operator.ScanAtomResultByLabel;
 import tailor.engine.plan.Plan;
 import tailor.engine.plan.Planner;
-import tailor.engine.plan.Result;
 
 /**
  * Swing viewer for a Plan. Renders each Operator as a labelled rectangle,
@@ -80,7 +76,7 @@ public class PlanFrame extends JFrame {
         /** directed edges as {sourceId, sinkId} pairs */
         private final List<Edge> edges = new ArrayList<>();
         
-        private final Map<Class, Color> colorMap;
+        private final Map<Class<? extends Operator>, Color> colorMap;
 
         PlanPanel(Plan plan) {
             setBackground(Color.WHITE);
@@ -91,7 +87,6 @@ public class PlanFrame extends JFrame {
             colorMap.put(FilterAtomResultByCondition.class, Color.MAGENTA);
             colorMap.put(CombineResults.class, Color.PINK);
             colorMap.put(PrintAdapter.class, Color.RED);
-            colorMap.put(PrintResults.class, Color.RED);
             colorMap.put(Measurer.class, Color.GRAY);
 
             for (Operator op : plan.getOperators()) {
@@ -110,27 +105,15 @@ public class PlanFrame extends JFrame {
          * Walk every operator and record a directed edge wherever an outgoing
          * ResultPipe has its sink registered.
          */
-        @SuppressWarnings("unchecked")
         private void collectEdges(Plan plan) {
-            for (Operator op : plan.getOperators()) {
-                if (op instanceof PipeableOperator pipeable) {
-                	System.out.println("Found pipeable " + op.description());
-                    Sink<?> sink = pipeable.getSink();
-                    System.out.println("Sink " + sink);
-                    if (sink instanceof ResultPipe pipe && pipe.getSinkId() != null) {
-                    	System.out.println("Pipe sink id " + pipe.getSinkId());
-                        edges.add(new Edge(op.getId(), pipe.getSinkId()));
-                    }
-                } else if (op instanceof CombineResults combine) {
-                	System.out.println("Found combine " + op.description());
-                    Sink<Result> output = combine.getOutput();
-                    System.out.println("Sink " + output);
-                    if (output instanceof ResultPipe pipe && pipe.getSinkId() != null) {
-                    	System.out.println("Pipe sink id " + output.getSinkId());
-                        edges.add(new Edge(op.getId(), pipe.getSinkId()));
-                    }
-                }
-            }
+        	for (Operator op : plan.getOperators()) {
+        		Pipe output = op.getOutput();
+        		System.out.println("Output " + output);
+        		if (output != null && output.getSinkId() != null) {
+        			System.out.println("Output Pipe id " + output.getSinkId());
+        			edges.add(new Edge(op.getId(), output.getSinkId()));
+        		}
+        	}
         }
 
         /**

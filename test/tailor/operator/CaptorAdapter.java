@@ -2,16 +2,16 @@ package tailor.operator;
 
 import java.util.List;
 
-import tailor.api.Source;
 import tailor.engine.operator.AbstractOperator;
+import tailor.engine.operator.Pipe;
 import tailor.engine.plan.Result;
 
 public class CaptorAdapter extends AbstractOperator {
 	
 	private List<Result> capture;
-	private Source<Result> input;
+	private Pipe input;
 	
-	public CaptorAdapter(Source<Result> input, List<Result> capture) {
+	public CaptorAdapter(Pipe input, List<Result> capture) {
 		this.input = input;
 		this.capture = capture;
 	}

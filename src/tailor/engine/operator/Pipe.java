@@ -5,11 +5,9 @@ import java.util.Iterator;
 import java.util.List;
 
 import tailor.api.Operator;
-import tailor.api.Sink;
-import tailor.api.Source;
 import tailor.engine.plan.Result;
 
-public class ResultPipe implements Source<Result>, Sink<Result> {
+public class Pipe  {
 	
 	private Iterator<Result> resultIterator;	// TODO - convert to true stream
 	private List<Result> results;
@@ -20,7 +18,7 @@ public class ResultPipe implements Source<Result>, Sink<Result> {
 	// The id of the operator that is the sink
 	private String sinkId;
 	
-	public ResultPipe() {
+	public Pipe() {
 		this.results = new ArrayList<>();
 		this.resultIterator = null;
 	}
@@ -29,23 +27,14 @@ public class ResultPipe implements Source<Result>, Sink<Result> {
 		this.results.clear();
 	}
 
-	@Override
 	public void put(Result item) {
 		results.add(item);
 	}
 
-	@Override
-	public int getArity() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
 	public Result getNext() {
 		return resultIterator.next();
 	}
 
-	@Override
 	public boolean hasNext() {
 		if (resultIterator == null) {
 			resultIterator = results.iterator();
@@ -54,25 +43,21 @@ public class ResultPipe implements Source<Result>, Sink<Result> {
 	}
 
 
-	@Override
 	public String getSourceId() {
 		return this.sourceId;
 	}
 
 
-	@Override
 	public void registerSource(Operator operator) {
 		this.sourceId = operator.getId();
 	}
 
 
-	@Override
 	public String getSinkId() {
 		return this.sinkId;
 	}
 
 
-	@Override
 	public void registerSink(Operator operator) {
 		this.sinkId = operator.getId();
 	}

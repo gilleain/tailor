@@ -7,7 +7,7 @@ import tailor.description.group.GroupNameDescription;
 import tailor.engine.plan.Result;
 import tailor.structure.Group;
 
-public class FilterGroupByDescription extends AbstractPipeableOperator {
+public class FilterGroupByDescription extends AbstractOperator {
 	
 	private Logger logger = Logger.getLogger(FilterGroupByDescription.class.getName());
 	

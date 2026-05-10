@@ -173,7 +173,7 @@ public class FunctionalTests {
 	}
 	
 	@Test
-	public void helixONBondTest() throws IOException {
+	public void helixONBondSpecificGroupTest() throws IOException {
 		String filename = "helix.pdb";
 		run(filename, makeON(null, "LEU"));
 	}

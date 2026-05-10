@@ -1,23 +1,24 @@
 package tailor.engine.operator;
 
-import tailor.api.Source;
-import tailor.engine.plan.Result;
-
 /**
  * Convenience class for converting a pipe to output (feels like we should not need this...)
  */
 public class PrintAdapter extends AbstractOperator {
 	
-	private Source<Result> input;
+	private Pipe input;
 	
-	public PrintAdapter(String id, ResultPipe input) {
+	public PrintAdapter(Pipe input) {
+		this("", input);
+	}
+	
+	public PrintAdapter(String id, Pipe input) {
 		this.id = id;
 		this.input = input;
 	}
 	
 	public void setId(String id) {
 		super.setId(id);
-		((ResultPipe)this.input).registerSink(this);// TODO
+		this.input.registerSink(this);
 	}
 	
 

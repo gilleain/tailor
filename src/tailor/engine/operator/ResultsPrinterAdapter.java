@@ -8,11 +8,13 @@ public class ResultsPrinterAdapter implements Operator {
 	
 	private ResultsPrinter resultsPrinter;
 	
-	private ResultPipe source;
+	private Pipe source;
 	
 	private ChainDescription chainDescription;
 	
-	public ResultsPrinterAdapter(ResultsPrinter resultsPrinter, ResultPipe source, ChainDescription chainDescription) {
+	private String id;
+	
+	public ResultsPrinterAdapter(ResultsPrinter resultsPrinter, Pipe source, ChainDescription chainDescription) {
 		super();
 		this.resultsPrinter = resultsPrinter;
 		this.source = source;
@@ -28,6 +30,11 @@ public class ResultsPrinterAdapter implements Operator {
 	}
 
 	@Override
+	public Pipe getInput() {
+		return this.source;
+	}
+
+	@Override
 	public String description() {
 		// TODO Auto-generated method stub
 		return null;
@@ -35,20 +42,33 @@ public class ResultsPrinterAdapter implements Operator {
 
 	@Override
 	public String getId() {
-		// TODO Auto-generated method stub
-		return null;
+		return this.id;
 	}
 
 	@Override
 	public void setId(String id) {
-		// TODO Auto-generated method stub
-		
+		this.id = id;
 	}
 
 	@Override
 	public void clear() {
-		// TODO Auto-generated method stub
-		
+		// No action
+	}
+
+	@Override
+	public void setOutput(Pipe output) {
+		// No action
+	}
+
+	@Override
+	public void setInput(Pipe input) {
+		// No action
+	}
+
+	@Override
+	public Pipe getOutput() {
+		// No action
+		return null;
 	}
 
 }

@@ -13,8 +13,7 @@ import tailor.engine.operator.CombineResults;
 import tailor.engine.operator.FilterAtomResultByCondition;
 import tailor.engine.operator.GroupSource;
 import tailor.engine.operator.PrintAdapter;
-import tailor.engine.operator.PrintResults;
-import tailor.engine.operator.ResultPipe;
+import tailor.engine.operator.Pipe;
 import tailor.engine.operator.ScanAtomResultByLabel;
 import tailor.structure.Chain;
 
@@ -30,21 +29,21 @@ public class TestFilter {
 		double distance = 5;	// whatever
 		
 		Chain chain = Helper.makeData(3);
-		ResultPipe resultPipe1 = new ResultPipe();
-		ResultPipe resultPipe2 = new ResultPipe();
+		Pipe resultPipe1 = new Pipe();
+		Pipe resultPipe2 = new Pipe();
 		GroupSource groupSource = new GroupSource(chain, List.of(resultPipe1, resultPipe2));
 		
-		ResultPipe oPipe = new ResultPipe();
+		Pipe oPipe = new Pipe();
 		ScanAtomResultByLabel scanO = new ScanAtomResultByLabel(List.of("O"));
-		scanO.setSink(oPipe);
-		scanO.setSource(resultPipe1);
+		scanO.setOutput(oPipe);
+		scanO.setInput(resultPipe1);
 		
-		ResultPipe nPipe = new ResultPipe();
+		Pipe nPipe = new Pipe();
 		ScanAtomResultByLabel scanN = new ScanAtomResultByLabel(List.of("N"));
-		scanN.setSink(nPipe);
-		scanN.setSource(resultPipe2);
+		scanN.setOutput(nPipe);
+		scanN.setInput(resultPipe2);
 		
-		ResultPipe onPipe = new ResultPipe();
+		Pipe onPipe = new Pipe();
 		CombineResults combineON = new CombineResults(List.of(oPipe, nPipe), onPipe);
 		
 		GroupDescription groupA = Helper.makeGroupDescription("O");
@@ -52,9 +51,9 @@ public class TestFilter {
 		AtomDistanceDescription condition = new AtomDistanceDescription(
 				distance, Helper.pathTo(groupA, "O"), Helper.pathTo(groupB, "N"));
 		FilterAtomResultByCondition filter = new FilterAtomResultByCondition(List.of(condition));
-		filter.setSource(onPipe);
-		ResultPipe end = new ResultPipe();
-		filter.setSink(end);
+		filter.setInput(onPipe);
+		Pipe end = new Pipe();
+		filter.setOutput(end);
 		
 		PrintAdapter printAdapter = new PrintAdapter("END", end);
 		
@@ -71,20 +70,21 @@ public class TestFilter {
 		double angle = 90;
 		
 		Chain chain = Helper.makeData(3);
-		ResultPipe groupResultPipe = new ResultPipe();
+		Pipe groupResultPipe = new Pipe();
 		GroupSource groupSource = new GroupSource(chain, List.of(groupResultPipe));
-		ResultPipe triplePipe = new ResultPipe();
+		Pipe triplePipe = new Pipe();
 		ScanAtomResultByLabel scanTriple = new ScanAtomResultByLabel(List.of("N", "CA", "C"));
-		scanTriple.setSource(groupResultPipe);
-		scanTriple.setSink(triplePipe);
+		scanTriple.setInput(groupResultPipe);
+		scanTriple.setOutput(triplePipe);
 		
 		GroupDescription group = Helper.makeGroupDescription("C", "CA", "N");
 		AtomAngleDescription condition = 
 				new AtomAngleDescription(angle, pathTo(group, "N"), pathTo(group, "CA"), pathTo(group, "C"));
 		FilterAtomResultByCondition filter = new FilterAtomResultByCondition(List.of(condition));
-		filter.setSource(triplePipe);
-		filter.setSink(new PrintResults());
-		Helper.runAll(List.of(groupSource, scanTriple, filter));
+		filter.setInput(triplePipe);
+		Pipe end = new Pipe();
+		filter.setOutput(end);
+		Helper.runAll(List.of(groupSource, scanTriple, filter, new PrintAdapter(end)));
 	}
 	
 }

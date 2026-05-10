@@ -7,7 +7,7 @@ import tailor.api.Measurement;
 import tailor.condition.AtomPartition;
 import tailor.engine.plan.Result;
 
-public class Measurer extends AbstractPipeableOperator {
+public class Measurer extends AbstractOperator {
 	
 	private List<AtomListMeasure> measures;
 	

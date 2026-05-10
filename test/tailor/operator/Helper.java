@@ -4,13 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import tailor.api.Operator;
-import tailor.api.Sink;
 import tailor.description.AtomDescription;
 import tailor.description.DescriptionPath;
 import tailor.description.GroupDescription;
 import tailor.engine.operator.GroupSource;
+import tailor.engine.operator.Pipe;
 import tailor.engine.plan.Plan;
-import tailor.engine.plan.Result;
 import tailor.geometry.Vector;
 import tailor.structure.Atom;
 import tailor.structure.Chain;
@@ -22,7 +21,7 @@ public class Helper {
 		Helper.run(chain, plan, null);
 	}
 	protected static void run(Chain chain, Plan plan, Operator printer) {	
-		List<Sink<Result>> inputs = plan.getInputPipes();
+		List<Pipe> inputs = plan.getInputPipes();
 		GroupSource groupSource = new GroupSource(chain, inputs);
 		List<Operator> fullPipeline = new ArrayList<>();
 		fullPipeline.add(groupSource);

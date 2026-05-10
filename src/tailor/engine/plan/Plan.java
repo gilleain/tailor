@@ -4,9 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import tailor.api.Operator;
-import tailor.api.PipeableOperator;
-import tailor.api.Sink;
-import tailor.engine.operator.ResultPipe;
+import tailor.engine.operator.Pipe;
 
 /**
  * A plan is a directed graph of operators that carry out a search.
@@ -23,7 +21,7 @@ public class Plan {
 	 */
 	private List<Operator> startPoints;
 	
-	private ResultPipe outputPoint;
+	private Pipe outputPoint;
 	
 	public Plan() {
 		this.operators = new ArrayList<>();
@@ -50,20 +48,17 @@ public class Plan {
 		return this.startPoints;
 	}
 	
-	public List<Sink<Result>> getInputPipes() {
-		List<Sink<Result>> inputs = new ArrayList<Sink<Result>>();
+	public List<Pipe> getInputPipes() {
+		List<Pipe> inputs = new ArrayList<Pipe>();
 		for (Operator start : this.startPoints) {
-			if (start instanceof PipeableOperator) {
-				PipeableOperator<Result, Result> pipeableOperator = (PipeableOperator<Result, Result>) start;
-				ResultPipe input = new ResultPipe();
-				pipeableOperator.setSource(input);
-				inputs.add(input);
-			}
+			Pipe input = new Pipe();
+			start.setInput(input);
+			inputs.add(input);
 		}
 		return inputs;
 	}
 	
-	public ResultPipe addStart(PipeableOperator<Result, Result> operator) {
+	public Pipe addStart(Operator operator) {
 		this.startPoints.add(operator);
 		return this.addOperatorReturnPipe(operator);
 	}
@@ -73,17 +68,17 @@ public class Plan {
 		operator.setId(getOperatorId());
 	}
 	
-	public ResultPipe addOperatorReturnPipe(PipeableOperator<Result, Result> operator) {
+	public Pipe addOperatorReturnPipe(Operator operator) {
 		return this.addOperatorReturnPipe(operator, null);
 	}
 		
-    public ResultPipe addOperatorReturnPipe(PipeableOperator<Result, Result> operator, ResultPipe sourcePipe) {
+    public Pipe addOperatorReturnPipe(Operator operator, Pipe inputPipe) {
 		addOperator(operator);
 		
-		ResultPipe outputPipe = new ResultPipe();
-		operator.setSink(outputPipe);
-		if (sourcePipe != null) {
-			operator.setSource(sourcePipe);
+		Pipe outputPipe = new Pipe();
+		operator.setOutput(outputPipe);
+		if (inputPipe != null) {
+			operator.setInput(inputPipe);
 		}
 		return outputPipe;
 	}
@@ -94,11 +89,11 @@ public class Plan {
 		return operatorIdString;
 	}
 
-	public ResultPipe getOutputPoint() {
+	public Pipe getOutputPoint() {
 		return outputPoint;
 	}
 
-	public void setOutputPoint(ResultPipe output) {
+	public void setOutputPoint(Pipe output) {
 		this.outputPoint = output;
 	}
 }
