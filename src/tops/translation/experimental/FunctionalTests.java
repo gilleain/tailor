@@ -8,6 +8,7 @@ import java.io.IOException;
 
 import org.junit.Test;
 
+import tops.translation.model.BackboneSegment;
 import tops.translation.model.Chain;
 import tops.translation.model.Protein;
 import translation.HBondAnalyser;
@@ -19,7 +20,12 @@ public class FunctionalTests {
 	
 	@Test
 	public void testSingleBAB() throws IOException {
-		run(bab(), read("2bop.pdb"));
+		run(bab(), read("1ajj.pdb"));
+	}
+	
+	@Test
+	public void testSingleLongStrand() throws IOException {
+		run(longStrand(), read("1a73.pdb"));
 	}
 	
 	private void run(ChainDescription chainDescription, Protein target) {
@@ -36,6 +42,16 @@ public class FunctionalTests {
 			}
 			printer.run();
 		}
+	}
+	
+	private ChainDescription longStrand() {
+		int minLength = 5;
+		ChainDescription chainDescription = new ChainDescription();
+		SegmentDescription segmentDescription = new SegmentDescription(STRAND);
+		chainDescription.addSegment(segmentDescription);
+		segmentDescription.addPropertyDescription(new SegmentLength(minLength, getPathTo(chainDescription, 0)));
+		
+		return chainDescription;
 	}
 	
 	private ChainDescription bab() {
@@ -64,6 +80,11 @@ public class FunctionalTests {
 		Protein protein = PDBReader.read(new File(DATA_DIR, filename));
 		HBondAnalyser hbondAnalyser = new HBondAnalyser();
 		hbondAnalyser.analyse(protein);
+		for (Chain c : protein) {
+			for (BackboneSegment s : c) {
+				System.out.println(s);
+			}
+		}
 		return protein;
 	}
 

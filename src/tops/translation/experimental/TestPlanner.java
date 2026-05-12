@@ -13,7 +13,7 @@ import org.junit.Test;
 public class TestPlanner {
 	
 	@Test
-	public void testA() {
+	public void testEHE() {
 		ChainDescription chainDescription = new ChainDescription();
 		chainDescription.addSegment(new SegmentDescription(STRAND));
 		chainDescription.addSegment(new SegmentDescription(HELIX));
@@ -26,6 +26,22 @@ public class TestPlanner {
 						operator(SegmentTypeFilter.class, "2"),
 						operator(Combiner.class, "3"),
 						operator(Combiner.class, "4")
+				)
+		);
+	}
+	
+	@Test
+	public void testSingleSegmentWithInnerCondition() {
+		ChainDescription chainDescription = new ChainDescription();
+		SegmentDescription strand = new SegmentDescription(STRAND);
+		chainDescription.addSegment(strand);
+		strand.addPropertyDescription(new SegmentLength(10, new SegmentDescriptionPath(chainDescription, strand)));
+		
+		Plan plan = new Planner().makePlan(chainDescription);
+		assertThat(plan.getOperators(), 
+				contains(
+						operator(SegmentTypeFilter.class, "0"),
+						operator(FilterSegmentByPropertyDescription.class, "1")
 				)
 		);
 	}

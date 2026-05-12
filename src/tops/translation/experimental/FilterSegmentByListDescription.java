@@ -7,19 +7,19 @@ import java.util.logging.Logger;
 import tailor.api.SegmentListDescription;
 import tailor.condition.SegmentPartition;
 
-public class FilterSegmentByDescription extends AbstractOperator {
+public class FilterSegmentByListDescription extends AbstractOperator {
 	
-	private Logger logger = Logger.getLogger(FilterSegmentByDescription.class.getName());
+	private Logger logger = Logger.getLogger(FilterSegmentByListDescription.class.getName());
 	
 	private List<SegmentListDescription> listDescriptions;
 	
 	private Pipe input;
 	
-	public FilterSegmentByDescription(Pipe input, SegmentListDescription... listDescriptions) {
+	public FilterSegmentByListDescription(Pipe input, SegmentListDescription... listDescriptions) {
 		this(input, Arrays.asList(listDescriptions));
 	}
 	
-	public FilterSegmentByDescription(Pipe input, List<SegmentListDescription> listDescriptions) {
+	public FilterSegmentByListDescription(Pipe input, List<SegmentListDescription> listDescriptions) {
 		this.input = input;
 		this.listDescriptions = listDescriptions;
 	}

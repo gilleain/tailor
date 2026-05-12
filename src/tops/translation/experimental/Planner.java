@@ -14,6 +14,9 @@ public class Planner {
 		for (SegmentDescription segment : chainDescription.getSegments()) {
 			Pipe input = new Pipe();
 			Pipe output = plan.addInputOperator(new SegmentTypeFilter(segment.getType(), input), input);
+			if (!segment.getPropertyDescriptions().isEmpty()) {
+				output = addInnerFilter(plan, output, segment);
+			}
 			outputs.add(output);
 		}
 		
@@ -27,13 +30,18 @@ public class Planner {
 		
 		// TODO - need to work out where to put these filters ...
 		for (SegmentListDescription segmentListDescription : chainDescription.getSegmentListDescription()) {
-			FilterSegmentByDescription filter = new FilterSegmentByDescription(currentOutput, segmentListDescription);
+			FilterSegmentByListDescription filter = new FilterSegmentByListDescription(currentOutput, segmentListDescription);
 			currentOutput = plan.addOperator(filter);
 		}
 		
 		plan.setOutputPipe(currentOutput);
 		
 		return plan;
+	}
+	
+	private Pipe addInnerFilter(Plan plan, Pipe input, SegmentDescription segmentDescription) {
+		return plan.addOperator(
+				new FilterSegmentByPropertyDescription(input, segmentDescription.getPropertyDescriptions()));
 	}
 
 }

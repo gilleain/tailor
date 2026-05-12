@@ -6,7 +6,7 @@ import tailor.condition.SegmentPartition;
 import tops.translation.experimental.SegmentDescription;
 
 /**
- * Measurement to make on a list of atoms.
+ * Measurement to make on a list of segments.
  */
 public interface SegmentListMeasure {
 	
