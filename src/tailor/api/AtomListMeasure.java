@@ -10,7 +10,7 @@ import tailor.description.GroupDescription;
  */
 public interface AtomListMeasure {
 	
-	Measurement measure(AtomPartition atomPartition);
+	Measurement<Double> measure(AtomPartition atomPartition);
 
 	/**
 	 * @return the group descriptions the measure applies to

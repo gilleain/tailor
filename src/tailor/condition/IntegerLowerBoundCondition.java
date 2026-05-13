@@ -4,17 +4,17 @@ import java.util.logging.Logger;
 
 import tailor.api.Condition;
 
-public class LowerBoundCondition implements Condition<Double> {
+public class IntegerLowerBoundCondition implements Condition<Integer> {
 	
 	private Logger logger = Logger.getLogger(this.getClass().getName());
 	
-	private double minValue;
+	private Integer minValue;
 	
-	public LowerBoundCondition(double value) {
+	public IntegerLowerBoundCondition(Integer value) {
 		this.minValue = value;
 	}
 	
-	public boolean accept(Double value) {
+	public boolean accept(Integer value) {
 		logger.fine("Value " + value + ((value > minValue)? " < " : " > ") + minValue);
 		return minValue < value;
 	}

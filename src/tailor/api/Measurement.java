@@ -3,8 +3,8 @@ package tailor.api;
 /**
  * The outcome of applying a measure to some atoms.
  */
-public interface Measurement {
+public interface Measurement<T> {
 	
-	double getValue(String id);
+	boolean apply(Condition<T> condition);
 
 }

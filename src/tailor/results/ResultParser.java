@@ -67,7 +67,7 @@ public class ResultParser {
                     try {
                         ExampleDescription exampleDescription = parseFunc.apply(line);
                         examples.computeIfAbsent(exampleDescription.getPdbid(), 
-                            k -> new ArrayList<>()).add(exampleDescription);
+                            _ -> new ArrayList<>()).add(exampleDescription);
                     } catch (Exception e) {
                         System.err.println(e.getMessage());
                     }

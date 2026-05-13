@@ -16,7 +16,7 @@ public interface SegmentPropertyDescription {
 	/**
 	 * @return convert this description to a measure across the same segment
 	 */
-	SegmentPropertyMeasure createMeasure();
+	SegmentIntPropertyMeasure createMeasure();
 	
 	/**
 	 * 

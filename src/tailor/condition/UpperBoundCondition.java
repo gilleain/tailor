@@ -2,11 +2,9 @@ package tailor.condition;
 
 import java.util.logging.Logger;
 
-import tailor.api.Measurement;
-import tailor.api.MeasurementCondition;
-import tailor.measurement.DoubleMeasurement;
+import tailor.api.Condition;
 
-public class UpperBoundCondition implements MeasurementCondition {
+public class UpperBoundCondition implements Condition<Double> {
 	
 	private Logger logger = Logger.getLogger(this.getClass().getName());
 	
@@ -16,10 +14,9 @@ public class UpperBoundCondition implements MeasurementCondition {
 		this.maxValue = value;
 	}
 	
-	public boolean accept(Measurement measurement) {
-		double actualValue = ((DoubleMeasurement) measurement).getValue();
-		logger.fine("Value " + actualValue + ((actualValue < maxValue)? " < " : " > ") + maxValue);
-		return actualValue < maxValue;
+	public boolean accept(Double value) {
+		logger.fine("Value " + value + ((value < maxValue)? " < " : " > ") + maxValue);
+		return value < maxValue;
 	}
 	
 }

@@ -1,21 +1,21 @@
 package tops.translation.experimental;
 
 import tailor.api.Measurement;
-import tailor.api.SegmentPropertyMeasure;
-import tailor.measurement.DoubleMeasurement;
+import tailor.api.SegmentIntPropertyMeasure;
+import tailor.measurement.SimpleMeasurement;
 import tops.translation.model.BackboneSegment;
 
-public class SegmentLengthMeasurement implements SegmentPropertyMeasure {
+public class SegmentLengthMeasure implements SegmentIntPropertyMeasure {
 	
 	private final SegmentDescriptionPath path;
 
-	public SegmentLengthMeasurement(SegmentDescriptionPath path) {
+	public SegmentLengthMeasure(SegmentDescriptionPath path) {
 		this.path = path;
 	}
 
 	@Override
-	public Measurement measure(BackboneSegment segment) {
-		return new DoubleMeasurement(segment.length());	// TODO - IntegerMeasurement ?
+	public Measurement<Integer> measure(BackboneSegment segment) {
+		return new SimpleMeasurement<Integer>(segment.length());
 	}
 
 	@Override

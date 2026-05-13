@@ -4,7 +4,6 @@ import java.util.List;
 
 import tailor.api.AtomListDescription;
 import tailor.api.AtomListMeasure;
-import tailor.api.Measurement;
 import tailor.condition.AtomPartition;
 import tailor.condition.RangeCondition;
 import tailor.condition.UpperBoundCondition;
@@ -12,7 +11,7 @@ import tailor.description.AtomDescription;
 import tailor.description.DescriptionPath;
 import tailor.description.GroupDescription;
 import tailor.measure.HBondMeasure;
-import tailor.measurement.DoubleMeasurement;
+import tailor.measurement.CompositeDoubleMeasurement;
 
 /**
  * Hydrogen bond defined by D-H...A-AA :
@@ -81,9 +80,8 @@ public class HBondDescription implements AtomListDescription {
 	}
 	
 	public boolean apply(AtomPartition atomPartition) {
-		Measurement m = measure.measure(atomPartition);
-		return haDistanceCondition.accept(new DoubleMeasurement( m.getValue("d") )) 
-				&& daaAngleRangeCondition.accept(new DoubleMeasurement( m.getValue("a")));
+		CompositeDoubleMeasurement m = (CompositeDoubleMeasurement) measure.measure(atomPartition);
+		return m.apply("d", haDistanceCondition) && m.apply("a", daaAngleRangeCondition);
 	}
 	
 	public AtomDescription getDonorAtomDescription() {

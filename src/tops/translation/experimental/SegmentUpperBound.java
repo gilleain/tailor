@@ -31,8 +31,8 @@ public class SegmentUpperBound implements SegmentListDescription {
 
 	@Override
 	public boolean apply(SegmentPartition segmentPartition) {
-		Measurement m = measure.measure(segmentPartition);
-		return condition.accept(m);
+		Measurement<Double> m = measure.measure(segmentPartition);
+		return m.apply(condition);
 	}
 
 }

@@ -21,7 +21,7 @@ public class Measurer extends AbstractOperator {
 			Result nextResult = source.getNext();
 			AtomPartition atomPartition = nextResult.getAtomPartition();
 			for (AtomListMeasure measure : measures) {
-				Measurement measurement = measure.measure(atomPartition);
+				Measurement<?> measurement = measure.measure(atomPartition);
 				nextResult.addMeasurement(measurement);
 			}
 			sink.put(nextResult);

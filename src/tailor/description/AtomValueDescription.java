@@ -4,17 +4,17 @@ import java.util.List;
 
 import tailor.api.AtomListDescription;
 import tailor.api.AtomListMeasure;
+import tailor.api.Condition;
 import tailor.api.Measurement;
-import tailor.api.MeasurementCondition;
 import tailor.condition.AtomPartition;
 
 public class AtomValueDescription implements AtomListDescription {
 	
-	private final MeasurementCondition condition;
+	private final Condition<Double> condition;
 	
 	private final AtomListMeasure measure;
 	
-	public AtomValueDescription(MeasurementCondition condition, AtomListMeasure measure) {
+	public AtomValueDescription(Condition<Double> condition, AtomListMeasure measure) {
 		this.condition = condition;
 		this.measure = measure;
 	}
@@ -30,8 +30,8 @@ public class AtomValueDescription implements AtomListDescription {
 	}
 	
 	public boolean apply(AtomPartition atomPartition) {
-		Measurement m = measure.measure(atomPartition);
-		return condition.accept(m);
+		Measurement<Double> m = measure.measure(atomPartition);
+		return m.apply(condition);
 	}
 
 }

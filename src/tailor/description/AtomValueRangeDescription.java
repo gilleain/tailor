@@ -48,8 +48,7 @@ public class AtomValueRangeDescription implements AtomListDescription  {
 	}
 	
 	public boolean apply(AtomPartition atomPartition) {
-		// TODO
-		Measurement m = measure.measure(atomPartition);
-		return condition.accept(m);
+		Measurement<Double> m = measure.measure(atomPartition);
+		return m.apply(condition);
 	}
 }

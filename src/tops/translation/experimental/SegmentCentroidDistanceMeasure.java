@@ -48,7 +48,7 @@ public class SegmentCentroidDistanceMeasure implements SegmentListMeasure {
 	}
 
 	@Override
-	public Measurement measure(SegmentPartition segmentPartition) {
+	public Measurement<Double> measure(SegmentPartition segmentPartition) {
 		Optional<Match> match = segmentMatcher.containedIn(segmentPartition);
 		if (match.isPresent()) {
 			return measure(match.get().getSegments());
@@ -57,7 +57,7 @@ public class SegmentCentroidDistanceMeasure implements SegmentListMeasure {
 		}
 	}
 
-	private Measurement measure(List<BackboneSegment> segments) {
+	private Measurement<Double> measure(List<BackboneSegment> segments) {
 		BackboneSegment segmentA = segments.get(0);
 		BackboneSegment segmentB = segments.get(1);
 		Axis aA = segmentA.getAxis();

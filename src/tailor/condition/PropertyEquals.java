@@ -1,17 +1,18 @@
 package tailor.condition;
 
-import tailor.measurement.PropertyMeasurement;
+import tailor.api.Condition;
 
-public class PropertyEquals {
+public class PropertyEquals implements Condition<String> {
 	
 	private final String value;
 	
 	public PropertyEquals(String value) {
 		this.value = value;
 	}
-	
-	public boolean accept(PropertyMeasurement propertyMeasurement) {
-		return propertyMeasurement.getValue().equals(value);
+
+	@Override
+	public boolean accept(String value) {
+		return value.equals(value);
 	}
 	
 	public String toString() {

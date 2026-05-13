@@ -26,7 +26,7 @@ public class GroupCenterDistanceDescription {
 		PointMeasurement pB = measureB.measure(null);
 		DoubleMeasurement measurement = measureC.measure(pA.getValue(), pB.getValue());
 		
-		return upperBound.accept(measurement);
+		return measurement.apply(upperBound);
 	}
 
 }

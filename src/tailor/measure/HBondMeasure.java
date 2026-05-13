@@ -6,11 +6,10 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import tailor.api.AtomListMeasure;
-import tailor.api.Measurement;
 import tailor.condition.AtomPartition;
 import tailor.description.DescriptionPath;
 import tailor.description.GroupDescription;
-import tailor.measurement.CompositeMeasurement;
+import tailor.measurement.CompositeDoubleMeasurement;
 import tailor.measurement.DoubleMeasurement;
 
 public class HBondMeasure implements AtomListMeasure {
@@ -32,12 +31,12 @@ public class HBondMeasure implements AtomListMeasure {
 	}
 
 	@Override
-	public Measurement measure(AtomPartition atomPartition) {
+	public CompositeDoubleMeasurement measure(AtomPartition atomPartition) {
 		
 		DoubleMeasurement d = this.atomDistanceMeasure.measure(atomPartition);
 		DoubleMeasurement a = this.atomAngleMeasure.measure(atomPartition);
 		
-		return new CompositeMeasurement(Map.of("d", d, "a", a));
+		return new CompositeDoubleMeasurement(Map.of("d", d, "a", a));
 	}
 
 	@Override

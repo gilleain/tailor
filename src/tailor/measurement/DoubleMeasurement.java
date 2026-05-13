@@ -1,8 +1,9 @@
 package tailor.measurement;
 
+import tailor.api.Condition;
 import tailor.api.Measurement;
 
-public class DoubleMeasurement implements Measurement {
+public class DoubleMeasurement implements Measurement<Double> {
 	
 	private final double value;
 	
@@ -23,7 +24,7 @@ public class DoubleMeasurement implements Measurement {
 	}
 
 	@Override
-	public double getValue(String id) {
-		return value;
+	public boolean apply(Condition<Double> condition) {
+		return condition.accept(this.value);
 	}
 }

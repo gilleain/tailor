@@ -10,7 +10,7 @@ import tops.translation.experimental.SegmentDescription;
  */
 public interface SegmentListMeasure {
 	
-	Measurement measure(SegmentPartition segmentPartition);
+	Measurement<Double> measure(SegmentPartition segmentPartition);
 
 	/**
 	 * @return the segment descriptions the measure applies to

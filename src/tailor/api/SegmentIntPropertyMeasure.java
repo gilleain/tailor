@@ -6,9 +6,9 @@ import tops.translation.model.BackboneSegment;
 /**
  * Measurement to make on a single segment.
  */
-public interface SegmentPropertyMeasure {
+public interface SegmentIntPropertyMeasure {
 	
-	Measurement measure(BackboneSegment segment);
+	Measurement<Integer> measure(BackboneSegment segment);
 
 	/**
 	 * @return the segment description the measure applies to

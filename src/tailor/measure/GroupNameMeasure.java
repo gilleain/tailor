@@ -1,12 +1,27 @@
 package tailor.measure;
 
+import tailor.api.GroupPropertyMeasure;
+import tailor.api.Measurement;
+import tailor.description.GroupDescription;
 import tailor.measurement.PropertyMeasurement;
 import tailor.structure.Group;
 
-public class GroupNameMeasure {
+public class GroupNameMeasure implements GroupPropertyMeasure {
 	
-	public PropertyMeasurement measure(Group group) {
+	public Measurement<String> measure(Group group) {
 		return new PropertyMeasurement(group.getName());
+	}
+
+	@Override
+	public GroupDescription getGroupDescription() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String getName() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

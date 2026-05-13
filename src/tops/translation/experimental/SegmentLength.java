@@ -1,19 +1,19 @@
 package tops.translation.experimental;
 
+import tailor.api.SegmentIntPropertyMeasure;
 import tailor.api.SegmentPropertyDescription;
-import tailor.api.SegmentPropertyMeasure;
-import tailor.condition.LowerBoundCondition;
+import tailor.condition.IntegerLowerBoundCondition;
 import tops.translation.model.BackboneSegment;
 
 public class SegmentLength implements SegmentPropertyDescription {
 	
-	private final SegmentLengthMeasurement segmentLengthMeasurement;
+	private final SegmentLengthMeasure segmentLengthMeasurement;
 	
-	private final LowerBoundCondition condition;
+	private final IntegerLowerBoundCondition condition;
 
 	public SegmentLength(int value, SegmentDescriptionPath segmentDescriptionPath) {
-		this.condition = new LowerBoundCondition(value);
-		this.segmentLengthMeasurement = new SegmentLengthMeasurement(segmentDescriptionPath);
+		this.condition = new IntegerLowerBoundCondition(value);
+		this.segmentLengthMeasurement = new SegmentLengthMeasure(segmentDescriptionPath);
 	}
 
 	@Override
@@ -22,13 +22,13 @@ public class SegmentLength implements SegmentPropertyDescription {
 	}
 
 	@Override
-	public SegmentPropertyMeasure createMeasure() {
+	public SegmentIntPropertyMeasure createMeasure() {
 		return segmentLengthMeasurement;
 	}
 
 	@Override
 	public boolean apply(BackboneSegment segment) {
-		return this.condition.accept(this.segmentLengthMeasurement.measure(segment));
+		return this.segmentLengthMeasurement.measure(segment).apply(this.condition);
 	}
 
 }

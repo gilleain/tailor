@@ -1,11 +1,13 @@
 package tailor.description.group;
 
+import tailor.api.GroupPropertyDescription;
+import tailor.api.Measurement;
 import tailor.condition.PropertyEquals;
+import tailor.description.GroupDescription;
 import tailor.measure.GroupNameMeasure;
-import tailor.measurement.PropertyMeasurement;
 import tailor.structure.Group;
 
-public class GroupNameDescription {
+public class GroupNameDescription implements GroupPropertyDescription {
 	
 	private final PropertyEquals propertyEquals;
 	
@@ -21,12 +23,18 @@ public class GroupNameDescription {
 	}
 	
 	public boolean apply(Group group) {
-		PropertyMeasurement propertyMeasurement = groupNameMeasure.measure(group);
-		return propertyEquals.accept(propertyMeasurement);
+		Measurement<String> propertyMeasurement = groupNameMeasure.measure(group);
+		return propertyMeasurement.apply(propertyEquals);
 	}
 	
 	public String toString() {
 		return "GroupName" + this.propertyEquals.toString();
+	}
+
+	@Override
+	public GroupDescription getGroupDescription() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

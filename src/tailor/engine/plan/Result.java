@@ -55,7 +55,7 @@ public class Result {
 	private CRef root;
 	
 	// store measurements
-	private List<Measurement> measurements = new ArrayList<>();	// TODO
+	private List<Measurement<?>> measurements = new ArrayList<>();	// TODO
 	
 	private Result() {
 		this.root = null;
@@ -106,7 +106,7 @@ public class Result {
 		return atoms;
 	}
 	
-	public void addMeasurement(Measurement measurement) {
+	public void addMeasurement(Measurement<?> measurement) {
 		this.measurements.add(measurement);	// TODO
 	}
 	
@@ -307,7 +307,7 @@ public class Result {
 		groupNode.atomRefs.add(new ARef(atom));
 	}
 
-	public List<Measurement> getMeasurements() {
+	public List<Measurement<?>> getMeasurements() {
 		return this.measurements;
 	}
 
