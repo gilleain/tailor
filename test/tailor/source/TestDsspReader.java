@@ -9,6 +9,7 @@ import java.util.List;
 
 import org.junit.Test;
 
+import tailor.datasource.DsspReader;
 import tailor.structure.Chain;
 import tailor.structure.Segment;
 import tailor.structure.Segment.Type;

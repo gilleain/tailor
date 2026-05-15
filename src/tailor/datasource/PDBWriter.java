@@ -1,4 +1,4 @@
-package tailor.source;
+package tailor.datasource;
 
 import java.io.BufferedWriter;
 import java.io.IOException;

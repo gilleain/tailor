@@ -12,6 +12,7 @@ import javax.vecmath.Point3d;
 
 import org.junit.Test;
 
+import tailor.datasource.PDBWriter;
 import tailor.structure.Atom;
 import tailor.structure.Chain;
 import tailor.structure.Group;

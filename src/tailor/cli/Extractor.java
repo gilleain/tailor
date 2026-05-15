@@ -13,8 +13,8 @@ import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.apache.commons.cli.PosixParser;
 
-import tailor.source.PDBReader;
-import tailor.source.PDBWriter;
+import tailor.datasource.PDBReader;
+import tailor.datasource.PDBWriter;
 import tailor.structure.Chain;
 import tailor.structure.Group;
 import tailor.structure.Protein;
