@@ -59,7 +59,7 @@ public class Chain {
     }
 
     public boolean isDNA() {
-        return this.residues.get(0).isDNA();
+        return this.residues.get(0).isType(PolymerType.DNA);
     }
 
     // since this doesn't check, in the event that a structure actually HAS

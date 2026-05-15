@@ -15,8 +15,8 @@ public class Residue implements Comparable<Residue> {
     private int absoluteNumber;
     private int pdbNumber;
     private String type;
-    private String polymerType;
-    private String environment;
+    private PolymerType polymerType;
+    private Environment environment;
     private List<HBond> hBonds;
     private double phi;
     private double psi;
@@ -27,8 +27,8 @@ public class Residue implements Comparable<Residue> {
         this.phi = 0;
         this.psi = 0;
         this.type = "None";
-        this.polymerType = "None";
-        this.environment = "None";
+        this.polymerType = PolymerType.NONE;
+        this.environment = Environment.NONE;
     }
 
     public Residue(int absoluteNumber, int pdbNumber) {
@@ -41,9 +41,9 @@ public class Residue implements Comparable<Residue> {
         this(absoluteNumber, pdbNumber);
         this.type = type.trim();
         if (this.isBase()) {
-            this.polymerType = "DNA";
+            this.polymerType = PolymerType.DNA;
         } else {
-            this.polymerType = "Protein";
+            this.polymerType = PolymerType.PROTEIN;
         }
     }
 
@@ -82,15 +82,15 @@ public class Residue implements Comparable<Residue> {
                 this.type.equals("VAL");
     }
 
-    public boolean isDNA() {
-        return this.polymerType == "DNA";
+    public boolean isType(PolymerType polymerType) {
+        return this.polymerType == polymerType;
     }
 
-    public void setEnvironment(String environment) {
+    public void setEnvironment(Environment environment) {
         this.environment = environment;
     }
 
-    public String getEnvironment() {
+    public Environment getEnvironment() {
         return this.environment;
     }
 

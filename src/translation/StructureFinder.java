@@ -13,6 +13,7 @@ import javax.vecmath.Point3d;
 import javax.vecmath.Vector3d;
 
 import tops.translation.model.Chain;
+import tops.translation.model.Environment;
 import tops.translation.model.HBond;
 import tops.translation.model.Protein;
 import tops.translation.model.Residue;
@@ -707,14 +708,14 @@ public class StructureFinder {
         LOG.info(numberOfNTerminalHBonds + ", " + numberOfCTerminalHBonds + " for " + residue);
 
         if (numberOfNTerminalHBonds == 0 && numberOfCTerminalHBonds == 0) {
-            residue.setEnvironment("Loop");
+            residue.setEnvironment(Environment.LOOP);
         } else if (numberOfNTerminalHBonds == 1 && numberOfCTerminalHBonds == 0) {
             if (nTerminalHBonds.get(0).hasHelixResidueSeparation()) {
-                residue.setEnvironment("End of a Helix");
+                residue.setEnvironment(Environment.HELIX_END);
             }
         } else if (numberOfNTerminalHBonds == 0 && numberOfCTerminalHBonds == 1) {
             if (cTerminalHBonds.get(0).hasHelixResidueSeparation()) {
-                residue.setEnvironment("Start of a Helix");
+                residue.setEnvironment(Environment.HELIX_START);
             }
         } else if (numberOfNTerminalHBonds == 1 && numberOfCTerminalHBonds == 1) {
             int n = nTerminalHBonds.get(0).getResidueSeparation();
@@ -722,15 +723,15 @@ public class StructureFinder {
             //System.err.println(n + ", " + c + " for " + residue);
 
             if (n == 4 && c == 4) {
-                residue.setEnvironment("Middle of a Helix");
+                residue.setEnvironment(Environment.HELIX_MIDDLE);
             } else if (Math.abs(n - c) == 2) {
-                residue.setEnvironment("Parallel Strand");
+                residue.setEnvironment(Environment.PARALLEL_STRAND);
             } else if (n - c == 0) {
-                residue.setEnvironment("AntiParallel Strand");
+                residue.setEnvironment(Environment.ANTIPARALLEL_STRAND);
             } else if (n == 4) {
-                residue.setEnvironment("End of a Helix");
+                residue.setEnvironment(Environment.HELIX_END);
             } else if (c == 4) {
-                residue.setEnvironment("Start of a Helix");
+                residue.setEnvironment(Environment.HELIX_START);
             }
         }
     }
@@ -753,7 +754,7 @@ public class StructureFinder {
             Residue residue = residueIterator.next();
             int residueAbsoluteNumber = residue.getAbsoluteNumber();
 
-            if (residue.getEnvironment().equals("Middle of a Helix")) {
+            if (residue.getEnvironment().equals(Environment.HELIX_MIDDLE)) {
 
                 // this may be the first residue in the helix core
                 if (helixStartIndex == -1) {
@@ -782,11 +783,12 @@ public class StructureFinder {
         Segment currentStrand = new Segment(Type.STRAND);
         while (residueIterator.hasNext()) {
             Residue residue = residueIterator.next();
-            String residueEnvironment = residue.getEnvironment();
-            if (residueEnvironment.equals("Parallel Strand") || residueEnvironment.equals("AntiParallel Strand")) {
+            Environment residueEnvironment = residue.getEnvironment();
+            if (residueEnvironment.equals(Environment.PARALLEL_STRAND) 
+            		|| residueEnvironment.equals(Environment.ANTIPARALLEL_STRAND)) {
                 lastResidueWasStrand = true;
                 currentStrand.expandBy(residue);
-            } else if (residueEnvironment.equals("Loop")) {
+            } else if (residueEnvironment.equals(Environment.LOOP)) {
                 if (lastResidueWasStrand) {
                     currentStrand.expandBy(residue);
                 } else {
