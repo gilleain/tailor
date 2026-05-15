@@ -117,7 +117,7 @@ public class Chain implements Iterable<BackboneSegment> {
 
     public void createLoop(int startIndex, int endIndex) {
     	Residue firstResidue = this.getResidueByAbsoluteNumbering(startIndex);
-        BackboneSegment unstructured = new BackboneSegment(Type.OTHER, firstResidue);
+        BackboneSegment unstructured = new BackboneSegment(Type.UNSTRUCTURED, firstResidue);
         for (int index = startIndex + 1; index < endIndex + 1; index++) {
             unstructured.expandBy(this.getResidueByAbsoluteNumbering(index));
         }
@@ -450,7 +450,7 @@ public class Chain implements Iterable<BackboneSegment> {
         int vertexNumber = 0;
         while (backboneSegmentIterator.hasNext()) {
             BackboneSegment nextBackboneSegment = backboneSegmentIterator.next();
-            if (nextBackboneSegment.getType() == Type.OTHER) {
+            if (nextBackboneSegment.getType() == Type.UNSTRUCTURED) {
                 continue;
             } else {
                 nextBackboneSegment.setNumber(vertexNumber);

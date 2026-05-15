@@ -10,7 +10,7 @@ import javax.vecmath.Point3d;
 
 import translation.Axis;
 
-public class BackboneSegment implements Comparable<BackboneSegment>, Iterable<Residue> {
+public class BackboneSegment implements Comparable<BackboneSegment> {
 	
 	// TODO - not exhaustive of possible types, 
 	// 'OTHER' is doing a lot of heavy lifting here 
@@ -19,7 +19,7 @@ public class BackboneSegment implements Comparable<BackboneSegment>, Iterable<Re
 		CTERMINUS("C"),
 		STRAND("E"),
 		HELIX("H"),
-		OTHER("U");
+		UNSTRUCTURED("U");
 		
 		private final String typeString;
 		Type(String typeString) {
@@ -69,7 +69,7 @@ public class BackboneSegment implements Comparable<BackboneSegment>, Iterable<Re
     		return "N-Terminus";
     	} else if (this.type == Type.CTERMINUS) {
     		return "C-Terminus";
-    	} else if (this.type == Type.OTHER) {
+    	} else if (this.type == Type.UNSTRUCTURED) {
     		return "Unstuctured (" + this.number + ") : " + this.orientation 
    				 + " " + this.firstResidue() + " - " + this.lastResidue() + " " + this.axis;
     	} else {
@@ -89,7 +89,7 @@ public class BackboneSegment implements Comparable<BackboneSegment>, Iterable<Re
     		return "N";
     	} else if (this.type == Type.CTERMINUS) {
     		return "C";
-    	} else if (this.type == Type.OTHER) {
+    	} else if (this.type == Type.UNSTRUCTURED) {
     		return "U(" + this.number + ")[" 
     				+ this.firstResidue().getPDBNumber() + ":" + this.lastResidue().getPDBNumber() + "]";
     	} else {
@@ -164,7 +164,7 @@ public class BackboneSegment implements Comparable<BackboneSegment>, Iterable<Re
     }
 
     public boolean bondedTo(Residue otherResidue) {
-        for (Residue residue : this) {
+        for (Residue residue : this.residues) {
             if (residue.bondedTo(otherResidue)) {
                 return true;
             }
@@ -249,7 +249,7 @@ public class BackboneSegment implements Comparable<BackboneSegment>, Iterable<Re
     }
 
     public boolean containsPDBNumber(int pdbResidueNumber) {
-        for (Residue r : this) {
+        for (Residue r : this.residues) {
             if (r.getPDBNumber() == pdbResidueNumber) {
                 return true;
             }

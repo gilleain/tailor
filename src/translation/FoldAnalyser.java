@@ -94,7 +94,7 @@ public class FoldAnalyser {
     public boolean bonded(BackboneSegment strand, BackboneSegment otherStrand) {
         //basically, run through the residues, checking the list of hbonds to find residues that might be in the other strand
         int numberOfHBonds = 0;
-        for (Residue nextResidue : strand) {
+        for (Residue nextResidue : strand.getResidues()) {
             if (otherStrand.bondedTo(nextResidue)) {
                 numberOfHBonds++;
             }

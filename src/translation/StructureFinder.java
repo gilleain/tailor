@@ -227,8 +227,8 @@ public class StructureFinder {
 
             // helices
             if (currentSegment.isType(Type.HELIX) && currentSegment.length() < 4) {
-                if (previousSegment != null && previousSegment.isType(Type.OTHER)) {
-                    if (nextSegment != null && nextSegment.isType(Type.OTHER)) {
+                if (previousSegment != null && previousSegment.isType(Type.UNSTRUCTURED)) {
+                    if (nextSegment != null && nextSegment.isType(Type.UNSTRUCTURED)) {
                         this.mergeThreeSegments(itr, previousSegment, currentSegment, nextSegment);            
                     } else {
                         previousSegment.mergeWith(currentSegment);
@@ -236,7 +236,7 @@ public class StructureFinder {
                         currentSegment = previousSegment;
                     }
                 } else {
-                    if (nextSegment != null && nextSegment.isType(Type.OTHER)) {
+                    if (nextSegment != null && nextSegment.isType(Type.UNSTRUCTURED)) {
                         nextSegment.mergeWith(currentSegment);
                         itr.previous();
                         itr.remove();
@@ -261,13 +261,13 @@ public class StructureFinder {
         // make a new segment of the appropriate type
         BackboneSegment newSegment = null;
         if (sseType == 'U') {
-            newSegment = new BackboneSegment(Type.OTHER);
+            newSegment = new BackboneSegment(Type.UNSTRUCTURED);
         } else if (sseType == 'E') {
             newSegment = new BackboneSegment(Type.STRAND);
         } else if (sseType == 'H') {
             newSegment = new BackboneSegment(Type.HELIX);
         } else {
-            newSegment = new BackboneSegment(Type.OTHER);
+            newSegment = new BackboneSegment(Type.UNSTRUCTURED);
         }
 
         // fill the new segment with residues
@@ -462,7 +462,7 @@ public class StructureFinder {
     public boolean bonded(BackboneSegment strand, BackboneSegment otherStrand) {
         //basically, run through the residues, checking the list of hbonds to find residues that might be in the other strand
         int numberOfHBonds = 0;
-        for (Residue nextResidue : strand) {
+        for (Residue nextResidue : strand.getResidues()) {
             if (otherStrand.bondedTo(nextResidue)) {
                 numberOfHBonds++;
             }
@@ -495,7 +495,7 @@ public class StructureFinder {
             }
 
             //Consider the unstructured parts in between for deletion
-            if (currentSegment.isType(Type.OTHER)) {
+            if (currentSegment.isType(Type.UNSTRUCTURED)) {
                 //only merge if the unstructured segment is short
                 if (currentSegment.length() > 2) {
                     continue;
@@ -522,7 +522,7 @@ public class StructureFinder {
                 if (backboneSegmentIterator.hasNext()) {
                     BackboneSegment nextSegment = backboneSegmentIterator.next();
                     LOG.info("Checking : " + previousSegment + " and " + currentSegment + " and " + nextSegment);
-                    if (previousSegment.isType(Type.OTHER) && nextSegment.isType(Type.OTHER)) {
+                    if (previousSegment.isType(Type.UNSTRUCTURED) && nextSegment.isType(Type.UNSTRUCTURED)) {
                         this.mergeThreeSegments(backboneSegmentIterator, previousSegment, currentSegment, nextSegment);
                         continue;
                     } else {
@@ -557,7 +557,7 @@ public class StructureFinder {
             } else if (torsionsMatch(Type.HELIX, residue)) {
                 return new BackboneSegment(Type.HELIX, residue);
             } else {
-                return new BackboneSegment(Type.OTHER, residue);
+                return new BackboneSegment(Type.UNSTRUCTURED, residue);
             }
         } else if (currentBackboneSegment.isType(Type.HELIX)) {
             if (torsionsMatch(Type.HELIX, residue)) {
@@ -566,7 +566,7 @@ public class StructureFinder {
             } else if (torsionsMatch(Type.STRAND, residue)) {
                 return new BackboneSegment(Type.STRAND, residue);
             } else {
-            	 return new BackboneSegment(Type.OTHER, residue);
+            	 return new BackboneSegment(Type.UNSTRUCTURED, residue);
             }
         } else {
             if (torsionsMatch(Type.STRAND, residue)) {
@@ -584,7 +584,7 @@ public class StructureFinder {
         Iterator<Residue> residueIterator = chain.residueIterator();
         BackboneSegment nterminus = new BackboneSegment(Type.NTERMINUS);
         chain.addBackboneSegment(nterminus);
-        BackboneSegment currentBackboneSegment = new BackboneSegment(Type.OTHER);
+        BackboneSegment currentBackboneSegment = new BackboneSegment(Type.UNSTRUCTURED);
 
         while (residueIterator.hasNext()) {
             Residue residue = residueIterator.next();
