@@ -3,11 +3,9 @@ package tailor.structure;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Chain extends Segment implements Structure {
+public class Chain extends Segment {
     
-    private final Level level = Level.CHAIN;
-    
-    private final List<SSE> sses;
+    private final List<Segment> sses;
     
     private String name;
     
@@ -15,28 +13,27 @@ public class Chain extends Segment implements Structure {
         this.name = name;
     }
 
-
-    private ChainType type;
+    private ChainType chainType;
     
     public Chain() {
         this("A");  // XXX is this a sensible default?
     }
     
     public Chain(String name) {	// TODO - type is null here 
-        super(new ArrayList<>());
+        super(Type.CHAIN, new ArrayList<>());
         this.name = name;
         this.sses = new ArrayList<>();
     }
     
-    public Chain(String name, ChainType type) {
-        super(new ArrayList<>());
+    public Chain(String name, ChainType chainType) {
+        super(Type.CHAIN, new ArrayList<>());
         this.name = name;
         this.sses = new ArrayList<>();
-        this.type = type;
+        this.chainType = chainType;
     }
     
-    public ChainType getType() {
-        return this.type;
+    public ChainType getChainType() {
+        return this.chainType;
     }
     
     public String getResidueRange() {
@@ -51,15 +48,11 @@ public class Chain extends Segment implements Structure {
     	return this.getGroups().get(index);	// TODO - is this the best way to do this?
     }
     
-    public void setType(ChainType type) {
-        this.type = type;
-    }
-    
-    public void addSSE(SSE sse) {
+    public void addSSE(Segment sse) {
         this.sses.add(sse);
     }
     
-    public List<SSE> getSSEs() {
+    public List<Segment> getSSEs() {
         return this.sses;
     }
     
@@ -67,34 +60,8 @@ public class Chain extends Segment implements Structure {
         super.addGroup(group);
     }
 
-    @Override
-    public void accept(StructureVisitor visitor) {
-        super.accept(visitor);
-    }
-    
-    @Override
-    public void accept(HierarchyVisitor visitor) {
-       super.accept(visitor);
-    }
-
-    @Override
-    public Level getLevel() {
-        return level;
-    }
-
-    @Override
     public String getName() {
         return name;
-    }
-
-
-    @Override
-    public void addSubStructure(Structure structure) {
-        if (structure instanceof Group) {
-            super.addGroup((Group) structure);
-        } else {
-            throw new IllegalArgumentException("Can only add instances of " + Group.class.getName());
-        }
     }
 
 }

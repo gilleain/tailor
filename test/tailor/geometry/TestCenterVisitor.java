@@ -16,9 +16,8 @@ public class TestCenterVisitor {
         group.addAtom(a1);
         group.addAtom(a2);
         group.addAtom(a3);
-        CenterVisitor visitor = new CenterVisitor();
-        group.accept(visitor);
-        System.out.println(visitor.get());
+        
+        // TODO
     }
 
 }

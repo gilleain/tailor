@@ -12,7 +12,6 @@ import tailor.structure.Chain;
 import tailor.structure.ChainType;
 import tailor.structure.Group;
 import tailor.structure.Protein;
-import tailor.structure.Structure;
 
 /**
  * Note - was aigen from python
@@ -26,11 +25,11 @@ class ExampleStream {
        this.pdbFileList = new PDBFileList(pdbdirectory);
    }
    
-   public Iterator<Structure> examples(String pdbid, List<ExampleDescription> exampleDescriptions) {
-       return new Iterator<Structure>() {
-           private Structure structure;
+   public Iterator<Protein> examples(String pdbid, List<ExampleDescription> exampleDescriptions) {
+       return new Iterator<Protein>() {
+           private Protein structure;
            private Iterator<ExampleDescription> descIterator;
-           private Structure nextExample;
+           private Protein nextExample;
            
            {
                try {
@@ -61,8 +60,8 @@ class ExampleStream {
            }
            
            @Override
-           public Structure next() {
-               Structure result = nextExample;
+           public Protein next() {
+        	   Protein result = nextExample;
                advance();
                return result;
            }
@@ -112,8 +111,8 @@ class ExampleDescription {
    /**
     * Finds and extracts this example from the given structure
     */
-   public Structure findIn(Protein structure) {
-       Structure example = new Protein(this.pdbid);
+   public Protein findIn(Protein structure) {
+       Protein example = new Protein(this.pdbid);
        
        // Get the first model
        // TODO

@@ -8,9 +8,7 @@ import java.util.Map;
 import tailor.datasource.aigen.ResidueID;
 import tailor.geometry.Vector;
 
-public class Group implements Structure {
-    
-    private final Level level = Level.RESIDUE;
+public class Group {
     
     private final Map<String, Atom> atomMap;
 
@@ -51,27 +49,6 @@ public class Group implements Structure {
     public void addAtom(Atom atom) {
         this.atomMap.put(atom.getName(), atom);
     }
-
-    @Override
-    public void accept(StructureVisitor visitor) {
-        visitor.visit(this);
-        for (String atomName : atomMap.keySet()) {
-            visitor.visit(atomMap.get(atomName));
-        }
-    }
-    
-    public void accept(HierarchyVisitor visitor) {
-        visitor.enter(this);
-        for (String atomName : atomMap.keySet()) {
-            atomMap.get(atomName).accept(visitor);
-        }
-        visitor.exit(this);
-    }
-
-    @Override
-    public Level getLevel() {
-        return level;
-    }
     
     public Integer getNumber() {
     	return this.residueId.getResseq();
@@ -80,8 +57,6 @@ public class Group implements Structure {
     public ResidueID getResidueId() {
     	return this.residueId;
     }
-   
-    
     
     public int getIndex() {
         return index;
@@ -91,7 +66,6 @@ public class Group implements Structure {
         this.index = index;
     }
 
-    @Override
     public String getName() {
         return name;
     }
@@ -112,22 +86,6 @@ public class Group implements Structure {
 		return getAtom(atomName).getCenter();
 	}
 
-    @Override
-    public void addSubStructure(Structure structure) {
-        if (structure instanceof Atom) {
-            addAtom((Atom) structure);
-        } else {
-            throw new IllegalArgumentException("Can only add instances of " + Atom.class.getName());
-        }
-    }
-
-    @Override
-    public List<Structure> getSubstructures() {
-        List<Structure> substructures = new ArrayList<>();
-        substructures.addAll(getAtoms());
-        return substructures;
-    }
-    
     public String toString() {
         return name + atomMap;
     }

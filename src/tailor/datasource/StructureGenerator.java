@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import tailor.structure.Structure;
+import tailor.structure.Chain;
 
 /*
  * NOTE : originally the intention with this seems to have been to make 
@@ -13,7 +13,7 @@ import tailor.structure.Structure;
  * 
  * TODO - since it generates _chains_ why not narrow the type?s
  */
-public class StructureGenerator implements Iterable<Structure> {
+public class StructureGenerator implements Iterable<Chain> {
 	
 	public class AngleRange {
 	    public double start;
@@ -62,8 +62,8 @@ public class StructureGenerator implements Iterable<Structure> {
     }
     
     @Override
-    public Iterator<Structure> iterator() {
-        return new Iterator<Structure>() {
+    public Iterator<Chain> iterator() {
+        return new Iterator<Chain>() {
             private int currentModel = 0;
             
             @Override
@@ -72,7 +72,7 @@ public class StructureGenerator implements Iterable<Structure> {
             }
             
             @Override
-            public Structure next() {
+            public Chain next() {
                 List<PhiPsi> anglePairs = new ArrayList<>();
                 for (int i = 0; i < angles.size(); i += 2) {
                 	// TODO - this code never made sense, even in python
@@ -81,7 +81,7 @@ public class StructureGenerator implements Iterable<Structure> {
                 }
                 
                 // TODO
-                Structure structure = Generation.makeFragment(anglePairs);
+                Chain structure = Generation.makeFragment(anglePairs);
                 updateIndices();
                 currentModel++;
                 

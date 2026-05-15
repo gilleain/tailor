@@ -5,7 +5,7 @@ import java.io.FileReader;
 import java.io.IOException;
 
 import tailor.structure.ChainType;
-import tailor.structure.Structure;
+import tailor.structure.Protein;
 
 public class PDBParser {
     private StructureBuilder builder;
@@ -15,12 +15,12 @@ public class PDBParser {
     }
     
 
-    public static Structure structureFromFile(String filepath) throws IOException {
+    public static Protein structureFromFile(String filepath) throws IOException {
         PDBParser parser = new PDBParser(new StructureBuilder());
         return parser.getStructure(filepath);
     }
     
-    public tailor.structure.Structure getStructure(String path) throws IOException {
+    public Protein getStructure(String path) throws IOException {
         String pdbID = PDBUtils.getPDBIDFromPath(path);
         builder.initStructure(pdbID);
         

@@ -8,9 +8,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import tailor.structure.Structure;
+import tailor.structure.Protein;
 
-public class PDBFileList implements Iterable<Structure> {
+public class PDBFileList implements Iterable<Protein> {
     private String path;
     private Map<String, String> pathMap;
     private List<String> structurePaths;
@@ -78,8 +78,8 @@ public class PDBFileList implements Iterable<Structure> {
     }
     
     @Override
-    public Iterator<Structure> iterator() {
-        return new Iterator<Structure>() {
+    public Iterator<Protein> iterator() {
+        return new Iterator<Protein>() {
             private int currentIndex = 0;
             
             @Override
@@ -88,7 +88,7 @@ public class PDBFileList implements Iterable<Structure> {
             }
             
             @Override
-            public Structure next() {
+            public Protein next() {
                 try {
                     String path = structurePaths.get(currentIndex);
                     currentIndex++;
@@ -101,7 +101,7 @@ public class PDBFileList implements Iterable<Structure> {
         };
     }
     
-    public Structure get(String key) throws IOException {
+    public Protein get(String key) throws IOException {
         String filepath = this.pathMap.get(key);
         if (filepath == null) {
             throw new IllegalArgumentException("No structure found for key: " + key);

@@ -27,7 +27,7 @@ import tailor.engine.plan.Planner;
 import tailor.measure.AtomDistanceMeasure;
 import tailor.measure.AtomTorsionMeasure;
 import tailor.structure.Chain;
-import tailor.structure.Structure;
+import tailor.structure.Protein;
 
 public class FunctionalTests {
 	
@@ -229,10 +229,9 @@ public class FunctionalTests {
 		Plan plan = new Planner().plan(chainDescription, false);
 		plan.describe();
 		
-		Structure structure = PDBReader.read(new File(DATA_DIR, filename));
+		Protein structure = PDBReader.read(new File(DATA_DIR, filename));
 		SysoutResultsPrinter printer = new SysoutResultsPrinter(structure.getName());
-		for (Structure chainStructure : structure.getSubstructures()) {
-			Chain chain = (Chain) chainStructure;
+		for (Chain chain : structure.getChains()) {
 			Operator resOperator = new ResultsPrinterAdapter(printer, plan.getOutputPoint(), chainDescription);
 			// TODO - do we have to reset?
 			Helper.run(chain, plan, resOperator);

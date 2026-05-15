@@ -10,9 +10,8 @@ import java.util.List;
 import org.junit.Test;
 
 import tailor.structure.Chain;
-import tailor.structure.SSE;
-import tailor.structure.Strand;
-import tailor.structure.Structure;
+import tailor.structure.Segment;
+import tailor.structure.Segment.Type;
 
 public class TestDsspReader {
     
@@ -20,9 +19,8 @@ public class TestDsspReader {
     
     @Test
     public void testSSERead() throws IOException {
-        Structure structure = DsspReader.read(new File(DIR, "1tgx.dssp"));
-        Chain chain = (Chain) structure;
-        List<SSE> sses = chain.getSSEs(); 
+        Chain chain = DsspReader.read(new File(DIR, "1tgx.dssp"));
+        List<Segment> sses = chain.getSSEs(); 
         assertEquals(5, sses.size());
         
         int index = 0;
@@ -33,14 +31,14 @@ public class TestDsspReader {
         assertTrue(isStrand(sses.get(index++), 49, 54));
     }
     
-    public void p(SSE sse, int index) {
+    public void p(Segment sse, int index) {
         System.out.println(sse.getClass().getSimpleName() + " " + index
                 + " " + sse.getFirst().getNumber() 
                 + "-" + sse.getLast().getNumber());
     }
     
-    private boolean isStrand(SSE sse, int start, int end) {
-        return sse instanceof Strand 
+    private boolean isStrand(Segment sse, int start, int end) {
+        return sse.getType() == Type.STRAND
                 && sse.getFirst().getNumber().equals(String.valueOf(start))
                 && sse.getLast().getNumber().equals(String.valueOf(end));
     }

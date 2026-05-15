@@ -13,11 +13,10 @@ import tailor.structure.Chain;
 import tailor.structure.ChainType;
 import tailor.structure.Group;
 import tailor.structure.Protein;
-import tailor.structure.Structure;
 
 public class PDBReader {
 	
-	  public static Structure read(File path) throws IOException {
+	  public static Protein read(File path) throws IOException {
 	        String pdbID = path.getName().substring(0, 4);	// this is a hack...
 	        String line;
 
@@ -50,9 +49,8 @@ public class PDBReader {
 	        Chain currentChain = null;
 
 	        for (String atomRecord : atomRecords) {	        	
-	            Chain newChain = PDBReader.parseRecord(atomRecord, currentChain);
+	            Chain newChain = PDBReader.parseRecord(atomRecord, currentChain, ChainType.PEPTIDE);
 	            if (currentChain == null || !newChain.getName().equals(currentChain.getName())) {
-	                newChain.setType(ChainType.PEPTIDE);
 	                protein.addChain(newChain);
 	                currentChain = newChain;
 	            } 
@@ -61,9 +59,8 @@ public class PDBReader {
 	        currentChain = null;
 	        
 	        for (String hetatmRecord : hetatmRecords) {
-	            Chain newChain = PDBReader.parseRecord(hetatmRecord, currentChain);
+	            Chain newChain = PDBReader.parseRecord(hetatmRecord, currentChain, ChainType.WATER);
                 if (currentChain == null || !newChain.getName().equals(currentChain.getName())) {
-                    newChain.setType(ChainType.WATER);
                     protein.addChain(newChain);
                     currentChain = newChain;
                 } 
@@ -72,7 +69,7 @@ public class PDBReader {
 	        return protein;
 	    }
 
-	    public static Chain parseRecord(String atomRecord, Chain chain) {
+	    public static Chain parseRecord(String atomRecord, Chain chain, ChainType chainType) {
 	        //String atomNumber = atomRecord.substring(4, 11).trim();
 	        String atomName = atomRecord.substring(11, 16).trim();
 	        String residueName = atomRecord.substring(17, 20);
@@ -87,7 +84,7 @@ public class PDBReader {
             Group residue = null;
             int chainIndex;
             if (chain == null || (!chainLabel.equals(chain.getName()))) {
-	            chain = new Chain(chainLabel);
+	            chain = new Chain(chainLabel, chainType);
                 chainIndex = 0; 
 	        } else {
                 residue = chain.getGroups().get(chain.getGroups().size() - 1);
@@ -98,8 +95,8 @@ public class PDBReader {
                 if (residue != null) {
                     chainIndex++;
                 }
-                residue = PDBReader.createResidue(residueNumber, residueName, chainIndex);
-                chain.addSubStructure(residue);
+                residue = PDBReader.createGroup(residueNumber, residueName, chainIndex);
+                chain.addGroup(residue);
             }
 
             residue.addAtom(new Atom(atomName, new Vector(coordinates)));
@@ -107,7 +104,7 @@ public class PDBReader {
 	        return chain;
 	    }
 	    
-	    public static Group createResidue(int residueNumber, String residueName, int chainIndex) {
+	    public static Group createGroup(int residueNumber, String residueName, int chainIndex) {
 //            System.out.println("residue " + residueNumber + " " + residueName + " " + chainIndex);
 	    	Group residue = new Group(residueNumber, residueName);
             residue.setIndex(chainIndex);

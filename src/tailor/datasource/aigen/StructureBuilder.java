@@ -5,10 +5,9 @@ import tailor.structure.Chain;
 import tailor.structure.ChainType;
 import tailor.structure.Group;
 import tailor.structure.Protein;
-import tailor.structure.Structure;
 
 public class StructureBuilder {
-    private Structure structure;
+    private Protein structure;
     
     private Chain chain;
     private Group residue;
@@ -41,8 +40,8 @@ public class StructureBuilder {
         this.resname = null;
     }
     
-    public Structure getStructure() {
-        Structure s = this.structure;
+    public Protein getStructure() {
+        Protein s = this.structure;
         reset();
         return s;
     }
@@ -70,7 +69,7 @@ public class StructureBuilder {
         this.chainType = chainType;
         this.chain = new Chain(chainID, chainType);
 //        this.model.add(this.chain);
-        this.structure.addSubStructure(chain);
+        this.structure.addChain(chain);
     }
     
     public void registerLine(ResidueID residueID, String resname, int resseq, 
@@ -92,12 +91,12 @@ public class StructureBuilder {
         this.residueID = residueID;
         this.resname = resname;
         this.residue = new Group(residueID, resname, this.segID);
-        this.chain.addSubStructure(this.residue);
+        this.chain.addGroup(this.residue);
     }
     
     public void initAtom(String name, double[] coord, double bFactor, 
                         double occupancy, String altloc) {
         Atom atom = new Atom(name, coord, bFactor, occupancy, altloc);
-        this.residue.addSubStructure(atom);
+        this.residue.addAtom(atom);
     }
 }

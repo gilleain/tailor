@@ -14,7 +14,7 @@ import tailor.engine.operator.ResultsPrinterAdapter;
 import tailor.engine.plan.Plan;
 import tailor.engine.plan.Planner;
 import tailor.structure.Chain;
-import tailor.structure.Structure;
+import tailor.structure.Protein;
 
 public class PlanEngine implements Engine {
 	
@@ -45,9 +45,8 @@ public class PlanEngine implements Engine {
 		StructureSource structureSource = run.getStructureSource();
 		while (structureSource.hasNext()) {
 			try {
-				Structure str = structureSource.next();
-				for (Structure subStr : str.getSubstructures()) { // TODO ugh
-					Chain chain = (Chain) subStr;
+				Protein str = structureSource.next();
+				for (Chain chain : str.getChains()) { // TODO ugh
 					runChain(str.getName(), chain); // TODO - want to be cleverer with handling chains
 				}
 			} catch (IOException e) {

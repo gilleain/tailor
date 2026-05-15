@@ -5,7 +5,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import tailor.structure.Structure;
+import tailor.structure.Protein;
+
 
 
 public class PDBFileList implements StructureSource {
@@ -67,8 +68,8 @@ public class PDBFileList implements StructureSource {
 		return this.structurePaths;
 	}
     
-    public Structure next() throws IOException {
-        Structure next = PDBReader.read(this.structurePaths.get(this.currentIndex));
+    public Protein next() throws IOException {
+    	Protein next = PDBReader.read(this.structurePaths.get(this.currentIndex));
         this.currentIndex++;
         return next;
     }

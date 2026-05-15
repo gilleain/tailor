@@ -11,20 +11,18 @@ import tailor.geometry.Vector;
 import tailor.structure.Atom;
 import tailor.structure.Chain;
 import tailor.structure.Group;
-import tailor.structure.Helix;
-import tailor.structure.SSE;
-import tailor.structure.Strand;
-import tailor.structure.Structure;
+import tailor.structure.Segment;
+import tailor.structure.Segment.Type;
 
 public class DsspReader {
     
-    public static Structure read(File path) throws IOException {
+    public static Chain read(File path) throws IOException {
         String pdbID = path.getName().substring(0, 4);  // this is a hack...
 
         List<String> records = getRecords(new BufferedReader(new FileReader(path)));
         Chain chain = new Chain();
         String previousStructure = null;
-        SSE currentSSE = null;
+        Segment currentSSE = null;
         for (String record : records) {
             Group group = parseGroup(record);
             chain.addGroup(group);
@@ -45,10 +43,10 @@ public class DsspReader {
         return chain;
     }
     
-    private static SSE makeSSE(String structure) {
+    private static Segment makeSSE(String structure) {
         switch (structure) {
-            case "E": return new Strand(); // hmmm
-            case "H": return new Helix(); // hmmm
+            case "E": return new Segment(Type.STRAND); // hmmm
+            case "H": return new Segment(Type.HELIX); // hmmm
             default: return null;
         }
     }

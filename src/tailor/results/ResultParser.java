@@ -10,7 +10,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 
-import tailor.structure.Structure;
+import tailor.structure.Atom;
+import tailor.structure.Chain;
+import tailor.structure.Group;
+import tailor.structure.Protein;
 
 
 
@@ -33,14 +36,14 @@ public class ResultParser {
     /**
      * Generates examples from a file using the provided parser function
      */
-    public static Iterable<Structure> generateExamples(
+    public static Iterable<Protein> generateExamples(
             String filename, 
             String pdbdir, 
             Function<String, ExampleDescription> parseFunc) {
         
-        return new Iterable<Structure>() {
+        return new Iterable<Protein>() {
             @Override
-            public Iterator<Structure> iterator() {
+            public Iterator<Protein> iterator() {
                 return new ExampleIterator(filename, pdbdir, parseFunc);
             }
         };
@@ -49,12 +52,12 @@ public class ResultParser {
     /**
      * Iterator that lazily generates examples
      */
-    private static class ExampleIterator implements Iterator<Structure> {
+    private static class ExampleIterator implements Iterator<Protein> {
         private Map<String, List<ExampleDescription>> examples;
         private Iterator<String> pdbidIterator;
         private ExampleStream exampleStream;
-        private Iterator<Structure> currentExamples;
-        private Structure nextExample;
+        private Iterator<Protein> currentExamples;
+        private Protein nextExample;
         
         public ExampleIterator(String filename, String pdbdir, 
                              Function<String, ExampleDescription> parseFunc) {
@@ -113,8 +116,8 @@ public class ResultParser {
         }
         
         @Override
-        public Structure next() {
-            Structure result = nextExample;
+        public Protein next() {
+        	Protein result = nextExample;
             advance();
             return result;
         }
@@ -137,7 +140,7 @@ public class ResultParser {
             return new ExampleDescription(parts[0], parts[1], parts[2], parts[3], "0");
         };
         
-        for (Structure e : generateExamples(filename, pdbdir, parser)) {
+        for (Protein e : generateExamples(filename, pdbdir, parser)) {
             recurse(e);
         }
     }
@@ -145,10 +148,22 @@ public class ResultParser {
     /**
      * Recursively print the structure tree
      */
-    private static void recurse(Structure tree) {
+    private static void recurse(Protein tree) {
         System.out.println(tree.getClass().getSimpleName() + " " + tree);
-        for (Structure child : tree.getSubstructures()) {
+        for (Chain child : tree.getChains()) {
             recurse(child);
+        }
+    }
+    private static void recurse(Chain tree) {
+        System.out.println(tree.getClass().getSimpleName() + " " + tree);
+        for (Group child : tree.getGroups()) {
+            recurse(child);
+        }
+    }
+    private static void recurse(Group group) {
+        System.out.println(group.getClass().getSimpleName() + " " + group);
+        for (Atom atom : group.getAtoms()) {
+            System.out.println(atom);
         }
     }
 }
