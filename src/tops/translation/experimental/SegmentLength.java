@@ -3,7 +3,7 @@ package tops.translation.experimental;
 import tailor.api.SegmentIntPropertyMeasure;
 import tailor.api.SegmentPropertyDescription;
 import tailor.condition.IntegerLowerBoundCondition;
-import tops.translation.model.BackboneSegment;
+import tops.translation.model.Segment;
 
 public class SegmentLength implements SegmentPropertyDescription {
 	
@@ -27,7 +27,7 @@ public class SegmentLength implements SegmentPropertyDescription {
 	}
 
 	@Override
-	public boolean apply(BackboneSegment segment) {
+	public boolean apply(Segment segment) {
 		return this.segmentLengthMeasurement.measure(segment).apply(this.condition);
 	}
 

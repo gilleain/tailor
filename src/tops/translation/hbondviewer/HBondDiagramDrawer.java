@@ -10,11 +10,11 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-import tops.translation.model.BackboneSegment;
-import tops.translation.model.BackboneSegment.Type;
 import tops.translation.model.Chain;
 import tops.translation.model.HBond;
 import tops.translation.model.Residue;
+import tops.translation.model.Segment;
+import tops.translation.model.Segment.Type;
 
 public class HBondDiagramDrawer {
     private int w;
@@ -90,9 +90,7 @@ public class HBondDiagramDrawer {
             }
         }
 
-        Iterator<BackboneSegment> backboneSegmentIterator = this.chain.backboneSegmentIterator();
-        while (backboneSegmentIterator.hasNext()) {
-            BackboneSegment backboneSegment = (BackboneSegment) backboneSegmentIterator.next();
+        for (Segment backboneSegment : this.chain.getSegments()) {
             if (backboneSegment.length() > 0) {
                 int startIndex = backboneSegment.firstResidue().getAbsoluteNumber();
                 int endIndex = backboneSegment.lastResidue().getAbsoluteNumber();

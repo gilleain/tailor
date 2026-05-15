@@ -1,7 +1,7 @@
 package tailor.api;
 
 import tops.translation.experimental.SegmentDescription;
-import tops.translation.model.BackboneSegment;
+import tops.translation.model.Segment;
 
 /**
  * Description for a segments that can create conditions and matchers for filtering.
@@ -22,6 +22,6 @@ public interface SegmentPropertyDescription {
 	 * 
 	 * @return the result of applying this description to the segment
 	 */
-	boolean apply(BackboneSegment segment);
+	boolean apply(Segment segment);
 
 }

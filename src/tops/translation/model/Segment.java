@@ -10,7 +10,7 @@ import javax.vecmath.Point3d;
 
 import translation.Axis;
 
-public class BackboneSegment implements Comparable<BackboneSegment> {
+public class Segment implements Comparable<Segment> {
 	
 	// TODO - not exhaustive of possible types, 
 	// 'OTHER' is doing a lot of heavy lifting here 
@@ -46,14 +46,14 @@ public class BackboneSegment implements Comparable<BackboneSegment> {
     
     private Type type;
 
-    public BackboneSegment(Type type) {
+    public Segment(Type type) {
     	this.type = type;
         this.residues = new TreeSet<>();
         this.axis = null;
         this.orientation = Orientation.NONE;
     }
 
-    public BackboneSegment(Type type, Residue first) {
+    public Segment(Type type, Residue first) {
         this(type);
         this.residues.add(first);
     }
@@ -106,7 +106,7 @@ public class BackboneSegment implements Comparable<BackboneSegment> {
     	return this.type == type;
     }
 
-    public int compareTo(BackboneSegment other) {
+    public int compareTo(Segment other) {
         try {
             return this.firstResidue().compareTo(other.firstResidue());
         } catch (NoSuchElementException n) {
@@ -172,7 +172,7 @@ public class BackboneSegment implements Comparable<BackboneSegment> {
         return false;
     }
 
-    public boolean continuousWith(BackboneSegment other) {
+    public boolean continuousWith(Segment other) {
         if (this.getClass() == other.getClass()) {
             if (this.getAxis().approximatelyLinearTo(other.getAxis())) {
                 return true;
@@ -184,12 +184,12 @@ public class BackboneSegment implements Comparable<BackboneSegment> {
         }
     }
 
-    public void mergeWith(BackboneSegment other) {
+    public void mergeWith(Segment other) {
         this.residues.addAll(other.residues);
         this.axis = null;
     }
 
-    public boolean overlaps(BackboneSegment other) {
+    public boolean overlaps(Segment other) {
         try {
             int oS = other.firstResidue().getAbsoluteNumber();
             int oE = other.lastResidue().getAbsoluteNumber();
@@ -318,7 +318,7 @@ public class BackboneSegment implements Comparable<BackboneSegment> {
         this.orientation = orientation;
     }
 
-    public char getRelativeOrientation(BackboneSegment other) {
+    public char getRelativeOrientation(Segment other) {
         return this.getRelativeOrientation(other.getAxis());
     }
 

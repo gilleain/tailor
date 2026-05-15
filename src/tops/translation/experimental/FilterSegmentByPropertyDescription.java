@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.logging.Logger;
 
 import tailor.api.SegmentPropertyDescription;
-import tops.translation.model.BackboneSegment;
+import tops.translation.model.Segment;
 
 public class FilterSegmentByPropertyDescription extends AbstractOperator {
 	
@@ -30,7 +30,7 @@ public class FilterSegmentByPropertyDescription extends AbstractOperator {
 		int filterOutCount = 0;
 		while (input.hasNext()) {
 			Result result = input.getNext();
-			BackboneSegment segment = result.getSegments().get(0);	// XXX FIXME
+			Segment segment = result.getSegments().get(0);	// XXX FIXME
 			if (isAccepted(segment)) {
 				getOutput().put(result);
 				filterInCount++;
@@ -45,7 +45,7 @@ public class FilterSegmentByPropertyDescription extends AbstractOperator {
 		return "Filter by properties";	// TODO
 	}
 	
-	private boolean isAccepted(BackboneSegment segment) {
+	private boolean isAccepted(Segment segment) {
 		for (SegmentPropertyDescription segmentPropertyDescription : propertyDescriptions) {
 			if (!segmentPropertyDescription.apply(segment)) {
 				return false;

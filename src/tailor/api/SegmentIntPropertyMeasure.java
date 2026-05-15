@@ -1,14 +1,14 @@
 package tailor.api;
 
 import tops.translation.experimental.SegmentDescription;
-import tops.translation.model.BackboneSegment;
+import tops.translation.model.Segment;
 
 /**
  * Measurement to make on a single segment.
  */
 public interface SegmentIntPropertyMeasure {
 	
-	Measurement<Integer> measure(BackboneSegment segment);
+	Measurement<Integer> measure(Segment segment);
 
 	/**
 	 * @return the segment description the measure applies to

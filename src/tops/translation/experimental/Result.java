@@ -7,7 +7,7 @@ import java.util.stream.Collectors;
 import javax.vecmath.Point3d;
 
 import tailor.condition.SegmentPartition;
-import tops.translation.model.BackboneSegment;
+import tops.translation.model.Segment;
 import tops.translation.model.Chain;
 import tops.translation.model.Residue;
 
@@ -23,12 +23,12 @@ public class Result {
 	}
 	
 	private class SRef {
-		public BackboneSegment segment;
+		public Segment segment;
 		public List<RRef> residueRefs = new ArrayList<>();
-		public SRef(BackboneSegment segment) {
+		public SRef(Segment segment) {
 			this.segment = segment;
 		}
-		public BackboneSegment getSegment() {
+		public Segment getSegment() {
 			return segment;
 		}
 	}
@@ -61,17 +61,17 @@ public class Result {
 		}
 	}
 	
-	public Result(Chain chain, BackboneSegment... segments) {
+	public Result(Chain chain, Segment... segments) {
 		this(chain);
-		for (BackboneSegment segment : segments) {
+		for (Segment segment : segments) {
 			SRef segmentRef = new SRef(segment);
 			this.root.segmentRefs.add(segmentRef);
 			// TODO - residues and atoms?
 		}
 	}
 	
-	public List<BackboneSegment> getSegments() {
-		List<BackboneSegment> segments = new ArrayList<>();
+	public List<Segment> getSegments() {
+		List<Segment> segments = new ArrayList<>();
 		for (SRef segmentRef : this.root.segmentRefs) {
 			segments.add(segmentRef.segment);
 		}
@@ -79,12 +79,12 @@ public class Result {
 	}
 
 	public SegmentPartition getSegmentPartition() {
-		List<List<BackboneSegment>> parts = new ArrayList<>();
+		List<List<Segment>> parts = new ArrayList<>();
 		parts.add(getSegments(root));
 		return new SegmentPartition(parts);
 	}
 	
-	private List<BackboneSegment> getSegments(CRef cRef) {
+	private List<Segment> getSegments(CRef cRef) {
 		return cRef.segmentRefs.stream().map(SRef::getSegment).toList();
 	}
 	

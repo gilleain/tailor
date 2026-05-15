@@ -15,12 +15,12 @@ import java.util.logging.Logger;
 import javax.vecmath.Point3d;
 import javax.vecmath.Vector3d;
 
-import tops.translation.model.BackboneSegment;
-import tops.translation.model.BackboneSegment.Orientation;
-import tops.translation.model.BackboneSegment.Type;
 import tops.translation.model.Chain;
 import tops.translation.model.Protein;
 import tops.translation.model.Residue;
+import tops.translation.model.Segment;
+import tops.translation.model.Segment.Orientation;
+import tops.translation.model.Segment.Type;
 import tops.translation.model.Sheet;
 
 public class FoldAnalyser {
@@ -37,7 +37,7 @@ public class FoldAnalyser {
     }
 
     public Protein analyse(Protein protein) throws PropertyException {
-        for (Chain chain : protein) {
+        for (Chain chain : protein.getChains()) {
 
             if (chain.isDNA()) {
                 continue;
@@ -56,20 +56,20 @@ public class FoldAnalyser {
     public void findSheets(Chain chain) {
         // for each strand, examine all strands in front (so we don't do the same comparison twice)
         // each examination is a simple centroid-centroid distance
-        ListIterator<BackboneSegment> firstSegments = chain.backboneSegmentListIterator();
+        ListIterator<Segment> firstSegments = chain.segmentListIterator();
 
 
         while (firstSegments.hasNext()) {
             // get the first segment, reject if not a strand
-            BackboneSegment firstSegment = firstSegments.next();
+            Segment firstSegment = firstSegments.next();
             if (!(firstSegment.getType() == Type.STRAND)) {
                 continue;
             }
 
             // get the segments after the current one
-            ListIterator<BackboneSegment> secondSegments = chain.backboneSegmentListIterator(firstSegment);
+            ListIterator<Segment> secondSegments = chain.segmentListIterator(firstSegment);
             while (secondSegments.hasNext()) {
-                BackboneSegment secondSegment = secondSegments.next();
+                Segment secondSegment = secondSegments.next();
                 if ((secondSegment != firstSegment) && (secondSegment.getType() == Type.STRAND)) {
                     // make a crude distance check
                     if (this.closeApproach(firstSegment, secondSegment)) {
@@ -83,7 +83,7 @@ public class FoldAnalyser {
         }
     }
 
-    public boolean closeApproach(BackboneSegment a, BackboneSegment b) {
+    public boolean closeApproach(Segment a, Segment b) {
         Vector3d distanceVector = new Vector3d();
         distanceVector.sub(a.getAxis().getCentroid(), b.getAxis().getCentroid());
         double length = distanceVector.length();
@@ -91,7 +91,7 @@ public class FoldAnalyser {
         return length < 20.0;
     }
 
-    public boolean bonded(BackboneSegment strand, BackboneSegment otherStrand) {
+    public boolean bonded(Segment strand, Segment otherStrand) {
         //basically, run through the residues, checking the list of hbonds to find residues that might be in the other strand
         int numberOfHBonds = 0;
         for (Residue nextResidue : strand.getResidues()) {
@@ -111,7 +111,7 @@ public class FoldAnalyser {
         }
     }
 
-    public void addStrandPair(BackboneSegment first, BackboneSegment second, Chain chain) {
+    public void addStrandPair(Segment first, Segment second, Chain chain) {
         Sheet firstSheet = chain.getSheetContaining(first);
         Sheet secondSheet = chain.getSheetContaining(second);
 
@@ -157,9 +157,9 @@ public class FoldAnalyser {
             //System.out.println("Sheet axis = " + sheetAxis.getCentroid() + ", " + sheetAxis.getAxisVector());
 
             // assign the helices to orientations dependant on the sheet 
-            ListIterator<BackboneSegment> segments = chain.backboneSegmentListIterator();
+            ListIterator<Segment> segments = chain.segmentListIterator();
             while (segments.hasNext()) {
-                BackboneSegment segment = (BackboneSegment) segments.next();
+                Segment segment = (Segment) segments.next();
                 if (segment.getType() == Type.STRAND || 
                 	segment.getType() == Type.NTERMINUS || 
                 	segment.getType() == Type.CTERMINUS) {
@@ -176,14 +176,14 @@ public class FoldAnalyser {
             }
         // no sheets, take the first helix as UP
         } else {
-            ListIterator<BackboneSegment> segments = chain.backboneSegmentListIterator();
+            ListIterator<Segment> segments = chain.segmentListIterator();
             // ignore n-terminus
             segments.next();
-            BackboneSegment firstSegment = (BackboneSegment) segments.next();
+            Segment firstSegment = (Segment) segments.next();
             firstSegment.setOrientation(Orientation.UP);
             Axis firstAxis = firstSegment.getAxis();
             while (segments.hasNext()) {
-                BackboneSegment segment = (BackboneSegment) segments.next();
+                Segment segment = (Segment) segments.next();
                 if (segment.getType() == Type.NTERMINUS || segment.getType() == Type.CTERMINUS) {
                     continue;
                 }
@@ -197,12 +197,12 @@ public class FoldAnalyser {
             Iterator<Sheet> sheets = chain.sheetIterator();
             while (sheets.hasNext()) {
                 Sheet sheet = (Sheet) sheets.next(); 
-                Iterator<BackboneSegment> sheetChainOrderIterator = sheet.chainOrderIterator();
-                BackboneSegment strand = (BackboneSegment) sheetChainOrderIterator.next();
+                Iterator<Segment> sheetChainOrderIterator = sheet.chainOrderIterator();
+                Segment strand = (Segment) sheetChainOrderIterator.next();
         
                 Logger.getLogger("translation.FoldAnalyser").info("finding chirals in sheet of length " + sheet.size());
                 while (sheetChainOrderIterator.hasNext()) {
-                    BackboneSegment partner = (BackboneSegment) sheetChainOrderIterator.next();
+                    Segment partner = (Segment) sheetChainOrderIterator.next();
                     if (strand == partner) {
                         Logger.getLogger("translation.FoldAnalyser").info("strand == partner : " + strand + ", " + partner);
                         continue;
@@ -219,12 +219,12 @@ public class FoldAnalyser {
                         Point3d partnerCentroid = partner.getAxis().getCentroid();
         
                         // get the sses we will use for the chirality calculation
-                        ListIterator<BackboneSegment> inBetweeners = chain.backboneSegmentListIterator(strand, partner);
+                        ListIterator<Segment> inBetweeners = chain.segmentListIterator(strand, partner);
 
                         // find the average center of these sses
                         List<Point3d> centroids = new ArrayList<>();
                         while (inBetweeners.hasNext()) {
-                            BackboneSegment segment = inBetweeners.next();
+                            Segment segment = inBetweeners.next();
                             centroids.add(segment.getAxis().getCentroid());
                         }
                         Point3d averageCentroid = Geometer.averagePoints(centroids);

@@ -2,17 +2,17 @@ package tops.translation.experimental;
 
 import java.util.logging.Logger;
 
-import tops.translation.model.BackboneSegment;
+import tops.translation.model.Segment;
 
 public class SegmentTypeFilter extends AbstractOperator {
 	
 	private static Logger logger = Logger.getLogger(SegmentTypeFilter.class.getName());
 	
-	private final BackboneSegment.Type segmentType;
+	private final Segment.Type segmentType;
 	
 	private final Pipe input;
 	
-	public SegmentTypeFilter(BackboneSegment.Type segmentType, Pipe input) {
+	public SegmentTypeFilter(Segment.Type segmentType, Pipe input) {
 		this.segmentType = segmentType;
 		this.input = input;
 	}
@@ -27,7 +27,7 @@ public class SegmentTypeFilter extends AbstractOperator {
 		while (input.hasNext()) {
 			Result result = input.getNext();
 //			logger.info("Filtering " + result);
-			for (BackboneSegment segment : result.getSegments()) {
+			for (Segment segment : result.getSegments()) {
 				if (segmentType == segment.getType()) { 
 //					logger.info("Accepted " + segment);
 					getOutput().put(result.copy());

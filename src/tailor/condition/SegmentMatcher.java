@@ -6,7 +6,7 @@ import java.util.Optional;
 import java.util.logging.Logger;
 
 import tailor.condition.LabelPartition.Part;
-import tops.translation.model.BackboneSegment;
+import tops.translation.model.Segment;
 
 public class SegmentMatcher {
 	
@@ -14,10 +14,10 @@ public class SegmentMatcher {
 	
 	public static class Match {
 		
-		private List<BackboneSegment> segments;
+		private List<Segment> segments;
 		private boolean isComplete;
 		
-		public Match(List<BackboneSegment> segments) {
+		public Match(List<Segment> segments) {
 			this.segments = segments;
 		}
 		
@@ -30,13 +30,13 @@ public class SegmentMatcher {
 			return this;
 		}
 		
-		public List<BackboneSegment> getSegments() {
+		public List<Segment> getSegments() {
 			return this.segments;
 		}
 		
 		public String toString() {
 			String output = "|";
-			for (BackboneSegment segment : segments) {
+			for (Segment segment : segments) {
 				output += segment.getType().getTypeString();
 				output += "|";
 			}
@@ -65,18 +65,18 @@ public class SegmentMatcher {
 	}
 	
 	private Match findMatch(SegmentPartition result) {
-		List<BackboneSegment> matches = new ArrayList<>();
+		List<Segment> matches = new ArrayList<>();
 		for (int partIndex = 0; partIndex < atomLabels.numberOfParts(); partIndex++) {
 			Part part = atomLabels.getPart(partIndex);
 			int originalPartIndex = part.getIndex();	// the index of the part in the original order
-			List<BackboneSegment> resultPart = result.getPart(originalPartIndex);
+			List<Segment> resultPart = result.getPart(originalPartIndex);
 			int indexFrom = 0;
 			for (String label : part.getElements()) {	
 				int index = findIndex(label, indexFrom, resultPart);
 				if (index == -1) {
 					return new Match(matches);
 				} else {
-					BackboneSegment item = resultPart.get(index);
+					Segment item = resultPart.get(index);
 					matches.add(item);
 					indexFrom = index + 1;
 				}
@@ -86,9 +86,9 @@ public class SegmentMatcher {
 	}
 	
 	// Search for a match in the part, starting from the index 'indexFrom', returning the matching index 
-	private int findIndex(String label, int indexFrom, List<BackboneSegment> resultPart) {
+	private int findIndex(String label, int indexFrom, List<Segment> resultPart) {
 		int index = 0;
-		for (BackboneSegment item : resultPart) {
+		for (Segment item : resultPart) {
 			if (index < indexFrom) {
 				index++;
 				continue;

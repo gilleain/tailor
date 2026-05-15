@@ -2,14 +2,12 @@ package tops.translation.model;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
 import translation.ChainDomainMap;
-import translation.StructureFinder;
 
-public class Protein implements Iterable<Chain> {
+public class Protein {
 
     private String id;
 
@@ -67,18 +65,8 @@ public class Protein implements Iterable<Chain> {
         return stringBuffer.toString();
     }
 
-	@Override
-	public Iterator<Chain> iterator() {
-		return this.chains.iterator();
-	}
-
     public List<Chain> getChains() {
         return this.chains;
-    }
-
-    public void findStructure(StructureFinder structureFinder) {
-        // XXX UGH
-        
     }
 
 }

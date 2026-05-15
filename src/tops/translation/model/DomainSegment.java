@@ -13,15 +13,15 @@ public class DomainSegment {
         this.end = end;
     }
 
-    public boolean contains(BackboneSegment backboneSegment) {
+    public boolean contains(Segment backboneSegment) {
         //return backboneSegment.containedInPDBNumberRange(this.start, this.end);
         return backboneSegment.overlapsPDBNumberRange(this.start, this.end);
     }
 
-    public List<BackboneSegment> filter(List<BackboneSegment> backboneSegments) {
-        List<BackboneSegment> subList = new ArrayList<>();
+    public List<Segment> filter(List<Segment> backboneSegments) {
+        List<Segment> subList = new ArrayList<>();
 
-        for (BackboneSegment backboneSegment : backboneSegments) {
+        for (Segment backboneSegment : backboneSegments) {
             if (this.contains(backboneSegment)) {
                 subList.add(backboneSegment);
             }

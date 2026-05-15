@@ -1,16 +1,16 @@
 package tops.translation.experimental;
 
-import static tops.translation.model.BackboneSegment.Type.HELIX;
-import static tops.translation.model.BackboneSegment.Type.STRAND;
+import static tops.translation.model.Segment.Type.HELIX;
+import static tops.translation.model.Segment.Type.STRAND;
 
 import java.io.File;
 import java.io.IOException;
 
 import org.junit.Test;
 
-import tops.translation.model.BackboneSegment;
 import tops.translation.model.Chain;
 import tops.translation.model.Protein;
+import tops.translation.model.Segment;
 import translation.HBondAnalyser;
 import translation.PDBReader;
 
@@ -29,7 +29,7 @@ public class FunctionalTests {
 	}
 	
 	private void run(ChainDescription chainDescription, Protein target) {
-		for (Chain chain : target) {
+		for (Chain chain : target.getChains()) {
 			// create the pipeline
 			Plan plan = new Planner().makePlan(chainDescription);	// TODO! reset plan
 			SegmentSource segmentSource = new SegmentSource(chain, plan.getInputs());
@@ -80,9 +80,9 @@ public class FunctionalTests {
 		Protein protein = PDBReader.read(new File(DATA_DIR, filename));
 		HBondAnalyser hbondAnalyser = new HBondAnalyser();
 		hbondAnalyser.analyse(protein);
-		for (Chain c : protein) {
-			for (BackboneSegment s : c) {
-				System.out.println(s);
+		for (Chain chain : protein.getChains()) {
+			for (Segment segment : chain.getSegments()) {
+				System.out.println(segment);
 			}
 		}
 		return protein;

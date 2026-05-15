@@ -15,7 +15,7 @@ import tailor.condition.SegmentMatcher;
 import tailor.condition.SegmentMatcher.Match;
 import tailor.condition.SegmentPartition;
 import tailor.measurement.DoubleMeasurement;
-import tops.translation.model.BackboneSegment;
+import tops.translation.model.Segment;
 import translation.Axis;
 import translation.Geometer;
 
@@ -57,9 +57,9 @@ public class SegmentCentroidDistanceMeasure implements SegmentListMeasure {
 		}
 	}
 
-	private Measurement<Double> measure(List<BackboneSegment> segments) {
-		BackboneSegment segmentA = segments.get(0);
-		BackboneSegment segmentB = segments.get(1);
+	private Measurement<Double> measure(List<Segment> segments) {
+		Segment segmentA = segments.get(0);
+		Segment segmentB = segments.get(1);
 		Axis aA = segmentA.getAxis();
 		Axis aB = segmentB.getAxis();
 		

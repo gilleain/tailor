@@ -110,7 +110,7 @@ public class TestRunner {
                 Map<String, Map<String, String>> chainDomainStringMap = 
                 		protein.toTopsDomainStrings(cathChainMap);
 
-                for (Chain chain : protein) {
+                for (Chain chain : protein.getChains()) {
 
                     // ignore DNA chains
                     if (chain.isDNA()) {

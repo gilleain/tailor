@@ -1,11 +1,10 @@
 package tops.translation.experimental;
 
-import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Logger;
 
-import tops.translation.model.BackboneSegment;
 import tops.translation.model.Chain;
+import tops.translation.model.Segment;
 
 public class SegmentSource extends AbstractOperator {
 	
@@ -22,9 +21,7 @@ public class SegmentSource extends AbstractOperator {
 
 	@Override
 	public void run() {
-		Iterator<BackboneSegment> bbi = chain.backboneSegmentIterator();  
-		while (bbi.hasNext()) {
-			BackboneSegment segment = bbi.next();
+		for (Segment segment : chain.getSegments()) {
 			for (Pipe output : outputs) {
 //				logger.info("Putting " + segment + " to " + output.getSinkId());
 				output.put(new Result(chain, segment));

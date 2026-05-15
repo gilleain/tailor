@@ -2,13 +2,13 @@ package tailor.condition;
 
 import java.util.List;
 
-import tops.translation.model.BackboneSegment;
+import tops.translation.model.Segment;
 
 public class SegmentPartition {
 	
-	private final List<List<BackboneSegment>> parts;
+	private final List<List<Segment>> parts;
 	
-	public SegmentPartition(List<List<BackboneSegment>> parts) {
+	public SegmentPartition(List<List<Segment>> parts) {
 		this.parts = parts;
 	}
 	
@@ -16,7 +16,7 @@ public class SegmentPartition {
 		return parts.stream().map(List::size).reduce(0, Integer::sum);
 	}
 	
-	public List<BackboneSegment> getPart(int index) {
+	public List<Segment> getPart(int index) {
 		return this.parts.get(index);
 	}
 	
@@ -24,7 +24,7 @@ public class SegmentPartition {
 		return this.parts.stream().map(this::toString).toList().toString();
 	}
 	
-	private String toString(List<BackboneSegment> segments) {
-		return segments.stream().map(BackboneSegment::toCompactString).toList().toString();
+	private String toString(List<Segment> segments) {
+		return segments.stream().map(Segment::toCompactString).toList().toString();
 	}
 }

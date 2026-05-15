@@ -107,7 +107,7 @@ public class Viewer extends JFrame {
         // reset?
         int viewIndex = 0;
 
-        for(Chain chain : protein) {
+        for(Chain chain : protein.getChains()) {
             System.out.println(chain.toTopsString(new Domain(0)));
             if (viewIndex < this.views.size()) {
                 this.addChainToView(chain, this.views.get(viewIndex));

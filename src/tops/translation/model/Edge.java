@@ -2,11 +2,11 @@ package tops.translation.model;
 
 
 public class Edge implements Comparable<Edge> {
-    private BackboneSegment first;
-    private BackboneSegment second;
+    private Segment first;
+    private Segment second;
     private char type;
 
-    public Edge(BackboneSegment first, BackboneSegment second, char type) {
+    public Edge(Segment first, Segment second, char type) {
         this.first = first;
         this.second = second;
         this.type = type;

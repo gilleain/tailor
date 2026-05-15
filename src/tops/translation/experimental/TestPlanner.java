@@ -3,8 +3,8 @@ package tops.translation.experimental;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.contains;
 import static tops.translation.experimental.TestPlanner.OperatorMatcher.operator;
-import static tops.translation.model.BackboneSegment.Type.HELIX;
-import static tops.translation.model.BackboneSegment.Type.STRAND;
+import static tops.translation.model.Segment.Type.HELIX;
+import static tops.translation.model.Segment.Type.STRAND;
 
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;

@@ -12,11 +12,11 @@ import java.util.logging.Logger;
 
 import javax.vecmath.Point3d;
 
-import tops.translation.model.BackboneSegment;
 import tops.translation.model.Chain;
 import tops.translation.model.HBond;
 import tops.translation.model.Protein;
 import tops.translation.model.Residue;
+import tops.translation.model.Segment;
 
 public class HBondAnalyser {
     
@@ -87,7 +87,7 @@ public class HBondAnalyser {
     public void analyse(Protein protein) throws PropertyException {
         boolean calculateBackboneHydrogens = this.properties.getProperty("CALCULATE_BACKBONE_AMIDE_HYDROGENS").equals("TRUE");
 
-        for (Chain chain : protein) {
+        for (Chain chain : protein.getChains()) {
             if (calculateBackboneHydrogens) {
                 chain.addBackboneAmideHydrogens();
             }
@@ -211,15 +211,14 @@ public class HBondAnalyser {
 
         // finally, finish off the SSEs
         this.finishSSES(chain);
-        chain.sortBackboneSegments();
+        chain.sortSegments();
         chain.mergeHelices();
         chain.addTerminii();
         
         // TODO
         int bbIndex = 0;
-        Iterator<BackboneSegment> i = chain.backboneSegmentIterator();
-        while (i.hasNext()) {
-        	i.next().setNumber(bbIndex);
+        for (Segment segment : chain.getSegments()) {
+        	segment.setNumber(bbIndex);
         	bbIndex++;
         }
     }

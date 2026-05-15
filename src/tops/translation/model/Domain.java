@@ -31,7 +31,7 @@ public class Domain {
         this.segments.add(new DomainSegment(start, end));
     }
 
-    public boolean contains(BackboneSegment backboneSegment) {
+    public boolean contains(Segment backboneSegment) {
         if (this.isEmpty()) {
             return true;
         }
@@ -45,8 +45,8 @@ public class Domain {
         return false;
     }
 
-    public List<BackboneSegment> filter(List<BackboneSegment> backboneSegments) {
-        List<BackboneSegment> segmentsInDomain = new ArrayList<>();
+    public List<Segment> filter(List<Segment> backboneSegments) {
+        List<Segment> segmentsInDomain = new ArrayList<>();
         for (DomainSegment domainSegment : this.segments) {
             segmentsInDomain.addAll(domainSegment.filter(backboneSegments));
         }

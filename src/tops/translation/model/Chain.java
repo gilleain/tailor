@@ -11,19 +11,19 @@ import java.util.Map;
 import javax.vecmath.Point3d;
 import javax.vecmath.Vector3d;
 
-import tops.translation.model.BackboneSegment.Type;
+import tops.translation.model.Segment.Type;
 import translation.Axis;
 import translation.ChainDomainMap;
 import translation.Geometer;
 
-public class Chain implements Iterable<BackboneSegment> {
+public class Chain {
     private String label;
     private String type;
     private Point3d center;
     private List<Residue> residues;
     private List<HBond> hbonds;
     private List<Sheet> sheets;
-    private List<BackboneSegment> backboneSegments;
+    private List<Segment> segments;
     private List<Edge> chiralities;
     private List<Domain> domains;
 
@@ -31,7 +31,7 @@ public class Chain implements Iterable<BackboneSegment> {
         this.residues = new ArrayList<>();
         this.hbonds = new ArrayList<>();
         this.sheets = new ArrayList<>();
-        this.backboneSegments = new ArrayList<>();
+        this.segments = new ArrayList<>();
         this.chiralities = new ArrayList<>();
         this.domains = new ArrayList<>();
         this.center = null;
@@ -97,47 +97,47 @@ public class Chain implements Iterable<BackboneSegment> {
 
     public void createHelix(int helixStartIndex, int helixEndIndex) {
     	Residue firstResidue = this.getResidueByAbsoluteNumbering(helixStartIndex);
-        BackboneSegment helix = new BackboneSegment(Type.HELIX, firstResidue);
+        Segment helix = new Segment(Type.HELIX, firstResidue);
         for (int index = helixStartIndex + 1; index < helixEndIndex + 1; index++) {
             helix.expandBy(this.getResidueByAbsoluteNumbering(index));
         }
         //System.err.println("Created " + helix + " from " + helixStartIndex + " " + helixEndIndex);
-        this.backboneSegments.add(helix);
+        this.segments.add(helix);
     }
 
     public void createStrand(int strandStartIndex, int strandEndIndex) {
     	Residue firstResidue = this.getResidueByAbsoluteNumbering(strandStartIndex);
-        BackboneSegment strand = new BackboneSegment(Type.STRAND, firstResidue);
+        Segment strand = new Segment(Type.STRAND, firstResidue);
         for (int index = strandStartIndex + 1; index < strandEndIndex + 1; index++) {
             strand.expandBy(this.getResidueByAbsoluteNumbering(index));
         }
         //System.err.println("Created " + strand + " from " + strandStartIndex + " " + strandEndIndex);
-        this.backboneSegments.add(strand);
+        this.segments.add(strand);
     }
 
     public void createLoop(int startIndex, int endIndex) {
     	Residue firstResidue = this.getResidueByAbsoluteNumbering(startIndex);
-        BackboneSegment unstructured = new BackboneSegment(Type.UNSTRUCTURED, firstResidue);
+        Segment unstructured = new Segment(Type.UNSTRUCTURED, firstResidue);
         for (int index = startIndex + 1; index < endIndex + 1; index++) {
             unstructured.expandBy(this.getResidueByAbsoluteNumbering(index));
         }
-        this.backboneSegments.add(unstructured);
+        this.segments.add(unstructured);
     }
 
     // firstly, assume that the sses are sorted so that for i < j; i.end < j.end
     // secondly assume that, if two helices overlap, they should be merged
     public void mergeHelices() {
-        for (int segmentIndex = 0; segmentIndex < this.backboneSegments.size() - 1; segmentIndex++) {
-            BackboneSegment sseA = this.backboneSegments.get(segmentIndex);
+        for (int segmentIndex = 0; segmentIndex < this.segments.size() - 1; segmentIndex++) {
+            Segment sseA = this.segments.get(segmentIndex);
             if (sseA.getType() == Type.HELIX) {
-                BackboneSegment sseB = this.backboneSegments.get(segmentIndex + 1);
+                Segment sseB = this.segments.get(segmentIndex + 1);
                 if (sseB.getType() == Type.HELIX) {
                     if (sseA.overlaps(sseB)) {
                         //System.err.println("Merging : " + sseA + " and " + sseB); 
                         sseB.mergeWith(sseA);
 
                         //System.err.println("Removing: " + sseA); 
-                        this.backboneSegments.remove(segmentIndex);
+                        this.segments.remove(segmentIndex);
                         segmentIndex--;
                     } else {
                         //System.err.println("No overlap : " + sseA + " and " + sseB); 
@@ -148,25 +148,25 @@ public class Chain implements Iterable<BackboneSegment> {
     }
 
     public void addTerminii() {
-        if (this.backboneSegments.isEmpty()) {
+        if (this.segments.isEmpty()) {
             return;
         }
 
-        if (this.backboneSegments.get(0).getType() != Type.NTERMINUS) {
-            this.backboneSegments.add(0, new BackboneSegment(Type.NTERMINUS));
+        if (this.segments.get(0).getType() != Type.NTERMINUS) {
+            this.segments.add(0, new Segment(Type.NTERMINUS));
         }
 
-        if (this.backboneSegments.get(this.backboneSegments.size() - 1).getType() != Type.CTERMINUS) {
-            this.backboneSegments.add(new BackboneSegment(Type.CTERMINUS));
+        if (this.segments.get(this.segments.size() - 1).getType() != Type.CTERMINUS) {
+            this.segments.add(new Segment(Type.CTERMINUS));
         }
     }
 
-    public void sortBackboneSegments() {
-        Collections.sort(this.backboneSegments);
+    public void sortSegments() {
+        Collections.sort(this.segments);
     }
 
-    public Iterator<BackboneSegment> backboneSegmentIterator() {
-        return this.backboneSegments.iterator();
+    public List<Segment> getSegments() {
+        return this.segments;
     }
 
     public boolean hasResidueByPDBNumbering(int pdbResidueNumber) {
@@ -228,7 +228,7 @@ public class Chain implements Iterable<BackboneSegment> {
         this.sheets.add(sheet);
     }
 
-    public void createSheet(BackboneSegment strand, BackboneSegment otherStrand) {
+    public void createSheet(Segment strand, Segment otherStrand) {
         if (this.sheets.isEmpty()) {
             this.sheets.add(new Sheet(1, strand, otherStrand));
         } else {
@@ -241,7 +241,7 @@ public class Chain implements Iterable<BackboneSegment> {
         this.sheets.remove(sheet);
     }
 
-    public Sheet getSheetContaining(BackboneSegment strand) {
+    public Sheet getSheetContaining(Segment strand) {
     	for (Sheet sheet : this.sheets) {
             if (sheet.contains(strand)) {
                 return sheet;
@@ -258,13 +258,13 @@ public class Chain implements Iterable<BackboneSegment> {
         return this.sheets.size();
     }
 
-    public void addChirality(BackboneSegment first, BackboneSegment second, char chirality) {
+    public void addChirality(Segment first, Segment second, char chirality) {
         this.chiralities.add(new Edge(first, second, chirality));
     }
 
     public Axis getAxis() {
         List<Point3d> centroids = new ArrayList<>();
-        for (BackboneSegment nextBackboneSegment : this.backboneSegments) {
+        for (Segment nextBackboneSegment : this.segments) {
             Axis a = nextBackboneSegment.getAxis();
             //System.out.println("Centroid for BS " + nextBackboneSegment + " is " + a.getCentroid());
             centroids.add(a.getCentroid());
@@ -304,32 +304,28 @@ public class Chain implements Iterable<BackboneSegment> {
         return this.label;
     }
 
-    public void addBackboneSegment(BackboneSegment backboneSegment) {
-        this.backboneSegments.add(backboneSegment);
+    public void addBackboneSegment(Segment backboneSegment) {
+        this.segments.add(backboneSegment);
     }
 
-    public ListIterator<BackboneSegment> backboneSegmentListIterator() {
-        return this.backboneSegments.listIterator();
+    public ListIterator<Segment> segmentListIterator() {
+        return this.segments.listIterator();
     }
 
-    public ListIterator<BackboneSegment> backboneSegmentListIterator(int i) {
-        return this.backboneSegments.listIterator(i);
+    public ListIterator<Segment> segmentListIterator(Segment segment) {
+        return this.segments.listIterator(this.segments.indexOf(segment));
     }
 
-    public ListIterator<BackboneSegment> backboneSegmentListIterator(BackboneSegment backboneSegment) {
-        return this.backboneSegments.listIterator(this.backboneSegments.indexOf(backboneSegment));
+    public ListIterator<Segment> segmentListIterator(Segment startSegment, Segment endSegment) {
+        return this.segments.subList(this.segments.indexOf(startSegment) + 1, this.segments.indexOf(endSegment)).listIterator();
     }
 
-    public ListIterator<BackboneSegment> backboneSegmentListIterator(BackboneSegment startSegment, BackboneSegment endSegment) {
-        return this.backboneSegments.subList(this.backboneSegments.indexOf(startSegment) + 1, this.backboneSegments.indexOf(endSegment)).listIterator();
-    }
-
-    public int numberOfSegmentsInBetween(BackboneSegment startSegment, BackboneSegment endSegment) {
-        return this.backboneSegments.indexOf(endSegment) - (this.backboneSegments.indexOf(startSegment) + 1);
+    public int numberOfSegmentsInBetween(Segment startSegment, Segment endSegment) {
+        return this.segments.indexOf(endSegment) - (this.segments.indexOf(startSegment) + 1);
     }
     
-    public List<BackboneSegment> filterBackboneSegmentsByDomain(Domain domain) {
-        return domain.filter(this.backboneSegments);
+    public List<Segment> filterSegmentsByDomain(Domain domain) {
+        return domain.filter(this.segments);
     }
 
     public void calculateTorsions() {
@@ -377,7 +373,7 @@ public class Chain implements Iterable<BackboneSegment> {
     public void findOrientations() {
         Axis chainAxis = this.getAxis();
 
-        for (BackboneSegment nextSegment : this.backboneSegments) {
+        for (Segment nextSegment : this.segments) {
             nextSegment.determineOrientation(chainAxis);
         }
     }
@@ -386,7 +382,7 @@ public class Chain implements Iterable<BackboneSegment> {
         StringBuilder script = new StringBuilder();
 
         int segmentNumber = 1;
-        for (BackboneSegment bs : this.backboneSegments) {
+        for (Segment bs : this.segments) {
             String name = bs.getTopsSymbol() + "" + segmentNumber + "(" + bs.firstPDB() + "-" + bs.lastPDB() + ")";
             String selection = "not hetatm and name ca+c+n+o+h and resi " + bs.firstPDB() + "-" + bs.lastPDB();
             script.append("cmd.select(\"" + name + "\", \"" + selection + "\")\n");
@@ -437,19 +433,19 @@ public class Chain implements Iterable<BackboneSegment> {
         s.append(this.getCathCompatibleLabel() + domain.getNumber() + " ");
 
         //vertexstring
-        Iterator<BackboneSegment> backboneSegmentIterator;
+        Iterator<Segment> backboneSegmentIterator;
         if (domain.isEmpty()) {
-            backboneSegmentIterator = this.backboneSegments.iterator();
+            backboneSegmentIterator = this.segments.iterator();
         } else {
-            List<BackboneSegment> segmentsFilteredByDomain = domain.filter(this.backboneSegments);
-            segmentsFilteredByDomain.add(0, new BackboneSegment(Type.NTERMINUS));
-            segmentsFilteredByDomain.add(new BackboneSegment(Type.CTERMINUS));
+            List<Segment> segmentsFilteredByDomain = domain.filter(this.segments);
+            segmentsFilteredByDomain.add(0, new Segment(Type.NTERMINUS));
+            segmentsFilteredByDomain.add(new Segment(Type.CTERMINUS));
             backboneSegmentIterator = segmentsFilteredByDomain.iterator();
         }
 
         int vertexNumber = 0;
         while (backboneSegmentIterator.hasNext()) {
-            BackboneSegment nextBackboneSegment = backboneSegmentIterator.next();
+            Segment nextBackboneSegment = backboneSegmentIterator.next();
             if (nextBackboneSegment.getType() == Type.UNSTRUCTURED) {
                 continue;
             } else {
@@ -514,7 +510,7 @@ public class Chain implements Iterable<BackboneSegment> {
             s.append(nextBond + "\n");
         }
 
-        for (BackboneSegment nextBackboneSegment : this.backboneSegments) {
+        for (Segment nextBackboneSegment : this.segments) {
             s.append(nextBackboneSegment.toFullString() + "\n");
         }
 
@@ -524,10 +520,5 @@ public class Chain implements Iterable<BackboneSegment> {
         }
 
         return s.toString();
-    }
-
-    @Override
-    public Iterator<BackboneSegment> iterator() {
-        return this.backboneSegments.iterator();
     }
 }

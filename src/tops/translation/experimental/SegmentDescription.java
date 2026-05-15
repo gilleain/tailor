@@ -4,20 +4,20 @@ import java.util.ArrayList;
 import java.util.List;
 
 import tailor.api.SegmentPropertyDescription;
-import tops.translation.model.BackboneSegment;
+import tops.translation.model.Segment;
 
 public class SegmentDescription {
 	
-	private final BackboneSegment.Type type;
+	private final Segment.Type type;
 	
 	private final List<SegmentPropertyDescription> segmentPropertyDescriptions;
 	
-	public SegmentDescription(BackboneSegment.Type type) {
+	public SegmentDescription(Segment.Type type) {
 		this.type = type;
 		this.segmentPropertyDescriptions = new ArrayList<>();
 	}
 
-	public BackboneSegment.Type getType() {
+	public Segment.Type getType() {
 		return this.type;
 	}
 
