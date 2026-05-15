@@ -11,7 +11,7 @@ import javax.vecmath.Point3d;
 import translation.Geometer;
 
 public class Residue implements Comparable<Residue> {
-    private Map<String, Point3d> atoms;
+	private final Map<String, Atom> atomMap;
     private int absoluteNumber;
     private int pdbNumber;
     private String type;
@@ -22,8 +22,8 @@ public class Residue implements Comparable<Residue> {
     private double psi;
 
     public Residue() {
-        atoms = new HashMap<>();
-        hBonds = new ArrayList<>();
+        this.atomMap = new HashMap<>();
+        this.hBonds = new ArrayList<>();
         this.phi = 0;
         this.psi = 0;
         this.type = "None";
@@ -167,7 +167,7 @@ public class Residue implements Comparable<Residue> {
     }
 
     public void setAtom(String atomType, Point3d coordinates) {
-        atoms.put(atomType, coordinates);
+        this.atomMap.put(atomType, new Atom(atomType, coordinates));
     }
 
     public void setAtom(String atomType, String xyz) {
@@ -193,7 +193,7 @@ public class Residue implements Comparable<Residue> {
     }
 
     public Point3d getCenter() {
-        if (this.atoms.containsKey("CA")) {
+        if (this.atomMap.containsKey("CA")) {
             return this.getCoordinates("CA");
         } else {
             return this.calculateCenterOfMass();
@@ -201,11 +201,11 @@ public class Residue implements Comparable<Residue> {
     }
 
     public Point3d calculateCenterOfMass() {
-        return Geometer.averagePoints(this.atoms.values());
+        return Geometer.averagePoints(this.atomMap.values().stream().map(Atom::getCenter).toList());
     }
 
     public Point3d getCoordinates(String atomType) {
-        return (Point3d) this.atoms.get(atomType);
+        return this.atomMap.get(atomType).getCenter();
     }
 
     public int getAbsoluteNumber() {
