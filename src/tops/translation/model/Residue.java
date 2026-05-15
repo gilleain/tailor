@@ -98,6 +98,10 @@ public class Residue implements Comparable<Residue> {
         this.hBonds.add(hbond);
     }
 
+    public List<HBond> getHBonds() {
+    	return this.hBonds;
+    }
+    
     public Iterator<HBond> getHBondIterator() {
         return this.hBonds.iterator();
     }

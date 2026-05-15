@@ -10,7 +10,7 @@ import javax.vecmath.Point3d;
 
 import translation.Axis;
 
-public abstract class BackboneSegment implements Comparable<BackboneSegment>, Iterable<Residue> {
+public class BackboneSegment implements Comparable<BackboneSegment>, Iterable<Residue> {
 	
 	// TODO - not exhaustive of possible types, 
 	// 'OTHER' is doing a lot of heavy lifting here 
@@ -19,7 +19,7 @@ public abstract class BackboneSegment implements Comparable<BackboneSegment>, It
 		CTERMINUS("C"),
 		STRAND("E"),
 		HELIX("H"),
-		OTHER("O");
+		OTHER("U");
 		
 		private final String typeString;
 		Type(String typeString) {
@@ -36,30 +36,75 @@ public abstract class BackboneSegment implements Comparable<BackboneSegment>, It
 		NONE;
 	}
 
-    protected int number;
+    private int number;
 
-    protected TreeSet<Residue> residues;
+    private TreeSet<Residue> residues;
 
-    protected Axis axis;
+    private Axis axis;
 
-    protected Orientation orientation;
+    private Orientation orientation;
+    
+    private Type type;
 
-    public BackboneSegment() {
+    public BackboneSegment(Type type) {
+    	this.type = type;
         this.residues = new TreeSet<>();
         this.axis = null;
         this.orientation = Orientation.NONE;
     }
 
-    public BackboneSegment(Residue first) {
-        this();
+    public BackboneSegment(Type type, Residue first) {
+        this(type);
         this.residues.add(first);
     }
 
-    public abstract String toFullString();
+    public String toFullString() {
+    	if (this.type == Type.HELIX) {
+    		 return "Helix (" + this.number + ") : " + this.orientation 
+    				 + " " + this.firstResidue() + " - " + this.lastResidue() + " " + this.axis;
+    	} else if (this.type == Type.STRAND) {
+    		return "Strand (" + this.number + ") : " + this.orientation + " " 
+    				+ this.firstResidue() + " - " + this.lastResidue() + " " + this.axis;
+    	} else if (this.type == Type.NTERMINUS) {
+    		return "N-Terminus";
+    	} else if (this.type == Type.CTERMINUS) {
+    		return "C-Terminus";
+    	} else if (this.type == Type.OTHER) {
+    		return "Unstuctured (" + this.number + ") : " + this.orientation 
+   				 + " " + this.firstResidue() + " - " + this.lastResidue() + " " + this.axis;
+    	} else {
+    		return "";
+    	}
+    	
+    }
     
-    public abstract String toCompactString();
+    public String toCompactString() {
+    	if (this.type == Type.HELIX) {
+    		return "H(" + this.number + ")[" 
+    				+ this.firstResidue().getPDBNumber() + ":" + this.lastResidue().getPDBNumber() + "]";
+    	} else if (this.type == Type.STRAND) {
+    		return "E(" + this.number + ")[" 
+    				+ this.firstResidue().getPDBNumber() + ":" + this.lastResidue().getPDBNumber() + "]";
+    	} else if (this.type == Type.NTERMINUS) {
+    		return "N";
+    	} else if (this.type == Type.CTERMINUS) {
+    		return "C";
+    	} else if (this.type == Type.OTHER) {
+    		return "U(" + this.number + ")[" 
+    				+ this.firstResidue().getPDBNumber() + ":" + this.lastResidue().getPDBNumber() + "]";
+    	} else {
+    		return "";
+    	}
+    	
+    }
 
-    public abstract Type getType();
+    public Type getType() {
+    	return this.type;
+    }
+    
+    public boolean isType(Type type) {
+    	return this.type == type;
+    }
 
     public int compareTo(BackboneSegment other) {
         try {

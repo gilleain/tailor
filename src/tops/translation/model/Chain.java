@@ -96,7 +96,8 @@ public class Chain implements Iterable<BackboneSegment> {
     }
 
     public void createHelix(int helixStartIndex, int helixEndIndex) {
-        BackboneSegment helix = new Helix(this.getResidueByAbsoluteNumbering(helixStartIndex));
+    	Residue firstResidue = this.getResidueByAbsoluteNumbering(helixStartIndex);
+        BackboneSegment helix = new BackboneSegment(Type.HELIX, firstResidue);
         for (int index = helixStartIndex + 1; index < helixEndIndex + 1; index++) {
             helix.expandBy(this.getResidueByAbsoluteNumbering(index));
         }
@@ -105,7 +106,8 @@ public class Chain implements Iterable<BackboneSegment> {
     }
 
     public void createStrand(int strandStartIndex, int strandEndIndex) {
-        BackboneSegment strand = new Strand(this.getResidueByAbsoluteNumbering(strandStartIndex));
+    	Residue firstResidue = this.getResidueByAbsoluteNumbering(strandStartIndex);
+        BackboneSegment strand = new BackboneSegment(Type.STRAND, firstResidue);
         for (int index = strandStartIndex + 1; index < strandEndIndex + 1; index++) {
             strand.expandBy(this.getResidueByAbsoluteNumbering(index));
         }
@@ -114,7 +116,8 @@ public class Chain implements Iterable<BackboneSegment> {
     }
 
     public void createLoop(int startIndex, int endIndex) {
-        BackboneSegment unstructured = new UnstructuredSegment(this.getResidueByAbsoluteNumbering(startIndex));
+    	Residue firstResidue = this.getResidueByAbsoluteNumbering(startIndex);
+        BackboneSegment unstructured = new BackboneSegment(Type.OTHER, firstResidue);
         for (int index = startIndex + 1; index < endIndex + 1; index++) {
             unstructured.expandBy(this.getResidueByAbsoluteNumbering(index));
         }
@@ -126,9 +129,9 @@ public class Chain implements Iterable<BackboneSegment> {
     public void mergeHelices() {
         for (int segmentIndex = 0; segmentIndex < this.backboneSegments.size() - 1; segmentIndex++) {
             BackboneSegment sseA = this.backboneSegments.get(segmentIndex);
-            if (sseA instanceof Helix) {
+            if (sseA.getType() == Type.HELIX) {
                 BackboneSegment sseB = this.backboneSegments.get(segmentIndex + 1);
-                if (sseB instanceof Helix) {
+                if (sseB.getType() == Type.HELIX) {
                     if (sseA.overlaps(sseB)) {
                         //System.err.println("Merging : " + sseA + " and " + sseB); 
                         sseB.mergeWith(sseA);
@@ -149,12 +152,12 @@ public class Chain implements Iterable<BackboneSegment> {
             return;
         }
 
-        if (!(this.backboneSegments.get(0) instanceof Terminus)) {
-            this.backboneSegments.add(0, new Terminus("N Terminus", Type.NTERMINUS));
+        if (this.backboneSegments.get(0).getType() != Type.NTERMINUS) {
+            this.backboneSegments.add(0, new BackboneSegment(Type.NTERMINUS));
         }
 
-        if (!(this.backboneSegments.get(this.backboneSegments.size() - 1) instanceof Terminus)) {
-            this.backboneSegments.add(new Terminus("C Terminus", Type.CTERMINUS));
+        if (this.backboneSegments.get(this.backboneSegments.size() - 1).getType() != Type.CTERMINUS) {
+            this.backboneSegments.add(new BackboneSegment(Type.CTERMINUS));
         }
     }
 
@@ -379,7 +382,7 @@ public class Chain implements Iterable<BackboneSegment> {
         }
     }
 
-    public String toPymolScript() {
+    public String toPymolScript() {	// TODO ?
         StringBuilder script = new StringBuilder();
 
         int segmentNumber = 1;
@@ -388,7 +391,7 @@ public class Chain implements Iterable<BackboneSegment> {
             String selection = "not hetatm and name ca+c+n+o+h and resi " + bs.firstPDB() + "-" + bs.lastPDB();
             script.append("cmd.select(\"" + name + "\", \"" + selection + "\")\n");
             String color = "green";
-            if (bs instanceof Strand) {
+            if (bs.getType() == Type.STRAND) {
                 script.append("line(");
 //                Axis axis = bs.getAxis();
 //                Point3d start = axis.getStart();
@@ -397,7 +400,7 @@ public class Chain implements Iterable<BackboneSegment> {
 //                script.append(String.format("%6.2f, %6.2f, %6.2f, ", end.x, end.y, end.z));
                 script.append("\"").append(name).append("axis\")\n");
                 color = "yellow";
-            } else if (bs instanceof Helix) {
+            } else if (bs.getType() == Type.HELIX) {
                 color = "red";
             }
             script.append("cmd.color(\"" + color + "\", \"" + name + "\")\n");
@@ -439,15 +442,15 @@ public class Chain implements Iterable<BackboneSegment> {
             backboneSegmentIterator = this.backboneSegments.iterator();
         } else {
             List<BackboneSegment> segmentsFilteredByDomain = domain.filter(this.backboneSegments);
-            segmentsFilteredByDomain.add(0, new Terminus("N Terminus", Type.NTERMINUS));
-            segmentsFilteredByDomain.add(new Terminus("C Terminus", Type.CTERMINUS));
+            segmentsFilteredByDomain.add(0, new BackboneSegment(Type.NTERMINUS));
+            segmentsFilteredByDomain.add(new BackboneSegment(Type.CTERMINUS));
             backboneSegmentIterator = segmentsFilteredByDomain.iterator();
         }
 
         int vertexNumber = 0;
         while (backboneSegmentIterator.hasNext()) {
             BackboneSegment nextBackboneSegment = backboneSegmentIterator.next();
-            if (nextBackboneSegment instanceof UnstructuredSegment) {
+            if (nextBackboneSegment.getType() == Type.OTHER) {
                 continue;
             } else {
                 nextBackboneSegment.setNumber(vertexNumber);

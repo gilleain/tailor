@@ -11,11 +11,10 @@ import java.util.Iterator;
 import java.util.Map;
 
 import tops.translation.model.BackboneSegment;
+import tops.translation.model.BackboneSegment.Type;
 import tops.translation.model.Chain;
 import tops.translation.model.HBond;
-import tops.translation.model.Helix;
 import tops.translation.model.Residue;
-import tops.translation.model.Strand;
 
 public class HBondDiagramDrawer {
     private int w;
@@ -99,8 +98,8 @@ public class HBondDiagramDrawer {
                 int endIndex = backboneSegment.lastResidue().getAbsoluteNumber();
                 int pdbStart = backboneSegment.firstPDB();
                 int pdbEnd   = backboneSegment.lastPDB();
-                String type = (backboneSegment instanceof Helix)? "Helix" 
-                			: (backboneSegment instanceof Strand)? "Strand" : "Other";
+                String type = (backboneSegment.getType() == Type.HELIX)? "Helix" 
+                			: (backboneSegment.getType() == Type.STRAND)? "Strand" : "Other";
 
                 this.drawBackboneSegment(residueSeparation, startIndex, endIndex, pdbStart, pdbEnd, type, g2);
             }

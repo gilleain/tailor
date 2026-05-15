@@ -17,12 +17,11 @@ import javax.vecmath.Vector3d;
 
 import tops.translation.model.BackboneSegment;
 import tops.translation.model.BackboneSegment.Orientation;
+import tops.translation.model.BackboneSegment.Type;
 import tops.translation.model.Chain;
 import tops.translation.model.Protein;
 import tops.translation.model.Residue;
 import tops.translation.model.Sheet;
-import tops.translation.model.Strand;
-import tops.translation.model.Terminus;
 
 public class FoldAnalyser {
 
@@ -63,7 +62,7 @@ public class FoldAnalyser {
         while (firstSegments.hasNext()) {
             // get the first segment, reject if not a strand
             BackboneSegment firstSegment = firstSegments.next();
-            if (!(firstSegment instanceof Strand)) {
+            if (!(firstSegment.getType() == Type.STRAND)) {
                 continue;
             }
 
@@ -71,7 +70,7 @@ public class FoldAnalyser {
             ListIterator<BackboneSegment> secondSegments = chain.backboneSegmentListIterator(firstSegment);
             while (secondSegments.hasNext()) {
                 BackboneSegment secondSegment = secondSegments.next();
-                if ((secondSegment != firstSegment) && (secondSegment instanceof Strand)) {
+                if ((secondSegment != firstSegment) && (secondSegment.getType() == Type.STRAND)) {
                     // make a crude distance check
                     if (this.closeApproach(firstSegment, secondSegment)) {
                         // if this passes, make a finer bonding check
@@ -161,7 +160,9 @@ public class FoldAnalyser {
             ListIterator<BackboneSegment> segments = chain.backboneSegmentListIterator();
             while (segments.hasNext()) {
                 BackboneSegment segment = (BackboneSegment) segments.next();
-                if ((segment instanceof Strand) || (segment instanceof Terminus)) {
+                if (segment.getType() == Type.STRAND || 
+                	segment.getType() == Type.NTERMINUS || 
+                	segment.getType() == Type.CTERMINUS) {
                     continue;
                 } else {
                     segment.determineOrientation(sheetAxis);
@@ -183,7 +184,7 @@ public class FoldAnalyser {
             Axis firstAxis = firstSegment.getAxis();
             while (segments.hasNext()) {
                 BackboneSegment segment = (BackboneSegment) segments.next();
-                if (segment instanceof Terminus) {
+                if (segment.getType() == Type.NTERMINUS || segment.getType() == Type.CTERMINUS) {
                     continue;
                 }
                 segment.determineOrientation(firstAxis);
