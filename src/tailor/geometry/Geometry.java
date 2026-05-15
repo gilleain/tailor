@@ -1,17 +1,37 @@
 package tailor.geometry;
 
+import javax.vecmath.Point3d;
 
 public class Geometry {
 
 	public static final Vector Y = new Vector(0, 1, 0);
 	public static final Vector NEG_Y = new Vector(0, -1, 0);
+	
+	public static final Point3d P_Y = new Point3d(0, 1, 0);
+	public static final Point3d P_NEG_Y = new Point3d(0, -1, 0);
   
+	// FIXME
+	private static Vector v(Point3d p) { return new Vector(p.x, p.y, p.z); }
+	private static Point3d p(Vector v) { return new Point3d(v.x(), v.y(), v.z()); }
+	
+	public static double distance(Point3d a, Point3d b) {
+		return distance(v(a), v(b));
+	}
+	
     public static double distance(Vector a, Vector b) {
         return a.minus(b).length();
     }
     
+    public static double angle(Point3d a, Point3d b, Point3d c) {
+    	return angle(v(a), v(b), v(c));
+    }
+    
     public static double angle(Vector a, Vector b, Vector c) {
         return Math.toDegrees(b.minus(a).angle(b.minus(c)));
+    }
+    
+    public static double torsion(Point3d a, Point3d b, Point3d c, Point3d d) {
+    	return torsion(v(a), v(b), v(c), v(d));
     }
     
     public static double torsion(Vector a, Vector b, Vector c, Vector d) {
@@ -26,6 +46,11 @@ public class Geometry {
         }
     }
     
+    public static Point3d makeXYZFromAngle(Point3d a, Point3d b, double distance, 
+            double angle, Point3d planeVector) {
+    	return p(makeXYZFromAngle(v(a), v(b), distance, angle, v(planeVector)));
+    }
+    
     public static Vector makeXYZFromAngle(Vector a, Vector b, double distance, 
                                           double angle, Vector planeVector) {
         double angleRadians = Math.toRadians(180 - angle);
@@ -35,6 +60,12 @@ public class Geometry {
         Vector y = planeVector.multiply(distance * Math.sin(angleRadians));
         Vector v = x.add(y);
         return b.add(v);
+    }
+    
+    public static Point3d makeXYZ(Point3d previousXYZ, double distance, 
+            Point3d previousButOneXYZ, double angle, 
+            Point3d furthestXYZ, double torsion) {
+    	return p(makeXYZ(v(previousXYZ), distance, v(previousButOneXYZ), angle, v(furthestXYZ), torsion));
     }
     
     public static Vector makeXYZ(Vector previousXYZ, double distance, 

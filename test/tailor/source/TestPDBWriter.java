@@ -8,9 +8,10 @@ import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
 
+import javax.vecmath.Point3d;
+
 import org.junit.Test;
 
-import tailor.geometry.Vector;
 import tailor.structure.Atom;
 import tailor.structure.Chain;
 import tailor.structure.Group;
@@ -23,7 +24,7 @@ public class TestPDBWriter {
         String atomName = "2HG1";
         String residueName = "VAL";
         int residueNumber = 146;
-        Vector coords = new Vector("-1.167  26.492  10.182");
+        Point3d coords = new Point3d(-1.167, 26.492, 10.182);
         Atom atom = new Atom(atomName, coords);
         
         StringWriter stringWriter = new StringWriter();
@@ -71,7 +72,7 @@ public class TestPDBWriter {
      * Guaranteed to be random, chosen by die roll.
      */
     private Atom randomAtom(String atomName) {
-        Vector coords = new Vector("-1.167  26.492  10.182");
+        Point3d coords = new Point3d(-1.167, 26.492, 10.182);
         return new Atom(atomName, coords);
     }
 

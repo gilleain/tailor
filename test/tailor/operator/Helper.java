@@ -3,6 +3,8 @@ package tailor.operator;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.vecmath.Point3d;
+
 import tailor.api.Operator;
 import tailor.description.AtomDescription;
 import tailor.description.DescriptionPath;
@@ -10,7 +12,6 @@ import tailor.description.GroupDescription;
 import tailor.engine.operator.GroupSource;
 import tailor.engine.operator.Pipe;
 import tailor.engine.plan.Plan;
-import tailor.geometry.Vector;
 import tailor.structure.Atom;
 import tailor.structure.Chain;
 import tailor.structure.Group;
@@ -79,7 +80,7 @@ public class Helper {
 	
 	protected static Chain makeData(List<String> groupNames) {	
 		Chain chain = new Chain();
-		Vector p = new Vector(1, 1, 1);
+		Point3d p = new Point3d(1, 1, 1);
 		for (int i = 0; i < groupNames.size(); i++) {
 			String groupName = groupNames.get(i);
 			Group group = new Group(i, groupName);	// could add 1 to get a more realistic number ..
@@ -93,13 +94,13 @@ public class Helper {
 		return chain;
 	}
 	
-	private static Vector addAtom(Group group, String atomName, Vector p) {
+	private static Point3d addAtom(Group group, String atomName, Point3d p) {
 		group.addAtom(new Atom(atomName, p));
 		return nextP(p);
 	}
 	
-	private static Vector nextP(Vector p) {
-		return new Vector(p.y() + 1.2, p.z() + 1.5, p.x() + 1.7);
+	private static Point3d nextP(Point3d p) {
+		return new Point3d(p.y + 1.2, p.z + 1.5, p.x + 1.7);
 	}
 
 }

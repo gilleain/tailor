@@ -5,8 +5,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.vecmath.Point3d;
+
 import tailor.datasource.aigen.ResidueID;
-import tailor.geometry.Vector;
 
 public class Group {
     
@@ -82,7 +83,7 @@ public class Group {
     	return atomMap.get(atomName);
     }
 
-	public Vector getAtomPosition(String atomName) {
+	public Point3d getAtomPosition(String atomName) {
 		return getAtom(atomName).getCenter();
 	}
 

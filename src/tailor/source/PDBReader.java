@@ -7,7 +7,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import tailor.geometry.Vector;
+import javax.vecmath.Point3d;
+
 import tailor.structure.Atom;
 import tailor.structure.Chain;
 import tailor.structure.Group;
@@ -81,10 +82,18 @@ public class PDBReader {
                 chain.addGroup(residue);
                 chainIndex++;
             }
-            residue.addAtom(new Atom(atomName, new Vector(coordinates)));
+            residue.addAtom(new Atom(atomName, fromCoords(coordinates)));
 	        
 	        return chain;
 	    }
+	    
+	    private static Point3d fromCoords(String coords) {
+			String[] bits = coords.split("\\s+");
+			double x = Double.parseDouble(bits[0]);
+			double y = Double.parseDouble(bits[1]);
+			double z = Double.parseDouble(bits[2]);
+			return new Point3d(x, y, z);
+		}
 	    
 	    public static Group createResidue(String residueNumber, String residueName, int chainIndex) {
 //            System.out.println("residue " + residueNumber + " " + residueName + " " + chainIndex);

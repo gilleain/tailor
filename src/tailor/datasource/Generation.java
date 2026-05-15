@@ -3,8 +3,9 @@ package tailor.datasource;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.vecmath.Point3d;
+
 import tailor.geometry.Geometry;
-import tailor.geometry.Vector;
 import tailor.structure.Atom;
 import tailor.structure.Chain;
 import tailor.structure.Group;
@@ -95,9 +96,9 @@ public class Generation {
      * Creates a protein fragment from a list of phi/psi angles
      */
     public static Chain makeFragment(List<PhiPsi> phiPsiList) {
-        Vector c_pos = new Vector(0, 0, 0);
-        Vector o_pos = new Vector(C_O_DISTANCE, 0, 0);
-        Vector ca_pos = Geometry.makeXYZFromAngle(o_pos, c_pos, CA_C_DISTANCE, CA_C_O_ANGLE, Geometry.NEG_Y);
+    	Point3d c_pos = new Point3d(0, 0, 0);
+    	Point3d o_pos = new Point3d(C_O_DISTANCE, 0, 0);
+    	Point3d ca_pos = Geometry.makeXYZFromAngle(o_pos, c_pos, CA_C_DISTANCE, CA_C_O_ANGLE, Geometry.P_NEG_Y);
         
         Group nCap = new Group(1, "GLY");
         nCap.addAtom(new Atom("CA", ca_pos));
@@ -109,7 +110,7 @@ public class Generation {
         double psi = firstAngles.psi;
         double N_CA_C_O_torsion = Geometry.invertTorsion(psi);
         
-        Vector n_pos = Geometry.makeXYZFromAngle(o_pos, c_pos, C_N_DISTANCE, O_C_N_ANGLE, Geometry.Y);
+        Point3d n_pos = Geometry.makeXYZFromAngle(o_pos, c_pos, C_N_DISTANCE, O_C_N_ANGLE, Geometry.P_Y);
         ca_pos = Geometry.makeXYZ(n_pos, N_CA_DISTANCE, c_pos, C_N_CA_ANGLE, o_pos, 0);
         c_pos = Geometry.makeXYZ(ca_pos, CA_C_DISTANCE, n_pos, N_CA_C_ANGLE, c_pos, phi);
         o_pos = Geometry.makeXYZ(c_pos, C_O_DISTANCE, ca_pos, CA_C_O_ANGLE, n_pos, N_CA_C_O_torsion);
@@ -150,10 +151,10 @@ public class Generation {
      */
     public static Group makeNTerminalResidue(double psi) {
         double N_CA_C_O_torsion = Geometry.invertTorsion(psi);
-        Vector nitrogen = new Vector(0.0, 0.0, 0.0);
-        Vector cAlpha = new Vector(N_CA_DISTANCE, 0.0, 0.0);
-        Vector carbonylCarbon = Geometry.makeXYZFromAngle(nitrogen, cAlpha, CA_C_DISTANCE, N_CA_C_ANGLE, Geometry.Y);
-        Vector oxygen = Geometry.makeXYZ(carbonylCarbon, C_O_DISTANCE, cAlpha, CA_C_O_ANGLE, nitrogen, N_CA_C_O_torsion);
+        Point3d nitrogen = new Point3d(0.0, 0.0, 0.0);
+        Point3d cAlpha = new Point3d(N_CA_DISTANCE, 0.0, 0.0);
+        Point3d carbonylCarbon = Geometry.makeXYZFromAngle(nitrogen, cAlpha, CA_C_DISTANCE, N_CA_C_ANGLE, Geometry.P_Y);
+        Point3d oxygen = Geometry.makeXYZ(carbonylCarbon, C_O_DISTANCE, cAlpha, CA_C_O_ANGLE, nitrogen, N_CA_C_O_torsion);
         
         Group r = new Group(1, "GLY");
         r.addAtom(new Atom("N", nitrogen));
@@ -168,15 +169,15 @@ public class Generation {
      * Creates a residue based on the previous residue and phi/psi angles
      */
     public static Group makeResidue(Group previousResidue, double phi, double psi, double lastPsi) {
-        Vector previousNitrogen = previousResidue.getAtomPosition("N");
-        Vector previousCAlpha = previousResidue.getAtomPosition("CA");
-        Vector previousC = previousResidue.getAtomPosition("C");
+    	Point3d previousNitrogen = previousResidue.getAtomPosition("N");
+    	Point3d previousCAlpha = previousResidue.getAtomPosition("CA");
+    	Point3d previousC = previousResidue.getAtomPosition("C");
         double N_CA_C_O_torsion = Geometry.invertTorsion(psi);
         
-        Vector nitrogen = Geometry.makeXYZ(previousC, C_N_DISTANCE, previousCAlpha, CA_C_N_ANGLE, previousNitrogen, lastPsi);
-        Vector cAlpha = Geometry.makeXYZ(nitrogen, N_CA_DISTANCE, previousC, C_N_CA_ANGLE, previousCAlpha, 180);
-        Vector carbonylCarbon = Geometry.makeXYZ(cAlpha, CA_C_DISTANCE, nitrogen, N_CA_C_ANGLE, previousC, phi);
-        Vector oxygen = Geometry.makeXYZ(carbonylCarbon, C_O_DISTANCE, cAlpha, CA_C_O_ANGLE, nitrogen, N_CA_C_O_torsion);
+        Point3d nitrogen = Geometry.makeXYZ(previousC, C_N_DISTANCE, previousCAlpha, CA_C_N_ANGLE, previousNitrogen, lastPsi);
+        Point3d cAlpha = Geometry.makeXYZ(nitrogen, N_CA_DISTANCE, previousC, C_N_CA_ANGLE, previousCAlpha, 180);
+        Point3d carbonylCarbon = Geometry.makeXYZ(cAlpha, CA_C_DISTANCE, nitrogen, N_CA_C_ANGLE, previousC, phi);
+        Point3d oxygen = Geometry.makeXYZ(carbonylCarbon, C_O_DISTANCE, cAlpha, CA_C_O_ANGLE, nitrogen, N_CA_C_O_torsion);
         
         int residueNumber = previousResidue.getNumber() + 1;
         Group r = new Group(residueNumber, "GLY");
@@ -198,10 +199,10 @@ public class Generation {
         
         for (Group residue : chain.getGroups()) {
             for (Atom atom : residue.getAtoms()) {
-                Vector p = atom.getCenter();
+            	Point3d p = atom.getCenter();
                 String record = String.format(recordFormat, 
                     atomnum, atom.getName(), residue.getName(), 
-                    residue.getNumber(), p.x(), p.y(), p.z());
+                    residue.getNumber(), p.x, p.y, p.z);
                 records.add(record);
                 atomnum++;
             }

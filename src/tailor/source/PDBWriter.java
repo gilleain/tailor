@@ -37,7 +37,7 @@ public class PDBWriter {
             String residueName, int residueNumber, BufferedWriter out) throws IOException {
         out.write(String.format(
                 FORMAT, index, centerPad(atom.getName()), residueName, residueNumber, 
-                atom.getCenter().x(), atom.getCenter().y(), atom.getCenter().z()));
+                atom.getCenter().x, atom.getCenter().y, atom.getCenter().z));
         
     }
     

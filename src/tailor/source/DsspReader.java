@@ -7,7 +7,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import tailor.geometry.Vector;
+import javax.vecmath.Point3d;
+
 import tailor.structure.Atom;
 import tailor.structure.Chain;
 import tailor.structure.Group;
@@ -66,7 +67,7 @@ public class DsspReader {
         double xca = Double.parseDouble(record.substring(115, 122).trim());
         double yca = Double.parseDouble(record.substring(122, 129).trim());
         double zca = Double.parseDouble(record.substring(129).trim());
-        Atom atom = new Atom("CA", new Vector(xca, yca, zca));
+        Atom atom = new Atom("CA", new Point3d(xca, yca, zca));
         return atom;
     }
 

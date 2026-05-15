@@ -1,12 +1,12 @@
 package tailor.structure;
 
-import tailor.geometry.Vector;
+import javax.vecmath.Point3d;
 
 public class Atom {
     
     private final String name;
     
-    private final Vector center;
+    private final Point3d center;
     
     // from pdb file
     private Double bFactor;
@@ -15,10 +15,10 @@ public class Atom {
     
     public Atom(String name) {
         this.name = name;
-        this.center = new Vector();
+        this.center = new Point3d();
     }
     
-    public Atom(String name, Vector center) {
+    public Atom(String name, Point3d center) {
         this.name = name;
         this.center = center;
     }
@@ -26,7 +26,7 @@ public class Atom {
     public Atom(String name, double[] coord, double bFactor, double occupancy, String altloc) {
 		// TODO Auto-generated constructor stub
     	this.name = name;
-    	this.center = new Vector(coord[0], coord[1], coord[2]);
+    	this.center = new Point3d(coord[0], coord[1], coord[2]);
     	this.bFactor = bFactor;
     	this.occupancy = occupancy;
     	this.altloc = altloc;
@@ -37,7 +37,7 @@ public class Atom {
     	return null;
     }
 
-	public Vector getCenter() {
+	public Point3d getCenter() {
         return center;
     }
 
@@ -45,7 +45,7 @@ public class Atom {
         return name;
     }
 
-    public void setPosition(Vector position) {
+    public void setPosition(Point3d position) {
         this.center.set(position);
     }
     
