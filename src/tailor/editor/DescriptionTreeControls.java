@@ -11,8 +11,6 @@ import javax.swing.JToolBar;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 
-import tailor.structure.Level;
-
 /**
  * @author maclean
  *
@@ -62,7 +60,7 @@ public class DescriptionTreeControls extends JPanel implements ActionListener, T
 	}
 	
 	public void updateButtons() {
-        Level level = this.tree.getCurrentlySelectedLevel();
+        tailor.editor.DescriptionTreeView.Level level = this.tree.getCurrentlySelectedLevel();
         
         String levelName; 
         if (level == null) {

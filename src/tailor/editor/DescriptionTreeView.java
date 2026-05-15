@@ -18,9 +18,13 @@ import tailor.description.ChainDescription;
 import tailor.description.Description;
 import tailor.description.DescriptionPath;
 import tailor.description.GroupDescription;
-import tailor.structure.Level;
 
 public class DescriptionTreeView extends JPanel  {
+	
+	public enum Level {
+		CHAIN, RESIDUE, ATOM
+		
+	}
 
 	private JTree descriptionTree;
     
