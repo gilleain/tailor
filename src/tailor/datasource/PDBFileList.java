@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import tailor.structure.Protein;
 
@@ -12,6 +13,7 @@ import tailor.structure.Protein;
 public class PDBFileList implements StructureSource {
 	
 	private File path;
+	private Map<String, String> pathMap;
 	private List<File> structurePaths;
     private int currentIndex;
 
@@ -53,6 +55,7 @@ public class PDBFileList implements StructureSource {
 					// FIXME : quick hack to exclude .svn files
 					if (filename.startsWith(".")) { continue; }
 					File currentPath = new File(this.path, filename);
+					mapFilename(filename, currentPath);
 					this.structurePaths.add(currentPath);
 				}
 			} else {
@@ -63,6 +66,12 @@ public class PDBFileList implements StructureSource {
 		}
         this.currentIndex = 0;
 	}
+	
+	private void mapFilename(String filename, File fullpath) {
+        // Take the first four letters of a filename
+        String id = filename.length() >= 4 ? filename.substring(0, 4) : filename;
+        this.pathMap.put(id, fullpath.toString());
+    }
 	
 	public List<File> getStructurePaths() {
 		return this.structurePaths;
@@ -83,6 +92,14 @@ public class PDBFileList implements StructureSource {
     
     public int size() {
         return this.structurePaths.size();
+    }
+    
+    public Protein get(String key) throws IOException {
+        String filepath = this.pathMap.get(key);
+        if (filepath == null) {
+            throw new IllegalArgumentException("No structure found for key: " + key);
+        }
+        return PDBReader.read(filepath);
     }
 	
 	public String toString() {

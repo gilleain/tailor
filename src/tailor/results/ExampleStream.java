@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import tailor.datasource.aigen.PDBFileList;
+import tailor.datasource.PDBFileList;
 import tailor.structure.Atom;
 import tailor.structure.Chain;
 import tailor.structure.Group;
