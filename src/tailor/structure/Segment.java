@@ -333,7 +333,7 @@ public class Segment implements Comparable<Segment> {
         }
     }
 
-    public List<Group> getResidues() {
+    public List<Group> getGroups() {
         List<Group> residueList = new ArrayList<>();
         for (Group residue : this.residues) {
             residueList.add(residue);

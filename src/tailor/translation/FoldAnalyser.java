@@ -90,7 +90,7 @@ public class FoldAnalyser {
     public boolean bonded(Segment strand, Segment otherStrand) {
         //basically, run through the residues, checking the list of hbonds to find residues that might be in the other strand
         int numberOfHBonds = 0;
-        for (Group nextResidue : strand.getResidues()) {
+        for (Group nextResidue : strand.getGroups()) {
             if (otherStrand.bondedTo(nextResidue)) {
                 numberOfHBonds++;
             }
