@@ -24,38 +24,29 @@ public class Group implements Comparable<Group> {
     
     private String segmentId;	// TODO
 
-    public Group() {
+    public Group(int absoluteNumber, int pdbNumber, String name) {
+        this.absoluteNumber = absoluteNumber;
+        this.pdbNumber = pdbNumber;
         this.atomMap = new HashMap<>();
         this.hBonds = new ArrayList<>();
         this.phi = 0;
         this.psi = 0;
-        this.name = "None";
-        this.polymerType = PolymerType.NONE;
-        this.environment = Environment.NONE;
-    }
-
-    public Group(int absoluteNumber, int pdbNumber) {
-        this();
-        this.absoluteNumber = absoluteNumber;
-        this.pdbNumber = pdbNumber;
-    }
-    
-    public Group(int pdbNumber, String name) {
-    	this(pdbNumber, pdbNumber, name);	// set the absolute number the same as the number in the model
-    }
-
-    public Group(int absoluteNumber, int pdbNumber, String name) {
-        this(absoluteNumber, pdbNumber);
         this.name = name.trim();
         if (this.isBase()) {
             this.polymerType = PolymerType.DNA;
         } else {
             this.polymerType = PolymerType.PROTEIN;
         }
+        this.environment = Environment.NONE;
     }
     
-    public Group(int residueSeq, String insertionCode, String name, String segmentId) {
-    	this(residueSeq, name);
+    public Group(int pdbNumber, String name) {
+    	this(pdbNumber, pdbNumber, name);	// set the absolute number the same as the number in the model
+    }
+    
+    public Group(int pdbNumber, String insertionCode, String name, String segmentId) {
+    	this(pdbNumber, name);
+    	// these two are extra values in pdb file - could be useful
     	this.insertionCode = insertionCode;
     	this.segmentId = segmentId;
     }
