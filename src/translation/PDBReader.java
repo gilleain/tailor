@@ -66,7 +66,7 @@ public class PDBReader {
         String residueNumber = atomRecord.substring(22, 26).trim();
         String coordinates = atomRecord.substring(27, 54).trim();
 
-        if (chain == null || (!chainLabel.equals(chain.getLabel()))) {
+        if (chain == null || (!chainLabel.equals(chain.getName()))) {
             chain = new Chain(chainLabel);
         }
 

@@ -3,6 +3,7 @@ package tailor.structure;
 import java.util.ArrayList;
 import java.util.List;
 
+import tops.translation.model.Chain;
 import tops.translation.model.PolymerType;
 
 public class Protein {

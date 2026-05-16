@@ -6,9 +6,9 @@ import java.util.Iterator;
 import java.util.List;
 
 import tailor.datasource.aigen.PDBFileList;
-import tailor.structure.Chain;
 import tailor.structure.Protein;
 import tops.translation.model.Atom;
+import tops.translation.model.Chain;
 import tops.translation.model.Group;
 import tops.translation.model.PolymerType;
 
@@ -151,7 +151,7 @@ class ExampleDescription {
        
        List<Chain> waterChains = structure.chainsOfType(PolymerType.WATER);
        if (!waterChains.isEmpty()) {
-           Group existingWater = waterChains.get(0).getGroupAt(this.ligandNum);
+           Group existingWater = waterChains.get(0).getResidueByPDBNumbering(this.ligandNum);
            if (existingWater != null) {
                Atom oAtom = existingWater.getAtom("O");
                if (oAtom != null) {

@@ -6,10 +6,10 @@ import org.junit.Test;
 
 import tailor.engine.operator.CombineResults;
 import tailor.engine.operator.GroupSource;
-import tailor.engine.operator.PrintAdapter;
 import tailor.engine.operator.Pipe;
+import tailor.engine.operator.PrintAdapter;
 import tailor.engine.operator.ScanAtomResultByLabel;
-import tailor.structure.Chain;
+import tops.translation.model.Chain;
 
 public class AssemblyTestCombine {
 	

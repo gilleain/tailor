@@ -7,9 +7,9 @@ import java.util.stream.Collectors;
 import javax.vecmath.Point3d;
 
 import tailor.condition.SegmentPartition;
-import tops.translation.model.Segment;
 import tops.translation.model.Chain;
 import tops.translation.model.Group;
+import tops.translation.model.Segment;
 
 public class Result {
 	
@@ -120,6 +120,6 @@ public class Result {
 	
 	public String toString() {
 		String segments = this.root.segmentRefs.stream().map(s -> s.segment.toCompactString()).collect(Collectors.joining("|"));
-		return root.chain.getLabel() + "/" + segments;	// TODO
+		return root.chain.getName() + "/" + segments;	// TODO
 	}
 }

@@ -10,7 +10,7 @@ import java.util.List;
 import org.junit.Test;
 
 import tailor.datasource.DsspReader;
-import tailor.structure.Chain;
+import tops.translation.model.Chain;
 import tops.translation.model.Segment;
 
 public class TestDsspReader {
@@ -20,7 +20,7 @@ public class TestDsspReader {
     @Test
     public void testSSERead() throws IOException {
         Chain chain = DsspReader.read(new File(DIR, "1tgx.dssp"));
-        List<Segment> sses = chain.getSSEs(); 
+        List<Segment> sses = chain.getSegments();
         assertEquals(5, sses.size());
         
         int index = 0;

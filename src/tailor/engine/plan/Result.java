@@ -8,8 +8,8 @@ import java.util.stream.Collectors;
 
 import tailor.api.Measurement;
 import tailor.condition.AtomPartition;
-import tailor.structure.Chain;
 import tops.translation.model.Atom;
+import tops.translation.model.Chain;
 import tops.translation.model.Group;
 
 /**

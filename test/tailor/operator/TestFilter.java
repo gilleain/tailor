@@ -12,10 +12,10 @@ import tailor.description.atom.AtomDistanceDescription;
 import tailor.engine.operator.CombineResults;
 import tailor.engine.operator.FilterAtomResultByCondition;
 import tailor.engine.operator.GroupSource;
-import tailor.engine.operator.PrintAdapter;
 import tailor.engine.operator.Pipe;
+import tailor.engine.operator.PrintAdapter;
 import tailor.engine.operator.ScanAtomResultByLabel;
-import tailor.structure.Chain;
+import tops.translation.model.Chain;
 
 public class TestFilter {
 	

@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import tailor.structure.Chain;
+import tops.translation.model.Chain;
 
 /*
  * NOTE : originally the intention with this seems to have been to make 

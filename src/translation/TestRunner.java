@@ -114,12 +114,12 @@ public class TestRunner {
 
                     // ignore DNA chains
                     if (chain.isDNA()) {
-                        System.err.println(pdbid + chain.getLabel() + " is DNA");
+                        System.err.println(pdbid + chain.getName() + " is DNA");
                         continue;
                     } 
 
                     // otherwise, get tops domain strings, and compare
-                    String chainID = chain.getCathCompatibleLabel();
+                    String chainID = chain.getCathCompatibleName();
                     Map<String, String> domainStringMap = chainDomainStringMap.get(chainID);
 
                     // find the chain that has been translated in the map of dssptops strings
@@ -141,7 +141,7 @@ public class TestRunner {
                         }
                     // if this chain isn't in the map, complain
                     } else {
-                        System.err.println("Chain " + chain.getCathCompatibleLabel() + " not found for pdbid " + pdbid);
+                        System.err.println("Chain " + chain.getCathCompatibleName() + " not found for pdbid " + pdbid);
                     }
                 }
             } catch (Exception ex) {

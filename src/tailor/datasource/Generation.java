@@ -6,8 +6,8 @@ import java.util.List;
 import javax.vecmath.Point3d;
 
 import tailor.geometry.Geometry;
-import tailor.structure.Chain;
 import tops.translation.model.Atom;
+import tops.translation.model.Chain;
 import tops.translation.model.Group;
 
 /**
@@ -75,7 +75,7 @@ public class Generation {
             lastResidue = nTerminus;
             currentLastPsi = firstAngles.psi;
         } else {
-            lastResidue = chain.getLast();
+            lastResidue = chain.lastResidue();
             PhiPsi firstAngles = phiPsiList.get(0);
             Group firstResidue = makeResidue(lastResidue, firstAngles.phi, firstAngles.psi, lastPsi);
             chain.addGroup(firstResidue);
@@ -130,7 +130,7 @@ public class Generation {
         }
         
         // Add C-terminal cap
-        Group last = chain.getLast();
+        Group last = chain.lastResidue();
         double lastPsi = phiPsiList.get(phiPsiList.size() - 1).psi;
         
         n_pos = last.getAtomPosition("N");

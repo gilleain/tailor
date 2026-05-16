@@ -583,19 +583,19 @@ public class StructureFinder {
     public void convertTorsionsToRepetitiveStructure(Chain chain) {
         Iterator<Group> residueIterator = chain.residueIterator();
         Segment nterminus = new Segment(Type.NTERMINUS);
-        chain.addBackboneSegment(nterminus);
+        chain.addSegment(nterminus);
         Segment currentSegment = new Segment(Type.UNSTRUCTURED);
 
         while (residueIterator.hasNext()) {
             Group residue = residueIterator.next();
             Segment nextSegment = this.fitNextResidue(residue, currentSegment);
             if (nextSegment != currentSegment) {
-                chain.addBackboneSegment(currentSegment);   //store the previous segment
+                chain.addSegment(currentSegment);   //store the previous segment
             }
             currentSegment = nextSegment;
         }
-        chain.addBackboneSegment(currentSegment);       //store the final segment
-        chain.addBackboneSegment(new Segment(Type.CTERMINUS));    //and add a C Terminus for luck
+        chain.addSegment(currentSegment);       //store the final segment
+        chain.addSegment(new Segment(Type.CTERMINUS));    //and add a C Terminus for luck
     }
 
     public void calculateHBondPartners(Chain c) {
@@ -737,12 +737,12 @@ public class StructureFinder {
     }
 
     public void buildSSES(Chain chain) {
-        chain.addBackboneSegment(new Segment(Type.NTERMINUS));
+        chain.addSegment(new Segment(Type.NTERMINUS));
         this.buildHelices(chain);
         this.buildStrands(chain);
         //this.buildLoops(chain);
         chain.sortSegments();
-        chain.addBackboneSegment(new Segment(Type.CTERMINUS));    //and add a C Terminus for luck
+        chain.addSegment(new Segment(Type.CTERMINUS));    //and add a C Terminus for luck
     }
 
     public void buildHelices(Chain chain) {
@@ -793,14 +793,14 @@ public class StructureFinder {
                     currentStrand.expandBy(residue);
                 } else {
                     if (currentStrand.length() != 0) {
-                        chain.addBackboneSegment(currentStrand);
+                        chain.addSegment(currentStrand);
                         currentStrand = new Segment(Type.STRAND);
                     }
                 }
                 lastResidueWasStrand = false;
             } else {
                 if (currentStrand.length() != 0) {
-                    chain.addBackboneSegment(currentStrand);
+                    chain.addSegment(currentStrand);
                     currentStrand = new Segment(Type.STRAND);
                 }
                 lastResidueWasStrand = false;

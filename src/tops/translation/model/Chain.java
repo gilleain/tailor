@@ -17,8 +17,8 @@ import translation.ChainDomainMap;
 import translation.Geometer;
 
 public class Chain {
-    private String label;
-    private String type;
+    private String name;
+    private PolymerType type;
     private Point3d center;
     private List<Group> residues;
     private List<HBond> hbonds;
@@ -28,18 +28,31 @@ public class Chain {
     private List<Domain> domains;
 
     public Chain() {
-        this.residues = new ArrayList<>();
+        this("A");	// TODO - is this a sensible default?
+    }
+
+    public Chain(String label) {
+    	this(label, PolymerType.NONE);
+    }
+    
+    public Chain(String name, PolymerType type) {
+    	this.residues = new ArrayList<>();
         this.hbonds = new ArrayList<>();
         this.sheets = new ArrayList<>();
         this.segments = new ArrayList<>();
         this.chiralities = new ArrayList<>();
         this.domains = new ArrayList<>();
         this.center = null;
+        this.name = name;
+        this.type = type;
     }
-
-    public Chain(String label) {
-        this();
-        this.label = label;
+    
+    public void addGroup(Group group) {
+    	this.residues.add(group);
+    }
+    
+    public List<Group> getGroups() {
+    	return this.residues;
     }
 
     public int length() {
@@ -50,7 +63,7 @@ public class Chain {
     	return this.center;
     }
     
-    public String getType() {
+    public PolymerType getType() {
     	return this.type;
     }
     
@@ -288,24 +301,20 @@ public class Chain {
         this.hbonds.add(hbond);
     }
 
-    public void setLabel(String label) {
-        this.label = label;
-    }
-
-    public String getCathCompatibleLabel() {
-        if (this.label.equals("  ")) {
+    public String getCathCompatibleName() {
+        if (this.name.equals("  ")) {
             return "0";
         } else {
-            return this.label.trim();
+            return this.name.trim();
         }
     }
 
-    public String getLabel() {
-        return this.label;
+    public String getName() {
+        return this.name;
     }
 
-    public void addBackboneSegment(Segment backboneSegment) {
-        this.segments.add(backboneSegment);
+    public void addSegment(Segment segment) {
+        this.segments.add(segment);
     }
 
     public ListIterator<Segment> segmentListIterator() {
@@ -406,8 +415,8 @@ public class Chain {
     }
 
     public Map<String, String> toTopsDomainStrings(ChainDomainMap chainDomainMap) {
-        if (chainDomainMap != null && chainDomainMap.containsKey(this.getCathCompatibleLabel())) {
-            List<Domain> domainsForChain = chainDomainMap.get(this.getCathCompatibleLabel());
+        if (chainDomainMap != null && chainDomainMap.containsKey(this.getCathCompatibleName())) {
+            List<Domain> domainsForChain = chainDomainMap.get(this.getCathCompatibleName());
             return this.toTopsDomainStrings(domainsForChain);
         } else {
             Map<String, String> map = new HashMap<>();
@@ -430,7 +439,7 @@ public class Chain {
     public String toTopsString(Domain domain) {
         //name
         StringBuffer s = new StringBuffer();
-        s.append(this.getCathCompatibleLabel() + domain.getNumber() + " ");
+        s.append(this.getCathCompatibleName() + domain.getNumber() + " ");
 
         //vertexstring
         Iterator<Segment> backboneSegmentIterator;
@@ -499,7 +508,7 @@ public class Chain {
 
     public String toString() {
         StringBuilder s = new StringBuilder();
-        s.append("Chain : " + this.getLabel() + " residue " + this.firstResidue().getPDBNumber() + " to " + this.lastResidue().getPDBNumber() + "\n");
+        s.append("Chain : " + this.getName() + " residue " + this.firstResidue().getPDBNumber() + " to " + this.lastResidue().getPDBNumber() + "\n");
 
         for (Group r : this.residues) {
             s.append(r.toFullString());

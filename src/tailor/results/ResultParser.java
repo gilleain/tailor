@@ -10,9 +10,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 
-import tailor.structure.Chain;
 import tailor.structure.Protein;
 import tops.translation.model.Atom;
+import tops.translation.model.Chain;
 import tops.translation.model.Group;
 
 

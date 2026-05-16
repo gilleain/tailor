@@ -5,8 +5,8 @@ import java.util.Arrays;
 import java.util.List;
 
 import tailor.engine.plan.Result;
-import tailor.structure.Chain;
 import tops.translation.model.Atom;
+import tops.translation.model.Chain;
 import tops.translation.model.Group;
 
 public class ResultBuilder {

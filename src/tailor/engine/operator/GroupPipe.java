@@ -3,7 +3,7 @@ package tailor.engine.operator;
 import java.util.Iterator;
 
 import tailor.api.Operator;
-import tailor.structure.Chain;
+import tops.translation.model.Chain;
 import tops.translation.model.Group;
 
 public class GroupPipe  {

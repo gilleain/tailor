@@ -9,8 +9,8 @@ import java.util.List;
 
 import javax.vecmath.Point3d;
 
-import tailor.structure.Chain;
 import tops.translation.model.Atom;
+import tops.translation.model.Chain;
 import tops.translation.model.Group;
 import tops.translation.model.Segment;
 
@@ -30,7 +30,7 @@ public class DsspReader {
             if (previousStructure == null || !previousStructure.equals(structure)) {
                 currentSSE = makeSSE(structure);
                 if (currentSSE != null) {
-                    chain.addSSE(currentSSE);
+                    chain.addSegment(currentSSE);
                 }
             }
             

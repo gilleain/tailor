@@ -1,5 +1,6 @@
 package tailor.structure;
 
+import tops.translation.model.Chain;
 import tops.translation.model.Group;
 
 public class StructureFactory {

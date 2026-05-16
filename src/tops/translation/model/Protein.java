@@ -40,7 +40,7 @@ public class Protein {
         for (int i = 0; i < this.chains.size(); i++) {
             Chain chain = (Chain) this.chains.get(i);
             chainDomainStringMap.put(
-            		chain.getCathCompatibleLabel(), 
+            		chain.getCathCompatibleName(), 
             		chain.toTopsDomainStrings(chainDomainMap));
         }
         return chainDomainStringMap;

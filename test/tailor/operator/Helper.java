@@ -12,8 +12,8 @@ import tailor.description.GroupDescription;
 import tailor.engine.operator.GroupSource;
 import tailor.engine.operator.Pipe;
 import tailor.engine.plan.Plan;
-import tailor.structure.Chain;
 import tops.translation.model.Atom;
+import tops.translation.model.Chain;
 import tops.translation.model.Group;
 
 public class Helper {

@@ -4,7 +4,7 @@ import java.util.List;
 
 import tailor.api.Operator;
 import tailor.engine.plan.Result;
-import tailor.structure.Chain;
+import tops.translation.model.Chain;
 import tops.translation.model.Group;
 
 public class GroupSource implements Operator {
