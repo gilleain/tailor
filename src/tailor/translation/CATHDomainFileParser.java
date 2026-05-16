@@ -1,4 +1,4 @@
-package translation;
+package tailor.translation;
 
 import java.io.BufferedReader;
 import java.io.FileReader;

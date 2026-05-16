@@ -1,4 +1,4 @@
-package translation;
+package tailor.translation;
 
 public class PropertyException extends RuntimeException {
 

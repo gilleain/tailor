@@ -7,7 +7,7 @@ import java.util.Map;
 
 import javax.vecmath.Point3d;
 
-import translation.Geometer;
+import tailor.geometry.Geometer;
 
 public class Group implements Comparable<Group> {
 	private final Map<String, Atom> atomMap;

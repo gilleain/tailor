@@ -21,9 +21,9 @@ import javax.swing.JFrame;
 import tailor.structure.Chain;
 import tailor.structure.Domain;
 import tailor.structure.Protein;
-import translation.HBondAnalyser;
-import translation.PDBReader;
-import translation.PropertyException;
+import tailor.translation.HBondAnalyser;
+import tailor.translation.PDBReader;
+import tailor.translation.PropertyException;
 
 public class Viewer extends JFrame {
 	private static final long serialVersionUID = -8935885728444318196L;

@@ -1,4 +1,4 @@
-package translation;
+package tailor.translation;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -12,6 +12,7 @@ import java.util.logging.Logger;
 
 import javax.vecmath.Point3d;
 
+import tailor.geometry.Geometer;
 import tailor.structure.Chain;
 import tailor.structure.Group;
 import tailor.structure.HBond;

@@ -1,4 +1,4 @@
-package translation;
+package tailor.translation;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -12,6 +12,8 @@ import java.util.logging.Logger;
 import javax.vecmath.Point3d;
 import javax.vecmath.Vector3d;
 
+import tailor.geometry.Axis;
+import tailor.geometry.Geometer;
 import tailor.structure.Chain;
 import tailor.structure.Environment;
 import tailor.structure.Group;

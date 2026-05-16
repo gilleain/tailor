@@ -8,7 +8,7 @@ import java.util.TreeSet;
 
 import javax.vecmath.Point3d;
 
-import translation.Axis;
+import tailor.geometry.Axis;
 
 public class Segment implements Comparable<Segment> {
 	

@@ -14,9 +14,9 @@ import java.util.logging.Logger;
 import javax.vecmath.Point3d;
 import javax.vecmath.Vector3d;
 
+import tailor.geometry.Axis;
+import tailor.geometry.Geometer;
 import tailor.structure.Segment.Orientation;
-import translation.Axis;
-import translation.Geometer;
 
 public class Sheet {
 

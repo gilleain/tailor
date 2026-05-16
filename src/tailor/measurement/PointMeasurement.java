@@ -1,10 +1,10 @@
 package tailor.measurement;
 
-import tailor.geometry.Vector;
+import javax.vecmath.Point3d;
 
 public class PointMeasurement {
 
-	public Vector getValue() {
+	public Point3d getValue() {
 		// TODO Auto-generated method stub
 		return null;
 	}

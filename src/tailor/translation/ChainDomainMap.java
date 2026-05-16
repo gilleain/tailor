@@ -1,4 +1,4 @@
-package translation;
+package tailor.translation;
 
 import java.util.HashMap;
 import java.util.Iterator;

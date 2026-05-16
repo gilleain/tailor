@@ -4,13 +4,12 @@ import java.util.List;
 
 import javax.vecmath.Point3d;
 
-import tailor.geometry.Vector;
 import tailor.structure.Atom;
 import tailor.structure.Group;
 
 public class GridLayout {
     
-    private static final Vector ORIGIN = new Vector(0, 0, 0);
+    private static final Point3d ORIGIN = new Point3d(0, 0, 0);
     
     public enum Direction {
         XP( 1,  0,  0),
@@ -29,7 +28,7 @@ public class GridLayout {
     
     public static void layout(List<Group> groups, Direction... directions) {
         assert numberOfAtoms(groups) - 1 == directions.length;
-        Point3d currentPoint = new Point3d(ORIGIN.x(), ORIGIN.y(), ORIGIN.z());
+        Point3d currentPoint = new Point3d(ORIGIN.x, ORIGIN.y, ORIGIN.z);
         int index = -1;
         for (Group group : groups) {
             for (Atom atom : group.getAtoms()) {

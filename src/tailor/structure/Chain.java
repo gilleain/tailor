@@ -11,10 +11,10 @@ import java.util.Map;
 import javax.vecmath.Point3d;
 import javax.vecmath.Vector3d;
 
+import tailor.geometry.Axis;
+import tailor.geometry.Geometer;
 import tailor.structure.Segment.Type;
-import translation.Axis;
-import translation.ChainDomainMap;
-import translation.Geometer;
+import tailor.translation.ChainDomainMap;
 
 public class Chain {
     private String name;
