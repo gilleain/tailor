@@ -1,4 +1,4 @@
-package tops.translation.hbondviewer;
+package tailor.view;
 
 import java.awt.Graphics;
 import javax.swing.JPanel;
