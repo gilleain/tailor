@@ -17,6 +17,10 @@ import tailor.structure.Protein;
 
 public class PDBReader {
 	
+	 public static Protein read(String filename) throws IOException {
+	    	return PDBReader.read(new File(filename));
+	    }
+	
 	  public static Protein read(File path) throws IOException {
 	        String pdbID = path.getName().substring(0, 4);	// this is a hack...
 	        String line;
@@ -90,7 +94,7 @@ public class PDBReader {
             }
 
             if (residue == null || residue.getNumber() != residueNumber) {
-                residue = PDBReader.createGroup(residueNumber, residueName);
+                residue = new Group(residueNumber, residueName);
                 chain.addGroup(residue);
             }
 
@@ -107,8 +111,4 @@ public class PDBReader {
 			return new Point3d(x, y, z);
 		}
 	    
-	    public static Group createGroup(int residueNumber, String residueName) {
-	    	Group residue = new Group(residueNumber, residueName);
-	    	return residue;
-	    }
 }

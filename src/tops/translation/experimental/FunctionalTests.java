@@ -8,11 +8,11 @@ import java.io.IOException;
 
 import org.junit.Test;
 
+import tailor.datasource.PDBReader;
 import tailor.structure.Chain;
 import tailor.structure.Protein;
 import tailor.structure.Segment;
 import tailor.translation.HBondAnalyser;
-import tailor.translation.PDBReader;
 
 public class FunctionalTests {
 	

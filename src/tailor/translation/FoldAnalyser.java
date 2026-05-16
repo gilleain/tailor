@@ -1,15 +1,9 @@
 package tailor.translation;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
-import java.util.Map;
-import java.util.logging.ConsoleHandler;
-import java.util.logging.Formatter;
-import java.util.logging.Level;
-import java.util.logging.LogRecord;
 import java.util.logging.Logger;
 
 import javax.vecmath.Point3d;
@@ -21,9 +15,9 @@ import tailor.structure.Chain;
 import tailor.structure.Group;
 import tailor.structure.Protein;
 import tailor.structure.Segment;
-import tailor.structure.Sheet;
 import tailor.structure.Segment.Orientation;
 import tailor.structure.Segment.Type;
+import tailor.structure.Sheet;
 
 public class FoldAnalyser {
 
@@ -240,48 +234,6 @@ public class FoldAnalyser {
                     strand = partner;
                 }
             }
-        }
-    }
-
-    public static void main(String[] args) {
-        String pdbFilename = args[0];
-        String cathDomainFilename = args[1];
-        String logLevelString = args[2];
-
-        try {
-            Protein protein = PDBReader.read(pdbFilename);
-
-            Logger packageLevelLogger = Logger.getLogger("translation.FoldAnalyser");
-            Level logLevel = Level.parse(logLevelString);
-            packageLevelLogger.setLevel(logLevel);
-            ConsoleHandler consoleHandler = new ConsoleHandler();
-            consoleHandler.setFormatter(new Formatter() { public String format(LogRecord record) { return record.getMessage() + "\n"; } } );
-            packageLevelLogger.addHandler(consoleHandler);
-            packageLevelLogger.setUseParentHandlers(false);
-
-            FoldAnalyser foldAnalyser = new FoldAnalyser();
-            foldAnalyser.analyse(protein);
-
-            System.out.println(protein);
-
-            ChainDomainMap cathChainDomainMap = 
-            		CATHDomainFileParser.parseUpToParticularID(cathDomainFilename, protein.getID());
-            Map<String, Map<String, String>> chainDomainStringMap = 
-            		protein.toTopsDomainStrings(cathChainDomainMap);
-
-            Iterator<String> itr = chainDomainStringMap.keySet().iterator();
-            while (itr.hasNext()) {
-                String chainID = itr.next();
-                Map<String, String> domainStrings = chainDomainStringMap.get(chainID);
-                for (String domainString : domainStrings.keySet()) {
-                    System.out.println(protein.getID() + domainString);
-                }
-            }
-
-        } catch (IOException ioe) {
-            System.err.println(ioe);
-        } catch (PropertyException pe) {
-            System.err.println(pe);
         }
     }
 

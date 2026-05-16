@@ -18,11 +18,11 @@ import java.util.List;
 
 import javax.swing.JFrame;
 
+import tailor.datasource.PDBReader;
 import tailor.structure.Chain;
 import tailor.structure.Domain;
 import tailor.structure.Protein;
 import tailor.translation.HBondAnalyser;
-import tailor.translation.PDBReader;
 import tailor.translation.PropertyException;
 
 public class Viewer extends JFrame {

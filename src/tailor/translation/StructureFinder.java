@@ -1,6 +1,5 @@
 package tailor.translation;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -20,8 +19,8 @@ import tailor.structure.Group;
 import tailor.structure.HBond;
 import tailor.structure.Protein;
 import tailor.structure.Segment;
-import tailor.structure.Sheet;
 import tailor.structure.Segment.Type;
+import tailor.structure.Sheet;
 
 public class StructureFinder {
     
@@ -29,8 +28,8 @@ public class StructureFinder {
     
     private final Logger LOG = Logger.getLogger(StructureFinder.class.getName());
 
-    public StructureFinder(String filename) throws IOException {
-        this.protein = PDBReader.read(filename);
+    public StructureFinder(Protein protein) {
+        this.protein = protein;
     }
 
     public Protein getProtein() {
@@ -805,30 +804,6 @@ public class StructureFinder {
                 int endOfLoop = nextSegment.firstResidue().getAbsoluteNumber() - 1;
                 chain.createLoop(startOfLoop, endOfLoop);
             } 
-        }
-    }
-
-    public static void main(String[] args) {
-        try {
-
-            StructureFinder structureFinder = new StructureFinder(args[0]);
-            Protein protein = structureFinder.getProtein();
-            System.out.println(protein.toString());
-
-            ChainDomainMap cathChainDomainMap = 
-            		CATHDomainFileParser.parseUpToParticularID(args[1], protein.getID());
-            Map<String, Map<String, String>> chainDomainStringMap = 
-            		protein.toTopsDomainStrings(cathChainDomainMap);
-
-            for (String chainID : chainDomainStringMap.keySet()) {
-                Map<String, String> domainStrings = chainDomainStringMap.get(chainID);
-                for (String domainString : domainStrings.keySet()) {
-                    System.out.println(protein.getID() + domainString);
-                }
-            }
-
-        } catch (IOException ioe) {
-            System.out.println(ioe);
         }
     }
 }

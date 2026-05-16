@@ -4,9 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import javax.vecmath.Point3d;
-
 import tailor.condition.SegmentPartition;
+import tailor.structure.Atom;
 import tailor.structure.Chain;
 import tailor.structure.Group;
 import tailor.structure.Segment;
@@ -42,8 +41,10 @@ public class Result {
 	}
 	
 	private class ARef {
-		public String atomName;
-		public Point3d point;
+		public Atom atom;
+		public ARef(Atom atom) {
+			this.atom = atom;
+		}
 	}
 	
 	private CRef root;
