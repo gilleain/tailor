@@ -6,9 +6,11 @@ import java.util.List;
 import tops.translation.model.Group;
 import tops.translation.model.PolymerType;
 
-public class Chain extends Segment {
+public class Chain  {
     
     private final List<Segment> sses;
+    
+    private final List<Group> groups;
     
     private String name;
     
@@ -23,16 +25,16 @@ public class Chain extends Segment {
     }
     
     public Chain(String name) {	// TODO - type is null here 
-        super(Type.CHAIN, new ArrayList<>());
         this.name = name;
         this.sses = new ArrayList<>();
+        this.groups = new ArrayList<>();
     }
     
     public Chain(String name, PolymerType chainType) {
-        super(Type.CHAIN, new ArrayList<>());
         this.name = name;
         this.sses = new ArrayList<>();
         this.chainType = chainType;
+        this.groups = new ArrayList<>();
     }
     
     public PolymerType getChainType() {
@@ -40,15 +42,31 @@ public class Chain extends Segment {
     }
     
     public String getResidueRange() {
-        if (size() > 1) {
+        if (groups.size() > 1) {
             return String.format("%s-%s", getFirst().getNumber(), getLast().getNumber());
         } else {
             return String.valueOf(getFirst().getNumber());
         }
     }
     
+    public PolymerType getType() {
+    	return this.chainType;
+    }
+    
+    public List<Group> getGroups() {
+    	return this.groups;
+    }
+    
+    public Group getFirst() {
+        return groups.get(0);
+    }
+    
+    public Group getLast() {
+        return groups.get(groups.size() - 1);
+    }
+    
     public Group getGroupAt(int index) {
-    	return this.getGroups().get(index);	// TODO - is this the best way to do this?
+    	return this.groups.get(index);	// TODO - is this the best way to do this?
     }
     
     public void addSSE(Segment sse) {
@@ -60,7 +78,7 @@ public class Chain extends Segment {
     }
     
     public void addGroup(Group group) {
-        super.addGroup(group);
+        groups.add(group);
     }
 
     public String getName() {
