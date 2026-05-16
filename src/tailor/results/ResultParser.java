@@ -10,9 +10,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 
-import tailor.structure.Atom;
-import tailor.structure.Chain;
-import tailor.structure.Group;
 import tailor.structure.Protein;
 
 
@@ -122,48 +119,5 @@ public class ResultParser {
             return result;
         }
     }
-    
-    /**
-     * Main method for testing
-     */
-    public static void main(String[] args) {
-        if (args.length < 2) {
-            System.err.println("Usage: java ResultParser <filename> <pdbdir>");
-            System.exit(1);
-        }
-        
-        String filename = args[0];
-        String pdbdir = args[1];
-        
-        Function<String, ExampleDescription> parser = line -> {
-            String[] parts = line.split("\\.");
-            return new ExampleDescription(parts[0], parts[1], parts[2], parts[3], "0");
-        };
-        
-        for (Protein e : generateExamples(filename, pdbdir, parser)) {
-            recurse(e);
-        }
-    }
-    
-    /**
-     * Recursively print the structure tree
-     */
-    private static void recurse(Protein tree) {
-        System.out.println(tree.getClass().getSimpleName() + " " + tree);
-        for (Chain child : tree.getChains()) {
-            recurse(child);
-        }
-    }
-    private static void recurse(Chain tree) {
-        System.out.println(tree.getClass().getSimpleName() + " " + tree);
-        for (Group child : tree.getGroups()) {
-            recurse(child);
-        }
-    }
-    private static void recurse(Group group) {
-        System.out.println(group.getClass().getSimpleName() + " " + group);
-        for (Atom atom : group.getAtoms()) {
-            System.out.println(atom);
-        }
-    }
+   
 }
