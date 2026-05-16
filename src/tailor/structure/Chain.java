@@ -3,6 +3,8 @@ package tailor.structure;
 import java.util.ArrayList;
 import java.util.List;
 
+import tops.translation.model.Group;
+
 public class Chain extends Segment {
     
     private final List<Segment> sses;

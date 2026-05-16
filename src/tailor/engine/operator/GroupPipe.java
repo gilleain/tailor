@@ -4,7 +4,7 @@ import java.util.Iterator;
 
 import tailor.api.Operator;
 import tailor.structure.Chain;
-import tailor.structure.Group;
+import tops.translation.model.Group;
 
 public class GroupPipe  {
 	

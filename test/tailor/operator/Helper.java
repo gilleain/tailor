@@ -13,8 +13,8 @@ import tailor.engine.operator.GroupSource;
 import tailor.engine.operator.Pipe;
 import tailor.engine.plan.Plan;
 import tailor.structure.Chain;
-import tailor.structure.Group;
 import tops.translation.model.Atom;
+import tops.translation.model.Group;
 
 public class Helper {
 	

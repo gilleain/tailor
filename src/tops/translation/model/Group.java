@@ -13,19 +13,23 @@ public class Group implements Comparable<Group> {
 	private final Map<String, Atom> atomMap;
     private int absoluteNumber;
     private int pdbNumber;
-    private String type;
+    private String name;
     private PolymerType polymerType;
     private Environment environment;
     private List<HBond> hBonds;
     private double phi;
     private double psi;
+    
+    private String insertionCode;
+    
+    private String segmentId;	// TODO
 
     public Group() {
         this.atomMap = new HashMap<>();
         this.hBonds = new ArrayList<>();
         this.phi = 0;
         this.psi = 0;
-        this.type = "None";
+        this.name = "None";
         this.polymerType = PolymerType.NONE;
         this.environment = Environment.NONE;
     }
@@ -35,15 +39,33 @@ public class Group implements Comparable<Group> {
         this.absoluteNumber = absoluteNumber;
         this.pdbNumber = pdbNumber;
     }
+    
+    public Group(int pdbNumber, String name) {
+    	this(pdbNumber, pdbNumber, name);	// set the absolute number the same as the number in the model
+    }
 
-    public Group(int absoluteNumber, int pdbNumber, String type) {
+    public Group(int absoluteNumber, int pdbNumber, String name) {
         this(absoluteNumber, pdbNumber);
-        this.type = type.trim();
+        this.name = name.trim();
         if (this.isBase()) {
             this.polymerType = PolymerType.DNA;
         } else {
             this.polymerType = PolymerType.PROTEIN;
         }
+    }
+    
+    public Group(int residueSeq, String insertionCode, String name, String segmentId) {
+    	this(residueSeq, name);
+    	this.insertionCode = insertionCode;
+    	this.segmentId = segmentId;
+    }
+    
+    public String getName() {
+    	return this.name;
+    }
+    
+    public List<Atom> getAtoms() {
+        return new ArrayList<>(this.atomMap.values());
     }
 
     public int compareTo(Group other) {
@@ -51,34 +73,34 @@ public class Group implements Comparable<Group> {
     }
 
     public boolean isPro() {
-        return this.type.equals("PRO");
+        return this.name.equals("PRO");
     }
 
     public boolean isBase() {
-        return this.type.equals("A") || this.type.equals("C") || this.type.equals("G") || this.type.equals("T");
+        return this.name.equals("A") || this.name.equals("C") || this.name.equals("G") || this.name.equals("T");
     }
 
     public boolean isStandardAminoAcid() {
-        return  this.type.equals("ALA") ||
-                this.type.equals("ARG") ||
-                this.type.equals("ASP") ||
-                this.type.equals("ASN") ||
-                this.type.equals("CYS") ||
-                this.type.equals("GLN") ||
-                this.type.equals("GLU") ||
-                this.type.equals("GLY") ||
-                this.type.equals("HIS") ||
-                this.type.equals("ILE") ||
-                this.type.equals("LEU") ||
-                this.type.equals("LYS") ||
-                this.type.equals("MET") ||
-                this.type.equals("PHE") ||
-                this.type.equals("PRO") ||
-                this.type.equals("SER") ||
-                this.type.equals("THR") ||
-                this.type.equals("TRP") ||
-                this.type.equals("TYR") ||
-                this.type.equals("VAL");
+        return  this.name.equals("ALA") ||
+                this.name.equals("ARG") ||
+                this.name.equals("ASP") ||
+                this.name.equals("ASN") ||
+                this.name.equals("CYS") ||
+                this.name.equals("GLN") ||
+                this.name.equals("GLU") ||
+                this.name.equals("GLY") ||
+                this.name.equals("HIS") ||
+                this.name.equals("ILE") ||
+                this.name.equals("LEU") ||
+                this.name.equals("LYS") ||
+                this.name.equals("MET") ||
+                this.name.equals("PHE") ||
+                this.name.equals("PRO") ||
+                this.name.equals("SER") ||
+                this.name.equals("THR") ||
+                this.name.equals("TRP") ||
+                this.name.equals("TYR") ||
+                this.name.equals("VAL");
     }
 
     public boolean isType(PolymerType polymerType) {
@@ -184,9 +206,21 @@ public class Group implements Comparable<Group> {
     public int getPDBNumber() {
         return this.pdbNumber;
     }
+    
+    public Integer getNumber() {	// TODO - dedup with above
+        return this.pdbNumber;
+    }
+    
+    public Atom getAtom(String atomName) {
+    	return atomMap.get(atomName);
+    }
+    
+    public Point3d getAtomPosition(String atomName) {
+		return this.atomMap.get(atomName).getCenter();
+	}
 
     public String getType() {
-        return this.type;
+        return this.name;
     }
 
     public String hBondString() {
@@ -204,7 +238,7 @@ public class Group implements Comparable<Group> {
 
     public String toString() {
         //return String.format("%s-%d ", this.type, this.pdbNumber);
-        return this.type + " " + this.pdbNumber;
+        return this.name + " " + this.pdbNumber;
     }
 
 	public void addAtom(Atom atom) {

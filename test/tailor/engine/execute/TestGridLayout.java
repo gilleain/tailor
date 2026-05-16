@@ -1,18 +1,18 @@
 package tailor.engine.execute;
 
-import static tailor.engine.execute.GridLayout.Direction.XP;
-import static tailor.engine.execute.GridLayout.Direction.YP;
-import static tailor.engine.execute.GridLayout.Direction.ZP;
 import static tailor.engine.execute.GridLayout.Direction.XM;
+import static tailor.engine.execute.GridLayout.Direction.XP;
 import static tailor.engine.execute.GridLayout.Direction.YM;
+import static tailor.engine.execute.GridLayout.Direction.YP;
 import static tailor.engine.execute.GridLayout.Direction.ZM;
+import static tailor.engine.execute.GridLayout.Direction.ZP;
 import static tailor.engine.execute.StructureBuilder.makeStructure;
 
 import java.util.List;
 
 import org.junit.Test;
 
-import tailor.structure.Group;
+import tops.translation.model.Group;
 
 public class TestGridLayout {
     

@@ -5,7 +5,7 @@ import java.util.logging.Logger;
 
 import tailor.api.GroupPropertyDescription;
 import tailor.engine.plan.Result;
-import tailor.structure.Group;
+import tops.translation.model.Group;
 
 public class FilterGroupByDescription extends AbstractOperator {
 	

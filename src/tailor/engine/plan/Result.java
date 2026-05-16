@@ -9,8 +9,8 @@ import java.util.stream.Collectors;
 import tailor.api.Measurement;
 import tailor.condition.AtomPartition;
 import tailor.structure.Chain;
-import tailor.structure.Group;
 import tops.translation.model.Atom;
+import tops.translation.model.Group;
 
 /**
  * A result is a subtree of a structure that may be a part of a final result from a plan.

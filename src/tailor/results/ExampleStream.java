@@ -8,9 +8,9 @@ import java.util.List;
 import tailor.datasource.aigen.PDBFileList;
 import tailor.structure.Chain;
 import tailor.structure.ChainType;
-import tailor.structure.Group;
 import tailor.structure.Protein;
 import tops.translation.model.Atom;
+import tops.translation.model.Group;
 
 /**
  * Note - was aigen from python

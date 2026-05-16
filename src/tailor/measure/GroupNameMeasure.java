@@ -4,7 +4,7 @@ import tailor.api.GroupPropertyMeasure;
 import tailor.api.Measurement;
 import tailor.description.GroupDescription;
 import tailor.measurement.PropertyMeasurement;
-import tailor.structure.Group;
+import tops.translation.model.Group;
 
 public class GroupNameMeasure implements GroupPropertyMeasure {
 	

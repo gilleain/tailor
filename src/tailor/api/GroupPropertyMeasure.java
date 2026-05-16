@@ -1,7 +1,7 @@
 package tailor.api;
 
 import tailor.description.GroupDescription;
-import tailor.structure.Group;
+import tops.translation.model.Group;
 
 /**
  * Measurement to make on a group.

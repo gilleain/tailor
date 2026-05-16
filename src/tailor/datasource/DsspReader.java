@@ -10,10 +10,10 @@ import java.util.List;
 import javax.vecmath.Point3d;
 
 import tailor.structure.Chain;
-import tailor.structure.Group;
 import tailor.structure.Segment;
 import tailor.structure.Segment.Type;
 import tops.translation.model.Atom;
+import tops.translation.model.Group;
 
 public class DsspReader {
     

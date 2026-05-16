@@ -2,6 +2,8 @@ package tailor.structure;
 
 import java.util.List;
 
+import tops.translation.model.Group;
+
 /**
  * A segment is a sequence of groups, for example a Chain or an SSE.
  * 

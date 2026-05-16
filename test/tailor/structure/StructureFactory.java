@@ -1,5 +1,7 @@
 package tailor.structure;
 
+import tops.translation.model.Group;
+
 public class StructureFactory {
     
     public static String oneToThree(char one) {
