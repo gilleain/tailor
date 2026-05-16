@@ -83,20 +83,14 @@ public class PDBReader {
 	        }
 	        
             Group residue = null;
-            int chainIndex;
             if (chain == null || (!chainLabel.equals(chain.getName()))) {
 	            chain = new Chain(chainLabel, chainType);
-                chainIndex = 0; 
 	        } else {
                 residue = chain.getGroups().get(chain.getGroups().size() - 1);
-                chainIndex = Integer.valueOf(residue.getIndex());
             }
 
             if (residue == null || residue.getNumber() != residueNumber) {
-                if (residue != null) {
-                    chainIndex++;
-                }
-                residue = PDBReader.createGroup(residueNumber, residueName, chainIndex);
+                residue = PDBReader.createGroup(residueNumber, residueName);
                 chain.addGroup(residue);
             }
 
@@ -113,12 +107,8 @@ public class PDBReader {
 			return new Point3d(x, y, z);
 		}
 	    
-	    public static Group createGroup(int residueNumber, String residueName, int chainIndex) {
-//            System.out.println("residue " + residueNumber + " " + residueName + " " + chainIndex);
+	    public static Group createGroup(int residueNumber, String residueName) {
 	    	Group residue = new Group(residueNumber, residueName);
-            residue.setIndex(chainIndex);
-//	    	residue.setNumber(residueNumber);
-//	    	residue.setId(residueName);
 	    	return residue;
 	    }
 }

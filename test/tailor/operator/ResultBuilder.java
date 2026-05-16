@@ -38,7 +38,9 @@ public class ResultBuilder {
 			List<Group> groupList = groups.get(groups.size() - 1); // get the last list added
 			assert groupNumbers.length == groupList.size();
 			for (int index = 0; index < groupNumbers.length; index++) {
-				groupList.get(index).setNumber(groupNumbers[index]);
+				Group group = groupList.get(index);
+				Group numberedGroup = new Group(groupNumbers[index], group.getName());
+				groupList.set(index, numberedGroup);
 			}
 			return (T) this;
 		}

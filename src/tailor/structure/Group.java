@@ -21,11 +21,6 @@ public class Group {
     
     private String segmentId;	// TODO
     
-    private int index;
-    
-    private int number; // TODO - id, index, number...
-    
-
     public Group() {
         this.atomMap = new HashMap<>();
     }
@@ -53,21 +48,9 @@ public class Group {
     public Integer getNumber() {
     	return this.residueSeq;
     }
-    
-    public int getIndex() {
-        return index;
-    }
-
-    public void setIndex(int index) {
-        this.index = index;
-    }
 
     public String getName() {
         return name;
-    }
-
-    public void setNumber(int number) {
-        this.residueSeq = number;
     }
 
     public List<Atom> getAtoms() {
