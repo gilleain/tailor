@@ -14,9 +14,9 @@ import javax.vecmath.Vector3d;
 
 import tops.translation.model.Chain;
 import tops.translation.model.Environment;
+import tops.translation.model.Group;
 import tops.translation.model.HBond;
 import tops.translation.model.Protein;
-import tops.translation.model.Group;
 import tops.translation.model.Segment;
 import tops.translation.model.Segment.Type;
 import tops.translation.model.Sheet;
@@ -152,35 +152,33 @@ public class StructureFinder {
 
     public void assignTorsionsAndHBondsToTypes(Chain chain) {
         //run through once, using hbonds and torsions to attempt individual residue assignments
-        Iterator<Group> residueIterator = chain.residueIterator();
-        Map<Group, Character> residueAssignments = new HashMap<>();
+        Map<Group, Type> residueAssignments = new HashMap<>();
 
         //temporary buffers to store char assignents
-        StringBuilder torsionBuffer = new StringBuilder();
-        StringBuilder hbondBuffer = new StringBuilder();
+        List<Type> torsionBuffer = new ArrayList<>();
+        List<Type> hbondBuffer = new ArrayList<>();
         StringBuilder assignBuffer = new StringBuilder();
 
         StringBuilder tmpTorsion = new StringBuilder();
         StringBuilder tmpHBond = new StringBuilder();
 
         int spaceCounter = 1;
-        while (residueIterator.hasNext()) {
-            Group residue = residueIterator.next();
+        for (Group residue : chain.getGroups()) {
 
-            char typeFromTorsion = this.determineTypeFromTorsion(residue);
-            torsionBuffer.append(typeFromTorsion);
+            Type typeFromTorsion = this.determineTypeFromTorsion(residue);
+            torsionBuffer.add(typeFromTorsion);
 
-            tmpTorsion.append(typeFromTorsion);
+            tmpTorsion.append(typeFromTorsion.getTypeString());
             if (spaceCounter % 10 == 0) { tmpTorsion.append(' '); }
 
-            char typeFromHBonds  = this.determineTypeFromHBonds(residue);
-            hbondBuffer.append(typeFromHBonds);
+            Type typeFromHBonds  = this.determineTypeFromHBonds(residue);
+            hbondBuffer.add(typeFromHBonds);
 
-            tmpHBond.append(typeFromHBonds);
+            tmpHBond.append(typeFromHBonds.getTypeString());
             if (spaceCounter % 10 == 0) { tmpHBond.append(' '); }
             
-            char assignment = this.assign(typeFromTorsion, typeFromHBonds);
-            assignBuffer.append(assignment);
+            Type assignment = this.assign(typeFromTorsion, typeFromHBonds);
+            assignBuffer.append(assignment.getTypeString());
             if (spaceCounter % 10 == 0) { assignBuffer.append(' '); }
 
             residueAssignments.put(residue, assignment);
@@ -191,12 +189,12 @@ public class StructureFinder {
         //now, run through the assignments, merging into sses
         int sseStart = 1;
         int sseEnd = -1;
-        char currentSSEType = 'U';
+        Type currentSSEType = Type.UNSTRUCTURED;
         List<Segment> backboneSegments = new ArrayList<>();
-        for (int index = 0; index < torsionBuffer.length(); index++) {
-            char sseChar = torsionBuffer.charAt(index);
+        for (int index = 0; index < torsionBuffer.size(); index++) {
+            Type sseType = torsionBuffer.get(index);
             // same type : extend the end of current
-            if (sseChar == currentSSEType) {
+            if (sseType == currentSSEType) {
                 sseEnd = index + 1;
             // change of type : finish previous and start new
             } else {
@@ -205,14 +203,14 @@ public class StructureFinder {
                 sseStart = index + 1;
                 sseEnd = index + 1;
             } 
-            currentSSEType = sseChar;
+            currentSSEType = sseType;
         }
         LOG.info("SSE : " + currentSSEType + " from " + sseStart + " to " + sseEnd);
 
         this.trimByHBonds(backboneSegments, hbondBuffer); 
     }
     
-    public void trimByHBonds(List<Segment> backboneSegments, StringBuilder hbondBuffer) {
+    public void trimByHBonds(List<Segment> backboneSegments, List<Type> hbondAssignments) {
         ListIterator<Segment> itr = backboneSegments.listIterator();
         Segment previousSegment = null;
 
@@ -257,18 +255,9 @@ public class StructureFinder {
         }
     }
 
-    public Segment createSegment(int start, int end, int sseType, Chain chain) {
+    public Segment createSegment(int start, int end, Type sseType, Chain chain) {
         // make a new segment of the appropriate type
-        Segment newSegment = null;
-        if (sseType == 'U') {
-            newSegment = new Segment(Type.UNSTRUCTURED);
-        } else if (sseType == 'E') {
-            newSegment = new Segment(Type.STRAND);
-        } else if (sseType == 'H') {
-            newSegment = new Segment(Type.HELIX);
-        } else {
-            newSegment = new Segment(Type.UNSTRUCTURED);
-        }
+        Segment newSegment = new Segment(sseType);
 
         // fill the new segment with residues
         for (int index = start; index <= end; index++) {
@@ -280,48 +269,48 @@ public class StructureFinder {
         return newSegment;
     }
 
-    public char assign(char typeFromTorsion, char typeFromHBonds) {
+    public Type assign(Type typeFromTorsion, Type typeFromHBonds) {
         //firstly, if we agree, then all is fine and dandy
         if (typeFromTorsion == typeFromHBonds) {
             return typeFromTorsion;
         } else {
             //torsions may fall outside the narrow bounds defined for them
-            if (typeFromTorsion == 'U') {
+            if (typeFromTorsion == Type.UNSTRUCTURED) {
                 return typeFromHBonds;
             } else {
                 //it is possible for a residue in an SSE not to have any bonds
-                if (typeFromHBonds == 'U') {
+                if (typeFromHBonds == Type.UNSTRUCTURED) {
                     return typeFromTorsion;
                 } else {
                     //torsion == 'H' and hbonds == 'E'
-                    if (typeFromTorsion == 'H') {
-                        return 'E';
+                    if (typeFromTorsion == Type.HELIX) {
+                        return Type.STRAND;
                     //torsion == 'E' and hbonds == 'H' - can this happen?
                     } else {
-                        return 'H';
+                        return Type.HELIX;
                     }
                 }
             }
         }
     }
 
-    public char determineTypeFromTorsion(Group residue) {
+    public Type determineTypeFromTorsion(Group residue) {
     	if (torsionsMatch(Type.HELIX, residue)) {
-    		return 'H';
+    		return Type.HELIX;
     	} else if (torsionsMatch(Type.STRAND, residue)) {
-            return 'E';
+            return Type.STRAND;
         } else {
-            return 'U';
+            return Type.UNSTRUCTURED;
         }
     }
 
-    public char determineTypeFromHBonds(Group residue) {
+    public Type determineTypeFromHBonds(Group residue) {
         if (hbondsMatch(Type.HELIX, residue)) {
-            return 'H';
+            return Type.HELIX;
         } else if (hbondsMatch(Type.STRAND, residue)) {
-            return 'E';
+            return Type.STRAND;
         } else {
-            return 'U';
+            return Type.UNSTRUCTURED;
         }
     }
     
@@ -581,13 +570,11 @@ public class StructureFinder {
     }
 
     public void convertTorsionsToRepetitiveStructure(Chain chain) {
-        Iterator<Group> residueIterator = chain.residueIterator();
         Segment nterminus = new Segment(Type.NTERMINUS);
         chain.addSegment(nterminus);
         Segment currentSegment = new Segment(Type.UNSTRUCTURED);
 
-        while (residueIterator.hasNext()) {
-            Group residue = residueIterator.next();
+        for (Group residue : chain.getGroups()) {
             Segment nextSegment = this.fitNextResidue(residue, currentSegment);
             if (nextSegment != currentSegment) {
                 chain.addSegment(currentSegment);   //store the previous segment
@@ -599,9 +586,7 @@ public class StructureFinder {
     }
 
     public void calculateHBondPartners(Chain c) {
-        Iterator<Group> itr = c.residueIterator();
-        while (itr.hasNext()) {
-            Group first = (Group) itr.next();
+       for (Group first : c.getGroups()) {
             this.searchForwards(first, c);
         }
     }
@@ -746,12 +731,9 @@ public class StructureFinder {
     }
 
     public void buildHelices(Chain chain) {
-        Iterator<Group> residueIterator = chain.residueIterator();
-
         int helixStartIndex = -1;
         int helixEndIndex = -1;
-        while (residueIterator.hasNext()) {
-            Group residue = residueIterator.next();
+        for (Group residue : chain.getGroups()) {
             int residueAbsoluteNumber = residue.getAbsoluteNumber();
 
             if (residue.getEnvironment().equals(Environment.HELIX_MIDDLE)) {
@@ -777,12 +759,10 @@ public class StructureFinder {
     }
 
     public void buildStrands(Chain chain) {
-        Iterator<Group> residueIterator = chain.residueIterator();
-
         boolean lastResidueWasStrand = false;
         Segment currentStrand = new Segment(Type.STRAND);
-        while (residueIterator.hasNext()) {
-            Group residue = residueIterator.next();
+        
+        for (Group residue : chain.getGroups()) {
             Environment residueEnvironment = residue.getEnvironment();
             if (residueEnvironment.equals(Environment.PARALLEL_STRAND) 
             		|| residueEnvironment.equals(Environment.ANTIPARALLEL_STRAND)) {

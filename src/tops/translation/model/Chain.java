@@ -160,20 +160,6 @@ public class Chain {
         }
     }
 
-    public void addTerminii() {
-        if (this.segments.isEmpty()) {
-            return;
-        }
-
-        if (this.segments.get(0).getType() != Type.NTERMINUS) {
-            this.segments.add(0, new Segment(Type.NTERMINUS));
-        }
-
-        if (this.segments.get(this.segments.size() - 1).getType() != Type.CTERMINUS) {
-            this.segments.add(new Segment(Type.CTERMINUS));
-        }
-    }
-
     public void sortSegments() {
         Collections.sort(this.segments);
     }
@@ -222,10 +208,6 @@ public class Chain {
         } else {
             return this.residues.get(residueIndex + 1);
         }
-    }
-
-    public Iterator<Group> residueIterator() {
-        return this.residues.iterator();
     }
 
     public Iterator<Group> residueIterator(int indexFrom) {
@@ -338,7 +320,7 @@ public class Chain {
     }
 
     public void calculateTorsions() {
-        Iterator<Group> residueIterator = this.residueIterator();
+        Iterator<Group> residueIterator = this.residues.iterator();
         Group previousResidue = null;
         Group thisResidue = null;
 

@@ -7,7 +7,6 @@ import java.awt.Graphics2D;
 import java.awt.geom.Arc2D;
 import java.awt.geom.Rectangle2D;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 
 import tops.translation.model.Chain;
@@ -70,9 +69,7 @@ public class HBondDiagramDrawer {
         g2.setColor(this.backgroundColor);
         g2.fillRect(0, 0, this.w, this.h);
 
-        Iterator<Group> residueIterator = this.chain.residueIterator();
-        while (residueIterator.hasNext()) {
-            Group residue = residueIterator.next();
+        for (Group residue : chain.getGroups()) {
             int residueIndex = residue.getAbsoluteNumber();
             this.drawResidue(residueSeparation, residueIndex, g2);
 

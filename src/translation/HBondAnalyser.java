@@ -13,10 +13,11 @@ import java.util.logging.Logger;
 import javax.vecmath.Point3d;
 
 import tops.translation.model.Chain;
+import tops.translation.model.Group;
 import tops.translation.model.HBond;
 import tops.translation.model.Protein;
-import tops.translation.model.Group;
 import tops.translation.model.Segment;
+import tops.translation.model.Segment.Type;
 
 public class HBondAnalyser {
     
@@ -110,10 +111,7 @@ public class HBondAnalyser {
         }
 
         int index = -1;
-        Iterator<Group> residues = chain.residueIterator();
-
-        while (residues.hasNext()) {
-            Group first = (Group) residues.next();
+        for (Group first : chain.getGroups()) {    
             index++;
 
             // we ignore gamma turns!
@@ -213,13 +211,28 @@ public class HBondAnalyser {
         this.finishSSES(chain);
         chain.sortSegments();
         chain.mergeHelices();
-        chain.addTerminii();
+        addTerminii(chain);
         
         // TODO
         int bbIndex = 0;
         for (Segment segment : chain.getSegments()) {
         	segment.setNumber(bbIndex);
         	bbIndex++;
+        }
+    }
+    
+    public void addTerminii(Chain chain) {
+    	List<Segment> segments = chain.getSegments();
+        if (segments.isEmpty()) {
+            return;
+        }
+
+        if (segments.get(0).getType() != Type.NTERMINUS) {
+        	segments.add(0, new Segment(Type.NTERMINUS));
+        }
+
+        if (segments.get(segments.size() - 1).getType() != Type.CTERMINUS) {
+            segments.add(new Segment(Type.CTERMINUS));
         }
     }
 
