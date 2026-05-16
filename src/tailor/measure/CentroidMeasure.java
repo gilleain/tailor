@@ -3,7 +3,7 @@ package tailor.measure;
 import java.util.Set;
 
 import tailor.measurement.PointMeasurement;
-import tailor.structure.Atom;
+import tops.translation.model.Atom;
 
 public class CentroidMeasure {
 	

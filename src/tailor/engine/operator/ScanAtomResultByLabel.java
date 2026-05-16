@@ -3,7 +3,7 @@ package tailor.engine.operator;
 import java.util.List;
 
 import tailor.engine.plan.Result;
-import tailor.structure.Atom;
+import tops.translation.model.Atom;
 
 public class ScanAtomResultByLabel extends AbstractOperator {
 	

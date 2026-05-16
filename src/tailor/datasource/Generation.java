@@ -6,9 +6,9 @@ import java.util.List;
 import javax.vecmath.Point3d;
 
 import tailor.geometry.Geometry;
-import tailor.structure.Atom;
 import tailor.structure.Chain;
 import tailor.structure.Group;
+import tops.translation.model.Atom;
 
 /**
  * Generate protein structures from phi/psi angles

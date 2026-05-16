@@ -6,7 +6,7 @@ import java.util.Optional;
 import java.util.logging.Logger;
 
 import tailor.condition.LabelPartition.Part;
-import tailor.structure.Atom;
+import tops.translation.model.Atom;
 
 public class AtomMatcher {
 	

@@ -7,11 +7,11 @@ import java.util.List;
 
 import tailor.datasource.aigen.PDBFileList;
 import tailor.datasource.aigen.ResidueID;
-import tailor.structure.Atom;
 import tailor.structure.Chain;
 import tailor.structure.ChainType;
 import tailor.structure.Group;
 import tailor.structure.Protein;
+import tops.translation.model.Atom;
 
 /**
  * Note - was aigen from python
@@ -135,7 +135,7 @@ class ExampleDescription {
                        
                        // Copy atoms
                        for (Atom atom : residue.getAtoms()) {
-                           residueFeature.addAtom(atom.copy());
+                           residueFeature.addAtom(new Atom(atom));
                        }
                        
                        chainFeature.addGroup(residueFeature);
@@ -158,7 +158,7 @@ class ExampleDescription {
            if (existingWater != null) {
                Atom oAtom = existingWater.getAtom("O");
                if (oAtom != null) {
-                   waterResidue.addAtom(oAtom.copy());
+                   waterResidue.addAtom(new Atom(oAtom));
                }
            }
        }

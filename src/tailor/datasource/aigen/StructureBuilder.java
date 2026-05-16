@@ -1,10 +1,10 @@
 package tailor.datasource.aigen;
 
-import tailor.structure.Atom;
 import tailor.structure.Chain;
 import tailor.structure.ChainType;
 import tailor.structure.Group;
 import tailor.structure.Protein;
+import tops.translation.model.Atom;
 
 public class StructureBuilder {
     private Protein structure;

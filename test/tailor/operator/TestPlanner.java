@@ -25,7 +25,7 @@ import tailor.engine.plan.Plan;
 import tailor.engine.plan.Planner;
 import tailor.measure.AbstractAtomListMeasure;
 import tailor.measurement.DoubleMeasurement;
-import tailor.structure.Atom;
+import tops.translation.model.Atom;
 
 public class TestPlanner {
 	

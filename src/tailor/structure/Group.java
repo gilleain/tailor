@@ -8,6 +8,7 @@ import java.util.Map;
 import javax.vecmath.Point3d;
 
 import tailor.datasource.aigen.ResidueID;
+import tops.translation.model.Atom;
 
 public class Group {
     

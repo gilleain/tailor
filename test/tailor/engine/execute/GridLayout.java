@@ -5,8 +5,8 @@ import java.util.List;
 import javax.vecmath.Point3d;
 
 import tailor.geometry.Vector;
-import tailor.structure.Atom;
 import tailor.structure.Group;
+import tops.translation.model.Atom;
 
 public class GridLayout {
     

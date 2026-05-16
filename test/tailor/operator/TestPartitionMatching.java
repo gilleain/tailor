@@ -13,7 +13,7 @@ import tailor.condition.AtomMatcher.Match;
 import tailor.condition.AtomPartition;
 import tailor.condition.LabelPartition;
 import tailor.condition.LabelPartition.LabelledPart;
-import tailor.structure.Atom;
+import tops.translation.model.Atom;
 
 public class TestPartitionMatching {
 

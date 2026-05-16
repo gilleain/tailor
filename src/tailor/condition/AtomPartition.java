@@ -2,7 +2,7 @@ package tailor.condition;
 
 import java.util.List;
 
-import tailor.structure.Atom;
+import tops.translation.model.Atom;
 
 public class AtomPartition {
 	
