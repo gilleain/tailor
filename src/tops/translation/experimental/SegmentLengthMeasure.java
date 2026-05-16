@@ -3,7 +3,7 @@ package tops.translation.experimental;
 import tailor.api.Measurement;
 import tailor.api.SegmentIntPropertyMeasure;
 import tailor.measurement.SimpleMeasurement;
-import tops.translation.model.Segment;
+import tailor.structure.Segment;
 
 public class SegmentLengthMeasure implements SegmentIntPropertyMeasure {
 	

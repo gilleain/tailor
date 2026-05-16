@@ -1,7 +1,7 @@
 package tailor.api;
 
+import tailor.structure.Segment;
 import tops.translation.experimental.SegmentDescription;
-import tops.translation.model.Segment;
 
 /**
  * Measurement to make on a single segment.

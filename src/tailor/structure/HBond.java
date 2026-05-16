@@ -1,4 +1,4 @@
-package tops.translation.model;
+package tailor.structure;
 
 
 public class HBond implements Comparable<HBond> {

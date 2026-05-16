@@ -7,9 +7,9 @@ import java.util.stream.Collectors;
 import javax.vecmath.Point3d;
 
 import tailor.condition.SegmentPartition;
-import tops.translation.model.Chain;
-import tops.translation.model.Group;
-import tops.translation.model.Segment;
+import tailor.structure.Chain;
+import tailor.structure.Group;
+import tailor.structure.Segment;
 
 public class Result {
 	

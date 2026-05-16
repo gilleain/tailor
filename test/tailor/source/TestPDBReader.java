@@ -8,9 +8,9 @@ import java.util.List;
 
 import org.junit.Test;
 
-import tops.translation.model.Chain;
-import tops.translation.model.Group;
-import tops.translation.model.Protein;
+import tailor.structure.Chain;
+import tailor.structure.Group;
+import tailor.structure.Protein;
 
 public class TestPDBReader {
     

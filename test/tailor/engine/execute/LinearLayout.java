@@ -4,8 +4,8 @@ import java.util.List;
 
 import javax.vecmath.Point3d;
 
-import tops.translation.model.Atom;
-import tops.translation.model.Group;
+import tailor.structure.Atom;
+import tailor.structure.Group;
 
 public class LinearLayout {
     

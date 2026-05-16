@@ -1,4 +1,4 @@
-package tops.translation.model;
+package tailor.structure;
 
 public enum PolymerType {
 	NONE,

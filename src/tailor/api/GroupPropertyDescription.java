@@ -1,7 +1,7 @@
 package tailor.api;
 
 import tailor.description.GroupDescription;
-import tops.translation.model.Group;
+import tailor.structure.Group;
 
 /**
  * Description for a property of a group that can create conditions and matchers for filtering.

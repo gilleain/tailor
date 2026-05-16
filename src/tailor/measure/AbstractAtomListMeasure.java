@@ -13,7 +13,7 @@ import tailor.condition.LabelPartition;
 import tailor.description.DescriptionPath;
 import tailor.description.GroupDescription;
 import tailor.measurement.DoubleMeasurement;
-import tops.translation.model.Atom;
+import tailor.structure.Atom;
 
 public abstract class AbstractAtomListMeasure implements AtomListMeasure {
 	

@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.logging.Logger;
 
 import tailor.api.SegmentPropertyDescription;
-import tops.translation.model.Segment;
+import tailor.structure.Segment;
 
 public class FilterSegmentByPropertyDescription extends AbstractOperator {
 	

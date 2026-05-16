@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import tops.translation.model.Protein;
+import tailor.structure.Protein;
 
 
 

@@ -3,7 +3,7 @@ package tops.translation.hbondviewer;
 import java.awt.Graphics;
 import javax.swing.JPanel;
 
-import tops.translation.model.Chain;
+import tailor.structure.Chain;
 
 public class HBondViewPanel extends JPanel {
 	private static final long serialVersionUID = -5729116881577405822L;

@@ -15,13 +15,13 @@ import java.util.logging.Logger;
 import javax.vecmath.Point3d;
 import javax.vecmath.Vector3d;
 
-import tops.translation.model.Chain;
-import tops.translation.model.Protein;
-import tops.translation.model.Group;
-import tops.translation.model.Segment;
-import tops.translation.model.Segment.Orientation;
-import tops.translation.model.Segment.Type;
-import tops.translation.model.Sheet;
+import tailor.structure.Chain;
+import tailor.structure.Group;
+import tailor.structure.Protein;
+import tailor.structure.Segment;
+import tailor.structure.Sheet;
+import tailor.structure.Segment.Orientation;
+import tailor.structure.Segment.Type;
 
 public class FoldAnalyser {
 

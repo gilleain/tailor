@@ -26,8 +26,8 @@ import tailor.engine.plan.Plan;
 import tailor.engine.plan.Planner;
 import tailor.measure.AtomDistanceMeasure;
 import tailor.measure.AtomTorsionMeasure;
-import tops.translation.model.Chain;
-import tops.translation.model.Protein;
+import tailor.structure.Chain;
+import tailor.structure.Protein;
 
 public class FunctionalTests {
 	

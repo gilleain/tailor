@@ -15,9 +15,9 @@ import org.apache.commons.cli.PosixParser;
 
 import tailor.datasource.PDBReader;
 import tailor.datasource.PDBWriter;
-import tops.translation.model.Chain;
-import tops.translation.model.Group;
-import tops.translation.model.Protein;
+import tailor.structure.Chain;
+import tailor.structure.Group;
+import tailor.structure.Protein;
 
 public class Extractor {
     

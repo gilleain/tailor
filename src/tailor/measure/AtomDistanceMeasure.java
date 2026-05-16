@@ -5,7 +5,7 @@ import java.util.List;
 import tailor.description.DescriptionPath;
 import tailor.geometry.Geometry;
 import tailor.measurement.DoubleMeasurement;
-import tops.translation.model.Atom;
+import tailor.structure.Atom;
 
 public class AtomDistanceMeasure extends AbstractAtomListMeasure {
 	

@@ -6,7 +6,7 @@ import java.util.List;
 
 import org.junit.Test;
 
-import tops.translation.model.Group;
+import tailor.structure.Group;
 
 public class TestLinearLayout {
     

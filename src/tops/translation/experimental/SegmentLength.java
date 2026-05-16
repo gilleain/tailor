@@ -3,7 +3,7 @@ package tops.translation.experimental;
 import tailor.api.SegmentIntPropertyMeasure;
 import tailor.api.SegmentPropertyDescription;
 import tailor.condition.IntegerLowerBoundCondition;
-import tops.translation.model.Segment;
+import tailor.structure.Segment;
 
 public class SegmentLength implements SegmentPropertyDescription {
 	

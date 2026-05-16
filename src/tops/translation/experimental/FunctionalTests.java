@@ -1,16 +1,16 @@
 package tops.translation.experimental;
 
-import static tops.translation.model.Segment.Type.HELIX;
-import static tops.translation.model.Segment.Type.STRAND;
+import static tailor.structure.Segment.Type.HELIX;
+import static tailor.structure.Segment.Type.STRAND;
 
 import java.io.File;
 import java.io.IOException;
 
 import org.junit.Test;
 
-import tops.translation.model.Chain;
-import tops.translation.model.Protein;
-import tops.translation.model.Segment;
+import tailor.structure.Chain;
+import tailor.structure.Protein;
+import tailor.structure.Segment;
 import translation.HBondAnalyser;
 import translation.PDBReader;
 

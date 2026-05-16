@@ -10,7 +10,7 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import tops.translation.model.Domain;
+import tailor.structure.Domain;
 
 public class CATHDomainFileParser {
     private static Pattern domainPattern = Pattern.compile("((?:\\d)(?:\\s\\s[\\d\\w]\\s+\\d+\\s\\-\\s[\\w\\d]\\s+\\d+\\s\\-)+)+");

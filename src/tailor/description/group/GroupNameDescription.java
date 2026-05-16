@@ -5,7 +5,7 @@ import tailor.api.Measurement;
 import tailor.condition.PropertyEquals;
 import tailor.description.GroupDescription;
 import tailor.measure.GroupNameMeasure;
-import tops.translation.model.Group;
+import tailor.structure.Group;
 
 public class GroupNameDescription implements GroupPropertyDescription {
 	

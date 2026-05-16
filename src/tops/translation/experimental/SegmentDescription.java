@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import tailor.api.SegmentPropertyDescription;
-import tops.translation.model.Segment;
+import tailor.structure.Segment;
 
 public class SegmentDescription {
 	

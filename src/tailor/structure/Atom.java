@@ -1,4 +1,4 @@
-package tops.translation.model;
+package tailor.structure;
 
 import javax.vecmath.Point3d;
 

@@ -10,8 +10,8 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import tops.translation.model.Chain;
-import tops.translation.model.Protein;
+import tailor.structure.Chain;
+import tailor.structure.Protein;
 
 /*
 Intended solely for testing the translation code by running on a directory

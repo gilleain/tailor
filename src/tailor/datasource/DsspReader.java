@@ -9,10 +9,10 @@ import java.util.List;
 
 import javax.vecmath.Point3d;
 
-import tops.translation.model.Atom;
-import tops.translation.model.Chain;
-import tops.translation.model.Group;
-import tops.translation.model.Segment;
+import tailor.structure.Atom;
+import tailor.structure.Chain;
+import tailor.structure.Group;
+import tailor.structure.Segment;
 
 public class DsspReader {
     
@@ -45,8 +45,8 @@ public class DsspReader {
     
     private static Segment makeSSE(String structure) {
         switch (structure) {
-            case "E": return new Segment(tops.translation.model.Segment.Type.STRAND); // hmmm
-            case "H": return new Segment(tops.translation.model.Segment.Type.HELIX); // hmmm
+            case "E": return new Segment(tailor.structure.Segment.Type.STRAND); // hmmm
+            case "H": return new Segment(tailor.structure.Segment.Type.HELIX); // hmmm
             default: return null;
         }
     }

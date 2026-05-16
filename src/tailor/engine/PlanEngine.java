@@ -13,8 +13,8 @@ import tailor.engine.operator.Pipe;
 import tailor.engine.operator.ResultsPrinterAdapter;
 import tailor.engine.plan.Plan;
 import tailor.engine.plan.Planner;
-import tops.translation.model.Chain;
-import tops.translation.model.Protein;
+import tailor.structure.Chain;
+import tailor.structure.Protein;
 
 public class PlanEngine implements Engine {
 	

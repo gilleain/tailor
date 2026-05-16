@@ -15,7 +15,7 @@ import tailor.condition.SegmentMatcher;
 import tailor.condition.SegmentMatcher.Match;
 import tailor.condition.SegmentPartition;
 import tailor.measurement.DoubleMeasurement;
-import tops.translation.model.Segment;
+import tailor.structure.Segment;
 import translation.Axis;
 import translation.Geometer;
 

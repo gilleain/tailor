@@ -18,9 +18,9 @@ import java.util.List;
 
 import javax.swing.JFrame;
 
-import tops.translation.model.Chain;
-import tops.translation.model.Domain;
-import tops.translation.model.Protein;
+import tailor.structure.Chain;
+import tailor.structure.Domain;
+import tailor.structure.Protein;
 import translation.HBondAnalyser;
 import translation.PDBReader;
 import translation.PropertyException;

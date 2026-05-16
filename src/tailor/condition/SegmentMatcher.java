@@ -6,7 +6,7 @@ import java.util.Optional;
 import java.util.logging.Logger;
 
 import tailor.condition.LabelPartition.Part;
-import tops.translation.model.Segment;
+import tailor.structure.Segment;
 
 public class SegmentMatcher {
 	

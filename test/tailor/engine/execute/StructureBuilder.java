@@ -3,8 +3,8 @@ package tailor.engine.execute;
 import java.util.ArrayList;
 import java.util.List;
 
-import tops.translation.model.Atom;
-import tops.translation.model.Group;
+import tailor.structure.Atom;
+import tailor.structure.Group;
 
 public class StructureBuilder {
     

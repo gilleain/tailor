@@ -2,7 +2,7 @@ package tailor.datasource;
 
 import java.io.IOException;
 
-import tops.translation.model.Protein;
+import tailor.structure.Protein;
 
 
 

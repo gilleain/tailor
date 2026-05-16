@@ -10,8 +10,8 @@ import java.util.List;
 import org.junit.Test;
 
 import tailor.datasource.DsspReader;
-import tops.translation.model.Chain;
-import tops.translation.model.Segment;
+import tailor.structure.Chain;
+import tailor.structure.Segment;
 
 public class TestDsspReader {
     
@@ -38,7 +38,7 @@ public class TestDsspReader {
     }
     
     private boolean isStrand(Segment sse, int start, int end) {
-        return sse.getType() == tops.translation.model.Segment.Type.STRAND
+        return sse.getType() == tailor.structure.Segment.Type.STRAND
                 && sse.firstResidue().getNumber() == start
                 && sse.lastResidue().getNumber() == end;
     }

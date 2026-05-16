@@ -1,8 +1,8 @@
-package tops.translation.model;
+package tailor.structure;
 
-import static tops.translation.model.Segment.Orientation.DOWN;
-import static tops.translation.model.Segment.Orientation.NONE;
-import static tops.translation.model.Segment.Orientation.UP;
+import static tailor.structure.Segment.Orientation.DOWN;
+import static tailor.structure.Segment.Orientation.NONE;
+import static tailor.structure.Segment.Orientation.UP;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -14,7 +14,7 @@ import java.util.logging.Logger;
 import javax.vecmath.Point3d;
 import javax.vecmath.Vector3d;
 
-import tops.translation.model.Segment.Orientation;
+import tailor.structure.Segment.Orientation;
 import translation.Axis;
 import translation.Geometer;
 

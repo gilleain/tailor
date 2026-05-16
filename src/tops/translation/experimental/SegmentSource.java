@@ -3,8 +3,8 @@ package tops.translation.experimental;
 import java.util.List;
 import java.util.logging.Logger;
 
-import tops.translation.model.Chain;
-import tops.translation.model.Segment;
+import tailor.structure.Chain;
+import tailor.structure.Segment;
 
 public class SegmentSource extends AbstractOperator {
 	

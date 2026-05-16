@@ -8,7 +8,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import tops.translation.model.Protein;
+import tailor.structure.Protein;
 
 public class PDBFileList implements Iterable<Protein> {
     private String path;

@@ -5,7 +5,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import tops.translation.model.Domain;
+import tailor.structure.Domain;
 
 /**
  * Simple class to wrap a map from chain strings to lists of domains.

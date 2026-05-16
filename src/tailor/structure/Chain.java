@@ -1,4 +1,4 @@
-package tops.translation.model;
+package tailor.structure;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -11,7 +11,7 @@ import java.util.Map;
 import javax.vecmath.Point3d;
 import javax.vecmath.Vector3d;
 
-import tops.translation.model.Segment.Type;
+import tailor.structure.Segment.Type;
 import translation.Axis;
 import translation.ChainDomainMap;
 import translation.Geometer;

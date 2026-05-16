@@ -12,12 +12,12 @@ import java.util.logging.Logger;
 
 import javax.vecmath.Point3d;
 
-import tops.translation.model.Chain;
-import tops.translation.model.Group;
-import tops.translation.model.HBond;
-import tops.translation.model.Protein;
-import tops.translation.model.Segment;
-import tops.translation.model.Segment.Type;
+import tailor.structure.Chain;
+import tailor.structure.Group;
+import tailor.structure.HBond;
+import tailor.structure.Protein;
+import tailor.structure.Segment;
+import tailor.structure.Segment.Type;
 
 public class HBondAnalyser {
     

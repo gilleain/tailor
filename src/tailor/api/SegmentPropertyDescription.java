@@ -1,7 +1,7 @@
 package tailor.api;
 
+import tailor.structure.Segment;
 import tops.translation.experimental.SegmentDescription;
-import tops.translation.model.Segment;
 
 /**
  * Description for a segments that can create conditions and matchers for filtering.

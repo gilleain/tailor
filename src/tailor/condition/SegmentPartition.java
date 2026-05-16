@@ -2,7 +2,7 @@ package tailor.condition;
 
 import java.util.List;
 
-import tops.translation.model.Segment;
+import tailor.structure.Segment;
 
 public class SegmentPartition {
 	

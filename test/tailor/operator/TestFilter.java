@@ -15,7 +15,7 @@ import tailor.engine.operator.GroupSource;
 import tailor.engine.operator.Pipe;
 import tailor.engine.operator.PrintAdapter;
 import tailor.engine.operator.ScanAtomResultByLabel;
-import tops.translation.model.Chain;
+import tailor.structure.Chain;
 
 public class TestFilter {
 	

@@ -1,4 +1,4 @@
-package tops.translation.model;
+package tailor.structure;
 
 import java.util.ArrayList;
 import java.util.Iterator;
