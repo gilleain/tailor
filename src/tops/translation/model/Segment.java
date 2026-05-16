@@ -38,7 +38,7 @@ public class Segment implements Comparable<Segment> {
 
     private int number;
 
-    private TreeSet<Residue> residues;
+    private TreeSet<Group> residues;
 
     private Axis axis;
 
@@ -53,7 +53,7 @@ public class Segment implements Comparable<Segment> {
         this.orientation = Orientation.NONE;
     }
 
-    public Segment(Type type, Residue first) {
+    public Segment(Type type, Group first) {
         this(type);
         this.residues.add(first);
     }
@@ -142,20 +142,20 @@ public class Segment implements Comparable<Segment> {
         }
     }
 
-    public Residue firstResidue() throws NoSuchElementException {
+    public Group firstResidue() throws NoSuchElementException {
         return this.residues.first();
     }
 
-    public Residue lastResidue() throws NoSuchElementException {
+    public Group lastResidue() throws NoSuchElementException {
         return this.residues.last();
     }
 
-    public Iterator<Residue> iterator() {
+    public Iterator<Group> iterator() {
         return this.residues.iterator();
     }
     
-    public Residue getResidueByAbsoluteNumber(int number) {
-        for (Residue residue : this.residues) {
+    public Group getResidueByAbsoluteNumber(int number) {
+        for (Group residue : this.residues) {
             if (residue.getAbsoluteNumber() == number) {
                 return residue;
             }
@@ -163,8 +163,8 @@ public class Segment implements Comparable<Segment> {
         return null;
     }
 
-    public boolean bondedTo(Residue otherResidue) {
-        for (Residue residue : this.residues) {
+    public boolean bondedTo(Group otherResidue) {
+        for (Group residue : this.residues) {
             if (residue.bondedTo(otherResidue)) {
                 return true;
             }
@@ -202,9 +202,9 @@ public class Segment implements Comparable<Segment> {
 
     public List<Point3d> getCAlphaCoordinates() {
         List<Point3d> cAlphas = new ArrayList<>();
-        Iterator<Residue> itr = this.residues.iterator();
+        Iterator<Group> itr = this.residues.iterator();
         while (itr.hasNext()) {
-            Residue nextResidue = itr.next();
+            Group nextResidue = itr.next();
             cAlphas.add(nextResidue.getCoordinates("CA"));
         }
         return cAlphas;
@@ -223,7 +223,7 @@ public class Segment implements Comparable<Segment> {
         return this.orientation;
     }
 
-    public void expandBy(Residue r) {
+    public void expandBy(Group r) {
         this.residues.add(r);
     }
 
@@ -249,7 +249,7 @@ public class Segment implements Comparable<Segment> {
     }
 
     public boolean containsPDBNumber(int pdbResidueNumber) {
-        for (Residue r : this.residues) {
+        for (Group r : this.residues) {
             if (r.getPDBNumber() == pdbResidueNumber) {
                 return true;
             }
@@ -259,8 +259,8 @@ public class Segment implements Comparable<Segment> {
 
     public boolean containsAbsoluteNumber(int absoluteResidueNumber) {
         try {
-            Residue first = this.firstResidue();
-            Residue last = this.lastResidue();
+            Group first = this.firstResidue();
+            Group last = this.lastResidue();
             return first.getAbsoluteNumber() <= absoluteResidueNumber
                     && last.getAbsoluteNumber() >= absoluteResidueNumber;
         } catch (NoSuchElementException n) {
@@ -268,7 +268,7 @@ public class Segment implements Comparable<Segment> {
         }
     }
 
-    public boolean contains(Residue r) {
+    public boolean contains(Group r) {
         return this.containsAbsoluteNumber(r.getAbsoluteNumber());
     }
 
@@ -333,9 +333,9 @@ public class Segment implements Comparable<Segment> {
         }
     }
 
-    public List<Residue> getResidues() {
-        List<Residue> residueList = new ArrayList<>();
-        for (Residue residue : this.residues) {
+    public List<Group> getResidues() {
+        List<Group> residueList = new ArrayList<>();
+        for (Group residue : this.residues) {
             residueList.add(residue);
         }
         return residueList;

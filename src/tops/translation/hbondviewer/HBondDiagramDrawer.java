@@ -11,8 +11,8 @@ import java.util.Iterator;
 import java.util.Map;
 
 import tops.translation.model.Chain;
+import tops.translation.model.Group;
 import tops.translation.model.HBond;
-import tops.translation.model.Residue;
 import tops.translation.model.Segment;
 import tops.translation.model.Segment.Type;
 
@@ -70,16 +70,14 @@ public class HBondDiagramDrawer {
         g2.setColor(this.backgroundColor);
         g2.fillRect(0, 0, this.w, this.h);
 
-        Iterator<Residue> residueIterator = this.chain.residueIterator();
+        Iterator<Group> residueIterator = this.chain.residueIterator();
         while (residueIterator.hasNext()) {
-            Residue residue = residueIterator.next();
+            Group residue = residueIterator.next();
             int residueIndex = residue.getAbsoluteNumber();
             this.drawResidue(residueSeparation, residueIndex, g2);
 
-            Iterator<HBond> hBondIterator = residue.getHBondIterator();
-            while (hBondIterator.hasNext()) {
-                HBond hbond = hBondIterator.next();
-                Residue partner = hbond.getPartner(residue);
+            for (HBond hbond : residue.getHBonds()) {
+                Group partner = hbond.getPartner(residue);
                 int partnerIndex = partner.getAbsoluteNumber();
 
                 if (hbond.residueIsDonor(residue)) {

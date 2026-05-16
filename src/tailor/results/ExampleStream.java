@@ -6,7 +6,6 @@ import java.util.Iterator;
 import java.util.List;
 
 import tailor.datasource.aigen.PDBFileList;
-import tailor.datasource.aigen.ResidueID;
 import tailor.structure.Chain;
 import tailor.structure.ChainType;
 import tailor.structure.Group;
@@ -130,8 +129,7 @@ class ExampleDescription {
                for (Group residue : chain.getGroups()) {
                    int resNum = residue.getNumber();
                    if (this.residueStart <= resNum && resNum <= this.residueEnd) {
-                	   ResidueID residueID = new ResidueID(residue.getNumber(), "");
-                       Group residueFeature = new Group(residueID, residue.getName());
+                       Group residueFeature = new Group(residue.getNumber(), residue.getName());
                        
                        // Copy atoms
                        for (Atom atom : residue.getAtoms()) {
@@ -149,8 +147,7 @@ class ExampleDescription {
        
        // Add the ligand (water molecule)
        Chain waterChain = new Chain("Water", ChainType.WATER);
-       ResidueID residueID = new ResidueID(ligandNum, "");
-       Group waterResidue = new Group(residueID, "HOH");
+       Group waterResidue = new Group(ligandNum, "HOH");
        
        List<Chain> waterChains = structure.chainsOfType(ChainType.WATER);
        if (!waterChains.isEmpty()) {

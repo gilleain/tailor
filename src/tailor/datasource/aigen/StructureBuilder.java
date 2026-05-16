@@ -19,7 +19,7 @@ public class StructureBuilder {
     private String chainID;
     private ChainType chainType;
     private String segID;
-    private ResidueID residueID;
+    private Integer residueNumber;
     private String resname;
     
     public StructureBuilder() {
@@ -36,7 +36,7 @@ public class StructureBuilder {
         this.chainID = null;
         this.chainType = null;
         this.segID = null;
-        this.residueID = null;
+        this.residueNumber = null;
         this.resname = null;
     }
     
@@ -72,13 +72,13 @@ public class StructureBuilder {
         this.structure.addChain(chain);
     }
     
-    public void registerLine(ResidueID residueID, String resname, int resseq, 
+    public void registerLine(String resname, int resseq, 
                             String icode, String segID, String chainID, ChainType chainType) {
         if (!chainID.equals(this.chainID) || !chainType.equals(this.chainType)) {
             initChain(chainID, chainType);
-            initResidue(residueID, resname, resseq, icode);
-        } else if (!residueID.equals(this.residueID) || !resname.equals(this.resname)) {
-            initResidue(residueID, resname, resseq, icode);
+            initResidue(resname, resseq, icode);
+        } else if (resseq != this.residueNumber || !resname.equals(this.resname)) {
+            initResidue(resname, resseq, icode);
         }
         
         if (!segID.equals(this.segID)) {
@@ -87,10 +87,9 @@ public class StructureBuilder {
     }
     
     
-    public void initResidue(ResidueID residueID, String resname, int resnum, String icode) {
-        this.residueID = residueID;
+    public void initResidue(String resname, int resnum, String icode) {
         this.resname = resname;
-        this.residue = new Group(residueID, resname, this.segID);
+        this.residue = new Group(resnum, icode, resname, this.segID);
         this.chain.addGroup(this.residue);
     }
     

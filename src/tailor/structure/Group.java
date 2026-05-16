@@ -7,7 +7,6 @@ import java.util.Map;
 
 import javax.vecmath.Point3d;
 
-import tailor.datasource.aigen.ResidueID;
 import tops.translation.model.Atom;
 
 public class Group {
@@ -16,7 +15,11 @@ public class Group {
 
     private String name;
     
-    private ResidueID  residueId;	// TODO
+    private int residueSeq;
+    
+    private String insertionCode;
+    
+    private String segmentId;	// TODO
     
     private int index;
     
@@ -28,36 +31,27 @@ public class Group {
     }
     
     public Group(int residueNumber, String residueName) {
-    	this(new ResidueID(residueNumber, ""), residueName, "");
+    	this(residueNumber, "", residueName, "");
     }
     
-    public Group(ResidueID residueId, String residueName) {
-    	this(residueId, residueName, "");
+    public Group(int residueSeq, String insertionCode, String residueName) {
+    	this(residueSeq, insertionCode, residueName, "");
     }
     
-    public Group(ResidueID residueId, String name, String segmentId) {
+    public Group(int residueSeq, String insertionCode, String name, String segmentId) {
     	this();
-    	// TODO - store these things
-    	this.residueId = residueId;
+    	this.residueSeq = residueSeq;
+    	this.insertionCode = insertionCode;
     	this.name = name;
+    	this.segmentId = segmentId;
     }
-    
-
-	public Group copy() {
-		// TODO could use a copy constructor
-		return null;
-	}
     
     public void addAtom(Atom atom) {
         this.atomMap.put(atom.getName(), atom);
     }
     
     public Integer getNumber() {
-    	return this.residueId.getResseq();
-    }
-    
-    public ResidueID getResidueId() {
-    	return this.residueId;
+    	return this.residueSeq;
     }
     
     public int getIndex() {
@@ -73,7 +67,7 @@ public class Group {
     }
 
     public void setNumber(int number) {
-        this.residueId = new ResidueID(number, "");	// TODO
+        this.residueSeq = number;
     }
 
     public List<Atom> getAtoms() {

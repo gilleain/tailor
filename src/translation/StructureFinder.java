@@ -16,7 +16,7 @@ import tops.translation.model.Chain;
 import tops.translation.model.Environment;
 import tops.translation.model.HBond;
 import tops.translation.model.Protein;
-import tops.translation.model.Residue;
+import tops.translation.model.Group;
 import tops.translation.model.Segment;
 import tops.translation.model.Segment.Type;
 import tops.translation.model.Sheet;
@@ -152,8 +152,8 @@ public class StructureFinder {
 
     public void assignTorsionsAndHBondsToTypes(Chain chain) {
         //run through once, using hbonds and torsions to attempt individual residue assignments
-        Iterator<Residue> residueIterator = chain.residueIterator();
-        Map<Residue, Character> residueAssignments = new HashMap<>();
+        Iterator<Group> residueIterator = chain.residueIterator();
+        Map<Group, Character> residueAssignments = new HashMap<>();
 
         //temporary buffers to store char assignents
         StringBuilder torsionBuffer = new StringBuilder();
@@ -165,7 +165,7 @@ public class StructureFinder {
 
         int spaceCounter = 1;
         while (residueIterator.hasNext()) {
-            Residue residue = residueIterator.next();
+            Group residue = residueIterator.next();
 
             char typeFromTorsion = this.determineTypeFromTorsion(residue);
             torsionBuffer.append(typeFromTorsion);
@@ -272,7 +272,7 @@ public class StructureFinder {
 
         // fill the new segment with residues
         for (int index = start; index <= end; index++) {
-            Residue residue = chain.getResidueByAbsoluteNumbering(index);
+            Group residue = chain.getResidueByAbsoluteNumbering(index);
             newSegment.expandBy(residue);
         }
 
@@ -305,7 +305,7 @@ public class StructureFinder {
         }
     }
 
-    public char determineTypeFromTorsion(Residue residue) {
+    public char determineTypeFromTorsion(Group residue) {
     	if (torsionsMatch(Type.HELIX, residue)) {
     		return 'H';
     	} else if (torsionsMatch(Type.STRAND, residue)) {
@@ -315,7 +315,7 @@ public class StructureFinder {
         }
     }
 
-    public char determineTypeFromHBonds(Residue residue) {
+    public char determineTypeFromHBonds(Group residue) {
         if (hbondsMatch(Type.HELIX, residue)) {
             return 'H';
         } else if (hbondsMatch(Type.STRAND, residue)) {
@@ -325,7 +325,7 @@ public class StructureFinder {
         }
     }
     
-    public boolean torsionsMatch(Type type, Residue residue) {
+    public boolean torsionsMatch(Type type, Group residue) {
     	if (type == Type.HELIX) {
     		int phiMin = -110;
     	    int phiMax = -30;
@@ -343,7 +343,7 @@ public class StructureFinder {
     	}
     }
     
-    public boolean torsionsMatch(Residue residue, int phiMin, int phiMax, int psiMin, int psiMax) {
+    public boolean torsionsMatch(Group residue, int phiMin, int phiMax, int psiMin, int psiMax) {
         double phi = residue.getPhi();
         double psi = residue.getPsi();
         boolean phiMatches = phi < phiMax && phi > phiMin;
@@ -351,7 +351,7 @@ public class StructureFinder {
         return phiMatches && psiMatches;
     }
     
-    public boolean hbondsMatch(Type type, Residue r) {
+    public boolean hbondsMatch(Type type, Group r) {
     	if (type == Type.HELIX) {
     		return r.getHBonds().stream().anyMatch(HBond::hasHelixResidueSeparation);
     	} else if (type == Type.STRAND) {
@@ -462,7 +462,7 @@ public class StructureFinder {
     public boolean bonded(Segment strand, Segment otherStrand) {
         //basically, run through the residues, checking the list of hbonds to find residues that might be in the other strand
         int numberOfHBonds = 0;
-        for (Residue nextResidue : strand.getResidues()) {
+        for (Group nextResidue : strand.getResidues()) {
             if (otherStrand.bondedTo(nextResidue)) {
                 numberOfHBonds++;
             }
@@ -549,7 +549,7 @@ public class StructureFinder {
         backboneSegmentIterator.remove();
     }
 
-    public Segment fitNextResidue(Residue residue, Segment currentBackboneSegment) {
+    public Segment fitNextResidue(Group residue, Segment currentBackboneSegment) {
         if (currentBackboneSegment.isType(Type.STRAND)) {
             if (torsionsMatch(Type.STRAND, residue)) {
                 currentBackboneSegment.expandBy(residue);
@@ -581,13 +581,13 @@ public class StructureFinder {
     }
 
     public void convertTorsionsToRepetitiveStructure(Chain chain) {
-        Iterator<Residue> residueIterator = chain.residueIterator();
+        Iterator<Group> residueIterator = chain.residueIterator();
         Segment nterminus = new Segment(Type.NTERMINUS);
         chain.addBackboneSegment(nterminus);
         Segment currentSegment = new Segment(Type.UNSTRUCTURED);
 
         while (residueIterator.hasNext()) {
-            Residue residue = residueIterator.next();
+            Group residue = residueIterator.next();
             Segment nextSegment = this.fitNextResidue(residue, currentSegment);
             if (nextSegment != currentSegment) {
                 chain.addBackboneSegment(currentSegment);   //store the previous segment
@@ -599,14 +599,14 @@ public class StructureFinder {
     }
 
     public void calculateHBondPartners(Chain c) {
-        Iterator<Residue> itr = c.residueIterator();
+        Iterator<Group> itr = c.residueIterator();
         while (itr.hasNext()) {
-            Residue first = (Residue) itr.next();
+            Group first = (Group) itr.next();
             this.searchForwards(first, c);
         }
     }
 
-    public void searchForwards(Residue first, Chain c) {
+    public void searchForwards(Group first, Chain c) {
 
         // check that it makes sense to be doing this
         if (!first.isStandardAminoAcid()) {
@@ -627,7 +627,7 @@ public class StructureFinder {
 
         // allow for chain breaks, or return if we have reached the end
         if (!c.hasResidueByAbsoluteNumbering(nextPosition)) {
-            Residue second = c.getNextResidue(position);
+            Group second = c.getNextResidue(position);
             if (second == null) {   //probably reached the end of the chain!
                 return ;
             }
@@ -635,14 +635,14 @@ public class StructureFinder {
         }
 
         // now, compare the first residue to the residues further on in the chain
-        Iterator<Residue> itr = c.residueIterator(nextPosition);
+        Iterator<Group> itr = c.residueIterator(nextPosition);
         while (itr.hasNext()) {
             int secondPosition = itr.next().getAbsoluteNumber();
             if (secondPosition < (position + 3)) {
                 continue;
             }
 
-            Residue second;
+            Group second;
             try {
                 second = c.getResidueByAbsoluteNumbering(secondPosition);
                 if (!second.isStandardAminoAcid()) {
@@ -687,7 +687,7 @@ public class StructureFinder {
         this.analyzeHBonds(first);
     }
 
-    public HBond createBond(Residue donor, Residue acceptor, Point3d nitrogen, Point3d hydrogen, Point3d oxygen, Point3d carbon) {
+    public HBond createBond(Group donor, Group acceptor, Point3d nitrogen, Point3d hydrogen, Point3d oxygen, Point3d carbon) {
         double distance = hydrogen.distance(oxygen);
         double nhoAngle = Geometer.angle(nitrogen, hydrogen, oxygen);
         double hocAngle = Geometer.angle(hydrogen, oxygen, carbon);
@@ -699,7 +699,7 @@ public class StructureFinder {
         }
     }
 
-    public void analyzeHBonds(Residue residue) {
+    public void analyzeHBonds(Group residue) {
         List<HBond> nTerminalHBonds = residue.getNTerminalHBonds();
         List<HBond> cTerminalHBonds = residue.getCTerminalHBonds();
         int numberOfNTerminalHBonds = nTerminalHBonds.size();
@@ -746,12 +746,12 @@ public class StructureFinder {
     }
 
     public void buildHelices(Chain chain) {
-        Iterator<Residue> residueIterator = chain.residueIterator();
+        Iterator<Group> residueIterator = chain.residueIterator();
 
         int helixStartIndex = -1;
         int helixEndIndex = -1;
         while (residueIterator.hasNext()) {
-            Residue residue = residueIterator.next();
+            Group residue = residueIterator.next();
             int residueAbsoluteNumber = residue.getAbsoluteNumber();
 
             if (residue.getEnvironment().equals(Environment.HELIX_MIDDLE)) {
@@ -777,12 +777,12 @@ public class StructureFinder {
     }
 
     public void buildStrands(Chain chain) {
-        Iterator<Residue> residueIterator = chain.residueIterator();
+        Iterator<Group> residueIterator = chain.residueIterator();
 
         boolean lastResidueWasStrand = false;
         Segment currentStrand = new Segment(Type.STRAND);
         while (residueIterator.hasNext()) {
-            Residue residue = residueIterator.next();
+            Group residue = residueIterator.next();
             Environment residueEnvironment = residue.getEnvironment();
             if (residueEnvironment.equals(Environment.PARALLEL_STRAND) 
             		|| residueEnvironment.equals(Environment.ANTIPARALLEL_STRAND)) {

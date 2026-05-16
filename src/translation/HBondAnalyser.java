@@ -15,7 +15,7 @@ import javax.vecmath.Point3d;
 import tops.translation.model.Chain;
 import tops.translation.model.HBond;
 import tops.translation.model.Protein;
-import tops.translation.model.Residue;
+import tops.translation.model.Group;
 import tops.translation.model.Segment;
 
 public class HBondAnalyser {
@@ -110,10 +110,10 @@ public class HBondAnalyser {
         }
 
         int index = -1;
-        Iterator<Residue> residues = chain.residueIterator();
+        Iterator<Group> residues = chain.residueIterator();
 
         while (residues.hasNext()) {
-            Residue first = (Residue) residues.next();
+            Group first = (Group) residues.next();
             index++;
 
             // we ignore gamma turns!
@@ -132,7 +132,7 @@ public class HBondAnalyser {
 
             // allow for chain breaks, or return if we have reached the end
             if (!chain.hasResidueByAbsoluteNumbering(nextPosition)) {
-                Residue second = chain.getNextResidue(position);
+                Group second = chain.getNextResidue(position);
                 if (second == null) {   //probably reached the end of the chain!
                     break;
                 }
@@ -140,7 +140,7 @@ public class HBondAnalyser {
             }
 
             // now, compare the first residue to the residues further on in the chain
-            Iterator<Residue> itr = chain.residueIterator(nextPosition);
+            Iterator<Group> itr = chain.residueIterator(nextPosition);
             while (itr.hasNext()) {
                 int secondPosition = itr.next().getAbsoluteNumber();
 
@@ -149,7 +149,7 @@ public class HBondAnalyser {
                     continue;
                 }
 
-                Residue second;
+                Group second;
                 try {
                     second = chain.getResidueByAbsoluteNumbering(secondPosition);
                     if (!second.isStandardAminoAcid()) {
@@ -223,7 +223,7 @@ public class HBondAnalyser {
         }
     }
 
-    public List<Tag> convertBondsToTags(Residue residue) {
+    public List<Tag> convertBondsToTags(Group residue) {
     	List<HBond> nTerminalHBonds = residue.getNTerminalHBonds();
     	List<HBond> cTerminalHBonds = residue.getCTerminalHBonds();
 
@@ -413,8 +413,8 @@ public class HBondAnalyser {
         }
 
         // could, of course, just pass the residue along to this method...
-        Residue residue = chain.getResidueByAbsoluteNumbering(index);
-        Residue twoBehind = chain.getResidueByAbsoluteNumbering(index - 2);
+        Group residue = chain.getResidueByAbsoluteNumbering(index);
+        Group twoBehind = chain.getResidueByAbsoluteNumbering(index - 2);
 
         // get the hbond partners for these two residues as arrays of indices
         int[] residueHBondPartners = residue.getHBondPartners();

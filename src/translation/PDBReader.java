@@ -7,9 +7,12 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.vecmath.Point3d;
+
+import tops.translation.model.Atom;
 import tops.translation.model.Chain;
+import tops.translation.model.Group;
 import tops.translation.model.Protein;
-import tops.translation.model.Residue;
 
 public class PDBReader {
 
@@ -67,7 +70,7 @@ public class PDBReader {
             chain = new Chain(chainLabel);
         }
 
-        Residue r;
+        Group r;
         int pdbNumber = Integer.parseInt(residueNumber);
         if (chain.hasResidueByPDBNumbering(pdbNumber)) {
             r = chain.getResidueByPDBNumbering(pdbNumber);
@@ -75,10 +78,18 @@ public class PDBReader {
             r = chain.createResidue(pdbNumber, residueType);
         }
 
-        r.setAtom(atomType, coordinates);
+        r.addAtom(new Atom(atomType, fromCoords(coordinates)));
 
         return chain;
     }
+    
+    private static Point3d fromCoords(String coords) {
+		String[] bits = coords.split("\\s+");
+		double x = Double.parseDouble(bits[0]);
+		double y = Double.parseDouble(bits[1]);
+		double z = Double.parseDouble(bits[2]);
+		return new Point3d(x, y, z);
+	}
 
     public static void main(String[] args) {
         try {

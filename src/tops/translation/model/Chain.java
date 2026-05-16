@@ -20,7 +20,7 @@ public class Chain {
     private String label;
     private String type;
     private Point3d center;
-    private List<Residue> residues;
+    private List<Group> residues;
     private List<HBond> hbonds;
     private List<Sheet> sheets;
     private List<Segment> segments;
@@ -66,8 +66,8 @@ public class Chain {
     // backbone amide hydrogens, it will overwrite them...
     public void addBackboneAmideHydrogens() {
         for (int i = 1; i < this.residues.size(); i++) {
-            Residue lastResidue = this.residues.get(i - 1);
-            Residue residue     = this.residues.get(i);
+            Group lastResidue = this.residues.get(i - 1);
+            Group residue     = this.residues.get(i);
 
             if (residue.isPro()) {
                 continue;
@@ -85,18 +85,18 @@ public class Chain {
             Point3d hPos = new Point3d();
             hPos.add(currN, OC);
 
-            residue.setAtom("H", hPos);
+            residue.addAtom(new Atom("H", hPos));
         }
     } 
 
-    public Residue createResidue(int pdbNumber, String residueType) {
-        Residue residue = new Residue(this.residues.size(), pdbNumber, residueType);
+    public Group createResidue(int pdbNumber, String residueType) {
+        Group residue = new Group(this.residues.size(), pdbNumber, residueType);
         this.residues.add(residue);
         return residue;
     }
 
     public void createHelix(int helixStartIndex, int helixEndIndex) {
-    	Residue firstResidue = this.getResidueByAbsoluteNumbering(helixStartIndex);
+    	Group firstResidue = this.getResidueByAbsoluteNumbering(helixStartIndex);
         Segment helix = new Segment(Type.HELIX, firstResidue);
         for (int index = helixStartIndex + 1; index < helixEndIndex + 1; index++) {
             helix.expandBy(this.getResidueByAbsoluteNumbering(index));
@@ -106,7 +106,7 @@ public class Chain {
     }
 
     public void createStrand(int strandStartIndex, int strandEndIndex) {
-    	Residue firstResidue = this.getResidueByAbsoluteNumbering(strandStartIndex);
+    	Group firstResidue = this.getResidueByAbsoluteNumbering(strandStartIndex);
         Segment strand = new Segment(Type.STRAND, firstResidue);
         for (int index = strandStartIndex + 1; index < strandEndIndex + 1; index++) {
             strand.expandBy(this.getResidueByAbsoluteNumbering(index));
@@ -116,7 +116,7 @@ public class Chain {
     }
 
     public void createLoop(int startIndex, int endIndex) {
-    	Residue firstResidue = this.getResidueByAbsoluteNumbering(startIndex);
+    	Group firstResidue = this.getResidueByAbsoluteNumbering(startIndex);
         Segment unstructured = new Segment(Type.UNSTRUCTURED, firstResidue);
         for (int index = startIndex + 1; index < endIndex + 1; index++) {
             unstructured.expandBy(this.getResidueByAbsoluteNumbering(index));
@@ -170,7 +170,7 @@ public class Chain {
     }
 
     public boolean hasResidueByPDBNumbering(int pdbResidueNumber) {
-        for (Residue residue : this.residues) {
+        for (Group residue : this.residues) {
             if (residue.getPDBNumber() == pdbResidueNumber) {
                 return true;
             }
@@ -178,8 +178,8 @@ public class Chain {
         return false;
     }
 
-    public Residue getResidueByPDBNumbering(int pdbResidueNumber) {
-    	for (Residue residue : this.residues) {
+    public Group getResidueByPDBNumbering(int pdbResidueNumber) {
+    	for (Group residue : this.residues) {
             if (residue.getPDBNumber() == pdbResidueNumber) {
                 return residue;
             }
@@ -187,7 +187,7 @@ public class Chain {
         return null;
     }
 
-    public Residue getResidueByAbsoluteNumbering(int i) {
+    public Group getResidueByAbsoluteNumbering(int i) {
         return this.residues.get(i);
     }
 
@@ -195,15 +195,15 @@ public class Chain {
         return i < this.residues.size();
     }
 
-    public Residue firstResidue() {
+    public Group firstResidue() {
         return this.residues.get(0);
     }
 
-    public Residue lastResidue() {
+    public Group lastResidue() {
         return this.residues.get(this.residues.size() - 1);
     }
 
-    public Residue getNextResidue(int residueIndex) {
+    public Group getNextResidue(int residueIndex) {
         if (residueIndex + 1 >= this.residues.size()) {
             return null;
         } else {
@@ -211,11 +211,11 @@ public class Chain {
         }
     }
 
-    public Iterator<Residue> residueIterator() {
+    public Iterator<Group> residueIterator() {
         return this.residues.iterator();
     }
 
-    public Iterator<Residue> residueIterator(int indexFrom) {
+    public Iterator<Group> residueIterator(int indexFrom) {
         return this.residues.subList(indexFrom, this.residues.size() - 1).iterator();
     }
 
@@ -329,18 +329,18 @@ public class Chain {
     }
 
     public void calculateTorsions() {
-        Iterator<Residue> residueIterator = this.residueIterator();
-        Residue previousResidue = null;
-        Residue thisResidue = null;
+        Iterator<Group> residueIterator = this.residueIterator();
+        Group previousResidue = null;
+        Group thisResidue = null;
 
         if (residueIterator.hasNext()) {
-            previousResidue = (Residue) residueIterator.next();
+            previousResidue = (Group) residueIterator.next();
         } else {
             return;
         }
 
         if (residueIterator.hasNext()) {
-            thisResidue = (Residue) residueIterator.next();
+            thisResidue = (Group) residueIterator.next();
         } else {
             return;
         }
@@ -356,7 +356,7 @@ public class Chain {
 
             previousResidue = thisResidue;
             if (residueIterator.hasNext()) {
-                Residue nextResidue = (Residue) residueIterator.next();
+                Group nextResidue = (Group) residueIterator.next();
 
                 Point3d nextN = nextResidue.getCoordinates("N");
 
@@ -501,7 +501,7 @@ public class Chain {
         StringBuilder s = new StringBuilder();
         s.append("Chain : " + this.getLabel() + " residue " + this.firstResidue().getPDBNumber() + " to " + this.lastResidue().getPDBNumber() + "\n");
 
-        for (Residue r : this.residues) {
+        for (Group r : this.residues) {
             s.append(r.toFullString());
             s.append("\n");
         }

@@ -45,7 +45,6 @@ public class PDBParser {
                 int resseq = Integer.parseInt(safeSubstring(line, 22, 26).trim());
                 String icode = safeSubstring(line, 26, 27);
                 
-                ResidueID residueID = new ResidueID(resseq, icode);
                 
                 // Atomic coordinates
                 double x = Double.parseDouble(safeSubstring(line, 30, 38).trim());
@@ -72,7 +71,7 @@ public class PDBParser {
                     chainType = ChainType.PEPTIDE;
                 }
                 
-                builder.registerLine(residueID, resname, resseq, icode, segID, chainID, chainType);
+                builder.registerLine(resname, resseq, icode, segID, chainID, chainType);
                 builder.initAtom(name, coord, bfactor, occupancy, altloc);
                 
             } else if (recordType.equals("ENDMDL")) {

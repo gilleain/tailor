@@ -9,7 +9,7 @@ import javax.vecmath.Point3d;
 import tailor.condition.SegmentPartition;
 import tops.translation.model.Segment;
 import tops.translation.model.Chain;
-import tops.translation.model.Residue;
+import tops.translation.model.Group;
 
 public class Result {
 	
@@ -34,9 +34,9 @@ public class Result {
 	}
 	
 	private class RRef {
-		public Residue residue;
+		public Group residue;
 		public List<ARef> atomRefs = new ArrayList<>();
-		public RRef(Residue residue) {
+		public RRef(Group residue) {
 			this.residue = residue;
 		}
 	}
@@ -52,9 +52,9 @@ public class Result {
 		this.root = new CRef(chain);
 	}
 
-	public Result(Chain chain, Residue... residues) {
+	public Result(Chain chain, Group... residues) {
 		this(chain);
-		for (Residue residue : residues) {
+		for (Group residue : residues) {
 			RRef residueRef = new RRef(residue);
 			this.root.residueRefs.add(residueRef);
 			// TODO - atoms?

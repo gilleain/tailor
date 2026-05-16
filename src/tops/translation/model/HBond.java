@@ -2,13 +2,13 @@ package tops.translation.model;
 
 
 public class HBond implements Comparable<HBond> {
-    private Residue donor;
-    private Residue acceptor;
+    private Group donor;
+    private Group acceptor;
     private double distance;
     private double nhoAngle;
     private double hocAngle;
 
-    public HBond(Residue donor, Residue acceptor, double distance, double nhoAngle, double hocAngle) {
+    public HBond(Group donor, Group acceptor, double distance, double nhoAngle, double hocAngle) {
         this.donor = donor;
         this.acceptor = acceptor;
         this.distance = distance;
@@ -26,7 +26,7 @@ public class HBond implements Comparable<HBond> {
         }
     }
 
-    public Residue getPartner(Residue residue) {
+    public Group getPartner(Group residue) {
         if (residue == this.donor) {
             return this.acceptor;
         } else {
@@ -34,7 +34,7 @@ public class HBond implements Comparable<HBond> {
         }
     }
 
-    public boolean contains(Residue residue) {
+    public boolean contains(Group residue) {
         return this.donor == residue || this.acceptor == residue;
     }
 
@@ -50,19 +50,19 @@ public class HBond implements Comparable<HBond> {
         return this.getResidueSeparation() > 4;
     }
 
-    public Residue acceptor() {
+    public Group acceptor() {
         return this.acceptor;
     }
 
-    public boolean residueIsAcceptor(Residue residue) {
+    public boolean residueIsAcceptor(Group residue) {
         return this.acceptor == residue;
     }
 
-    public Residue donor() {
+    public Group donor() {
         return this.donor;
     }
 
-    public boolean residueIsDonor(Residue residue) {
+    public boolean residueIsDonor(Group residue) {
         return this.donor == residue;
     }
 

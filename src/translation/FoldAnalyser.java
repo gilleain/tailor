@@ -17,7 +17,7 @@ import javax.vecmath.Vector3d;
 
 import tops.translation.model.Chain;
 import tops.translation.model.Protein;
-import tops.translation.model.Residue;
+import tops.translation.model.Group;
 import tops.translation.model.Segment;
 import tops.translation.model.Segment.Orientation;
 import tops.translation.model.Segment.Type;
@@ -94,7 +94,7 @@ public class FoldAnalyser {
     public boolean bonded(Segment strand, Segment otherStrand) {
         //basically, run through the residues, checking the list of hbonds to find residues that might be in the other strand
         int numberOfHBonds = 0;
-        for (Residue nextResidue : strand.getResidues()) {
+        for (Group nextResidue : strand.getResidues()) {
             if (otherStrand.bondedTo(nextResidue)) {
                 numberOfHBonds++;
             }

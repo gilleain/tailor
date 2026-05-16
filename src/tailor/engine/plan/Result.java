@@ -150,7 +150,7 @@ public class Result {
 		Group gN = thisGroupNode.group;
 		Group gM = otherGroupNode.group;
 		boolean groupIdsEqual = gN.getName().equals(gM.getName()) 
-							  && gN.getResidueId().getResseq() == gM.getResidueId().getResseq();
+							  && gN.getNumber() == gM.getNumber();
 		boolean atomsEqual = atomString(gN).equals(atomString(gM));
 		return groupIdsEqual && atomsEqual;
 	}
