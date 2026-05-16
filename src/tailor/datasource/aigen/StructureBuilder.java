@@ -1,10 +1,10 @@
 package tailor.datasource.aigen;
 
 import tailor.structure.Chain;
-import tailor.structure.ChainType;
 import tailor.structure.Protein;
 import tops.translation.model.Atom;
 import tops.translation.model.Group;
+import tops.translation.model.PolymerType;
 
 public class StructureBuilder {
     private Protein structure;
@@ -17,7 +17,7 @@ public class StructureBuilder {
     private Integer modelID;
     
     private String chainID;
-    private ChainType chainType;
+    private PolymerType chainType;
     private String segID;
     private Integer residueNumber;
     private String resname;
@@ -64,7 +64,7 @@ public class StructureBuilder {
 //        this.chainType = null;
 //    }
     
-    public void initChain(String chainID, ChainType chainType) {
+    public void initChain(String chainID, PolymerType chainType) {
         this.chainID = chainID;
         this.chainType = chainType;
         this.chain = new Chain(chainID, chainType);
@@ -73,7 +73,7 @@ public class StructureBuilder {
     }
     
     public void registerLine(String resname, int resseq, 
-                            String icode, String segID, String chainID, ChainType chainType) {
+                            String icode, String segID, String chainID, PolymerType chainType) {
         if (!chainID.equals(this.chainID) || !chainType.equals(this.chainType)) {
             initChain(chainID, chainType);
             initResidue(resname, resseq, icode);

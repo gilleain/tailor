@@ -4,8 +4,8 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 
-import tailor.structure.ChainType;
 import tailor.structure.Protein;
+import tops.translation.model.PolymerType;
 
 public class PDBParser {
     private StructureBuilder builder;
@@ -58,17 +58,17 @@ public class PDBParser {
                 
                 String segID = safeSubstring(line, 72, 76).trim();
                 
-                ChainType chainType;
+                PolymerType chainType;
                 if (recordType.equals("HETATM")) {
                     if (resname.equals("HOH") || resname.equals("DOD")) {
                         chainID = "Water";
-                        chainType = ChainType.WATER;
+                        chainType = PolymerType.WATER;
                     } else {
                         chainID = "Ligand";
-                        chainType = ChainType.LIGAND;
+                        chainType = PolymerType.LIGAND;
                     }
                 } else {
-                    chainType = ChainType.PEPTIDE;
+                    chainType = PolymerType.PEPTIDE;
                 }
                 
                 builder.registerLine(resname, resseq, icode, segID, chainID, chainType);

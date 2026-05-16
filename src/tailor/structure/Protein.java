@@ -3,6 +3,8 @@ package tailor.structure;
 import java.util.ArrayList;
 import java.util.List;
 
+import tops.translation.model.PolymerType;
+
 public class Protein {
     
     private final String name;
@@ -14,7 +16,7 @@ public class Protein {
         this.chains = new ArrayList<>();
     }
     
-    public List<Chain> chainsOfType(ChainType chainType) {
+    public List<Chain> chainsOfType(PolymerType chainType) {
         List<Chain> chainsToReturn = new ArrayList<>();
         for (Chain chain : chains) {
         	if (chain.getType().equals(chainType)) {

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import tops.translation.model.Group;
+import tops.translation.model.PolymerType;
 
 public class Chain extends Segment {
     
@@ -15,7 +16,7 @@ public class Chain extends Segment {
         this.name = name;
     }
 
-    private ChainType chainType;
+    private PolymerType chainType;
     
     public Chain() {
         this("A");  // XXX is this a sensible default?
@@ -27,14 +28,14 @@ public class Chain extends Segment {
         this.sses = new ArrayList<>();
     }
     
-    public Chain(String name, ChainType chainType) {
+    public Chain(String name, PolymerType chainType) {
         super(Type.CHAIN, new ArrayList<>());
         this.name = name;
         this.sses = new ArrayList<>();
         this.chainType = chainType;
     }
     
-    public ChainType getChainType() {
+    public PolymerType getChainType() {
         return this.chainType;
     }
     

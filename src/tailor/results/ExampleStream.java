@@ -7,10 +7,10 @@ import java.util.List;
 
 import tailor.datasource.aigen.PDBFileList;
 import tailor.structure.Chain;
-import tailor.structure.ChainType;
 import tailor.structure.Protein;
 import tops.translation.model.Atom;
 import tops.translation.model.Group;
+import tops.translation.model.PolymerType;
 
 /**
  * Note - was aigen from python
@@ -123,7 +123,7 @@ class ExampleDescription {
        for (Chain chain : structure.getChains()) {
     	   
            if (chain.getName().equals(this.chainName) || this.chainName.equals(" ")) {
-               Chain chainFeature = new Chain(chain.getName(), ChainType.PEPTIDE);
+               Chain chainFeature = new Chain(chain.getName(), PolymerType.PEPTIDE);
                
                // Process residues within the range
                for (Group residue : chain.getGroups()) {
@@ -146,10 +146,10 @@ class ExampleDescription {
        }
        
        // Add the ligand (water molecule)
-       Chain waterChain = new Chain("Water", ChainType.WATER);
+       Chain waterChain = new Chain("Water", PolymerType.WATER);
        Group waterResidue = new Group(ligandNum, "HOH");
        
-       List<Chain> waterChains = structure.chainsOfType(ChainType.WATER);
+       List<Chain> waterChains = structure.chainsOfType(PolymerType.WATER);
        if (!waterChains.isEmpty()) {
            Group existingWater = waterChains.get(0).getGroupAt(this.ligandNum);
            if (existingWater != null) {

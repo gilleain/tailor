@@ -10,10 +10,10 @@ import java.util.List;
 import javax.vecmath.Point3d;
 
 import tailor.structure.Chain;
-import tailor.structure.ChainType;
 import tailor.structure.Protein;
 import tops.translation.model.Atom;
 import tops.translation.model.Group;
+import tops.translation.model.PolymerType;
 
 public class PDBReader {
 	
@@ -50,7 +50,7 @@ public class PDBReader {
 	        Chain currentChain = null;
 
 	        for (String atomRecord : atomRecords) {	        	
-	            Chain newChain = PDBReader.parseRecord(atomRecord, currentChain, ChainType.PEPTIDE);
+	            Chain newChain = PDBReader.parseRecord(atomRecord, currentChain, PolymerType.PEPTIDE);
 	            if (currentChain == null || !newChain.getName().equals(currentChain.getName())) {
 	                protein.addChain(newChain);
 	                currentChain = newChain;
@@ -60,7 +60,7 @@ public class PDBReader {
 	        currentChain = null;
 	        
 	        for (String hetatmRecord : hetatmRecords) {
-	            Chain newChain = PDBReader.parseRecord(hetatmRecord, currentChain, ChainType.WATER);
+	            Chain newChain = PDBReader.parseRecord(hetatmRecord, currentChain, PolymerType.WATER);
                 if (currentChain == null || !newChain.getName().equals(currentChain.getName())) {
                     protein.addChain(newChain);
                     currentChain = newChain;
@@ -70,7 +70,7 @@ public class PDBReader {
 	        return protein;
 	    }
 
-	    public static Chain parseRecord(String atomRecord, Chain chain, ChainType chainType) {
+	    public static Chain parseRecord(String atomRecord, Chain chain, PolymerType chainType) {
 	        //String atomNumber = atomRecord.substring(4, 11).trim();
 	        String atomName = atomRecord.substring(11, 16).trim();
 	        String residueName = atomRecord.substring(17, 20);

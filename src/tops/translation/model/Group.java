@@ -35,7 +35,7 @@ public class Group implements Comparable<Group> {
         if (this.isBase()) {
             this.polymerType = PolymerType.DNA;
         } else {
-            this.polymerType = PolymerType.PROTEIN;
+            this.polymerType = PolymerType.PEPTIDE;
         }
         this.environment = Environment.NONE;
     }

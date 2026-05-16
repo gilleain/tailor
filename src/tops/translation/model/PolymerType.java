@@ -3,5 +3,7 @@ package tops.translation.model;
 public enum PolymerType {
 	NONE,
 	DNA,
-	PROTEIN
+	PEPTIDE,
+	LIGAND,		// non-water ligand
+	WATER;		// water ligands
 }
