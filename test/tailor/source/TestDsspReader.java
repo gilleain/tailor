@@ -11,7 +11,7 @@ import org.junit.Test;
 
 import tailor.datasource.DsspReader;
 import tailor.structure.Chain;
-import tailor.structure.Segment;
+import tops.translation.model.Segment;
 
 public class TestDsspReader {
     
@@ -33,14 +33,14 @@ public class TestDsspReader {
     
     public void p(Segment sse, int index) {
         System.out.println(sse.getClass().getSimpleName() + " " + index
-                + " " + sse.getFirst().getNumber() 
-                + "-" + sse.getLast().getNumber());
+                + " " + sse.firstResidue().getNumber() 
+                + "-" + sse.lastResidue().getNumber());
     }
     
     private boolean isStrand(Segment sse, int start, int end) {
         return sse.getType() == tops.translation.model.Segment.Type.STRAND
-                && sse.getFirst().getNumber() == start
-                && sse.getLast().getNumber() == end;
+                && sse.firstResidue().getNumber() == start
+                && sse.lastResidue().getNumber() == end;
     }
 
 }

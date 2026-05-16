@@ -340,4 +340,8 @@ public class Segment implements Comparable<Segment> {
         }
         return residueList;
     }
+
+	public void addGroup(Group group) {
+		residues.add(group);
+	}
 }

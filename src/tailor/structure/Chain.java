@@ -5,6 +5,7 @@ import java.util.List;
 
 import tops.translation.model.Group;
 import tops.translation.model.PolymerType;
+import tops.translation.model.Segment;
 
 public class Chain  {
     
