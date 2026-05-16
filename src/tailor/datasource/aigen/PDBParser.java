@@ -93,33 +93,5 @@ public class PDBParser {
         if (str.length() < end) return str.substring(start);
         return str.substring(start, end);
     }
-    
-    public static void main(String[] args) {
-//      if (args.length < 1) {
-//          System.err.println("Usage: java PDBParserMain <pdb_file>");
-//          System.exit(1);
-//      }
-//      
-//      try {
-//          PDBParser parser = new PDBParser(new StructureBuilder());
-//          Structure structure = parser.getStructure(args[0]);
-//          
-//          System.out.println(structure + " has " + structure.size() + " models");
-//          
-////          for (Model model : structure) {
-////              System.out.println(model + " has " + model.size() + " chains");
-////              
-////              for (Chain chain : model) {
-////                  System.out.println(chain + " has " + chain.size() + " residues");
-////                  
-////                  for (Residue residue : chain) {
-////                      System.out.println(residue + " has " + residue.size() + " atoms");
-////                  }
-////              }
-////          }
-//      } catch (IOException e) {
-//          System.err.println("Error reading PDB file: " + e.getMessage());
-//          e.printStackTrace();
-//      }
-  }
+  
 }

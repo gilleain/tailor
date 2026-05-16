@@ -3,7 +3,7 @@ package tailor.validate;
 import java.util.ArrayList;
 import java.util.List;
 
-import tailor.description.Description;
+import tailor.description.ProteinDescription;
 
 /**
  * Use this to check that a Description is valid; which specifically means that
@@ -33,7 +33,7 @@ public class DescriptionValidator {
      * @param description the description to check
      * @return true if all the validators allow the description
      */
-    public boolean isValid(Description description) {
+    public boolean isValid(ProteinDescription description) {
         for (Validator validator : validators) {
             if (validator.isValid(description)) {
                 continue;

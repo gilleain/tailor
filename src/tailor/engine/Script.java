@@ -12,7 +12,6 @@ import tailor.api.AtomListDescription;
 import tailor.api.AtomListMeasure;
 import tailor.description.AtomDescription;
 import tailor.description.ChainDescription;
-import tailor.description.Description;
 import tailor.description.DescriptionGenerator;
 import tailor.description.GroupDescription;
 import tailor.description.atom.AtomAngleRangeDescription;
@@ -323,8 +322,6 @@ public class Script {
     	
     private static ChainDescription makeChainMotif(ChainDescription chainDescription, List<LevelText> levelTexts) {	
         ChainDescription motifDescription = null;
-        Description currentLevel = null;
-        Class<? extends Description> currentLevelSubType = null;
         
         // Create the Description hierarchy with PropertyConditions
         for (LevelText levelText : levelTexts) {

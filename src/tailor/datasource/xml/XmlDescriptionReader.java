@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Stack;
 
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
@@ -25,9 +24,7 @@ import tailor.datasource.xml.description.ChainDescriptionXmlHandler;
 import tailor.datasource.xml.description.DescriptionXmlHandler;
 import tailor.datasource.xml.description.GroupDescriptionXmlHandler;
 import tailor.datasource.xml.description.ProteinDescriptionXmlHandler;
-import tailor.description.AtomDescription;
 import tailor.description.ChainDescription;
-import tailor.description.Description;
 import tailor.description.GroupDescription;
 import tailor.description.ProteinDescription;
 
@@ -46,13 +43,10 @@ public class XmlDescriptionReader {
         
         private GroupDescription currentGroupDescription;
         
-        private AtomDescription currentAtomDescription;	// TODO - don't really need this?
-        
         private ChainDescription root;
         
         private Object currentParent;
         
-        private Stack<Description> seenStack;
         
         private Map<String, DescriptionXmlHandler> descriptionHandlers;
         
@@ -61,7 +55,6 @@ public class XmlDescriptionReader {
         private Map<String, ConditionXmlHandler> conditionHandlers;
         
         public XmlMotifHandler() {
-            this.seenStack = new Stack<>();
             
             descriptionHandlers = new HashMap<>();
             descriptionHandlers.put("ProteinDescription", new ProteinDescriptionXmlHandler());
@@ -83,8 +76,6 @@ public class XmlDescriptionReader {
                 DescriptionXmlHandler handler = descriptionHandlers.get(qName);
                 try {
                 	setCurrent(qName, handler, attrs);
-//                    seenStack.push(currentDescription);
-//                    currentParent = currentDescription;
                     
                     if (root == null) {
                         root = currentChainDescription;	// TODO?
@@ -112,7 +103,7 @@ public class XmlDescriptionReader {
         		currentGroupDescription = (GroupDescription) groupDescriptionXmlHandler.create(attrs, currentChainDescription);
         		currentParent = currentGroupDescription;
         	} else if (handler instanceof AtomDescriptionXmlHandler atomDescriptionXmlHandler) {
-        		currentAtomDescription = (AtomDescription) atomDescriptionXmlHandler.create(attrs, currentGroupDescription);
+        		// no action
         	}
         }
         

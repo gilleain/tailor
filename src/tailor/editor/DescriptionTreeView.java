@@ -15,9 +15,9 @@ import javax.swing.tree.TreeSelectionModel;
 
 import tailor.description.AtomDescription;
 import tailor.description.ChainDescription;
-import tailor.description.Description;
 import tailor.description.DescriptionPath;
 import tailor.description.GroupDescription;
+import tailor.description.ProteinDescription;
 
 public class DescriptionTreeView extends JPanel  {
 	
@@ -185,7 +185,7 @@ public class DescriptionTreeView extends JPanel  {
             if (position == -1) {
                 position = currentlySelectedNode.getChildCount();
             }
-            Description description = createFromLevel(childLevel, name);
+//            Description description = createFromLevel(childLevel, name);
             // TODO
 //            this.addDescriptionToNewChildNode(currentlySelectedNode, description);
         }
@@ -196,10 +196,10 @@ public class DescriptionTreeView extends JPanel  {
 		return getSubLevel(currentLevel);
 	}
 
-	private Description createFromLevel(Level protein, String name) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+//	private Description createFromLevel(Level protein, String name) {
+//		// TODO Auto-generated method stub
+//		return null;
+//	}
 	
 	public Level getSubLevel(Level currentLevel) {
 		// TODO Auto-generated method stub
@@ -334,12 +334,12 @@ public class DescriptionTreeView extends JPanel  {
      * 
      * @return the Description at the currently selected node
      */
-    public Description getCurrentlySelectedDescription() {
+    public ProteinDescription getCurrentlySelectedDescription() {
         DefaultMutableTreeNode currentlySelectedNode = this.getCurrentlySelectedNode();
         if (currentlySelectedNode == null) {
             return null;
         } else {
-            return (Description) currentlySelectedNode.getUserObject();
+            return (ProteinDescription) currentlySelectedNode.getUserObject();
         }
     }
     

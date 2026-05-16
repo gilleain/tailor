@@ -1,6 +1,6 @@
 package tailor.validate;
 
-import tailor.description.Description;
+import tailor.description.ProteinDescription;
 
 /**
  * A validator does a single check on a Description via its 
@@ -18,5 +18,5 @@ public interface Validator {
      * @param description the description to check
      * @return true if valid
      */
-    public boolean isValid(Description description);  
+    public boolean isValid(ProteinDescription description);  
 }

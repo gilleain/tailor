@@ -1,6 +1,6 @@
 package tailor.description;
 
-public class ProteinDescription implements Description {
+public class ProteinDescription {
 
 	public ProteinDescription(String string) {
 		// TODO Auto-generated constructor stub

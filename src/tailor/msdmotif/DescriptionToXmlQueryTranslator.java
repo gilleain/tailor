@@ -3,7 +3,6 @@ package tailor.msdmotif;
 import tailor.api.AtomListDescription;
 import tailor.description.AtomDescription;
 import tailor.description.ChainDescription;
-import tailor.description.Description;
 import tailor.description.DescriptionPath;
 import tailor.description.GroupDescription;
 import tailor.description.ProteinDescription;
@@ -21,10 +20,7 @@ public class DescriptionToXmlQueryTranslator {
 	
 	public static String header = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<!DOCTYPE query SYSTEM \"http://www.ebi.ac.uk/msd-srv/msdmotif/query.dtd\">\n"; 
 
-	public static String translate(Description description) {
-        
-        // TODO : type safety!
-        ProteinDescription protein = (ProteinDescription) description;
+	public static String translate(ProteinDescription protein) {
         
 		StringBuffer xmlString = new StringBuffer();
 		
