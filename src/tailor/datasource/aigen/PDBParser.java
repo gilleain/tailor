@@ -4,8 +4,8 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 
-import tailor.structure.Protein;
 import tops.translation.model.PolymerType;
+import tops.translation.model.Protein;
 
 public class PDBParser {
     private StructureBuilder builder;

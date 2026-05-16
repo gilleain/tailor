@@ -13,8 +13,8 @@ import tailor.engine.operator.Pipe;
 import tailor.engine.operator.ResultsPrinterAdapter;
 import tailor.engine.plan.Plan;
 import tailor.engine.plan.Planner;
-import tailor.structure.Protein;
 import tops.translation.model.Chain;
+import tops.translation.model.Protein;
 
 public class PlanEngine implements Engine {
 	
@@ -47,7 +47,7 @@ public class PlanEngine implements Engine {
 			try {
 				Protein str = structureSource.next();
 				for (Chain chain : str.getChains()) { // TODO ugh
-					runChain(str.getName(), chain); // TODO - want to be cleverer with handling chains
+					runChain(str.getID(), chain); // TODO - want to be cleverer with handling chains
 				}
 			} catch (IOException e) {
 				// TODO Auto-generated catch block

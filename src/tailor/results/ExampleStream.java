@@ -6,11 +6,11 @@ import java.util.Iterator;
 import java.util.List;
 
 import tailor.datasource.aigen.PDBFileList;
-import tailor.structure.Protein;
 import tops.translation.model.Atom;
 import tops.translation.model.Chain;
 import tops.translation.model.Group;
 import tops.translation.model.PolymerType;
+import tops.translation.model.Protein;
 
 /**
  * Note - was aigen from python

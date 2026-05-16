@@ -8,9 +8,9 @@ import java.util.List;
 
 import org.junit.Test;
 
-import tailor.structure.Protein;
 import tops.translation.model.Chain;
 import tops.translation.model.Group;
+import tops.translation.model.Protein;
 
 public class TestPDBReader {
     
@@ -19,7 +19,7 @@ public class TestPDBReader {
     @Test
     public void testRead() throws IOException {
         File file = new File(DIR, "test.pdb");
-        Protein structure = (Protein) tailor.datasource.PDBReader.read(file);
+        Protein structure = tailor.datasource.PDBReader.read(file);
         
         List<Chain> chains = structure.getChains();
         assertEquals(2, chains.size());

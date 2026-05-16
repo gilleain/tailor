@@ -15,9 +15,9 @@ import org.apache.commons.cli.PosixParser;
 
 import tailor.datasource.PDBReader;
 import tailor.datasource.PDBWriter;
-import tailor.structure.Protein;
 import tops.translation.model.Chain;
 import tops.translation.model.Group;
+import tops.translation.model.Protein;
 
 public class Extractor {
     
@@ -112,7 +112,7 @@ public class Extractor {
         System.err.println("Extracting from " + argHandler.startResidueNumber 
                     + " to " + argHandler.endResidueNumber);
         
-        Protein outputProtein = new Protein(protein.getName());
+        Protein outputProtein = new Protein(protein.getID());
         outputProtein.addChain(outputChain);
         
         BufferedWriter out;

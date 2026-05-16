@@ -33,6 +33,16 @@ public class Protein {
     public void addChain(Chain chain) {
         this.chains.add(chain);
     }
+    
+    public List<Chain> chainsOfType(PolymerType chainType) {
+        List<Chain> chainsToReturn = new ArrayList<>();
+        for (Chain chain : chains) {
+        	if (chain.getType().equals(chainType)) {
+        		chainsToReturn.add(chain);
+        	}
+        }
+        return chainsToReturn;
+    }
 
     public Map<String, Map<String, String>> toTopsDomainStrings(
     		ChainDomainMap chainDomainMap) {

@@ -9,11 +9,11 @@ import java.util.List;
 
 import javax.vecmath.Point3d;
 
-import tailor.structure.Protein;
 import tops.translation.model.Atom;
 import tops.translation.model.Chain;
 import tops.translation.model.Group;
 import tops.translation.model.PolymerType;
+import tops.translation.model.Protein;
 
 public class PDBReader {
 	

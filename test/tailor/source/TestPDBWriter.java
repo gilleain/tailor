@@ -13,10 +13,10 @@ import javax.vecmath.Point3d;
 import org.junit.Test;
 
 import tailor.datasource.PDBWriter;
-import tailor.structure.Protein;
 import tops.translation.model.Atom;
 import tops.translation.model.Chain;
 import tops.translation.model.Group;
+import tops.translation.model.Protein;
 
 public class TestPDBWriter {
     
