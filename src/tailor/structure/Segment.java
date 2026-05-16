@@ -14,21 +14,18 @@ public class Segment  {
     
     private final List<Group> groups;
     
-    public enum Type {
-    	CHAIN,HELIX,STRAND
-    }
-    private Type type;
+    private tops.translation.model.Segment.Type type;
     
-    public Segment(Type type) {
+    public Segment(tops.translation.model.Segment.Type type) {
     	this(type, List.of());
     }
     
-    public Segment(Type type, List<Group> groups) {
+    public Segment(tops.translation.model.Segment.Type type, List<Group> groups) {
     	this.type = type;
         this.groups = groups;
     }
     
-    public Type getType() {
+    public tops.translation.model.Segment.Type getType() {
     	return this.type;
     }
     

@@ -11,7 +11,6 @@ import javax.vecmath.Point3d;
 
 import tailor.structure.Chain;
 import tailor.structure.Segment;
-import tailor.structure.Segment.Type;
 import tops.translation.model.Atom;
 import tops.translation.model.Group;
 
@@ -46,8 +45,8 @@ public class DsspReader {
     
     private static Segment makeSSE(String structure) {
         switch (structure) {
-            case "E": return new Segment(Type.STRAND); // hmmm
-            case "H": return new Segment(Type.HELIX); // hmmm
+            case "E": return new Segment(tops.translation.model.Segment.Type.STRAND); // hmmm
+            case "H": return new Segment(tops.translation.model.Segment.Type.HELIX); // hmmm
             default: return null;
         }
     }
