@@ -3,6 +3,9 @@ package tops.translation.experimental;
 import java.util.ArrayList;
 import java.util.List;
 
+import tailor.api.Operator;
+import tailor.engine.operator.Pipe;
+
 public class Plan {
 	
 	private int operatorId;

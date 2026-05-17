@@ -8,6 +8,7 @@ import java.io.IOException;
 
 import org.junit.Test;
 
+import tailor.api.Operator;
 import tailor.datasource.PDBReader;
 import tailor.structure.Chain;
 import tailor.structure.Protein;

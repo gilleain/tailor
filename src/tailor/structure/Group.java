@@ -186,6 +186,18 @@ public class Group implements Comparable<Group> {
         return Geometer.averagePoints(this.atomMap.values().stream().map(Atom::getCenter).toList());
     }
 
+    public Point3d getCoordinatesOrBackup(String atomType, String backupType) {
+    	if (this.atomMap.containsKey(atomType)) {
+    		return getCoordinates(atomType);
+    	} else {
+    		if (this.atomMap.containsKey(backupType)) {
+    			return getCoordinates(backupType);
+    		} else {
+    			throw new IllegalArgumentException(String.format("Neither %s or %s found", atomType, backupType));
+    		}
+    	}
+    }
+    
     public Point3d getCoordinates(String atomType) {
         return this.atomMap.get(atomType).getCenter();
     }

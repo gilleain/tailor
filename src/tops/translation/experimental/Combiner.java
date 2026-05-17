@@ -5,6 +5,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Logger;
 
+import tailor.engine.operator.AbstractOperator;
+import tailor.engine.operator.Pipe;
 import tailor.engine.plan.Result;
 
 public class Combiner extends AbstractOperator {
@@ -21,6 +23,11 @@ public class Combiner extends AbstractOperator {
 		super.setId(id);
 		this.inputs.stream().forEach(pipe -> pipe.registerSink(this));
 	}
+
+	@Override
+	 public String description() {
+		return "Combiner";
+	 }
 
 	@Override
 	public void run() {

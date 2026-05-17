@@ -119,7 +119,7 @@ public class HBondAnalyser {
             int nextPosition = position + 3;
 
             Point3d firstN = first.getCoordinates("N");
-            Point3d firstH = first.getCoordinates("H");
+            Point3d firstH = first.getCoordinatesOrBackup("H", "HA");
             Point3d firstO = first.getCoordinates("O");
             Point3d firstC = first.getCoordinates("C");
 
@@ -138,6 +138,7 @@ public class HBondAnalyser {
             }
 
             // now, compare the first residue to the residues further on in the chain
+            if (nextPosition >= chain.length()) break;
             Iterator<Group> itr = chain.residueIterator(nextPosition);
             while (itr.hasNext()) {
                 int secondPosition = itr.next().getAbsoluteNumber();
@@ -158,7 +159,7 @@ public class HBondAnalyser {
                 }
 
                 Point3d secondN = second.getCoordinates("N");
-                Point3d secondH = second.getCoordinates("H");
+                Point3d secondH = second.getCoordinatesOrBackup("H", "HA");
                 Point3d secondO = second.getCoordinates("O");
                 Point3d secondC = second.getCoordinates("C");
 

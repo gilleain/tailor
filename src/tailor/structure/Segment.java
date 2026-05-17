@@ -57,6 +57,10 @@ public class Segment implements Comparable<Segment> {
         this(type);
         this.residues.add(first);
     }
+    
+    public String toString() {
+    	return toFullString();
+    }
 
     public String toFullString() {
     	if (this.type == Type.HELIX) {

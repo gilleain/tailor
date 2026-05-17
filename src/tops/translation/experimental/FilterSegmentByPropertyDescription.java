@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.logging.Logger;
 
 import tailor.api.SegmentPropertyDescription;
+import tailor.engine.operator.AbstractOperator;
+import tailor.engine.operator.Pipe;
 import tailor.engine.plan.Result;
 import tailor.structure.Segment;
 

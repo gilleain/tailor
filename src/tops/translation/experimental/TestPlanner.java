@@ -10,6 +10,8 @@ import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
 import org.junit.Test;
 
+import tailor.api.Operator;
+
 public class TestPlanner {
 	
 	@Test
