@@ -11,6 +11,7 @@ import org.hamcrest.TypeSafeMatcher;
 import org.junit.Test;
 
 import tailor.api.Operator;
+import tailor.description.ChainDescription;
 
 public class TestPlanner {
 	

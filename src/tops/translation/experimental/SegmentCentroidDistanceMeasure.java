@@ -13,9 +13,10 @@ import tailor.condition.LabelPartition.LabelledPart;
 import tailor.condition.LabelPartition.Part;
 import tailor.condition.SegmentMatcher;
 import tailor.condition.SegmentMatcher.Match;
+import tailor.condition.SegmentPartition;
+import tailor.description.ChainDescription;
 import tailor.geometry.Axis;
 import tailor.geometry.Geometer;
-import tailor.condition.SegmentPartition;
 import tailor.measurement.DoubleMeasurement;
 import tailor.structure.Segment;
 

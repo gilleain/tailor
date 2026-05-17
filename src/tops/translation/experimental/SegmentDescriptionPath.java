@@ -1,5 +1,7 @@
 package tops.translation.experimental;
 
+import tailor.description.ChainDescription;
+
 public class SegmentDescriptionPath {
 	
 	private final ChainDescription chainDescription;

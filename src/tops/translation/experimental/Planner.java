@@ -3,6 +3,7 @@ package tops.translation.experimental;
 import java.util.Stack;
 
 import tailor.api.SegmentListDescription;
+import tailor.description.ChainDescription;
 import tailor.engine.operator.Pipe;
 
 public class Planner {

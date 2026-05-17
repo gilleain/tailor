@@ -7,11 +7,21 @@ import java.util.Optional;
 
 import tailor.api.AtomListDescription;
 import tailor.api.AtomListMeasure;
+import tailor.api.SegmentListDescription;
 import tailor.description.group.GroupSequenceDescription;
+import tops.translation.experimental.SegmentDescription;
 
 public class ChainDescription {
 	
+	private int index;	// index of description in the list
+	
 	private Optional<String> label;
+	
+	// Descriptions of the segments to find
+	private List<SegmentDescription> segments;
+	
+	// Descriptions of relationships to find between the segments
+	private List<SegmentListDescription> segmentListDescriptions;
 	
 	// Descriptions of the groups to find
 	private List<GroupDescription> groupDescriptions;
@@ -31,14 +41,40 @@ public class ChainDescription {
 	
 	public ChainDescription(String label) {
 		this.label = Optional.ofNullable(label);
+		this.segments = new ArrayList<>();
+		this.segmentListDescriptions = new ArrayList<>();
 		this.groupDescriptions = new ArrayList<>();
 		this.atomListDescriptions = new ArrayList<>();
 		this.groupSequenceDescriptions = new ArrayList<>();
 		this.atomListMeasures = new ArrayList<>();
 	}
 	
+	public int getIndex() {
+		return index;
+	}
+
+	public void setIndex(int index) {
+		this.index = index;
+	}
+	
 	public Optional<String> getLabel() {
 		return label;
+	}
+	
+	public List<SegmentDescription> getSegments() {
+		return segments;
+	}
+
+	public void addSegment(SegmentDescription segmentDescription) {
+		this.segments.add(segmentDescription);
+	}
+	
+	public List<SegmentListDescription> getSegmentListDescription() {
+		return segmentListDescriptions;
+	}
+
+	public void addSegmentListDescriptions(SegmentListDescription... segmentListDescription) {
+		this.segmentListDescriptions.addAll(Arrays.asList(segmentListDescription));
 	}
 
 	public void addGroupDescription(GroupDescription groupDescription) {

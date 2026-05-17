@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
 import java.util.logging.Logger;
@@ -95,6 +94,12 @@ public class HBondAnalyser {
             this.analyse(chain);
         }
     }
+    
+    private record NHOCCords(Point3d n, Point3d h, Point3d o, Point3d c) { 
+    	public boolean anyNull() {
+    		return n == null || h == null || o == null || c == null;
+    	}
+    }
 
     public void analyse(Chain chain) throws PropertyException {
         double maxHODistance = 0.0;
@@ -110,21 +115,18 @@ public class HBondAnalyser {
             throw new PropertyException("Error in properties!");
         }
 
-        int index = -1;
-        for (Group first : chain.getGroups()) {    
-            index++;
+        List<Group> groups = chain.getGroups();
+        for (int index = 0; index < groups.size(); index++) {    
+            Group first = groups.get(index);
 
             // we ignore gamma turns!
             int position = first.getAbsoluteNumber();
             int nextPosition = position + 3;
-
-            Point3d firstN = first.getCoordinates("N");
-            Point3d firstH = first.getCoordinatesOrBackup("H", "HA");
-            Point3d firstO = first.getCoordinates("O");
-            Point3d firstC = first.getCoordinates("C");
+            
+            NHOCCords firstCoords = getNHOCCoords(first);
 
             // FIXME : unfortunately, this misses out on PRO residues (also below)
-            if (firstN == null || firstH == null || firstO == null || firstC == null) {
+            if (firstCoords == null ||firstCoords.anyNull()) {
                 continue;
             }
 
@@ -139,9 +141,7 @@ public class HBondAnalyser {
 
             // now, compare the first residue to the residues further on in the chain
             if (nextPosition >= chain.length()) break;
-            Iterator<Group> itr = chain.residueIterator(nextPosition);
-            while (itr.hasNext()) {
-                int secondPosition = itr.next().getAbsoluteNumber();
+            for (int secondPosition = nextPosition; secondPosition < chain.length(); secondPosition++) {
 
                 // we must still check this, since a chain break might move us to i + 2
                 if (secondPosition < (position + 3)) {
@@ -155,23 +155,21 @@ public class HBondAnalyser {
                         continue;
                     }
                 } catch (IndexOutOfBoundsException i) {
+                	System.err.println("IOOBE " + i);
                     break;
                 }
 
-                Point3d secondN = second.getCoordinates("N");
-                Point3d secondH = second.getCoordinatesOrBackup("H", "HA");
-                Point3d secondO = second.getCoordinates("O");
-                Point3d secondC = second.getCoordinates("C");
+                NHOCCords secondCoords = getNHOCCoords(second);
 
                 // FIXME : PRO residues...
-                if (secondN == null || secondH == null || secondO == null || secondC == null) {
+                if (secondCoords == null || secondCoords.anyNull()) {
                     continue;
                 }
 
                 // bonds from first N-H to second C=O
-                double firstHODistance = firstH.distance(secondO);
-                double firstNHOAngle = Geometer.angle(firstN, firstH, secondO);
-                double firstHOCAngle = Geometer.angle(firstH, secondO, secondC);
+                double firstHODistance = firstCoords.h.distance(secondCoords.o);
+                double firstNHOAngle = Geometer.angle(firstCoords.n, firstCoords.h, secondCoords.o);
+                double firstHOCAngle = Geometer.angle(firstCoords.h, secondCoords.o, secondCoords.c);
             
                 HBond firstSecondBond = null;
                 if (firstHODistance < maxHODistance && firstNHOAngle > minNHOAngle && firstHOCAngle > minHOCAngle) {
@@ -185,9 +183,9 @@ public class HBondAnalyser {
                 }
 
                 // bonds from second N-H to first C=O
-                double secondHODistance = secondH.distance(firstO);
-                double secondNHOAngle = Geometer.angle(secondN, secondH, firstO);
-                double secondHOCAngle = Geometer.angle(secondH, firstO, firstC);
+                double secondHODistance = secondCoords.h.distance(firstCoords.o);
+                double secondNHOAngle = Geometer.angle(secondCoords.n, secondCoords.h, firstCoords.o);
+                double secondHOCAngle = Geometer.angle(secondCoords.h, firstCoords.o, firstCoords.c);
 
                 HBond secondFirstBond = null;
                 if (secondHODistance < maxHODistance && secondNHOAngle > minNHOAngle && secondHOCAngle > minHOCAngle) {
@@ -220,6 +218,19 @@ public class HBondAnalyser {
         	segment.setNumber(bbIndex);
         	bbIndex++;
         }
+    }
+    
+    private NHOCCords getNHOCCoords(Group group) {
+    	try {
+	    	 Point3d n = group.getCoordinates("N");
+	         Point3d h = group.getCoordinates("H");
+	         Point3d o = group.getCoordinates("O");
+	         Point3d c = group.getCoordinates("C");
+	         return new NHOCCords(n, h, o, c);
+    	} catch (NullPointerException npe) {
+    		return null;	// TODO
+    	}
+        
     }
     
     public void addTerminii(Chain chain) {

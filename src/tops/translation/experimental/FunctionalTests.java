@@ -10,6 +10,7 @@ import org.junit.Test;
 
 import tailor.api.Operator;
 import tailor.datasource.PDBReader;
+import tailor.description.ChainDescription;
 import tailor.structure.Chain;
 import tailor.structure.Protein;
 import tailor.structure.Segment;
