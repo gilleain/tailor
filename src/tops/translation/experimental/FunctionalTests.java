@@ -11,6 +11,7 @@ import org.junit.Test;
 import tailor.api.Operator;
 import tailor.datasource.PDBReader;
 import tailor.description.ChainDescription;
+import tailor.engine.operator.PrintAdapter;
 import tailor.structure.Chain;
 import tailor.structure.Protein;
 import tailor.structure.Segment;
@@ -35,7 +36,7 @@ public class FunctionalTests {
 			// create the pipeline
 			Plan plan = new SegmentPlanner().makePlan(chainDescription);	// TODO! reset plan
 			SegmentSource segmentSource = new SegmentSource(chain, plan.getInputs());
-			PrintResult printer = new PrintResult(plan.getOutputPipe());
+			PrintAdapter printer = new PrintAdapter(plan.getOutputPipe());
 			
 			// run the pipeline
 			segmentSource.run();
