@@ -232,7 +232,7 @@ public class FunctionalTests {
 		Protein structure = PDBReader.read(new File(DATA_DIR, filename));
 		SysoutResultsPrinter printer = new SysoutResultsPrinter(structure.getID());
 		for (Chain chain : structure.getChains()) {
-			Operator resOperator = new ResultsPrinterAdapter(printer, plan.getOutputPoint(), chainDescription);
+			Operator resOperator = new ResultsPrinterAdapter(printer, plan.getOutputPipe(), chainDescription);
 			// TODO - do we have to reset?
 			Helper.run(chain, plan, resOperator);
 		}

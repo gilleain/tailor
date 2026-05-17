@@ -104,7 +104,7 @@ public class Planner {
 		if (withPrintOutput) {
 			plan.addOperator(new PrintAdapter("*", current));
 		} else {
-			plan.setOutputPoint(current);
+			plan.setOutputPipe(current);
 		}
 		return plan;
 	}

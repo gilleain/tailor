@@ -5,6 +5,7 @@ import java.util.Stack;
 import tailor.api.SegmentListDescription;
 import tailor.description.ChainDescription;
 import tailor.engine.operator.Pipe;
+import tailor.engine.plan.Plan;
 
 public class SegmentPlanner {
 	
@@ -15,7 +16,7 @@ public class SegmentPlanner {
 		Stack<Pipe> outputs = new Stack<>();
 		for (SegmentDescription segment : chainDescription.getSegments()) {
 			Pipe input = new Pipe();
-			Pipe output = plan.addInputOperator(new SegmentTypeFilter(segment.getType(), input), input);
+			Pipe output = plan.addStart(new SegmentTypeFilter(segment.getType(), input), input);
 			if (!segment.getPropertyDescriptions().isEmpty()) {
 				output = addInnerFilter(plan, output, segment);
 			}
@@ -26,14 +27,14 @@ public class SegmentPlanner {
 		Pipe currentOutput = outputs.pop();	// TODO - reverse order?
 		while (!outputs.empty()) {
 			Pipe nextOutput = outputs.pop();
-			Pipe combinedOutput = plan.addOperator(new Combiner(nextOutput, currentOutput));	// TODO - hack reversing here
+			Pipe combinedOutput = plan.addOperatorReturnPipe(new Combiner(nextOutput, currentOutput));	// TODO - hack reversing here
 			currentOutput = combinedOutput;
 		}
 		
 		// TODO - need to work out where to put these filters ...
 		for (SegmentListDescription segmentListDescription : chainDescription.getSegmentListDescription()) {
 			FilterSegmentByListDescription filter = new FilterSegmentByListDescription(currentOutput, segmentListDescription);
-			currentOutput = plan.addOperator(filter);
+			currentOutput = plan.addOperatorReturnPipe(filter);
 		}
 		
 		plan.setOutputPipe(currentOutput);
@@ -42,7 +43,7 @@ public class SegmentPlanner {
 	}
 	
 	private Pipe addInnerFilter(Plan plan, Pipe input, SegmentDescription segmentDescription) {
-		return plan.addOperator(
+		return plan.addOperatorReturnPipe(
 				new FilterSegmentByPropertyDescription(input, segmentDescription.getPropertyDescriptions()));
 	}
 

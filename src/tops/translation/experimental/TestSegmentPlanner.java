@@ -12,6 +12,7 @@ import org.junit.Test;
 
 import tailor.api.Operator;
 import tailor.description.ChainDescription;
+import tailor.engine.plan.Plan;
 
 public class TestSegmentPlanner {
 	

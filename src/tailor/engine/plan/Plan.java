@@ -19,7 +19,7 @@ public class Plan {
 	 * The 'entry' points to the pipeline, used to
 	 * connect the structure source to
 	 */
-	private List<Operator> startPoints;
+	private List<Pipe> startPoints;
 	
 	private Pipe outputPoint;
 	
@@ -44,23 +44,17 @@ public class Plan {
 		return this.operators;
 	}
 	
-	public List<Operator> getStartPoints() {
+	public List<Pipe> getInputPipes() {
 		return this.startPoints;
 	}
 	
-	public List<Pipe> getInputPipes() {
-		List<Pipe> inputs = new ArrayList<Pipe>();
-		for (Operator start : this.startPoints) {
-			Pipe input = new Pipe();
-			start.setInput(input);
-			inputs.add(input);
-		}
-		return inputs;
+	public Pipe addStart(Operator operator, Pipe input) {
+		this.startPoints.add(input);
+		return this.addOperatorReturnPipe(operator, input);
 	}
 	
 	public Pipe addStart(Operator operator) {
-		this.startPoints.add(operator);
-		return this.addOperatorReturnPipe(operator);
+		return addStart(operator, new Pipe());
 	}
 	
 	public void addOperator(Operator operator) {
@@ -89,11 +83,11 @@ public class Plan {
 		return operatorIdString;
 	}
 
-	public Pipe getOutputPoint() {
+	public Pipe getOutputPipe() {
 		return outputPoint;
 	}
 
-	public void setOutputPoint(Pipe output) {
+	public void setOutputPipe(Pipe output) {
 		this.outputPoint = output;
 	}
 }

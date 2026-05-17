@@ -25,8 +25,8 @@ import tailor.description.DescriptionFactory;
 import tailor.engine.operator.CombineResults;
 import tailor.engine.operator.FilterAtomResultByCondition;
 import tailor.engine.operator.Measurer;
-import tailor.engine.operator.PrintAdapter;
 import tailor.engine.operator.Pipe;
+import tailor.engine.operator.PrintAdapter;
 import tailor.engine.operator.ScanAtomResultByLabel;
 import tailor.engine.plan.Plan;
 import tailor.engine.plan.Planner;
@@ -122,8 +122,8 @@ public class PlanFrame extends JFrame {
          */
         private void assignLayers(Plan plan) {
             Map<String, Integer> layers = new HashMap<>();
-            for (Operator start : plan.getStartPoints()) {
-                layers.put(start.getId(), 0);
+            for (Pipe start : plan.getInputPipes()) {
+                layers.put(start.getSinkId(), 0);
             }
 
             // Propagate: iterate until stable (handles fan-in with max-of-predecessors)

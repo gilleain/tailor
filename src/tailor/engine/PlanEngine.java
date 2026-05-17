@@ -64,7 +64,7 @@ public class PlanEngine implements Engine {
 		List<Operator> fullPipeline = new ArrayList<>();
 		fullPipeline.add(groupSource);
 		fullPipeline.addAll(plan.getOperators());
-		Operator resOperator = new ResultsPrinterAdapter(resultsPrinter, plan.getOutputPoint(), getChainDescription());
+		Operator resOperator = new ResultsPrinterAdapter(resultsPrinter, plan.getOutputPipe(), getChainDescription());
 		fullPipeline.add(resOperator);
 
 		for (Operator operator : fullPipeline) {

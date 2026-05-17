@@ -84,7 +84,7 @@ public class TestPlanner {
 		// named group: FilterGroupByDescription + ScanAtomResultByLabel; unnamed: ScanAtomResultByLabel
 		// two separate components joined by CombineResults, then PrintAdapter
 		assertEquals(5, plan.getOperators().size());
-		assertEquals(2, plan.getStartPoints().size());
+		assertEquals(2, plan.getInputPipes().size());
 		assertEquals(1, countOf(plan, FilterGroupByDescription.class));
 		assertEquals(2, countOf(plan, ScanAtomResultByLabel.class));
 		assertEquals(1, countOf(plan, CombineResults.class));
@@ -103,7 +103,7 @@ public class TestPlanner {
 		// each named group: FilterGroupByDescription + ScanAtomResultByLabel
 		// two separate components joined by CombineResults, then PrintAdapter
 		assertEquals(6, plan.getOperators().size());
-		assertEquals(2, plan.getStartPoints().size());
+		assertEquals(2, plan.getInputPipes().size());
 		assertEquals(2, countOf(plan, FilterGroupByDescription.class));
 		assertEquals(2, countOf(plan, ScanAtomResultByLabel.class));
 		assertEquals(1, countOf(plan, CombineResults.class));
@@ -122,7 +122,7 @@ public class TestPlanner {
 		// two unnamed groups → two ScanAtomResultByLabel start points
 		// joined by CombineResults, then PrintAdapter
 		assertEquals(4, plan.getOperators().size());
-		assertEquals(2, plan.getStartPoints().size());
+		assertEquals(2, plan.getInputPipes().size());
 		assertEquals(2, countOf(plan, ScanAtomResultByLabel.class));
 		assertEquals(1, countOf(plan, CombineResults.class));
 		assertEquals(1, countOf(plan, PrintAdapter.class));
@@ -139,7 +139,7 @@ public class TestPlanner {
 
 		// same structure as single-atom case: two scanners joined and printed
 		assertEquals(4, plan.getOperators().size());
-		assertEquals(2, plan.getStartPoints().size());
+		assertEquals(2, plan.getInputPipes().size());
 		assertEquals(2, countOf(plan, ScanAtomResultByLabel.class));
 		assertEquals(1, countOf(plan, CombineResults.class));
 		assertEquals(1, countOf(plan, PrintAdapter.class));
@@ -170,7 +170,7 @@ public class TestPlanner {
 		// groupA+groupB connected via outer condition → component with Combine+Filter
 		// groupC is its own component; both joined by a second CombineResults, then PrintAdapter
 		assertEquals(7, plan.getOperators().size());
-		assertEquals(3, plan.getStartPoints().size());
+		assertEquals(3, plan.getInputPipes().size());
 		assertEquals(3, countOf(plan, ScanAtomResultByLabel.class));
 		assertEquals(2, countOf(plan, CombineResults.class));
 		assertEquals(1, countOf(plan, FilterAtomResultByCondition.class));
@@ -201,7 +201,7 @@ public class TestPlanner {
 		// inner condition on groupA → Scan + Filter for groupA; groupB is Scan only
 		// two separate components joined by CombineResults, then PrintAdapter
 		assertEquals(5, plan.getOperators().size());
-		assertEquals(2, plan.getStartPoints().size());
+		assertEquals(2, plan.getInputPipes().size());
 		assertEquals(2, countOf(plan, ScanAtomResultByLabel.class));
 		assertEquals(1, countOf(plan, FilterAtomResultByCondition.class));
 		assertEquals(1, countOf(plan, CombineResults.class));
@@ -232,7 +232,7 @@ public class TestPlanner {
 		// outer condition connects groupA and groupB → one component: Scan+Scan+Combine+Filter
 		// single component so no reduction CombineResults; then PrintAdapter
 		assertEquals(5, plan.getOperators().size());
-		assertEquals(2, plan.getStartPoints().size());
+		assertEquals(2, plan.getInputPipes().size());
 		assertEquals(2, countOf(plan, ScanAtomResultByLabel.class));
 		assertEquals(1, countOf(plan, FilterAtomResultByCondition.class));
 		assertEquals(1, countOf(plan, CombineResults.class));
@@ -259,7 +259,7 @@ public class TestPlanner {
 
 		// single group with inner condition → Scan + Filter; no join needed; then PrintAdapter
 		assertEquals(3, plan.getOperators().size());
-		assertEquals(1, plan.getStartPoints().size());
+		assertEquals(1, plan.getInputPipes().size());
 		assertEquals(1, countOf(plan, ScanAtomResultByLabel.class));
 		assertEquals(1, countOf(plan, FilterAtomResultByCondition.class));
 		assertEquals(1, countOf(plan, PrintAdapter.class));
@@ -285,7 +285,7 @@ public class TestPlanner {
 
 		// single group with inner condition → Scan + Filter; no join needed; then PrintAdapter
 		assertEquals(3, plan.getOperators().size());
-		assertEquals(1, plan.getStartPoints().size());
+		assertEquals(1, plan.getInputPipes().size());
 		assertEquals(1, countOf(plan, ScanAtomResultByLabel.class));
 		assertEquals(1, countOf(plan, FilterAtomResultByCondition.class));
 		assertEquals(1, countOf(plan, PrintAdapter.class));
@@ -314,7 +314,7 @@ public class TestPlanner {
 		// groupA has inner filter; groupB has no conditions
 		// two separate components joined by CombineResults, then PrintAdapter
 		assertEquals(5, plan.getOperators().size());
-		assertEquals(2, plan.getStartPoints().size());
+		assertEquals(2, plan.getInputPipes().size());
 		assertEquals(2, countOf(plan, ScanAtomResultByLabel.class));
 		assertEquals(1, countOf(plan, FilterAtomResultByCondition.class));
 		assertEquals(1, countOf(plan, CombineResults.class));
@@ -338,7 +338,7 @@ public class TestPlanner {
 
 		// two inner conditions on the same group are combined into one FilterAtomResultByCondition
 		assertEquals(3, plan.getOperators().size());
-		assertEquals(1, plan.getStartPoints().size());
+		assertEquals(1, plan.getInputPipes().size());
 		assertEquals(1, countOf(plan, ScanAtomResultByLabel.class));
 		assertEquals(1, countOf(plan, FilterAtomResultByCondition.class));
 		assertEquals(1, countOf(plan, PrintAdapter.class));
@@ -365,7 +365,7 @@ public class TestPlanner {
 		// two disconnected pair components: each has Scan+Scan+Combine+Filter
 		// the two component outputs are joined by a final CombineResults, then PrintAdapter
 		assertEquals(10, plan.getOperators().size());
-		assertEquals(4, plan.getStartPoints().size());
+		assertEquals(4, plan.getInputPipes().size());
 		assertEquals(4, countOf(plan, ScanAtomResultByLabel.class));
 		assertEquals(2, countOf(plan, FilterAtomResultByCondition.class));
 		assertEquals(3, countOf(plan, CombineResults.class));
@@ -394,7 +394,7 @@ public class TestPlanner {
 		// all four groups connected in a chain via three conditions → one component
 		// Scan×4 + CombineResults + FilterAtomResultByCondition + PrintAdapter
 		assertEquals(7, plan.getOperators().size());
-		assertEquals(4, plan.getStartPoints().size());
+		assertEquals(4, plan.getInputPipes().size());
 		assertEquals(4, countOf(plan, ScanAtomResultByLabel.class));
 		assertEquals(1, countOf(plan, FilterAtomResultByCondition.class));
 		assertEquals(1, countOf(plan, CombineResults.class));
@@ -419,7 +419,7 @@ public class TestPlanner {
 
 		// each group has its own inner condition → Scan+Filter for each; joined by CombineResults
 		assertEquals(6, plan.getOperators().size());
-		assertEquals(2, plan.getStartPoints().size());
+		assertEquals(2, plan.getInputPipes().size());
 		assertEquals(2, countOf(plan, ScanAtomResultByLabel.class));
 		assertEquals(2, countOf(plan, FilterAtomResultByCondition.class));
 		assertEquals(1, countOf(plan, CombineResults.class));
@@ -446,7 +446,7 @@ public class TestPlanner {
 
 		// single group with two inner conditions (combined into one Filter) + Measurer + PrintAdapter
 		assertEquals(4, plan.getOperators().size());
-		assertEquals(1, plan.getStartPoints().size());
+		assertEquals(1, plan.getInputPipes().size());
 		assertEquals(1, countOf(plan, ScanAtomResultByLabel.class));
 		assertEquals(1, countOf(plan, FilterAtomResultByCondition.class));
 		assertEquals(1, countOf(plan, Measurer.class));
