@@ -4,7 +4,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.contains;
 import static tailor.structure.Segment.Type.HELIX;
 import static tailor.structure.Segment.Type.STRAND;
-import static tops.translation.experimental.TestPlanner.OperatorMatcher.operator;
+import static tops.translation.experimental.TestSegmentPlanner.OperatorMatcher.operator;
 
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
@@ -13,7 +13,7 @@ import org.junit.Test;
 import tailor.api.Operator;
 import tailor.description.ChainDescription;
 
-public class TestPlanner {
+public class TestSegmentPlanner {
 	
 	@Test
 	public void testEHE() {
@@ -21,7 +21,7 @@ public class TestPlanner {
 		chainDescription.addSegment(new SegmentDescription(STRAND));
 		chainDescription.addSegment(new SegmentDescription(HELIX));
 		chainDescription.addSegment(new SegmentDescription(STRAND));
-		Plan plan = new Planner().makePlan(chainDescription);
+		Plan plan = new SegmentPlanner().makePlan(chainDescription);
 		assertThat(plan.getOperators(), 
 				contains(
 						operator(SegmentTypeFilter.class, "0"),
@@ -40,7 +40,7 @@ public class TestPlanner {
 		chainDescription.addSegment(strand);
 		strand.addPropertyDescription(new SegmentLength(10, new SegmentDescriptionPath(chainDescription, strand)));
 		
-		Plan plan = new Planner().makePlan(chainDescription);
+		Plan plan = new SegmentPlanner().makePlan(chainDescription);
 		assertThat(plan.getOperators(), 
 				contains(
 						operator(SegmentTypeFilter.class, "0"),

@@ -33,7 +33,7 @@ public class FunctionalTests {
 	private void run(ChainDescription chainDescription, Protein target) {
 		for (Chain chain : target.getChains()) {
 			// create the pipeline
-			Plan plan = new Planner().makePlan(chainDescription);	// TODO! reset plan
+			Plan plan = new SegmentPlanner().makePlan(chainDescription);	// TODO! reset plan
 			SegmentSource segmentSource = new SegmentSource(chain, plan.getInputs());
 			PrintResult printer = new PrintResult(plan.getOutputPipe());
 			

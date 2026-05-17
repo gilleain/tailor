@@ -6,7 +6,7 @@ import tailor.api.SegmentListDescription;
 import tailor.description.ChainDescription;
 import tailor.engine.operator.Pipe;
 
-public class Planner {
+public class SegmentPlanner {
 	
 	public Plan makePlan(ChainDescription chainDescription) {
 		Plan plan = new Plan();
