@@ -8,9 +8,11 @@ import java.util.stream.Collectors;
 
 import tailor.api.Measurement;
 import tailor.condition.AtomPartition;
+import tailor.condition.SegmentPartition;
 import tailor.structure.Atom;
 import tailor.structure.Chain;
 import tailor.structure.Group;
+import tailor.structure.Segment;
 
 /**
  * A result is a subtree of a structure that may be a part of a final result from a plan.
@@ -20,19 +22,22 @@ public class Result {
 	private class CRef {
 		public Chain chain;
 		public List<GRef> groupRefs = new ArrayList<>();
-//		public List<SRef> segmentRefs = new ArrayList<>(); // TODO
+		public List<SRef> segmentRefs = new ArrayList<>(); 
 		public CRef(Chain chain) {
 			this.chain = chain;
 		}
 	}
 	
-//	private class SRef {	// TODO
-//		public BackboneSegment segment;
-//		public List<RRef> residueRefs = new ArrayList<>();
-//		public SRef(BackboneSegment segment) {
-//			this.segment = segment;
-//		}
-//	}
+	private class SRef {
+		public Segment segment;
+		public List<GRef> groupRefs = new ArrayList<>();
+		public SRef(Segment segment) {
+			this.segment = segment;
+		}
+		public Segment getSegment() {
+			return segment;
+		}
+	}
 	
 	private class GRef {
 		public Group group;
@@ -61,24 +66,34 @@ public class Result {
 		this.root = null;
 	}
 	
+	public Result(Chain chain) {
+		this.root = new CRef(chain);
+	}
+	
 	public Result(Chain chain, Group... groups) {
 		this(chain, Arrays.asList(groups));
 	}
+	
+	public Result(Chain chain, Segment... segments) {
+		this(chain);
+		for (Segment segment : segments) {
+			SRef segmentRef = new SRef(segment);
+			this.root.segmentRefs.add(segmentRef);
+			for (Group group : segment.getGroups()) {
+				segmentRef.groupRefs.add(toGRef(group));
+			}
+		}
+	}
 		
 	public Result(Chain chain, List<Group> groups) {	
-		this.root = new CRef(chain);
+		this(chain);
 		for (Group group : groups) {
-			GRef groupNode = new GRef(group);
-			this.root.groupRefs.add(groupNode);
 			// Note this makes a ref to _every_ atom in the group
-			for (Atom atom : group.getAtoms()) {
-				groupNode.atomRefs.add(new ARef(atom));
-			}
+			this.root.groupRefs.add(addAtoms(new GRef(group), group.getAtoms()));
 		}
 	}
 	
 	public Result(Chain chain, Group group, Atom atom) {
-		// ... 
 		this.root = new CRef(chain);
 		GRef groupNode = new GRef(group);
 		this.root.groupRefs.add(groupNode);
@@ -86,13 +101,19 @@ public class Result {
 	}
 	
 	public Result(Chain chain, Group group, List<Atom> atoms) {
-		// ... 
 		this.root = new CRef(chain);
-		GRef groupNode = new GRef(group);
-		this.root.groupRefs.add(groupNode);
+		this.root.groupRefs.add(toGRef(group));
+	}
+	
+	private GRef toGRef(Group group) {
+		return addAtoms(new GRef(group), group.getAtoms());
+	}
+	
+	private GRef addAtoms(GRef groupNode, List<Atom> atoms) {
 		for (Atom atom : atoms) {
 			groupNode.atomRefs.add(new ARef(atom));
 		}
+		return groupNode;
 	}
 	
 	public List<Atom> getAtoms() {
@@ -125,6 +146,24 @@ public class Result {
 	
 	public List<Group> getGroups() {
 		return this.root.groupRefs.stream().map(GRef::getGroup).toList();
+	}
+	
+	public List<Segment> getSegments() {
+		List<Segment> segments = new ArrayList<>();
+		for (SRef segmentRef : this.root.segmentRefs) {
+			segments.add(segmentRef.segment);
+		}
+		return segments;
+	}
+
+	public SegmentPartition getSegmentPartition() {
+		List<List<Segment>> parts = new ArrayList<>();
+		parts.add(getSegments(root));
+		return new SegmentPartition(parts);
+	}
+	
+	private List<Segment> getSegments(CRef cRef) {
+		return cRef.segmentRefs.stream().map(SRef::getSegment).toList();
 	}
 
 	public boolean equals(Result other) {
@@ -159,14 +198,18 @@ public class Result {
 		return g.getAtoms().stream().map(Atom::getName).collect(Collectors.joining());
 	}
 
-	public Result merge(Result anotherResult) {
-		// merge anotherResult with this one
-		for (GRef groupRef : anotherResult.root.groupRefs) {
-			GRef groupCopy = new GRef(groupRef.group);
-			for (ARef atomRef : groupRef.atomRefs) {
-				groupCopy.atomRefs.add(new ARef(atomRef.atom));
+	public Result merge(Result other) {
+		// merge other with this one
+		for (SRef otherS : other.root.segmentRefs) {
+			SRef sCopy = new SRef(otherS.segment);
+			this.root.segmentRefs.add(sCopy);
+			for (GRef groupRef : otherS.groupRefs) {
+				sCopy.groupRefs.add(groupCopy(groupRef));
+				sCopy.groupRefs.sort(groupComparator);
 			}
-			this.root.groupRefs.add(groupCopy);
+		}
+		for (GRef groupRef : other.root.groupRefs) {
+			this.root.groupRefs.add(groupCopy(groupRef));
 			// TODO - use a data structure that maintains sort order?
 			this.root.groupRefs.sort(groupComparator);
 		}
@@ -185,24 +228,41 @@ public class Result {
 	public Result copy() {
 		Result copy = new Result();
 		copy.root = new CRef(this.root.chain);
-		for (GRef child : root.groupRefs) {
-			GRef groupCopy = new GRef(child.group);
-			for (ARef atomRef : child.atomRefs) {
-				groupCopy.atomRefs.add(new ARef(atomRef.atom));
+		for (SRef sRef : this.root.segmentRefs) {
+			SRef sCopy = new SRef(sRef.segment);
+			copy.root.segmentRefs.add(sCopy);
+			for (GRef gRef : sRef.groupRefs) {
+				sCopy.groupRefs.add(groupCopy(gRef));
 			}
-			copy.root.groupRefs.add(groupCopy);
+		}
+		
+		for (GRef gRef : root.groupRefs) {
+			copy.root.groupRefs.add(groupCopy(gRef));
 		}
 		
 		return copy;
 	}
 	
+	private GRef groupCopy(GRef other) {
+		GRef groupCopy = new GRef(other.group);
+		for (ARef atomRef : other.atomRefs) {
+			groupCopy.atomRefs.add(new ARef(atomRef.atom));
+		}
+		return groupCopy;
+	}
+	
 	public Result copyWithoutAtoms() {
 		Result copy = new Result();
 		copy.root = new CRef(this.root.chain);
-		// merge anotherResult with this one
-		for (GRef child : root.groupRefs) {
-			GRef groupCopy = new GRef(child.group);
-			copy.root.groupRefs.add(groupCopy);	
+		for (SRef sRef : this.root.segmentRefs) {
+			SRef sCopy = new SRef(sRef.segment);
+			copy.root.segmentRefs.add(sCopy);
+			for (GRef gRef : sRef.groupRefs) {
+				sCopy.groupRefs.add(new GRef(gRef.group));
+			}
+		}
+		for (GRef gRef : root.groupRefs) {
+			copy.root.groupRefs.add(new GRef(gRef.group));	
 		}
 		
 		return copy;
@@ -211,6 +271,8 @@ public class Result {
 	public String toString() {
 		StringBuffer output = new StringBuffer();
 		output.append(this.root.chain.getName()).append("(");
+		String segments = this.root.segmentRefs.stream().map(s -> s.segment.toCompactString()).collect(Collectors.joining("|"));
+		output.append("/").append(segments);
 		int counter = 0;
 		int numberOfChildren = this.root.groupRefs.size();
 		for (GRef child : this.root.groupRefs) {
@@ -249,36 +311,60 @@ public class Result {
 	}
 	
 	// Check the ordering of this Result compared to that
-	public boolean greaterThanOrEqual(Result other) {
-		// TODO combine with the hasSameGroup
-		// or .. do we even need to as same group would be equal?
-		for (GRef n : this.root.groupRefs) {
-			for (GRef m : other.root.groupRefs) {
-				if (n.group.getNumber() >= m.group.getNumber()) {
-					return true;
-				}
-			}
-		}
-		return false;
+	public boolean lessThanAbs(Result other) {
+		int thisMax = Math.max(getLastSegmentEnd(), getLastGroupIndex());
+		int otherMin = Math.min(other.getFirstSegmentStart(), other.getFirstGroupIndex());
+		return thisMax < otherMin;
 	}
 	
-	// TODO - simplify or ...
-	public boolean hasSameGroup(Result other) {
-		for (GRef n : this.root.groupRefs) {
-			for (GRef m : other.root.groupRefs) {
-				if (n.group.getName().equals(m.group.getName()) 
-						&& n.group.getNumber() == n.group.getNumber()) {
-					return true;
-				}
-			}
+	public boolean lessThan(Result other) {
+		int thisMin = Math.min(getFirstSegmentStart(), getFirstGroupIndex());
+		int otherMin = Math.min(other.getFirstSegmentStart(), other.getFirstGroupIndex());
+		return thisMin < otherMin;
+	}
+	
+	private int getFirstSegmentStart() {
+		if (this.root.segmentRefs.isEmpty()) {
+			return Integer.MAX_VALUE;
+		} else {
+			Segment firstSegment = this.root.segmentRefs.get(0).segment;
+			return firstSegment.firstResidue().getAbsoluteNumber();
 		}
-		return false;
+	}
+	
+	private int getFirstGroupIndex() {
+		if (this.root.groupRefs.isEmpty()) {
+			return Integer.MAX_VALUE;
+		} else {
+			Group firstGroup = this.root.groupRefs.get(0).group;
+			return firstGroup.getAbsoluteNumber();
+		}
+	}
+	
+	private int getLastSegmentEnd() {
+		if (this.root.segmentRefs.isEmpty()) {
+			return 0;	// arbitrary low value
+		} else {
+			return lastSegment().lastResidue().getAbsoluteNumber();
+		}
+	}
+	
+	private int getLastGroupIndex() {
+		if (this.root.groupRefs.isEmpty()) {
+			return 0; 	// arbitrary low value
+		} else {
+			return lastGroup().getAbsoluteNumber();
+		}
 	}
 	
 	public Group lastGroup() {
 		return this.root.groupRefs.get(this.root.groupRefs.size() - 1).group;
 	}
 	
+	public Segment lastSegment() {
+		int lastIndex = this.root.segmentRefs.size() - 1;
+		return this.root.segmentRefs.get(lastIndex).segment;
+	}
 
 	public int separation(Result result) {
 		return result.lastGroup().getNumber() - lastGroup().getNumber();

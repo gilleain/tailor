@@ -1,5 +1,7 @@
 package tailor.operator;
 
+import static org.junit.Assert.assertTrue;
+
 import org.junit.Test;
 
 import tailor.engine.plan.Result;
@@ -29,10 +31,11 @@ public class TestResultMerging {
 	
 	private void testMerge(Result left, Result right) {
 		System.out.println("Merging " + left + " and " + right);
-		boolean isMergable = right.greaterThanOrEqual(left);
+		boolean isMergable = left.lessThan(right);
 		Result merge = left.merge(right);
 		System.out.println("Output " + merge);
 		System.out.println("Is mergable " + isMergable);
+		assertTrue(isMergable);
 	}
 
 }

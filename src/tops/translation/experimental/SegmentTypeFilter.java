@@ -2,6 +2,7 @@ package tops.translation.experimental;
 
 import java.util.logging.Logger;
 
+import tailor.engine.plan.Result;
 import tailor.structure.Segment;
 
 public class SegmentTypeFilter extends AbstractOperator {

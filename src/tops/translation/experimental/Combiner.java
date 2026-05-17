@@ -5,6 +5,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Logger;
 
+import tailor.engine.plan.Result;
+
 public class Combiner extends AbstractOperator {
 	
 	private static Logger logger = Logger.getLogger(Combiner.class.getName());
@@ -73,7 +75,7 @@ public class Combiner extends AbstractOperator {
 	 private boolean reject(Result candidate, List<Result> combination) {
 		 if (!combination.isEmpty()) {
 			 Result last = combination.get(combination.size() - 1);
-			 if (last.greaterThanOrEqual(candidate)) {
+			 if (candidate.lessThan(last)) {
 				 return true;
 			 }
 		 }

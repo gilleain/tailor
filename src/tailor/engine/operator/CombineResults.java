@@ -153,24 +153,21 @@ public class CombineResults extends AbstractOperator {
     private boolean reject(Result candidate, List<Result> combination, Integer minSeparation) {
     	// TODO - clean up! 
     	if (!combination.isEmpty()) {
-    	Result last = combination.get(combination.size() - 1);
-//    	for (Result other : combination) {
-    		// TODO - make this configurable? or actually 
-    		if (last.greaterThanOrEqual(candidate) || candidate.hasSameGroup(last)) {
+    		Result last = combination.get(combination.size() - 1);
+    		if (candidate.lessThan(last)) {	// mis-ordered
     			return true;
     		}
     		// TODO - need to clean all this up
     		int sep = last.separation(candidate);
     		if (minSeparation != null && sep > minSeparation) {
-//    			System.out.println(sep + "  > " + minSeparation);
-				return true;
-			} else {
-				if (minSeparation != null) {
-//					System.out.println(sep + "  < " + minSeparation + " " + last + " " + candidate);
-				}
-			}
+    			//    			System.out.println(sep + "  > " + minSeparation);
+    			return true;
+    		} else {
+    			if (minSeparation != null) {
+    				//					System.out.println(sep + "  < " + minSeparation + " " + last + " " + candidate);
+    			}
+    		}
     	}
-//    	}
     	return false;
     }
     
