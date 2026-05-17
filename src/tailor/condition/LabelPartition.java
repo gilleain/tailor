@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import tailor.description.DescriptionPath;
+import tailor.description.GroupDescriptionPath;
 import tailor.description.GroupDescription;
 
 public class LabelPartition {
@@ -85,14 +85,14 @@ public class LabelPartition {
 		this.parts =  parts;
 	}
 
-	public static LabelPartition fromDescriptionPaths(DescriptionPath... descriptionPaths) {
+	public static LabelPartition fromDescriptionPaths(GroupDescriptionPath... descriptionPaths) {
 		return LabelPartition.fromDescriptionPaths(Arrays.asList(descriptionPaths));
 	}
 	
-	public static LabelPartition fromDescriptionPaths(List<DescriptionPath> descriptionPaths) {
+	public static LabelPartition fromDescriptionPaths(List<GroupDescriptionPath> descriptionPaths) {
 		Map<GroupDescription, List<String>> partition = new LinkedHashMap<>();
 		
-		for (DescriptionPath descriptionPath : descriptionPaths) {
+		for (GroupDescriptionPath descriptionPath : descriptionPaths) {
 			GroupDescription groupDescription = descriptionPath.getGroupDescription();
 			List<String> part = partition.computeIfAbsent(groupDescription, _ -> new ArrayList<>());
 			part.add(descriptionPath.getAtomDescription().getLabel());

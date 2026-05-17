@@ -23,7 +23,7 @@ import javax.swing.event.TreeSelectionListener;
 
 import tailor.api.AtomListMeasure;
 import tailor.description.ChainDescription;
-import tailor.description.DescriptionPath;
+import tailor.description.GroupDescriptionPath;
 import tailor.editor.DescriptionTreeView;
 import tailor.editor.SelectionDialog;
 import tailor.engine.Run;
@@ -162,7 +162,7 @@ public class RunDialog extends JDialog implements ActionListener, TreeSelectionL
             SwingUtilities.invokeLater(() -> selectionDialog.setVisible(true));
             
             if (selectionDialog.isComplete()) {
-                List<DescriptionPath> paths = selectionDialog.getDescriptions();
+                List<GroupDescriptionPath> paths = selectionDialog.getDescriptions();
                 String type = selectionDialog.getCurrentlySelectedType();
                 AtomListMeasure measure;
                 if (type.equals("Distance")) {

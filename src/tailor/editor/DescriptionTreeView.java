@@ -15,7 +15,7 @@ import javax.swing.tree.TreeSelectionModel;
 
 import tailor.description.AtomDescription;
 import tailor.description.ChainDescription;
-import tailor.description.DescriptionPath;
+import tailor.description.GroupDescriptionPath;
 import tailor.description.GroupDescription;
 import tailor.description.ProteinDescription;
 
@@ -348,7 +348,7 @@ public class DescriptionTreeView extends JPanel  {
      * 
      * @return the root of a new description path
      */
-    public DescriptionPath createPathToSelected() {
+    public GroupDescriptionPath createPathToSelected() {
         TreePath path = this.descriptionTree.getSelectionPath();
         if (path == null) {
         	System.err.println("returning null descriptionPathRoot");
@@ -372,7 +372,7 @@ public class DescriptionTreeView extends JPanel  {
                 
             }
             System.err.println("returning " + groupDescription.toString() + " " + atomDescription.toString());
-            return new DescriptionPath(groupDescription, atomDescription);
+            return new GroupDescriptionPath(groupDescription, atomDescription);
         }
     }
 

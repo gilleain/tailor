@@ -19,7 +19,7 @@ import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 
 import tailor.description.ChainDescription;
-import tailor.description.DescriptionPath;
+import tailor.description.GroupDescriptionPath;
 
 
 /**
@@ -38,7 +38,7 @@ public class SelectionDialog extends JDialog implements ActionListener, TreeSele
     
     private JRadioButton[] radioButtons;
     
-    private List<DescriptionPath> selectedDescriptions;
+    private List<GroupDescriptionPath> selectedDescriptions;
     
     private JComboBox<String> typeSelector;
     
@@ -126,7 +126,7 @@ public class SelectionDialog extends JDialog implements ActionListener, TreeSele
     
     public void valueChanged(TreeSelectionEvent tse) {
         // ask the tree for a new path object
-        DescriptionPath path = this.tree.createPathToSelected();
+        GroupDescriptionPath path = this.tree.createPathToSelected();
         
         if (path != null) {
             int buttonIndex = getSelectedRadioButtonIndex();
@@ -201,7 +201,7 @@ public class SelectionDialog extends JDialog implements ActionListener, TreeSele
         return (String) this.typeSelector.getSelectedItem();
     }
     
-    public List<DescriptionPath> getDescriptions() {
+    public List<GroupDescriptionPath> getDescriptions() {
         return this.selectedDescriptions;
     }
     

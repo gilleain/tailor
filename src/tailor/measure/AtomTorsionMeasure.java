@@ -2,26 +2,26 @@ package tailor.measure;
 
 import java.util.List;
 
-import tailor.description.DescriptionPath;
+import tailor.description.GroupDescriptionPath;
 import tailor.geometry.Geometry;
 import tailor.measurement.DoubleMeasurement;
 import tailor.structure.Atom;
 
 public class AtomTorsionMeasure extends AbstractAtomListMeasure {
 	
-	public AtomTorsionMeasure(DescriptionPath... descriptionPaths) {
+	public AtomTorsionMeasure(GroupDescriptionPath... descriptionPaths) {
 		super("", descriptionPaths);
 	}
 	
-	public AtomTorsionMeasure(List<DescriptionPath> descriptionPaths) {
+	public AtomTorsionMeasure(List<GroupDescriptionPath> descriptionPaths) {
 		super("", descriptionPaths);
 	}
 	
-	public AtomTorsionMeasure(String name, DescriptionPath... descriptionPaths) {
+	public AtomTorsionMeasure(String name, GroupDescriptionPath... descriptionPaths) {
 		super(name, descriptionPaths);
 	}
 	
-	public AtomTorsionMeasure(String name, List<DescriptionPath> descriptionPaths) {
+	public AtomTorsionMeasure(String name, List<GroupDescriptionPath> descriptionPaths) {
 		super(name, descriptionPaths);
 	}
 	

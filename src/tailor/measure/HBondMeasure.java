@@ -7,7 +7,7 @@ import java.util.stream.Collectors;
 
 import tailor.api.AtomListMeasure;
 import tailor.condition.AtomPartition;
-import tailor.description.DescriptionPath;
+import tailor.description.GroupDescriptionPath;
 import tailor.description.GroupDescription;
 import tailor.measurement.CompositeDoubleMeasurement;
 import tailor.measurement.DoubleMeasurement;
@@ -20,11 +20,11 @@ public class HBondMeasure implements AtomListMeasure {
 	
 	private AtomAngleMeasure atomAngleMeasure;
 
-	public HBondMeasure(List<DescriptionPath> atomDistancePaths, List<DescriptionPath> atomAnglePaths) {
+	public HBondMeasure(List<GroupDescriptionPath> atomDistancePaths, List<GroupDescriptionPath> atomAnglePaths) {
 		this(List.of("HBond"), atomDistancePaths, atomAnglePaths);
 	}
 
-	public HBondMeasure(List<String> names, List<DescriptionPath> atomDistancePaths, List<DescriptionPath> atomAnglePaths) {
+	public HBondMeasure(List<String> names, List<GroupDescriptionPath> atomDistancePaths, List<GroupDescriptionPath> atomAnglePaths) {
 		this.names = names;
 		this.atomDistanceMeasure = new AtomDistanceMeasure(atomDistancePaths);
 		this.atomAngleMeasure = new AtomAngleMeasure(atomAnglePaths);

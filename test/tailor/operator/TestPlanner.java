@@ -13,7 +13,7 @@ import tailor.api.Operator;
 import tailor.condition.AtomPartition;
 import tailor.description.ChainDescription;
 import tailor.description.DescriptionFactory;
-import tailor.description.DescriptionPath;
+import tailor.description.GroupDescriptionPath;
 import tailor.description.GroupDescription;
 import tailor.engine.operator.CombineResults;
 import tailor.engine.operator.FilterAtomResultByCondition;
@@ -33,7 +33,7 @@ public class TestPlanner {
 		
 		private AtomListMeasure measure;
 		
-		DummyAtomListDescription(DescriptionPath... paths) {
+		DummyAtomListDescription(GroupDescriptionPath... paths) {
 			this.measure = new DummyAtomListMeasure(paths);
 		}
 
@@ -56,7 +56,7 @@ public class TestPlanner {
 	
 	private class DummyAtomListMeasure extends AbstractAtomListMeasure {
 
-		public DummyAtomListMeasure(DescriptionPath... paths) {
+		public DummyAtomListMeasure(GroupDescriptionPath... paths) {
 			super("dummy", paths);
 		}
 

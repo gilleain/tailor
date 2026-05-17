@@ -1,7 +1,7 @@
 package tailor.description.atom;
 
 import tailor.description.AtomValueRangeDescription;
-import tailor.description.DescriptionPath;
+import tailor.description.GroupDescriptionPath;
 import tailor.measure.AtomDistanceMeasure;
 
 public class AtomDistanceRangeDescription extends AtomValueRangeDescription {
@@ -9,13 +9,13 @@ public class AtomDistanceRangeDescription extends AtomValueRangeDescription {
 	private String name;
 	
 	public AtomDistanceRangeDescription(
-			double minDistance, double maxDistance, DescriptionPath atomDescriptionA, DescriptionPath atomDescriptionB) {
+			double minDistance, double maxDistance, GroupDescriptionPath atomDescriptionA, GroupDescriptionPath atomDescriptionB) {
 		this("", minDistance, maxDistance, atomDescriptionA, atomDescriptionB);
 	}
 	
 	public AtomDistanceRangeDescription(
 			String name, double minDistance, double maxDistance, 
-			DescriptionPath atomDescriptionA, DescriptionPath atomDescriptionB) {
+			GroupDescriptionPath atomDescriptionA, GroupDescriptionPath atomDescriptionB) {
 		super(minDistance, maxDistance, new AtomDistanceMeasure(atomDescriptionA, atomDescriptionB));
 		this.name = name;
 	}

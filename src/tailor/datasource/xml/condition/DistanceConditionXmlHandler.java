@@ -7,7 +7,7 @@ import org.xml.sax.Attributes;
 
 import tailor.datasource.xml.PathXmlHandler;
 import tailor.description.ChainDescription;
-import tailor.description.DescriptionPath;
+import tailor.description.GroupDescriptionPath;
 import tailor.description.atom.AtomDistanceRangeDescription;
 
 public class DistanceConditionXmlHandler implements ConditionXmlHandler {
@@ -30,8 +30,8 @@ public class DistanceConditionXmlHandler implements ConditionXmlHandler {
         double center = Double.parseDouble(this.dataStore.get("center"));
         double range = Double.parseDouble(this.dataStore.get("range"));
         
-        DescriptionPath a1  = pathXmlHandler.getPath("a");
-        DescriptionPath a2  = pathXmlHandler.getPath("b");
+        GroupDescriptionPath a1  = pathXmlHandler.getPath("a");
+        GroupDescriptionPath a2  = pathXmlHandler.getPath("b");
         AtomDistanceRangeDescription distance = 
                 new AtomDistanceRangeDescription("name", center - range, center + range, a1, a2);
         

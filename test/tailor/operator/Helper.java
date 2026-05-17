@@ -7,7 +7,7 @@ import javax.vecmath.Point3d;
 
 import tailor.api.Operator;
 import tailor.description.AtomDescription;
-import tailor.description.DescriptionPath;
+import tailor.description.GroupDescriptionPath;
 import tailor.description.GroupDescription;
 import tailor.engine.operator.GroupSource;
 import tailor.engine.operator.Pipe;
@@ -44,13 +44,13 @@ public class Helper {
 		plan.describe();
 	}
 	
-	public static DescriptionPath pathTo(GroupDescription groupDescription, String atomLabel) {
+	public static GroupDescriptionPath pathTo(GroupDescription groupDescription, String atomLabel) {
 		AtomDescription atomDescription = 
 				groupDescription.getAtomDescriptions().stream()
 				.filter(a -> a.getLabel().equals(atomLabel))
 				.findFirst()
 				.orElseThrow();
-		return new DescriptionPath(groupDescription, atomDescription);
+		return new GroupDescriptionPath(groupDescription, atomDescription);
 	}
 	
 	public static GroupDescription makeGroupDescription(String... atomLabels) {

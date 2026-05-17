@@ -7,7 +7,7 @@ import org.xml.sax.Attributes;
 
 import tailor.datasource.xml.PathXmlHandler;
 import tailor.description.ChainDescription;
-import tailor.description.DescriptionPath;
+import tailor.description.GroupDescriptionPath;
 import tailor.description.atom.AtomTorsionRangeDescription;
 
 public class TorsionConditionXmlHandler implements ConditionXmlHandler {
@@ -31,10 +31,10 @@ public class TorsionConditionXmlHandler implements ConditionXmlHandler {
         double midPoint = Double.parseDouble(this.dataStore.get("midPoint"));
         double range = Double.parseDouble(this.dataStore.get("range"));
         
-        DescriptionPath pathA  = pathXmlHandler.getPath("a");
-        DescriptionPath pathB  = pathXmlHandler.getPath("b");
-        DescriptionPath pathC  = pathXmlHandler.getPath("c");
-        DescriptionPath pathD = pathXmlHandler.getPath("d");
+        GroupDescriptionPath pathA  = pathXmlHandler.getPath("a");
+        GroupDescriptionPath pathB  = pathXmlHandler.getPath("b");
+        GroupDescriptionPath pathC  = pathXmlHandler.getPath("c");
+        GroupDescriptionPath pathD = pathXmlHandler.getPath("d");
         
         // TODO - is it range or half range?
         double minValue = midPoint - range;

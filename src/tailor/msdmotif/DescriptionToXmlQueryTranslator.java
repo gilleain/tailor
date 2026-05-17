@@ -3,7 +3,7 @@ package tailor.msdmotif;
 import tailor.api.AtomListDescription;
 import tailor.description.AtomDescription;
 import tailor.description.ChainDescription;
-import tailor.description.DescriptionPath;
+import tailor.description.GroupDescriptionPath;
 import tailor.description.GroupDescription;
 import tailor.description.ProteinDescription;
 import tailor.description.atom.AtomTorsionRangeDescription;
@@ -102,10 +102,10 @@ public class DescriptionToXmlQueryTranslator {
 		residue.addAtomDescription(n);
 		
 		// TODO
-		DescriptionPath a = null;
-		DescriptionPath b = null;
-		DescriptionPath c = null;
-		DescriptionPath d = null;
+		GroupDescriptionPath a = null;
+		GroupDescriptionPath b = null;
+		GroupDescriptionPath c = null;
+		GroupDescriptionPath d = null;
         
 		chain.addAtomListDescriptions(
 				new AtomTorsionRangeDescription("phi", -60.0, -40.0, a, b, c, d),

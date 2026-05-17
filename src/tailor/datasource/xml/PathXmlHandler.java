@@ -1,6 +1,6 @@
 package tailor.datasource.xml;
 
-import static tailor.description.DescriptionPath.getPathByLabel;
+import static tailor.description.GroupDescriptionPath.getPathByLabel;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -8,19 +8,19 @@ import java.util.Map;
 import org.xml.sax.Attributes;
 
 import tailor.description.ChainDescription;
-import tailor.description.DescriptionPath;
+import tailor.description.GroupDescriptionPath;
 import tailor.description.GroupDescription;
 import tailor.description.ProteinDescription;
 
 public class PathXmlHandler {
     
-    private Map<String, DescriptionPath> pathMap;
+    private Map<String, GroupDescriptionPath> pathMap;
     
     public PathXmlHandler() {
         this.pathMap = new HashMap<>();
     }
     
-    public DescriptionPath getPath(String name) {
+    public GroupDescriptionPath getPath(String name) {
         return this.pathMap.get(name);
     }
     
@@ -31,7 +31,7 @@ public class PathXmlHandler {
     public void create(Attributes attrs, Object currentParent) {
 
         // create the path
-        DescriptionPath path = null;
+        GroupDescriptionPath path = null;
         String name = null;
         
         if (currentParent instanceof ProteinDescription) {

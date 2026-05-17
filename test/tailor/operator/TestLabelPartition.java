@@ -11,15 +11,15 @@ import org.junit.Test;
 import tailor.condition.LabelPartition;
 import tailor.condition.LabelPartition.LabelledPart;
 import tailor.description.AtomDescription;
-import tailor.description.DescriptionPath;
+import tailor.description.GroupDescriptionPath;
 import tailor.description.GroupDescription;
 
 public class TestLabelPartition {
 	
 	@Test
 	public void testFromTwoDescriptionPaths() {
-		DescriptionPath dp1 = new DescriptionPath(group().withIndex(0).build(), new AtomDescription("O"));
-		DescriptionPath dp2 = new DescriptionPath(group().withIndex(2).build(), new AtomDescription("C"));
+		GroupDescriptionPath dp1 = new GroupDescriptionPath(group().withIndex(0).build(), new AtomDescription("O"));
+		GroupDescriptionPath dp2 = new GroupDescriptionPath(group().withIndex(2).build(), new AtomDescription("C"));
 		
 		LabelPartition l = LabelPartition.fromDescriptionPaths(List.of(dp1, dp2));
 		System.out.println(l);
@@ -29,9 +29,9 @@ public class TestLabelPartition {
 	
 	@Test
 	public void testFromThreeDescriptionPaths() {
-		DescriptionPath dp1 = new DescriptionPath(group().withIndex(0).build(), new AtomDescription("N"));
-		DescriptionPath dp2 = new DescriptionPath(group().withIndex(2).build(), new AtomDescription("C"));
-		DescriptionPath dp3 = new DescriptionPath(group().withIndex(5).build(), new AtomDescription("O"));
+		GroupDescriptionPath dp1 = new GroupDescriptionPath(group().withIndex(0).build(), new AtomDescription("N"));
+		GroupDescriptionPath dp2 = new GroupDescriptionPath(group().withIndex(2).build(), new AtomDescription("C"));
+		GroupDescriptionPath dp3 = new GroupDescriptionPath(group().withIndex(5).build(), new AtomDescription("O"));
 		
 		LabelPartition l = LabelPartition.fromDescriptionPaths(List.of(dp1, dp2, dp3));
 		System.out.println(l);
@@ -41,8 +41,8 @@ public class TestLabelPartition {
 	
 	@Test
 	public void testFromEmptyInitial() {
-		DescriptionPath dp1 = new DescriptionPath(group().withIndex(1).build(), new AtomDescription("N"));
-		DescriptionPath dp2 = new DescriptionPath(group().withIndex(2).build(), new AtomDescription("C"));
+		GroupDescriptionPath dp1 = new GroupDescriptionPath(group().withIndex(1).build(), new AtomDescription("N"));
+		GroupDescriptionPath dp2 = new GroupDescriptionPath(group().withIndex(2).build(), new AtomDescription("C"));
 		
 		LabelPartition l = LabelPartition.fromDescriptionPaths(List.of(dp1, dp2));
 		System.out.println(l);
@@ -54,10 +54,10 @@ public class TestLabelPartition {
 	public void testFromOutOfOrderPaths() {
 		GroupDescription gp1 = group().withIndex(4).build();
 		GroupDescription gp2 = group().withIndex(0).build();
-		DescriptionPath dp1 = new DescriptionPath(gp1, new AtomDescription("C"));
-		DescriptionPath dp2 = new DescriptionPath(gp1, new AtomDescription("O"));
-		DescriptionPath dp3 = new DescriptionPath(gp2, new AtomDescription("H"));
-		DescriptionPath dp4 = new DescriptionPath(gp2, new AtomDescription("N"));
+		GroupDescriptionPath dp1 = new GroupDescriptionPath(gp1, new AtomDescription("C"));
+		GroupDescriptionPath dp2 = new GroupDescriptionPath(gp1, new AtomDescription("O"));
+		GroupDescriptionPath dp3 = new GroupDescriptionPath(gp2, new AtomDescription("H"));
+		GroupDescriptionPath dp4 = new GroupDescriptionPath(gp2, new AtomDescription("N"));
 		
 		LabelPartition l = LabelPartition.fromDescriptionPaths(List.of(dp1, dp2, dp3, dp4));
 		System.out.println(l);

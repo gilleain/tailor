@@ -7,7 +7,7 @@ import org.xml.sax.Attributes;
 
 import tailor.datasource.xml.PathXmlHandler;
 import tailor.description.ChainDescription;
-import tailor.description.DescriptionPath;
+import tailor.description.GroupDescriptionPath;
 import tailor.description.atom.HBondDescription;
 
 public class HBondConditionXmlHandler implements ConditionXmlHandler {
@@ -35,10 +35,10 @@ public class HBondConditionXmlHandler implements ConditionXmlHandler {
         double dhaMin = Double.parseDouble(this.dataStore.get("dhaMin"));
         double haaMin = Double.parseDouble(this.dataStore.get("haaMin"));
         
-        DescriptionPath d  = pathXmlHandler.getPath("donor");
-        DescriptionPath h  = pathXmlHandler.getPath("hydrogen");
-        DescriptionPath a  = pathXmlHandler.getPath("acceptor");
-        DescriptionPath aa = pathXmlHandler.getPath("attached");
+        GroupDescriptionPath d  = pathXmlHandler.getPath("donor");
+        GroupDescriptionPath h  = pathXmlHandler.getPath("hydrogen");
+        GroupDescriptionPath a  = pathXmlHandler.getPath("acceptor");
+        GroupDescriptionPath aa = pathXmlHandler.getPath("attached");
         
         // TODO - these dhaMin and haaMin values are wrong
         HBondDescription hBond = new HBondDescription(haMax, dhaMin, haaMin, d, h, a, aa);

@@ -10,7 +10,7 @@ import tailor.condition.AtomMatcher;
 import tailor.condition.AtomMatcher.Match;
 import tailor.condition.AtomPartition;
 import tailor.condition.LabelPartition;
-import tailor.description.DescriptionPath;
+import tailor.description.GroupDescriptionPath;
 import tailor.description.GroupDescription;
 import tailor.measurement.DoubleMeasurement;
 import tailor.structure.Atom;
@@ -21,15 +21,15 @@ public abstract class AbstractAtomListMeasure implements AtomListMeasure {
 	
 	private AtomMatcher atomMatcher;
 	
-	private final List<DescriptionPath> atomDescriptionPaths;
+	private final List<GroupDescriptionPath> atomDescriptionPaths;
 	
 	private String name;
 	
-	public AbstractAtomListMeasure(String name, DescriptionPath... descriptionPaths) {
+	public AbstractAtomListMeasure(String name, GroupDescriptionPath... descriptionPaths) {
 		this(name, Arrays.asList(descriptionPaths));
 	}
 		
-	public AbstractAtomListMeasure(String name, List<DescriptionPath> descriptionPaths) {	
+	public AbstractAtomListMeasure(String name, List<GroupDescriptionPath> descriptionPaths) {	
 		this.name = name;
 		this.atomDescriptionPaths = descriptionPaths;
 		this.atomMatcher = new AtomMatcher(LabelPartition.fromDescriptionPaths(descriptionPaths));
@@ -48,7 +48,7 @@ public abstract class AbstractAtomListMeasure implements AtomListMeasure {
 	}
 	
 	public List<GroupDescription> getGroupDescriptions() {
-		return atomDescriptionPaths.stream().map(DescriptionPath::getGroupDescription).toList();
+		return atomDescriptionPaths.stream().map(GroupDescriptionPath::getGroupDescription).toList();
 	}
 
 	public String getName() {

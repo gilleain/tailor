@@ -8,7 +8,7 @@ import tailor.condition.AtomPartition;
 import tailor.condition.RangeCondition;
 import tailor.condition.UpperBoundCondition;
 import tailor.description.AtomDescription;
-import tailor.description.DescriptionPath;
+import tailor.description.GroupDescriptionPath;
 import tailor.description.GroupDescription;
 import tailor.measure.HBondMeasure;
 import tailor.measurement.CompositeDoubleMeasurement;
@@ -28,24 +28,24 @@ public class HBondDescription implements AtomListDescription {
 	
 	private final HBondMeasure measure;
 	
-	private final DescriptionPath donorDescriptionPath;
+	private final GroupDescriptionPath donorDescriptionPath;
 	
-	private final DescriptionPath hydrogenDescriptionPath;
+	private final GroupDescriptionPath hydrogenDescriptionPath;
 	
-	private final DescriptionPath acceptorDescriptionPath;
+	private final GroupDescriptionPath acceptorDescriptionPath;
 	
-	private final DescriptionPath acceptorAttachedDescriptionPath;
+	private final GroupDescriptionPath acceptorAttachedDescriptionPath;
 	
 	public HBondDescription(double haDistance, double minDAAAngle, double maxDAAAngle, 
-			DescriptionPath donorDescriptionPath, DescriptionPath hydrogenDescriptionPath,
-			DescriptionPath acceptorDescriptionPath, DescriptionPath acceptorAttachedDescriptionPath) {
+			GroupDescriptionPath donorDescriptionPath, GroupDescriptionPath hydrogenDescriptionPath,
+			GroupDescriptionPath acceptorDescriptionPath, GroupDescriptionPath acceptorAttachedDescriptionPath) {
 		this(List.of(""), haDistance, minDAAAngle, maxDAAAngle, 
 				donorDescriptionPath, hydrogenDescriptionPath, acceptorDescriptionPath, acceptorAttachedDescriptionPath);
 	}
 	
 	public HBondDescription(List<String> names, double haDistance, double minDAAAngle, double maxDAAAngle, 
-			DescriptionPath donorDescriptionPath, DescriptionPath hydrogenDescriptionPath,
-			DescriptionPath acceptorDescriptionPath, DescriptionPath acceptorAttachedDescriptionPath) {
+			GroupDescriptionPath donorDescriptionPath, GroupDescriptionPath hydrogenDescriptionPath,
+			GroupDescriptionPath acceptorDescriptionPath, GroupDescriptionPath acceptorAttachedDescriptionPath) {
 		this.names = names;
 		this.haDistanceCondition = new UpperBoundCondition(haDistance);
 		this.daaAngleRangeCondition = new RangeCondition(minDAAAngle, maxDAAAngle);
@@ -58,11 +58,11 @@ public class HBondDescription implements AtomListDescription {
 		this.measure = (HBondMeasure) createMeasure();
 	}
 
-	private List<DescriptionPath> getDHPaths() {
+	private List<GroupDescriptionPath> getDHPaths() {
 		return List.of(hydrogenDescriptionPath, acceptorDescriptionPath);
 	}
 	
-	private List<DescriptionPath>  getDAAAPaths() {
+	private List<GroupDescriptionPath>  getDAAAPaths() {
 		return List.of(donorDescriptionPath, acceptorDescriptionPath, acceptorAttachedDescriptionPath);
 	}
 

@@ -8,7 +8,7 @@ import tailor.description.AtomDescription;
 import tailor.description.ChainDescription;
 import tailor.description.DescriptionFactory;
 import tailor.description.DescriptionFactory.MeasureBuilder;
-import tailor.description.DescriptionPath;
+import tailor.description.GroupDescriptionPath;
 import tailor.description.GroupDescription;
 import tailor.description.atom.AtomDistanceRangeDescription;
 import tailor.description.atom.HBondDescription;
@@ -40,9 +40,9 @@ public class SingleChainTest {
         ChainDescription chainDescription = new ChainDescription(); 
         GroupDescription groupDescription1 = new GroupDescription();
         GroupDescription groupDescription2 = new GroupDescription();
-        DescriptionPath carbonylOxygenI  = new DescriptionPath(groupDescription1, new AtomDescription("O"));
-        DescriptionPath carbonylOxygenI2 = new DescriptionPath(groupDescription2, new AtomDescription("O"));
-        DescriptionPath waterPath = new DescriptionPath(water, waterOxygen);
+        GroupDescriptionPath carbonylOxygenI  = new GroupDescriptionPath(groupDescription1, new AtomDescription("O"));
+        GroupDescriptionPath carbonylOxygenI2 = new GroupDescriptionPath(groupDescription2, new AtomDescription("O"));
+        GroupDescriptionPath waterPath = new GroupDescriptionPath(water, waterOxygen);
         
         System.out.println("COI " + carbonylOxygenI + 
                            " COIP2 " + carbonylOxygenI2 + 
@@ -73,8 +73,8 @@ public class SingleChainTest {
         factory.addResiduesAsSegment(3);
         ChainDescription chainDescription = factory.getChainDescription("A");
 
-        DescriptionPath carbonylOxygen = DescriptionPath.getPathByNumber(chainDescription, 0, "N");
-        DescriptionPath amineNitrogen = DescriptionPath.getPathByNumber(chainDescription, 1, "O");
+        GroupDescriptionPath carbonylOxygen = GroupDescriptionPath.getPathByNumber(chainDescription, 0, "N");
+        GroupDescriptionPath amineNitrogen = GroupDescriptionPath.getPathByNumber(chainDescription, 1, "O");
         
         chainDescription.addAtomListDescriptions(
                 new AtomDistanceRangeDescription("i.O->(i+3).N", 2.5, 4.5, carbonylOxygen, amineNitrogen)
