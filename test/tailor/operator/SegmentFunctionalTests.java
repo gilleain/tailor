@@ -1,4 +1,4 @@
-package tops.translation.experimental;
+package tailor.operator;
 
 import static tailor.structure.Segment.Type.HELIX;
 import static tailor.structure.Segment.Type.STRAND;
@@ -11,14 +11,20 @@ import org.junit.Test;
 import tailor.api.Operator;
 import tailor.datasource.PDBReader;
 import tailor.description.ChainDescription;
+import tailor.description.segment.SegmentCentroidDistanceDescription;
+import tailor.description.segment.SegmentDescription;
+import tailor.description.segment.SegmentDescriptionPath;
+import tailor.description.segment.SegmentLengthDescription;
 import tailor.engine.operator.PrintAdapter;
+import tailor.engine.operator.SegmentSource;
 import tailor.engine.plan.Plan;
+import tailor.engine.plan.SegmentPlanner;
 import tailor.structure.Chain;
 import tailor.structure.Protein;
 import tailor.structure.Segment;
 import tailor.translation.HBondAnalyser;
 
-public class FunctionalTests {
+public class SegmentFunctionalTests {
 	
 	private static final String DATA_DIR = "structures";
 	
@@ -53,7 +59,7 @@ public class FunctionalTests {
 		ChainDescription chainDescription = new ChainDescription();
 		SegmentDescription segmentDescription = new SegmentDescription(STRAND);
 		chainDescription.addSegment(segmentDescription);
-		segmentDescription.addPropertyDescription(new SegmentLength(minLength, getPathTo(chainDescription, 0)));
+		segmentDescription.addPropertyDescription(new SegmentLengthDescription(minLength, getPathTo(chainDescription, 0)));
 		
 		return chainDescription;
 	}
@@ -65,10 +71,10 @@ public class FunctionalTests {
 		chainDescription.addSegment(new SegmentDescription(HELIX));
 		chainDescription.addSegment(new SegmentDescription(STRAND));
 		chainDescription.addSegmentListDescriptions(
-				new SegmentCentroidDistance(
+				new SegmentCentroidDistanceDescription(
 						minDistance, getPathTo(chainDescription, 0), getPathTo(chainDescription, 1)
 				),
-				new SegmentCentroidDistance(
+				new SegmentCentroidDistanceDescription(
 						minDistance, getPathTo(chainDescription, 1), getPathTo(chainDescription, 2)
 				)
 		);

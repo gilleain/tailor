@@ -1,11 +1,15 @@
-package tops.translation.experimental;
+package tailor.engine.plan;
 
 import java.util.Stack;
 
 import tailor.api.SegmentListDescription;
 import tailor.description.ChainDescription;
+import tailor.description.segment.SegmentDescription;
+import tailor.engine.operator.FilterSegmentByListDescription;
+import tailor.engine.operator.FilterSegmentByPropertyDescription;
 import tailor.engine.operator.Pipe;
-import tailor.engine.plan.Plan;
+import tailor.engine.operator.SegmentCombiner;
+import tailor.engine.operator.SegmentTypeFilter;
 
 public class SegmentPlanner {
 	
@@ -27,7 +31,7 @@ public class SegmentPlanner {
 		Pipe currentOutput = outputs.pop();	// TODO - reverse order?
 		while (!outputs.empty()) {
 			Pipe nextOutput = outputs.pop();
-			Pipe combinedOutput = plan.addOperatorReturnPipe(new Combiner(nextOutput, currentOutput));	// TODO - hack reversing here
+			Pipe combinedOutput = plan.addOperatorReturnPipe(new SegmentCombiner(nextOutput, currentOutput));	// TODO - hack reversing here
 			currentOutput = combinedOutput;
 		}
 		

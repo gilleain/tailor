@@ -3,7 +3,7 @@ package tailor.api;
 import java.util.List;
 
 import tailor.condition.SegmentPartition;
-import tops.translation.experimental.SegmentDescription;
+import tailor.description.segment.SegmentDescription;
 
 /**
  * Measurement to make on a list of segments.

@@ -1,10 +1,10 @@
-package tops.translation.experimental;
+package tailor.operator;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.contains;
+import static tailor.operator.TestSegmentPlanner.OperatorMatcher.operator;
 import static tailor.structure.Segment.Type.HELIX;
 import static tailor.structure.Segment.Type.STRAND;
-import static tops.translation.experimental.TestSegmentPlanner.OperatorMatcher.operator;
 
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
@@ -12,7 +12,14 @@ import org.junit.Test;
 
 import tailor.api.Operator;
 import tailor.description.ChainDescription;
+import tailor.description.segment.SegmentDescription;
+import tailor.description.segment.SegmentDescriptionPath;
+import tailor.description.segment.SegmentLengthDescription;
+import tailor.engine.operator.FilterSegmentByPropertyDescription;
+import tailor.engine.operator.SegmentCombiner;
+import tailor.engine.operator.SegmentTypeFilter;
 import tailor.engine.plan.Plan;
+import tailor.engine.plan.SegmentPlanner;
 
 public class TestSegmentPlanner {
 	
@@ -28,8 +35,8 @@ public class TestSegmentPlanner {
 						operator(SegmentTypeFilter.class, "0"),
 						operator(SegmentTypeFilter.class, "1"),
 						operator(SegmentTypeFilter.class, "2"),
-						operator(Combiner.class, "3"),
-						operator(Combiner.class, "4")
+						operator(SegmentCombiner.class, "3"),
+						operator(SegmentCombiner.class, "4")
 				)
 		);
 	}
@@ -39,7 +46,7 @@ public class TestSegmentPlanner {
 		ChainDescription chainDescription = new ChainDescription();
 		SegmentDescription strand = new SegmentDescription(STRAND);
 		chainDescription.addSegment(strand);
-		strand.addPropertyDescription(new SegmentLength(10, new SegmentDescriptionPath(chainDescription, strand)));
+		strand.addPropertyDescription(new SegmentLengthDescription(10, new SegmentDescriptionPath(chainDescription, strand)));
 		
 		Plan plan = new SegmentPlanner().makePlan(chainDescription);
 		assertThat(plan.getOperators(), 

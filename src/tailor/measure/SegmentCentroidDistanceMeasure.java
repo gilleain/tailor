@@ -1,4 +1,4 @@
-package tops.translation.experimental;
+package tailor.measure;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -15,6 +15,8 @@ import tailor.condition.SegmentMatcher;
 import tailor.condition.SegmentMatcher.Match;
 import tailor.condition.SegmentPartition;
 import tailor.description.ChainDescription;
+import tailor.description.segment.SegmentDescription;
+import tailor.description.segment.SegmentDescriptionPath;
 import tailor.geometry.Axis;
 import tailor.geometry.Geometer;
 import tailor.measurement.DoubleMeasurement;

@@ -1,21 +1,20 @@
-package tops.translation.experimental;
+package tailor.engine.operator;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Logger;
 
-import tailor.engine.operator.AbstractOperator;
-import tailor.engine.operator.Pipe;
 import tailor.engine.plan.Result;
 
-public class Combiner extends AbstractOperator {
+// FIXME - this really just duplicates the existing combiner?
+public class SegmentCombiner extends AbstractOperator {
 	
-	private static Logger logger = Logger.getLogger(Combiner.class.getName());
+	private static Logger logger = Logger.getLogger(SegmentCombiner.class.getName());
 	
 	private final List<Pipe> inputs;
 	
-	public Combiner(Pipe... inputs) {
+	public SegmentCombiner(Pipe... inputs) {
 		this.inputs = Arrays.asList(inputs);
 	}
 	

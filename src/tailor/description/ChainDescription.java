@@ -9,7 +9,7 @@ import tailor.api.AtomListDescription;
 import tailor.api.AtomListMeasure;
 import tailor.api.SegmentListDescription;
 import tailor.description.group.GroupSequenceDescription;
-import tops.translation.experimental.SegmentDescription;
+import tailor.description.segment.SegmentDescription;
 
 public class ChainDescription {
 	

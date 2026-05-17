@@ -1,17 +1,18 @@
-package tops.translation.experimental;
+package tailor.description.segment;
 
 import tailor.api.SegmentIntPropertyMeasure;
 import tailor.api.SegmentPropertyDescription;
 import tailor.condition.IntegerLowerBoundCondition;
+import tailor.measure.SegmentLengthMeasure;
 import tailor.structure.Segment;
 
-public class SegmentLength implements SegmentPropertyDescription {
+public class SegmentLengthDescription implements SegmentPropertyDescription {
 	
 	private final SegmentLengthMeasure segmentLengthMeasurement;
 	
 	private final IntegerLowerBoundCondition condition;
 
-	public SegmentLength(int value, SegmentDescriptionPath segmentDescriptionPath) {
+	public SegmentLengthDescription(int value, SegmentDescriptionPath segmentDescriptionPath) {
 		this.condition = new IntegerLowerBoundCondition(value);
 		this.segmentLengthMeasurement = new SegmentLengthMeasure(segmentDescriptionPath);
 	}

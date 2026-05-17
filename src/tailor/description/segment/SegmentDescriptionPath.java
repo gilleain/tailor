@@ -1,4 +1,4 @@
-package tops.translation.experimental;
+package tailor.description.segment;
 
 import tailor.description.ChainDescription;
 

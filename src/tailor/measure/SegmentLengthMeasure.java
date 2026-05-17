@@ -1,7 +1,9 @@
-package tops.translation.experimental;
+package tailor.measure;
 
 import tailor.api.Measurement;
 import tailor.api.SegmentIntPropertyMeasure;
+import tailor.description.segment.SegmentDescription;
+import tailor.description.segment.SegmentDescriptionPath;
 import tailor.measurement.SimpleMeasurement;
 import tailor.structure.Segment;
 

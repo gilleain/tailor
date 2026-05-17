@@ -1,4 +1,4 @@
-package tops.translation.experimental;
+package tailor.engine.operator;
 
 import java.util.Arrays;
 import java.util.List;
@@ -6,8 +6,6 @@ import java.util.logging.Logger;
 
 import tailor.api.SegmentListDescription;
 import tailor.condition.SegmentPartition;
-import tailor.engine.operator.AbstractOperator;
-import tailor.engine.operator.Pipe;
 import tailor.engine.plan.Result;
 
 public class FilterSegmentByListDescription extends AbstractOperator {
