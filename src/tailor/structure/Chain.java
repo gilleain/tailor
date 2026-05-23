@@ -2,11 +2,9 @@ package tailor.structure;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
-import java.util.Map;
 
 import javax.vecmath.Point3d;
 import javax.vecmath.Vector3d;
@@ -14,7 +12,6 @@ import javax.vecmath.Vector3d;
 import tailor.geometry.Axis;
 import tailor.geometry.Geometer;
 import tailor.structure.Segment.Type;
-import tailor.translation.ChainDomainMap;
 
 public class Chain {
     private String name;
@@ -367,33 +364,6 @@ public class Chain {
         for (Segment nextSegment : this.segments) {
             nextSegment.determineOrientation(chainAxis);
         }
-    }
-
-    public String toPymolScript() {	// TODO ?
-        StringBuilder script = new StringBuilder();
-
-        int segmentNumber = 1;
-        for (Segment bs : this.segments) {
-            String name = bs.getTopsSymbol() + "" + segmentNumber + "(" + bs.firstPDB() + "-" + bs.lastPDB() + ")";
-            String selection = "not hetatm and name ca+c+n+o+h and resi " + bs.firstPDB() + "-" + bs.lastPDB();
-            script.append("cmd.select(\"" + name + "\", \"" + selection + "\")\n");
-            String color = "green";
-            if (bs.getType() == Type.STRAND) {
-                script.append("line(");
-//                Axis axis = bs.getAxis();
-//                Point3d start = axis.getStart();
-//                Point3d end = axis.getEnd();
-//                script.append(String.format("%6.2f, %6.2f, %6.2f, ", start.x, start.y, start.z));
-//                script.append(String.format("%6.2f, %6.2f, %6.2f, ", end.x, end.y, end.z));
-                script.append("\"").append(name).append("axis\")\n");
-                color = "yellow";
-            } else if (bs.getType() == Type.HELIX) {
-                color = "red";
-            }
-            script.append("cmd.color(\"" + color + "\", \"" + name + "\")\n");
-            segmentNumber++;
-        }
-        return script.toString(); 
     }
 
     public String toString() {
