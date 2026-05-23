@@ -100,6 +100,10 @@ public class HBondAnalyser {
     		return n == null || h == null || o == null || c == null;
     	}
     }
+    
+    private record HBondParameters(double maxHODistance, double minNHOAngle, double minHOCAngle ) {
+    	
+    }
 
     public void analyse(Chain chain) throws PropertyException {
         double maxHODistance = 0.0;
@@ -111,99 +115,23 @@ public class HBondAnalyser {
             minNHOAngle   = Double.parseDouble(this.properties.getProperty("MIN_NHO_ANGLE"));
             minHOCAngle   = Double.parseDouble(this.properties.getProperty("MIN_HOC_ANGLE"));
             LOG.info("HO " + maxHODistance + " NHO " + minNHOAngle + " HOC " + minHOCAngle);
+            
         } catch (NumberFormatException nfe) {
             throw new PropertyException("Error in properties!");
         }
+        
+        HBondParameters hBondParameters = new HBondParameters(maxHODistance, minNHOAngle, minHOCAngle);
 
         List<Group> groups = chain.getGroups();
-        for (int index = 0; index < groups.size(); index++) {    
+        for (int index = 0; index < groups.size(); index++) {
             Group first = groups.get(index);
-
-            // we ignore gamma turns!
-            int position = first.getAbsoluteNumber();
-            int nextPosition = position + 3;
-            
-            NHOCCords firstCoords = getNHOCCoords(first);
-
-            // FIXME : unfortunately, this misses out on PRO residues (also below)
-            if (firstCoords == null ||firstCoords.anyNull()) {
-                continue;
-            }
-
-            // allow for chain breaks, or return if we have reached the end
-            if (!chain.hasResidueByAbsoluteNumbering(nextPosition)) {
-                Group second = chain.getNextResidue(position);
-                if (second == null) {   //probably reached the end of the chain!
-                    break;
-                }
-                nextPosition = second.getAbsoluteNumber();
-            }
-
-            // now, compare the first residue to the residues further on in the chain
-            if (nextPosition >= chain.length()) break;
-            for (int secondPosition = nextPosition; secondPosition < chain.length(); secondPosition++) {
-
-                // we must still check this, since a chain break might move us to i + 2
-                if (secondPosition < (position + 3)) {
-                    continue;
-                }
-
-                Group second;
-                try {
-                    second = chain.getResidueByAbsoluteNumbering(secondPosition);
-                    if (!second.isStandardAminoAcid()) {
-                        continue;
-                    }
-                } catch (IndexOutOfBoundsException i) {
-                	System.err.println("IOOBE " + i);
-                    break;
-                }
-
-                NHOCCords secondCoords = getNHOCCoords(second);
-
-                // FIXME : PRO residues...
-                if (secondCoords == null || secondCoords.anyNull()) {
-                    continue;
-                }
-
-                // bonds from first N-H to second C=O
-                double firstHODistance = firstCoords.h.distance(secondCoords.o);
-                double firstNHOAngle = Geometer.angle(firstCoords.n, firstCoords.h, secondCoords.o);
-                double firstHOCAngle = Geometer.angle(firstCoords.h, secondCoords.o, secondCoords.c);
-            
-                HBond firstSecondBond = null;
-                if (firstHODistance < maxHODistance && firstNHOAngle > minNHOAngle && firstHOCAngle > minHOCAngle) {
-                    firstSecondBond = new HBond(first, second, firstHODistance, firstNHOAngle, firstHOCAngle);
-                }
-
-                if (firstSecondBond != null) {
-                    chain.addHBond(firstSecondBond);
-                    first.addHBond(firstSecondBond);
-                    second.addHBond(firstSecondBond);
-                }
-
-                // bonds from second N-H to first C=O
-                double secondHODistance = secondCoords.h.distance(firstCoords.o);
-                double secondNHOAngle = Geometer.angle(secondCoords.n, secondCoords.h, firstCoords.o);
-                double secondHOCAngle = Geometer.angle(secondCoords.h, firstCoords.o, firstCoords.c);
-
-                HBond secondFirstBond = null;
-                if (secondHODistance < maxHODistance && secondNHOAngle > minNHOAngle && secondHOCAngle > minHOCAngle) {
-                    secondFirstBond = new HBond(second, first, secondHODistance, secondNHOAngle, secondHOCAngle);
-                }
-
-                if (secondFirstBond != null) {
-                    chain.addHBond(secondFirstBond);
-                    first.addHBond(secondFirstBond);
-                    second.addHBond(secondFirstBond);
-                }
-            }
-            
-            // now, use these hbond assignments to determine the residue's environment
-            List<Tag> tags = this.convertBondsToTags(first);
+            try {
+            List<Tag> tags = findTags(chain, first, hBondParameters);
             LOG.info(first.toFullString() + " " + tags);
-
             this.updateSSEEndpoints(index, tags, chain);
+            }catch (NullPointerException npe) {
+            	System.err.println(npe);
+            }
         }
 
         // finally, finish off the SSEs
@@ -218,6 +146,96 @@ public class HBondAnalyser {
         	segment.setNumber(bbIndex);
         	bbIndex++;
         }
+    }
+    
+    private List<Tag> findTags(Chain chain, Group first, HBondParameters hBondParameters) {
+
+    	// we ignore gamma turns!
+    	int position = first.getAbsoluteNumber();
+    	int nextPosition = position + 3;
+
+    	NHOCCords firstCoords = getNHOCCoords(first);
+
+    	// FIXME : unfortunately, this misses out on PRO residues (also below)
+    	if (firstCoords == null || firstCoords.anyNull()) {
+    		return List.of();
+    	}
+
+    	// allow for chain breaks, or return if we have reached the end
+    	if (!chain.hasResidueByAbsoluteNumbering(nextPosition)) {
+    		Group second = chain.getNextResidue(position);
+    		if (second == null) {   //probably reached the end of the chain!
+    			return List.of();
+    		}
+    		nextPosition = second.getAbsoluteNumber();
+    	}
+
+    	// now, compare the first residue to the residues further on in the chain
+    	if (nextPosition >= chain.length()) return List.of();
+    	for (int secondPosition = nextPosition; secondPosition < chain.length(); secondPosition++) {
+
+    		// we must still check this, since a chain break might move us to i + 2
+    		if (secondPosition < (position + 3)) {
+    			continue;
+    		}
+
+    		Group second;
+    		try {
+    			second = chain.getResidueByAbsoluteNumbering(secondPosition);
+    			if (!second.isStandardAminoAcid()) {
+    				continue;
+    			}
+    		} catch (IndexOutOfBoundsException i) {
+    			System.err.println("IOOBE " + i);
+    			break;
+    		}
+
+    		NHOCCords secondCoords = getNHOCCoords(second);
+
+    		// FIXME : PRO residues...
+    		if (secondCoords == null || secondCoords.anyNull()) {
+    			continue;
+    		}
+
+    		// bonds from first N-H to second C=O
+    		double firstHODistance = firstCoords.h.distance(secondCoords.o);
+    		double firstNHOAngle = Geometer.angle(firstCoords.n, firstCoords.h, secondCoords.o);
+    		double firstHOCAngle = Geometer.angle(firstCoords.h, secondCoords.o, secondCoords.c);
+
+    		HBond firstSecondBond = null;
+    		if (firstHODistance < hBondParameters.maxHODistance 
+    				&& firstNHOAngle > hBondParameters.minNHOAngle 
+    				&& firstHOCAngle > hBondParameters.minHOCAngle) {
+    			firstSecondBond = new HBond(first, second, firstHODistance, firstNHOAngle, firstHOCAngle);
+    		}
+
+    		if (firstSecondBond != null) {
+    			chain.addHBond(firstSecondBond);
+    			first.addHBond(firstSecondBond);
+    			second.addHBond(firstSecondBond);
+    		}
+
+    		// bonds from second N-H to first C=O
+    		double secondHODistance = secondCoords.h.distance(firstCoords.o);
+    		double secondNHOAngle = Geometer.angle(secondCoords.n, secondCoords.h, firstCoords.o);
+    		double secondHOCAngle = Geometer.angle(secondCoords.h, firstCoords.o, firstCoords.c);
+
+    		HBond secondFirstBond = null;
+    		if (secondHODistance < hBondParameters.maxHODistance 
+    				&& secondNHOAngle > hBondParameters.minNHOAngle 
+    				&& secondHOCAngle > hBondParameters.minHOCAngle) {
+    			secondFirstBond = new HBond(second, first, secondHODistance, secondNHOAngle, secondHOCAngle);
+    		}
+
+    		if (secondFirstBond != null) {
+    			chain.addHBond(secondFirstBond);
+    			first.addHBond(secondFirstBond);
+    			second.addHBond(secondFirstBond);
+    		}
+    	}
+
+    	// now, use these hbond assignments to determine the residue's environment
+    	return this.convertBondsToTags(first);
     }
     
     private NHOCCords getNHOCCoords(Group group) {

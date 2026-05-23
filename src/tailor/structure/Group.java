@@ -199,7 +199,11 @@ public class Group implements Comparable<Group> {
     }
     
     public Point3d getCoordinates(String atomType) {
-        return this.atomMap.get(atomType).getCenter();
+    	if (this.atomMap.containsKey(atomType)) {
+    		return this.atomMap.get(atomType).getCenter();
+    	} else {
+    		return null;
+    	}
     }
 
     public int getAbsoluteNumber() {
@@ -235,8 +239,8 @@ public class Group implements Comparable<Group> {
     }
 
     public String toFullString() {
-        //return String.format("%s-%-3d %-3d %-19s [%6.2f, %6.2f] %s", this.type, this.pdbNumber, this.absoluteNumber, this.environment, this.phi, this.psi, this.hBondString());
-        return "";
+        return String.format("%s-%-3d %-3d %-19s [%6.2f, %6.2f] %s", this.polymerType, this.pdbNumber, this.absoluteNumber, this.environment, this.phi, this.psi, this.hBondString());
+//        return "";
     }
 
     public String toString() {
