@@ -11,6 +11,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import tailor.datasource.PDBReader;
+import tailor.datasource.TopsWriter;
 import tailor.structure.Chain;
 import tailor.structure.Protein;
 
@@ -109,7 +110,7 @@ public class TestRunner {
                 // translate the pdbfile
                 Protein protein = foldAnalyser.analyse(PDBReader.read(filename));
                 Map<String, Map<String, String>> chainDomainStringMap = 
-                		protein.toTopsDomainStrings(cathChainMap);
+                		TopsWriter.toTopsDomainStrings(protein, cathChainMap);
 
                 for (Chain chain : protein.getChains()) {
 

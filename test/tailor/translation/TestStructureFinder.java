@@ -6,6 +6,7 @@ import java.util.Map;
 import org.junit.Test;
 
 import tailor.datasource.PDBReader;
+import tailor.datasource.TopsWriter;
 import tailor.structure.Protein;
 
 public class TestStructureFinder {
@@ -23,7 +24,7 @@ public class TestStructureFinder {
 			ChainDomainMap cathChainDomainMap = 
 					CATHDomainFileParser.parseUpToParticularID(cathFilename, protein.getID());
 			Map<String, Map<String, String>> chainDomainStringMap = 
-					protein.toTopsDomainStrings(cathChainDomainMap);
+					TopsWriter.toTopsDomainStrings(protein, cathChainDomainMap);
 
 			for (String chainID : chainDomainStringMap.keySet()) {
 				Map<String, String> domainStrings = chainDomainStringMap.get(chainID);

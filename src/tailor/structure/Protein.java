@@ -1,11 +1,7 @@
 package tailor.structure;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-
-import tailor.translation.ChainDomainMap;
 
 public class Protein {
 
@@ -44,26 +40,6 @@ public class Protein {
         return chainsToReturn;
     }
 
-    public Map<String, Map<String, String>> toTopsDomainStrings(
-    		ChainDomainMap chainDomainMap) {
-        Map<String, Map<String, String>> chainDomainStringMap = new HashMap<>();
-        for (int i = 0; i < this.chains.size(); i++) {
-            Chain chain = (Chain) this.chains.get(i);
-            chainDomainStringMap.put(
-            		chain.getCathCompatibleName(), 
-            		chain.toTopsDomainStrings(chainDomainMap));
-        }
-        return chainDomainStringMap;
-    }
-
-    public String[] toTopsChainStringArray() {
-        String[] chainStrings = new String[this.chains.size()];
-        for (int i = 0; i < this.chains.size(); i++) {
-            Chain chain = (Chain) this.chains.get(i);
-            chainStrings[i] = chain.toTopsString(new Domain(0));
-        }
-        return chainStrings;
-    }
 
     @Override
     public String toString() {

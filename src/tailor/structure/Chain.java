@@ -396,98 +396,6 @@ public class Chain {
         return script.toString(); 
     }
 
-    public Map<String, String> toTopsDomainStrings(ChainDomainMap chainDomainMap) {
-        if (chainDomainMap != null && chainDomainMap.containsKey(this.getCathCompatibleName())) {
-            List<Domain> domainsForChain = chainDomainMap.get(this.getCathCompatibleName());
-            return this.toTopsDomainStrings(domainsForChain);
-        } else {
-            Map<String, String> map = new HashMap<>();
-            map.put("0", this.toTopsString(new Domain(0)));
-            return map;
-        }
-    }
-
-    public Map<String, String> toTopsDomainStrings(List<Domain> domainsToConvert) {
-        Map<String, String> domainStrings = new HashMap<>();
-
-        for (Domain domain : domainsToConvert) {
-            //System.err.println("Getting tops string for domain " + d);
-            domainStrings.put(domain.getID(), this.toTopsString(domain));
-        }
-
-        return domainStrings;
-    }
-
-    public String toTopsString(Domain domain) {
-        //name
-        StringBuffer s = new StringBuffer();
-        s.append(this.getCathCompatibleName() + domain.getNumber() + " ");
-
-        //vertexstring
-        Iterator<Segment> backboneSegmentIterator;
-        if (domain.isEmpty()) {
-            backboneSegmentIterator = this.segments.iterator();
-        } else {
-            List<Segment> segmentsFilteredByDomain = domain.filter(this.segments);
-            segmentsFilteredByDomain.add(0, new Segment(Type.NTERMINUS));
-            segmentsFilteredByDomain.add(new Segment(Type.CTERMINUS));
-            backboneSegmentIterator = segmentsFilteredByDomain.iterator();
-        }
-
-        int vertexNumber = 0;
-        while (backboneSegmentIterator.hasNext()) {
-            Segment nextBackboneSegment = backboneSegmentIterator.next();
-            if (nextBackboneSegment.getType() == Type.UNSTRUCTURED) {
-                continue;
-            } else {
-                nextBackboneSegment.setNumber(vertexNumber);
-                s.append(nextBackboneSegment.getTopsSymbol());
-                vertexNumber++;
-            }
-        }
-
-        s.append(" ");
-        
-        //edgestring
-        List<Edge> edges = new ArrayList<>();
-        for (Sheet sheet : this.sheets) {
-            edges.addAll(sheet.toTopsEdges(domain));
-        }
-
-        Collections.sort(edges);
-        
-        //merge the chirals with the hbonds
-        Iterator<Edge> chiralIterator = this.chiralities.iterator();
-        Iterator<Edge> edgeIterator;
-        while (chiralIterator.hasNext()) {
-            boolean merged = false;
-            Edge chiral = chiralIterator.next();
-            edgeIterator = edges.iterator();
-            while (edgeIterator.hasNext()) {
-                Edge hbond = edgeIterator.next();
-                if (hbond.equals(chiral)) {
-                    hbond.mergeWith(chiral);
-                    merged = true;
-                    break;
-                }
-            }
-            // those chirals that are not merged are simply added
-            if (!merged && chiral.containedIn(domain)) {
-                edges.add(chiral);
-            } 
-        }
-
-        Collections.sort(edges);
-
-        edgeIterator = edges.iterator();
-        while (edgeIterator.hasNext()) {
-            Edge edge = (Edge) edgeIterator.next();
-            s.append(edge.toString());
-        }
-
-        return s.toString();
-    }
-
     public String toString() {
         StringBuilder s = new StringBuilder();
         s.append("Chain : " + this.getName() + " residue " + this.firstResidue().getPDBNumber() + " to " + this.lastResidue().getPDBNumber() + "\n");
@@ -512,4 +420,12 @@ public class Chain {
 
         return s.toString();
     }
+    
+    public List<Edge> getChiralities() {
+    	return this.chiralities;
+    }
+
+	public List<Sheet> getSheets() {
+		return this.sheets;
+	}
 }

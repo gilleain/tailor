@@ -12,6 +12,7 @@ import java.util.logging.Logger;
 import org.junit.Test;
 
 import tailor.datasource.PDBReader;
+import tailor.datasource.TopsWriter;
 import tailor.structure.Protein;
 
 public class TestFoldAnalyser {
@@ -42,7 +43,7 @@ public class TestFoldAnalyser {
 			ChainDomainMap cathChainDomainMap = 
 					CATHDomainFileParser.parseUpToParticularID(cathDomainFilename, protein.getID());
 			Map<String, Map<String, String>> chainDomainStringMap = 
-					protein.toTopsDomainStrings(cathChainDomainMap);
+					TopsWriter.toTopsDomainStrings(protein, cathChainDomainMap);
 
 			Iterator<String> itr = chainDomainStringMap.keySet().iterator();
 			while (itr.hasNext()) {

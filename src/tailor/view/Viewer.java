@@ -19,6 +19,7 @@ import java.util.List;
 import javax.swing.JFrame;
 
 import tailor.datasource.PDBReader;
+import tailor.datasource.TopsWriter;
 import tailor.structure.Chain;
 import tailor.structure.Domain;
 import tailor.structure.Protein;
@@ -75,10 +76,8 @@ public class Viewer extends JFrame {
         this.currentView.setSize(width, height);
         this.setSize(width + 2, height + 2);
 
-        try {
-            this.loadPropertiesFromFile(propertyFilename);
-        } catch (PropertyException pe) {
-            System.err.println(pe);
+        if (propertyFilename != null) {
+        	this.loadPropertiesFromFile(propertyFilename);
         }
 
         try {
@@ -93,6 +92,8 @@ public class Viewer extends JFrame {
             this.hBondAnalyser.loadProperties(new FileInputStream(propertyFilename));
         } catch (IOException ioe) {
             System.err.println(ioe);
+        } catch (PropertyException pe) {
+            System.err.println(pe);
         }
     }
 
@@ -108,7 +109,7 @@ public class Viewer extends JFrame {
         int viewIndex = 0;
 
         for(Chain chain : protein.getChains()) {
-            System.out.println(chain.toTopsString(new Domain(0)));
+            System.out.println(TopsWriter.toTopsString(chain, new Domain(0)));
             if (viewIndex < this.views.size()) {
                 this.addChainToView(chain, this.views.get(viewIndex));
             } else {
@@ -129,11 +130,19 @@ public class Viewer extends JFrame {
             System.out.println("Usage : 'Viewer <filename> <property_file> [<width> <height>]' where '<filename>' is a PDB file");
         }
 
+        Viewer viewer = null;
         if (args.length == 0) {
-            Viewer viewer = new Viewer();
-            viewer.setVisible(true);
+            viewer = new Viewer();
+            
         }
-
+        
+        if (args.length == 1) {
+        	 String filename  = args[0];
+        	 int width = Viewer.DEFAULT_WIDTH;
+             int height = Viewer.DEFAULT_HEIGHT;
+        	 viewer = new Viewer(filename, null, width, height);
+        }
+        
         if (args.length > 1) {
             String filename         = args[0];
             String propertyFilename = args[1];
@@ -150,9 +159,10 @@ public class Viewer extends JFrame {
                 }
             }
 
-            Viewer viewer = new Viewer(filename, propertyFilename, width, height);
-            viewer.setVisible(true);
+            viewer = new Viewer(filename, propertyFilename, width, height);
         }
+        
+        viewer.setVisible(true);
     }
 
     public class ViewerDropTargetListener implements DropTargetListener {
