@@ -40,8 +40,8 @@ public class Viewer extends JFrame {
     private int viewWidth;
     private int viewHeight;
 
-    private static int DEFAULT_WIDTH = 1000;
-    private static int DEFAULT_HEIGHT = 250;
+    private static int DEFAULT_WIDTH = 1600;
+    private static int DEFAULT_HEIGHT = 450;
 
     public Viewer() {
         super("HBond Viewer");

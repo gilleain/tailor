@@ -104,6 +104,19 @@ public class HBondAnalyser {
     private record HBondParameters(double maxHODistance, double minNHOAngle, double minHOCAngle ) {
     	
     }
+    
+    private record HBondValues(double hoDistance, double nhoAngle, double hocAngle ) {
+    	
+    	public boolean matches(HBondParameters hBondParameters) {
+    		return this.hoDistance < hBondParameters.maxHODistance 
+    				&& this.nhoAngle > hBondParameters.minNHOAngle 
+    				&& this.hocAngle > hBondParameters.minHOCAngle;
+    	}
+    	
+    	public String toString() {
+    		return String.format("HO: %2.2f, NHO: %2.2f, HOC: %2.2f", hoDistance, nhoAngle, hocAngle);
+    	}
+    }
 
     public void analyse(Chain chain) throws PropertyException {
         double maxHODistance = 0.0;
@@ -126,9 +139,9 @@ public class HBondAnalyser {
         for (int index = 0; index < groups.size(); index++) {
             Group first = groups.get(index);
             try {
-            List<Tag> tags = findTags(chain, first, hBondParameters);
-            LOG.info(first.toFullString() + " " + tags);
-            this.updateSSEEndpoints(index, tags, chain);
+	            List<Tag> tags = findTags(chain, first, index, hBondParameters);
+	            LOG.info(first.toFullString() + " " + tags);
+	            this.updateSSEEndpoints(index, tags, chain);
             }catch (NullPointerException npe) {
             	System.err.println(npe);
             }
@@ -148,10 +161,10 @@ public class HBondAnalyser {
         }
     }
     
-    private List<Tag> findTags(Chain chain, Group first, HBondParameters hBondParameters) {
+    private List<Tag> findTags(Chain chain, Group first, int firstIndex, HBondParameters hBondParameters) {
 
     	// we ignore gamma turns!
-    	int position = first.getAbsoluteNumber();
+    	int position = firstIndex;
     	int nextPosition = position + 3;
 
     	NHOCCords firstCoords = getNHOCCoords(first);
@@ -172,16 +185,16 @@ public class HBondAnalyser {
 
     	// now, compare the first residue to the residues further on in the chain
     	if (nextPosition >= chain.length()) return List.of();
-    	for (int secondPosition = nextPosition; secondPosition < chain.length(); secondPosition++) {
-
+    	List<Group> groups = chain.getGroups();
+    	for (int secondPosition = nextPosition; secondPosition < groups.size(); secondPosition++) {
     		// we must still check this, since a chain break might move us to i + 2
-    		if (secondPosition < (position + 3)) {
+    		if (secondPosition < (position + 2)) {
     			continue;
     		}
 
     		Group second;
     		try {
-    			second = chain.getResidueByAbsoluteNumbering(secondPosition);
+    			second = groups.get(secondPosition);
     			if (!second.isStandardAminoAcid()) {
     				continue;
     			}
@@ -198,44 +211,45 @@ public class HBondAnalyser {
     		}
 
     		// bonds from first N-H to second C=O
-    		double firstHODistance = firstCoords.h.distance(secondCoords.o);
-    		double firstNHOAngle = Geometer.angle(firstCoords.n, firstCoords.h, secondCoords.o);
-    		double firstHOCAngle = Geometer.angle(firstCoords.h, secondCoords.o, secondCoords.c);
+    		HBondValues firstToSecond = calculateValues(firstCoords, secondCoords);
 
     		HBond firstSecondBond = null;
-    		if (firstHODistance < hBondParameters.maxHODistance 
-    				&& firstNHOAngle > hBondParameters.minNHOAngle 
-    				&& firstHOCAngle > hBondParameters.minHOCAngle) {
-    			firstSecondBond = new HBond(first, second, firstHODistance, firstNHOAngle, firstHOCAngle);
+    		if (firstToSecond.matches(hBondParameters)) {
+    			firstSecondBond = new HBond(first, second, firstToSecond.hoDistance, firstToSecond.nhoAngle, firstToSecond.hocAngle);
     		}
 
     		if (firstSecondBond != null) {
-    			chain.addHBond(firstSecondBond);
-    			first.addHBond(firstSecondBond);
-    			second.addHBond(firstSecondBond);
+    			add(chain, first, second, firstSecondBond);
     		}
 
     		// bonds from second N-H to first C=O
-    		double secondHODistance = secondCoords.h.distance(firstCoords.o);
-    		double secondNHOAngle = Geometer.angle(secondCoords.n, secondCoords.h, firstCoords.o);
-    		double secondHOCAngle = Geometer.angle(secondCoords.h, firstCoords.o, firstCoords.c);
+    		HBondValues secondToFirst = calculateValues(secondCoords, firstCoords);
 
     		HBond secondFirstBond = null;
-    		if (secondHODistance < hBondParameters.maxHODistance 
-    				&& secondNHOAngle > hBondParameters.minNHOAngle 
-    				&& secondHOCAngle > hBondParameters.minHOCAngle) {
-    			secondFirstBond = new HBond(second, first, secondHODistance, secondNHOAngle, secondHOCAngle);
+    		if (secondToFirst.matches(hBondParameters)) {
+    			secondFirstBond = new HBond(second, first, secondToFirst.hoDistance, secondToFirst.nhoAngle, secondToFirst.hocAngle);
     		}
 
     		if (secondFirstBond != null) {
-    			chain.addHBond(secondFirstBond);
-    			first.addHBond(secondFirstBond);
-    			second.addHBond(secondFirstBond);
+    			add(chain, first, second, secondFirstBond);
     		}
     	}
 
     	// now, use these hbond assignments to determine the residue's environment
     	return this.convertBondsToTags(first);
+    }
+    
+    private void add(Chain chain, Group first, Group second, HBond hbond) {
+    	chain.addHBond(hbond);
+		first.addHBond(hbond);
+		second.addHBond(hbond);
+    }
+    
+    private HBondValues calculateValues(NHOCCords firstCoords, NHOCCords secondCoords) {
+    	double hoDistance = firstCoords.h.distance(secondCoords.o);
+		double nhoAngle = Geometer.angle(firstCoords.n, firstCoords.h, secondCoords.o);
+		double hocAngle = Geometer.angle(firstCoords.h, secondCoords.o, secondCoords.c);
+		return new HBondValues(hoDistance, nhoAngle, hocAngle);
     }
     
     private NHOCCords getNHOCCoords(Group group) {
@@ -269,6 +283,7 @@ public class HBondAnalyser {
     public List<Tag> convertBondsToTags(Group residue) {
     	List<HBond> nTerminalHBonds = residue.getNTerminalHBonds();
     	List<HBond> cTerminalHBonds = residue.getCTerminalHBonds();
+    	LOG.info(residue.getAbsoluteNumber() + " " + nTerminalHBonds + " " + cTerminalHBonds);
 
         List<Tag> tags = new ArrayList<>();
 
@@ -305,6 +320,7 @@ public class HBondAnalyser {
     }
 
     public Tag convertBondsToTag(int nSeparation, int cSeparation) {
+    	LOG.info(String.format("%s %s", nSeparation, cSeparation));
 
         // neither has a bond
         if (nSeparation == 0 && cSeparation == 0) {
