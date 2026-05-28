@@ -7,6 +7,7 @@ import tailor.api.AtomListMeasure;
 import tailor.api.Condition;
 import tailor.api.Measurement;
 import tailor.condition.AtomPartition;
+import tailor.description.GroupDescription;
 
 public class AtomValueDescription implements AtomListDescription {
 	
