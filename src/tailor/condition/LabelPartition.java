@@ -94,7 +94,7 @@ public class LabelPartition {
 		
 		for (GroupDescriptionPath descriptionPath : descriptionPaths) {
 			GroupDescription groupDescription = descriptionPath.getGroupDescription();
-			List<String> part = partition.computeIfAbsent(groupDescription, _ -> new ArrayList<>());
+			List<String> part = partition.computeIfAbsent(groupDescription, $ -> new ArrayList<>());
 			part.add(descriptionPath.getAtomDescription().getLabel());
 		}
 		List<Part> parts = new ArrayList<>();

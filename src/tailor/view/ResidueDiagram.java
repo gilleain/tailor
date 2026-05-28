@@ -439,7 +439,7 @@ public class ResidueDiagram {
 	}
 	
 	private void addSymbolMapping(Symbol symbol, AtomDescription atomDescription) {
-		this.symbolToObjectMap.computeIfAbsent(symbol, _ -> new ArrayList<>()).add(atomDescription);
+		this.symbolToObjectMap.computeIfAbsent(symbol, $ -> new ArrayList<>()).add(atomDescription);
 	}
 	
 	public void removeResidueFromEnd() {
