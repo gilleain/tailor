@@ -1,4 +1,4 @@
-package tailor.description;
+package tailor.description.atom;
 
 import java.util.List;
 

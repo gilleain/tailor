@@ -1,7 +1,6 @@
 package tailor.description.atom;
 
 import tailor.condition.UpperBoundCondition;
-import tailor.description.AtomValueDescription;
 import tailor.description.GroupDescriptionPath;
 import tailor.measure.AtomDistanceMeasure;
 

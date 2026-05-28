@@ -1,7 +1,6 @@
 package tailor.description.atom;
 
 import tailor.description.AtomDescription;
-import tailor.description.AtomValueRangeDescription;
 import tailor.description.GroupDescriptionPath;
 import tailor.measure.AtomTorsionMeasure;
 
