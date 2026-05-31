@@ -2,13 +2,13 @@ package tailor.description.group;
 
 import java.util.Set;
 
-import tailor.condition.AtomPartition;
 import tailor.condition.UpperBoundCondition;
 import tailor.description.GroupDescriptionPath;
 import tailor.measure.CentroidMeasure;
 import tailor.measure.PointDistanceMeasure;
 import tailor.measurement.DoubleMeasurement;
 import tailor.measurement.PointMeasurement;
+import tailor.partition.GroupPartition;
 
 public class GroupCenterDistanceDescription {
 	
@@ -21,9 +21,9 @@ public class GroupCenterDistanceDescription {
 		
 	}
 	
-	public boolean apply(AtomPartition atomPartition) {
-		PointMeasurement pA = measureA.measure(null);
-		PointMeasurement pB = measureB.measure(null);
+	public boolean apply(GroupPartition groupPartition) {
+		PointMeasurement pA = measureA.measure(groupPartition);
+		PointMeasurement pB = measureB.measure(groupPartition);
 		DoubleMeasurement measurement = measureC.measure(pA.getValue(), pB.getValue());
 		
 		return measurement.apply(upperBound);

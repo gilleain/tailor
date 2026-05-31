@@ -1,11 +1,11 @@
-package tailor.condition;
+package tailor.partition;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.logging.Logger;
 
-import tailor.condition.LabelPartition.Part;
+import tailor.partition.LabelPartition.Part;
 import tailor.structure.Atom;
 
 public class AtomMatcher {

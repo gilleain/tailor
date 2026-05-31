@@ -4,7 +4,6 @@ import java.util.List;
 
 import tailor.api.AtomListDescription;
 import tailor.api.AtomListMeasure;
-import tailor.condition.AtomPartition;
 import tailor.condition.RangeCondition;
 import tailor.condition.UpperBoundCondition;
 import tailor.description.AtomDescription;
@@ -12,6 +11,7 @@ import tailor.description.GroupDescriptionPath;
 import tailor.description.GroupDescription;
 import tailor.measure.HBondMeasure;
 import tailor.measurement.CompositeDoubleMeasurement;
+import tailor.partition.AtomPartition;
 
 /**
  * Hydrogen bond defined by D-H...A-AA :

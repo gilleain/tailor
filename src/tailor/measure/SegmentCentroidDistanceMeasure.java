@@ -8,18 +8,18 @@ import java.util.Optional;
 
 import tailor.api.Measurement;
 import tailor.api.SegmentListMeasure;
-import tailor.condition.LabelPartition;
-import tailor.condition.LabelPartition.LabelledPart;
-import tailor.condition.LabelPartition.Part;
-import tailor.condition.SegmentMatcher;
-import tailor.condition.SegmentMatcher.Match;
-import tailor.condition.SegmentPartition;
 import tailor.description.ChainDescription;
 import tailor.description.segment.SegmentDescription;
 import tailor.description.segment.SegmentDescriptionPath;
 import tailor.geometry.Axis;
 import tailor.geometry.Geometer;
 import tailor.measurement.DoubleMeasurement;
+import tailor.partition.LabelPartition;
+import tailor.partition.SegmentMatcher;
+import tailor.partition.SegmentPartition;
+import tailor.partition.LabelPartition.LabelledPart;
+import tailor.partition.LabelPartition.Part;
+import tailor.partition.SegmentMatcher.Match;
 import tailor.structure.Segment;
 
 public class SegmentCentroidDistanceMeasure implements SegmentListMeasure {

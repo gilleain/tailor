@@ -6,11 +6,11 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import tailor.api.AtomListMeasure;
-import tailor.condition.AtomPartition;
 import tailor.description.GroupDescriptionPath;
 import tailor.description.GroupDescription;
 import tailor.measurement.CompositeDoubleMeasurement;
 import tailor.measurement.DoubleMeasurement;
+import tailor.partition.AtomPartition;
 
 public class HBondMeasure implements AtomListMeasure {
 	

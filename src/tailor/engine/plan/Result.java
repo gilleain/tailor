@@ -7,8 +7,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import tailor.api.Measurement;
-import tailor.condition.AtomPartition;
-import tailor.condition.SegmentPartition;
+import tailor.partition.AtomPartition;
+import tailor.partition.SegmentPartition;
 import tailor.structure.Atom;
 import tailor.structure.Chain;
 import tailor.structure.Group;

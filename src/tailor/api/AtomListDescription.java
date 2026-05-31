@@ -2,8 +2,8 @@ package tailor.api;
 
 import java.util.List;
 
-import tailor.condition.AtomPartition;
 import tailor.description.GroupDescription;
+import tailor.partition.AtomPartition;
 
 /**
  * Description for a list of atoms that can create conditions and matchers for filtering.

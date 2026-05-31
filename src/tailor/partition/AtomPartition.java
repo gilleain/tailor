@@ -1,4 +1,4 @@
-package tailor.condition;
+package tailor.partition;
 
 import java.util.List;
 

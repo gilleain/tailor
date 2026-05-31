@@ -2,8 +2,8 @@ package tailor.api;
 
 import java.util.List;
 
-import tailor.condition.AtomPartition;
 import tailor.description.GroupDescription;
+import tailor.partition.AtomPartition;
 
 /**
  * Measurement to make on a list of atoms.

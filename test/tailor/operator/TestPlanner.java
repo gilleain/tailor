@@ -10,7 +10,6 @@ import org.junit.Test;
 import tailor.api.AtomListDescription;
 import tailor.api.AtomListMeasure;
 import tailor.api.Operator;
-import tailor.condition.AtomPartition;
 import tailor.description.ChainDescription;
 import tailor.description.DescriptionFactory;
 import tailor.description.GroupDescriptionPath;
@@ -25,6 +24,7 @@ import tailor.engine.plan.Plan;
 import tailor.engine.plan.Planner;
 import tailor.measure.AbstractAtomListMeasure;
 import tailor.measurement.DoubleMeasurement;
+import tailor.partition.AtomPartition;
 import tailor.structure.Atom;
 
 public class TestPlanner {

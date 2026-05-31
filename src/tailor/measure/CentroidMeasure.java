@@ -2,12 +2,20 @@ package tailor.measure;
 
 import java.util.Set;
 
+import tailor.description.GroupDescriptionPath;
 import tailor.measurement.PointMeasurement;
-import tailor.structure.Atom;
+import tailor.partition.GroupPartition;
 
 public class CentroidMeasure {
 	
-	public PointMeasurement measure(Set<Atom> atoms) {
+	private Set<GroupDescriptionPath> paths;
+	
+	public CentroidMeasure(Set<GroupDescriptionPath> paths) {
+		this.paths = paths;
+	}
+
+
+	public PointMeasurement measure(GroupPartition groups) {
 		// TODO
 		return null;
 	}
