@@ -1,6 +1,6 @@
 package tailor.description.group;
 
-import java.util.Set;
+import java.util.List;
 
 import tailor.condition.UpperBoundCondition;
 import tailor.description.GroupDescriptionPath;
@@ -17,8 +17,11 @@ public class GroupCenterDistanceDescription {
 	private PointDistanceMeasure measureC;
 	private UpperBoundCondition upperBound;
 	
-	public GroupCenterDistanceDescription(double maxDistance, Set<GroupDescriptionPath> centerA, Set<GroupDescriptionPath> centerB) {
-		
+	public GroupCenterDistanceDescription(
+			double maxDistance, List<GroupDescriptionPath> centerA, List<GroupDescriptionPath> centerB) {
+		this.measureA = new CentroidMeasure(centerA);
+		this.measureB = new CentroidMeasure(centerB);
+		this.measureC = new PointDistanceMeasure();
 	}
 	
 	public boolean apply(GroupPartition groupPartition) {
