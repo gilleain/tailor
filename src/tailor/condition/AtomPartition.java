@@ -4,6 +4,9 @@ import java.util.List;
 
 import tailor.structure.Atom;
 
+/**
+ * Partition of atoms by the groups they are part of - like a 'slice' across the result tree.
+ */
 public class AtomPartition {
 	
 	private final List<List<Atom>> parts;
