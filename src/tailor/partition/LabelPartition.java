@@ -7,8 +7,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import tailor.description.GroupDescriptionPath;
+import tailor.description.ChainDescription;
 import tailor.description.GroupDescription;
+import tailor.description.GroupDescriptionPath;
+import tailor.description.segment.SegmentDescriptionPath;
 
 public class LabelPartition {
 	
@@ -100,6 +102,22 @@ public class LabelPartition {
 		List<Part> parts = new ArrayList<>();
 		for (GroupDescription groupDescription : partition.keySet()) {
 			parts.add(new LabelledPart(groupDescription.getIndex(), partition.get(groupDescription)));
+		}
+
+		return new LabelPartition(parts);
+	}
+	
+	public static LabelPartition fromDescriptionPaths(SegmentDescriptionPath... descriptionPaths) {
+		Map<ChainDescription, List<String>> partition = new LinkedHashMap<>();
+		for (SegmentDescriptionPath descriptionPath : descriptionPaths) {
+			ChainDescription chainDescription = descriptionPath.getChainDescription();
+			List<String> part = partition.computeIfAbsent(chainDescription, $ -> new ArrayList<>());
+			part.add(descriptionPath.getSegmentDescription().getType().getTypeString());
+		}
+		
+		List<Part> parts = new ArrayList<>();
+		for (ChainDescription chainDescription : partition.keySet()) {
+			parts.add(new LabelledPart(chainDescription.getIndex(), partition.get(chainDescription)));
 		}
 
 		return new LabelPartition(parts);
