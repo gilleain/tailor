@@ -38,7 +38,7 @@ public class SegmentCentroidDistanceMeasure implements SegmentListMeasure {
 		Map<ChainDescription, List<String>> partition = new LinkedHashMap<>();
 		for (SegmentDescriptionPath descriptionPath : descriptionPaths) {
 			ChainDescription chainDescription = descriptionPath.getChainDescription();
-			List<String> part = partition.computeIfAbsent(chainDescription, _ -> new ArrayList<>());
+			List<String> part = partition.computeIfAbsent(chainDescription, $ -> new ArrayList<>());
 			part.add(descriptionPath.getSegmentDescription().getType().getTypeString());
 		}
 		
