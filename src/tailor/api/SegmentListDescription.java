@@ -2,8 +2,8 @@ package tailor.api;
 
 import java.util.List;
 
-import tailor.condition.SegmentPartition;
 import tailor.description.segment.SegmentDescription;
+import tailor.partition.SegmentPartition;
 
 /**
  * Description for a list of segments that can create conditions and matchers for filtering.

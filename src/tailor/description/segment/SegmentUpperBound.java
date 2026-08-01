@@ -5,8 +5,8 @@ import java.util.List;
 import tailor.api.Measurement;
 import tailor.api.SegmentListDescription;
 import tailor.api.SegmentListMeasure;
-import tailor.condition.SegmentPartition;
 import tailor.condition.UpperBoundCondition;
+import tailor.partition.SegmentPartition;
 
 public class SegmentUpperBound implements SegmentListDescription {
 	

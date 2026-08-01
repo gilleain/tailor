@@ -4,8 +4,8 @@ import java.util.List;
 import java.util.logging.Logger;
 
 import tailor.api.AtomListDescription;
-import tailor.condition.AtomPartition;
 import tailor.engine.plan.Result;
+import tailor.partition.AtomPartition;
 
 public class FilterAtomResultByCondition extends AbstractOperator {
 	

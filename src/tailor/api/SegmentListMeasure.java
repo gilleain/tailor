@@ -2,8 +2,8 @@ package tailor.api;
 
 import java.util.List;
 
-import tailor.condition.SegmentPartition;
 import tailor.description.segment.SegmentDescription;
+import tailor.partition.SegmentPartition;
 
 /**
  * Measurement to make on a list of segments.

@@ -5,8 +5,8 @@ import java.util.List;
 import java.util.logging.Logger;
 
 import tailor.api.SegmentListDescription;
-import tailor.condition.SegmentPartition;
 import tailor.engine.plan.Result;
+import tailor.partition.SegmentPartition;
 
 public class FilterSegmentByListDescription extends AbstractOperator {
 	

@@ -6,13 +6,13 @@ import java.util.Optional;
 import java.util.logging.Logger;
 
 import tailor.api.AtomListMeasure;
-import tailor.condition.AtomMatcher;
-import tailor.condition.AtomMatcher.Match;
-import tailor.condition.AtomPartition;
-import tailor.condition.LabelPartition;
 import tailor.description.GroupDescriptionPath;
 import tailor.description.GroupDescription;
 import tailor.measurement.DoubleMeasurement;
+import tailor.partition.AtomMatcher;
+import tailor.partition.AtomPartition;
+import tailor.partition.LabelPartition;
+import tailor.partition.AtomMatcher.Match;
 import tailor.structure.Atom;
 
 public abstract class AbstractAtomListMeasure implements AtomListMeasure {

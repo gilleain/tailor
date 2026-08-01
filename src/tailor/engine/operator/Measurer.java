@@ -4,8 +4,8 @@ import java.util.List;
 
 import tailor.api.AtomListMeasure;
 import tailor.api.Measurement;
-import tailor.condition.AtomPartition;
 import tailor.engine.plan.Result;
+import tailor.partition.AtomPartition;
 
 public class Measurer extends AbstractOperator {
 	

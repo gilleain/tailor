@@ -8,10 +8,10 @@ import java.util.List;
 
 import org.junit.Test;
 
-import tailor.condition.LabelPartition;
-import tailor.condition.LabelPartition.LabelledPart;
 import tailor.description.AtomDescription;
 import tailor.description.GroupDescriptionPath;
+import tailor.partition.LabelPartition;
+import tailor.partition.LabelPartition.LabelledPart;
 import tailor.description.GroupDescription;
 
 public class TestLabelPartition {

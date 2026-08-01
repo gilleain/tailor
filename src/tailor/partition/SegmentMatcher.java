@@ -1,11 +1,11 @@
-package tailor.condition;
+package tailor.partition;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.logging.Logger;
 
-import tailor.condition.LabelPartition.Part;
+import tailor.partition.LabelPartition.Part;
 import tailor.structure.Segment;
 
 public class SegmentMatcher {
@@ -44,12 +44,12 @@ public class SegmentMatcher {
 		}
 	}
 	
-	private LabelPartition atomLabels; // TODO - this is implicitly in order - might want to make that explicit
+	private LabelPartition segmentLabels; // TODO - this is implicitly in order - might want to make that explicit
 	
-	public SegmentMatcher(LabelPartition atomLabels) {
-		// this is a partition of the atom labels by residue group
+	public SegmentMatcher(LabelPartition segmentLabels) {
+		// this is a partition of the segment labels by chain
 		// TODO - ordered parts of the partition ... which is also ordered?
-		this.atomLabels = atomLabels;
+		this.segmentLabels = segmentLabels;
 	}
 	
 	public Optional<Match> containedIn(SegmentPartition other) {
@@ -59,15 +59,15 @@ public class SegmentMatcher {
 			logger.fine("MATCH " + match + " for " + other);
 			return Optional.of(match);
 		} else {
-			logger.fine("No match " + this.atomLabels + " to " + other + " " + match);
+			logger.fine("No match " + this.segmentLabels + " to " + other + " " + match);
 			return Optional.empty();
 		}
 	}
 	
 	private Match findMatch(SegmentPartition result) {
 		List<Segment> matches = new ArrayList<>();
-		for (int partIndex = 0; partIndex < atomLabels.numberOfParts(); partIndex++) {
-			Part part = atomLabels.getPart(partIndex);
+		for (int partIndex = 0; partIndex < segmentLabels.numberOfParts(); partIndex++) {
+			Part part = segmentLabels.getPart(partIndex);
 			int originalPartIndex = part.getIndex();	// the index of the part in the original order
 			List<Segment> resultPart = result.getPart(originalPartIndex);
 			int indexFrom = 0;
@@ -103,6 +103,6 @@ public class SegmentMatcher {
 	}
 	
 	public String toString() {
-		return "Matcher(" + atomLabels + ")";
+		return "Matcher(" + segmentLabels + ")";
 	}
 }

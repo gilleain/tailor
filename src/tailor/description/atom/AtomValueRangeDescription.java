@@ -5,9 +5,9 @@ import java.util.List;
 import tailor.api.AtomListDescription;
 import tailor.api.AtomListMeasure;
 import tailor.api.Measurement;
-import tailor.condition.AtomPartition;
 import tailor.condition.RangeCondition;
 import tailor.description.GroupDescription;
+import tailor.partition.AtomPartition;
 
 public class AtomValueRangeDescription implements AtomListDescription  {
 	
