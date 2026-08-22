@@ -1,0 +1,597 @@
+@startuml tailor-engine
+
+title tailor.engine — Class Diagram
+
+skinparam classAttributeIconSize 0
+skinparam packageStyle rectangle
+skinparam shadowing false
+skinparam linetype ortho
+skinparam wrapWidth 200
+hide circle
+
+' ===================================================================
+' External context (tailor.api) — interfaces implemented/used by the
+' engine package, shown here only for the relations that cross into it.
+' ===================================================================
+package "tailor.api  «external»" {
+  interface "Operator" as api_Operator {
+    +run()
+    +description(): String
+    +getId(): String
+    +setId(id: String)
+    +clear()
+    +setOutput(output: Pipe)
+    +setInput(input: Pipe)
+    +getOutput(): Pipe
+    +getInput(): Pipe
+  }
+  interface "ResultsPrinter" as api_ResultsPrinter {
+    +printHeader(measures: List<AtomListMeasure>)
+    +printResult(result: Result)
+    +signalNextStructure()
+  }
+  interface "AtomListDescription" as api_AtomListDescription
+  interface "AtomListMeasure" as api_AtomListMeasure
+  interface "SegmentListDescription" as api_SegmentListDescription
+  interface "SegmentPropertyDescription" as api_SegmentPropertyDescription
+  interface "GroupPropertyDescription" as api_GroupPropertyDescription
+}
+
+' ===================================================================
+' tailor.engine (root)
+' ===================================================================
+package "tailor.engine" {
+
+  interface "Engine" as eng_Engine {
+    +run()
+  }
+
+  class "EngineFactory" as eng_EngineFactory {
+    +{static} getEngine(run: Run, printer: ResultsPrinter, type: EngineType): Engine
+  }
+
+  enum "EngineFactory.EngineType" as eng_EngineType {
+    PLAN
+    MSD
+  }
+
+  class "PlanEngine" as eng_PlanEngine {
+    -run: Run
+    -plan: Plan
+    -resultsPrinter: ResultsPrinter
+    +PlanEngine(run: Run, printer: ResultsPrinter)
+    +run()
+    -makePlan(run: Run): Plan
+    -runChain(structureName: String, chain: Chain)
+  }
+
+  class "Run" as eng_Run {
+    -descriptions: List<ChainDescription>
+    -structureSource: StructureSource
+    +Run()
+    +Run(path: String)
+    +Run(description: ChainDescription, path: String)
+    +getMeasureCount(): int
+    +getStructureSource(): StructureSource
+    +getDescriptions(): List<ChainDescription>
+    +setPath(path: File)
+  }
+
+  class "SysoutResultsPrinter" as eng_SysoutResultsPrinter {
+    -counter: int
+    -structureId: Optional<String>
+    +printHeader(measures: List<AtomListMeasure>)
+    +printResult(result: Result)
+    +signalNextStructure()
+  }
+
+  class "Script" as eng_Script {
+    +{static} main(args: String[])
+    +{static} parseScript(content: String): ParsedScript
+    +{static} translate(parsed: ParsedScript): Run
+    +{static} lookupMotif(text: String): ChainDescription
+    +{static} makeMotif(levels: List<LevelText>): ChainDescription
+    +{static} makeSelections(chainDescription, selections): List<AtomDescription>
+    +{static} makeMeasures(chainDescription, measures): List<AtomListMeasure>
+  }
+
+  class "ParsedScript" as eng_ParsedScript {
+    +motifDescription: String
+    +motifDescriptionLevels: List<LevelText>
+    +filepath: String
+    +filenames: List<String>
+    +measures: List<MeasureText>
+  }
+
+  class "LevelText" as eng_LevelText {
+    +levelName: String
+    +properties: List<PropertyText>
+  }
+
+  class "PropertyText" as eng_PropertyText {
+    +attributeName: String
+    +selections: List<Selection>
+    +values: List<Object>
+  }
+
+  class "Selection" as eng_Selection {
+    +residueNumber: int
+    +atomName: String
+  }
+
+  abstract class "MeasureText" as eng_MeasureText {
+    +measureType: String
+  }
+
+  class "GeometricMeasureText" as eng_GeometricMeasureText {
+    +selections: List<Selection>
+  }
+
+  class "PropertyMeasureText" as eng_PropertyMeasureText {
+    +residueNumber: int
+    +property: String
+    +valueType: String
+  }
+}
+
+' ===================================================================
+' tailor.engine.logical — description-driven, structure-independent plan
+' ===================================================================
+package "tailor.engine.logical" {
+
+  interface "LogicalOperator" as log_LogicalOperator
+
+  class "LogicalPlan" as log_LogicalPlan {
+    -operators: List<LogicalOperator>
+    -roots: List<LogicalOperator>
+    -edges: List<Edge>
+    +addRoot(op: LogicalOperator)
+    +addOperator(op: LogicalOperator)
+    +addOperatorFrom(from: LogicalOperator, to: LogicalOperator)
+    +getRoots(): List<LogicalOperator>
+    +getNext(current: LogicalOperator): List<LogicalOperator>
+  }
+
+  class "LogicalPlan.Edge" as log_Edge << record >> {
+    +from: LogicalOperator
+    +to: LogicalOperator
+  }
+
+  class "LogicalPlanner" as log_LogicalPlanner {
+    +plan(chainDescription: ChainDescription): LogicalPlan
+  }
+
+  class "SelectAllChains" as log_SelectAllChains
+  class "SelectAllResidues" as log_SelectAllResidues
+
+  class "SelectAtomByName" as log_SelectAtomByName {
+    -atomName: String
+  }
+
+  class "SelectChainByType" as log_SelectChainByType {
+    -type: PolymerType
+    +getType(): PolymerType
+  }
+
+  class "SelectGroupByType" as log_SelectGroupByType {
+    -groupType: String
+    +getGroupType(): String
+  }
+}
+
+' ===================================================================
+' tailor.engine.operator — the pipeline operators (physical, structure-bound)
+' ===================================================================
+package "tailor.engine.operator" {
+
+  abstract class "AbstractOperator" as op_AbstractOperator {
+    #id: String
+    #source: Pipe
+    #sink: Pipe
+    +getId(): String
+    +setId(id: String)
+    +clear()
+    +setOutput(output: Pipe)
+    +setInput(source: Pipe)
+    +getInput(): Pipe
+    +getOutput(): Pipe
+  }
+
+  class "Pipe" as op_Pipe {
+    -results: List<Result>
+    -resultIterator: Iterator<Result>
+    -sourceId: String
+    -sinkId: String
+    +put(item: Result)
+    +getNext(): Result
+    +hasNext(): boolean
+    +registerSource(op: Operator)
+    +registerSink(op: Operator)
+    +clear()
+  }
+
+  class "GroupPipe" as op_GroupPipe {
+    -chain: Chain
+    -groupIterator: Iterator<Group>
+    +getNext(): Group
+    +hasNext(): boolean
+  }
+
+  class "GroupSource" as op_GroupSource {
+    -chain: Chain
+    -outputs: List<Pipe>
+    +run()
+  }
+
+  class "ResultsPrinterAdapter" as op_ResultsPrinterAdapter {
+    -resultsPrinter: ResultsPrinter
+    -source: Pipe
+    -chainDescription: ChainDescription
+    +run()
+  }
+
+  class "CombineResults" as op_CombineResults {
+    -sources: List<Pipe>
+    -output: Pipe
+    -gapMap: Map<Integer, Integer>
+    +CombineResults(sources: List<Pipe>, output: Pipe)
+    +run()
+    +description(): String
+  }
+
+  class "CombineResults.PipeSeqConstraint" as op_PipeSeqConstraint << record >> {
+    +start: Pipe
+    +end: Pipe
+    +groupSeqDescription: GroupSequenceDescription
+  }
+
+  class "FilterAtomResultByCondition" as op_FilterAtomResultByCondition {
+    -listDescriptions: List<AtomListDescription>
+    +run()
+  }
+
+  class "FilterGroupByDescription" as op_FilterGroupByDescription {
+    -groupPropertyDescription: GroupPropertyDescription
+    +run()
+  }
+
+  class "FilterSegmentByListDescription" as op_FilterSegmentByListDescription {
+    -listDescriptions: List<SegmentListDescription>
+    -input: Pipe
+    +run()
+  }
+
+  class "FilterSegmentByPropertyDescription" as op_FilterSegmentByPropertyDescription {
+    -propertyDescriptions: List<SegmentPropertyDescription>
+    -input: Pipe
+    +run()
+  }
+
+  class "Measurer" as op_Measurer {
+    -measures: List<AtomListMeasure>
+    +run()
+  }
+
+  class "ScanAtomResultByLabel" as op_ScanAtomResultByLabel {
+    -atomLabels: List<String>
+    +run()
+  }
+
+  class "SegmentSource" as op_SegmentSource {
+    -chain: Chain
+    -outputs: List<Pipe>
+    +run()
+  }
+
+  class "SegmentCombiner" as op_SegmentCombiner {
+    -inputs: List<Pipe>
+    +run()
+  }
+
+  class "SegmentTypeFilter" as op_SegmentTypeFilter {
+    -segmentType: Segment.Type
+    -input: Pipe
+    +run()
+  }
+
+  class "PrintAdapter" as op_PrintAdapter {
+    -input: Pipe
+    +run()
+  }
+}
+
+' ===================================================================
+' tailor.engine.physical — sketch of a physical (structure-bound) plan,
+' currently a thin, partly unfinished mirror of the logical plan
+' ===================================================================
+package "tailor.engine.physical" {
+
+  interface "PhysicalOperator" as phy_PhysicalOperator
+
+  class "ChainFilter" as phy_ChainFilter {
+    -type: PolymerType
+    -chains: List<Chain>
+    -output: ChainPipe
+    +run()
+  }
+
+  class "ChainPipe" as phy_ChainPipe {
+    -items: List<Chain>
+    +put(chain: Chain)
+    +get(): List<Chain>
+  }
+
+  class "GroupFilter" as phy_GroupFilter {
+    -groupType: String
+    -input: ChainPipe
+    -output: GroupPipe
+    +run()
+  }
+
+  class "GroupPipe" as phy_GroupPipe {
+    -items: List<Group>
+    +put(group: Group)
+    +get(): List<Group>
+  }
+
+  class "PhysicalPlan" as phy_PhysicalPlan
+
+  class "PhysicalPlanner" as phy_PhysicalPlanner {
+    +plan(logicalPlan: LogicalPlan): PhysicalPlan
+    -walk(logicalPlan, root, physicalPlan)
+  }
+}
+
+' ===================================================================
+' tailor.engine.plan — the description-to-pipeline planners and the
+' Result tree produced/consumed by the pipeline
+' ===================================================================
+package "tailor.engine.plan" {
+
+  class "Plan" as pl_Plan {
+    -operatorId: int
+    -operators: List<Operator>
+    -startPoints: List<Pipe>
+    -outputPoint: Pipe
+    +describe()
+    +clear()
+    +getOperators(): List<Operator>
+    +getInputPipes(): List<Pipe>
+    +addStart(op: Operator): Pipe
+    +addOperator(op: Operator)
+    +addOperatorReturnPipe(op: Operator, in: Pipe): Pipe
+    +getOutputPipe(): Pipe
+    +setOutputPipe(output: Pipe)
+  }
+
+  class "Planner" as pl_Planner {
+    +plan(chainDescription: ChainDescription): Plan
+    +plan(chainDescription: ChainDescription, withPrintOutput: boolean): Plan
+    -addGroupOperators(plan, groupDescription): Pipe
+    -addAtomScanner(plan, groupDescription): Operator
+    -join(plan, chainDescription, inner, outer, startPointMap): Stack<Pipe>
+    -handleComponentGroup(...): Pipe
+    -makeCombiner(...): CombineResults
+    -addFilter(plan, previousOutput, atomListDescriptions): Pipe
+  }
+
+  class "SegmentPlanner" as pl_SegmentPlanner {
+    +makePlan(chainDescription: ChainDescription): Plan
+    -addInnerFilter(plan, input, segmentDescription): Pipe
+  }
+
+  class "GroupUnionFind" as pl_GroupUnionFind {
+    -parent: Map<GroupDescription, GroupDescription>
+    -groupDescriptionToAtomListDescriptionMap: Map
+    -groupDescriptionToGroupSeqDescriptionMap: Map
+    +GroupUnionFind(groups: List<GroupDescription>)
+    +union(atomListDescriptions, groupSequenceDescriptions)
+    +find(group: GroupDescription): GroupDescription
+    +getComponents(): List<Component>
+  }
+
+  class "GroupUnionFind.Component" as pl_Component << record >> {
+    +groupDescriptions: List<GroupDescription>
+    +atomListDescriptions: Set<AtomListDescription>
+    +groupSequenceDescriptions: Set<GroupSequenceDescription>
+  }
+
+  class "Result" as pl_Result {
+    -root: CRef
+    -measurements: List<Measurement<?>>
+    +Result(chain: Chain)
+    +Result(chain: Chain, groups: List<Group>)
+    +getAtoms(): List<Atom>
+    +getAtomPartition(): AtomPartition
+    +getGroups(): List<Group>
+    +getSegments(): List<Segment>
+    +getSegmentPartition(): SegmentPartition
+    +addMeasurement(m: Measurement<?>)
+    +merge(other: Result): Result
+    +copy(): Result
+    +copyWithoutAtoms(): Result
+    +lessThan(other: Result): boolean
+    +separation(result: Result): int
+  }
+
+  class "Result.CRef" as pl_CRef {
+    +chain: Chain
+    +groupRefs: List<GRef>
+    +segmentRefs: List<SRef>
+  }
+
+  class "Result.SRef" as pl_SRef {
+    +segment: Segment
+    +groupRefs: List<GRef>
+  }
+
+  class "Result.GRef" as pl_GRef {
+    +group: Group
+    +atomRefs: List<ARef>
+  }
+
+  class "Result.ARef" as pl_ARef {
+    +atom: Atom
+  }
+}
+
+' ===================================================================
+' tailor.engine.rewrite — graph-rewriting sketch (mostly unimplemented)
+' ===================================================================
+package "tailor.engine.rewrite" {
+
+  class "Graph" as rw_Graph
+
+  class "Match" as rw_Match {
+    +size(): int
+  }
+
+  interface "Rule" as rw_Rule {
+    +apply(match: Match, graph: Graph): Graph
+  }
+
+  class "Rewriter" as rw_Rewriter {
+    -rules: List<Rule>
+    +Rewriter(rules: List<Rule>)
+    +rewrite(input: Graph): Graph
+    -findBestMatch(graph: Graph): RuleMatch
+    -matchRule(rule: Rule, graph: Graph): Match
+  }
+
+  class "Rewriter.RuleMatch" as rw_RuleMatch << record >> {
+    +rule: Rule
+    +match: Match
+  }
+}
+
+' ===================================================================
+' Relationships
+' ===================================================================
+
+' -- tailor.engine --------------------------------------------------
+eng_PlanEngine ..|> eng_Engine
+eng_SysoutResultsPrinter ..|> api_ResultsPrinter
+eng_EngineFactory +-- eng_EngineType
+eng_EngineFactory ..> eng_Engine : creates
+eng_EngineFactory ..> eng_PlanEngine : creates
+eng_MeasureText <|-- eng_GeometricMeasureText
+eng_MeasureText <|-- eng_PropertyMeasureText
+eng_ParsedScript "1" o-- "*" eng_LevelText
+eng_ParsedScript "1" o-- "*" eng_MeasureText
+eng_LevelText "1" o-- "*" eng_PropertyText
+eng_PropertyText "1" o-- "*" eng_Selection
+eng_Script ..> eng_ParsedScript : parses into
+eng_Script ..> eng_Run : translates into
+eng_Script ..> eng_EngineFactory : uses
+eng_Script ..> eng_SysoutResultsPrinter : uses
+
+eng_PlanEngine --> eng_Run
+eng_PlanEngine --> pl_Plan
+eng_PlanEngine --> pl_Planner : uses
+eng_PlanEngine --> api_ResultsPrinter
+eng_PlanEngine ..> op_GroupSource : creates
+eng_PlanEngine ..> op_ResultsPrinterAdapter : creates
+eng_PlanEngine --> op_Pipe
+
+' -- tailor.engine.logical -------------------------------------------
+log_SelectAllChains ..|> log_LogicalOperator
+log_SelectAllResidues ..|> log_LogicalOperator
+log_SelectAtomByName ..|> log_LogicalOperator
+log_SelectChainByType ..|> log_LogicalOperator
+log_SelectGroupByType ..|> log_LogicalOperator
+log_LogicalPlan +-- log_Edge
+log_LogicalPlan "1" o-- "*" log_LogicalOperator
+log_Edge --> "2" log_LogicalOperator
+log_LogicalPlanner ..> log_LogicalPlan : builds
+log_LogicalPlanner ..> log_SelectAllChains
+log_LogicalPlanner ..> log_SelectChainByType
+log_LogicalPlanner ..> log_SelectAllResidues
+log_LogicalPlanner ..> log_SelectGroupByType
+log_LogicalPlanner ..> log_SelectAtomByName
+
+' -- tailor.engine.operator ------------------------------------------
+op_AbstractOperator ..|> api_Operator
+op_GroupSource ..|> api_Operator
+op_ResultsPrinterAdapter ..|> api_Operator
+op_CombineResults --|> op_AbstractOperator
+op_FilterAtomResultByCondition --|> op_AbstractOperator
+op_FilterGroupByDescription --|> op_AbstractOperator
+op_FilterSegmentByListDescription --|> op_AbstractOperator
+op_FilterSegmentByPropertyDescription --|> op_AbstractOperator
+op_Measurer --|> op_AbstractOperator
+op_PrintAdapter --|> op_AbstractOperator
+op_ScanAtomResultByLabel --|> op_AbstractOperator
+op_SegmentCombiner --|> op_AbstractOperator
+op_SegmentSource --|> op_AbstractOperator
+op_SegmentTypeFilter --|> op_AbstractOperator
+op_CombineResults +-- op_PipeSeqConstraint
+op_PipeSeqConstraint --> "2" op_Pipe
+
+op_AbstractOperator "1" o-- "0..2" op_Pipe : source / sink
+op_CombineResults "1" o-- "*" op_Pipe : sources
+op_SegmentCombiner "1" o-- "*" op_Pipe : inputs
+op_GroupSource "1" o-- "*" op_Pipe : outputs
+op_SegmentSource "1" o-- "*" op_Pipe : outputs
+op_ResultsPrinterAdapter --> op_Pipe : source
+op_ResultsPrinterAdapter --> api_ResultsPrinter
+op_FilterAtomResultByCondition --> "*" api_AtomListDescription
+op_FilterGroupByDescription --> api_GroupPropertyDescription
+op_FilterSegmentByListDescription --> "*" api_SegmentListDescription
+op_FilterSegmentByPropertyDescription --> "*" api_SegmentPropertyDescription
+op_Measurer --> "*" api_AtomListMeasure
+op_Pipe "1" o-- "*" pl_Result : buffers
+
+' -- tailor.engine.physical --------------------------------------------
+phy_ChainFilter ..|> phy_PhysicalOperator
+phy_GroupFilter ..|> phy_PhysicalOperator
+phy_ChainFilter --> phy_ChainPipe : output
+phy_GroupFilter --> phy_ChainPipe : input
+phy_GroupFilter --> phy_GroupPipe : output
+phy_PhysicalPlanner ..> log_LogicalPlan : reads
+phy_PhysicalPlanner ..> log_LogicalOperator
+phy_PhysicalPlanner ..> log_SelectChainByType
+phy_PhysicalPlanner ..> log_SelectGroupByType
+phy_PhysicalPlanner ..> phy_ChainFilter : creates
+phy_PhysicalPlanner ..> phy_GroupFilter : creates
+phy_PhysicalPlanner ..> phy_PhysicalPlan : builds
+
+' -- tailor.engine.plan -------------------------------------------------
+pl_Plan "1" o-- "*" api_Operator : operators
+pl_Plan "1" o-- "*" op_Pipe : startPoints / output
+pl_GroupUnionFind +-- pl_Component
+pl_Result +-- pl_CRef
+pl_Result +-- pl_SRef
+pl_Result +-- pl_GRef
+pl_Result +-- pl_ARef
+pl_CRef "1" o-- "*" pl_GRef
+pl_CRef "1" o-- "*" pl_SRef
+pl_SRef "1" o-- "*" pl_GRef
+pl_GRef "1" o-- "*" pl_ARef
+
+pl_Planner ..> pl_Plan : builds
+pl_Planner ..> pl_GroupUnionFind : uses
+pl_Planner ..> op_CombineResults : creates
+pl_Planner ..> op_FilterAtomResultByCondition : creates
+pl_Planner ..> op_FilterGroupByDescription : creates
+pl_Planner ..> op_Measurer : creates
+pl_Planner ..> op_PrintAdapter : creates
+pl_Planner ..> op_ScanAtomResultByLabel : creates
+pl_Planner ..> op_Pipe
+
+pl_SegmentPlanner ..> pl_Plan : builds
+pl_SegmentPlanner ..> op_FilterSegmentByListDescription : creates
+pl_SegmentPlanner ..> op_FilterSegmentByPropertyDescription : creates
+pl_SegmentPlanner ..> op_SegmentCombiner : creates
+pl_SegmentPlanner ..> op_SegmentTypeFilter : creates
+
+' -- tailor.engine.rewrite ----------------------------------------------
+rw_Rewriter "1" o-- "*" rw_Rule
+rw_Rewriter +-- rw_RuleMatch
+rw_RuleMatch --> rw_Rule
+rw_RuleMatch --> rw_Match
+rw_Rewriter ..> rw_Graph
+rw_Rewriter ..> rw_Match
+rw_Rule ..> rw_Graph
+rw_Rule ..> rw_Match
+
+@enduml
