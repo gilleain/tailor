@@ -10,12 +10,15 @@ import tailor.api.AtomListMeasure;
 import tailor.api.SegmentListDescription;
 import tailor.description.group.GroupSequenceDescription;
 import tailor.description.segment.SegmentDescription;
+import tailor.structure.PolymerType;
 
 public class ChainDescription {
 	
 	private int index;	// index of description in the list
 	
 	private Optional<String> label;
+	
+	private PolymerType type;
 	
 	// Descriptions of the segments to find
 	private List<SegmentDescription> segments;
@@ -36,11 +39,16 @@ public class ChainDescription {
 	private List<AtomListMeasure> atomListMeasures;
 
 	public ChainDescription() {
-		this(null);
+		this(null, PolymerType.NONE);
 	}
 	
 	public ChainDescription(String label) {
+		this(label, PolymerType.NONE);
+	}
+	
+	public ChainDescription(String label, PolymerType type) {
 		this.label = Optional.ofNullable(label);
+		this.type = type;
 		this.segments = new ArrayList<>();
 		this.segmentListDescriptions = new ArrayList<>();
 		this.groupDescriptions = new ArrayList<>();
@@ -59,6 +67,10 @@ public class ChainDescription {
 	
 	public Optional<String> getLabel() {
 		return label;
+	}
+	
+	public PolymerType getType() {
+		return this.type;
 	}
 	
 	public List<SegmentDescription> getSegments() {
