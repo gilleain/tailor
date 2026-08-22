@@ -10,8 +10,8 @@ import java.util.List;
 import org.junit.jupiter.api.Test;
 
 import tailor.engine.operator.CombineResults;
-import tailor.engine.operator.PrintAdapter;
 import tailor.engine.operator.Pipe;
+import tailor.engine.operator.PrintAdapter;
 import tailor.engine.plan.Result;
 import tailor.operator.ResultBuilder.ResultGroupBuilder;
 import tailor.operator.ResultBuilder.ResultGroupListBuilder;
@@ -37,7 +37,7 @@ public class TestCombineResults {
 		List<Result> finalResults = new ArrayList<>();
 		CaptorAdapter captor = new CaptorAdapter(output, finalResults);
 		captor.run();
-		assertEquals("3 results", 3, finalResults.size());
+		assertEquals(3, finalResults.size(), "3 results");
 	}
 	
 	/**

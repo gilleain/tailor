@@ -9,10 +9,10 @@ import java.util.List;
 import org.junit.jupiter.api.Test;
 
 import tailor.description.AtomDescription;
+import tailor.description.GroupDescription;
 import tailor.description.GroupDescriptionPath;
 import tailor.partition.LabelPartition;
 import tailor.partition.LabelPartition.LabelledPart;
-import tailor.description.GroupDescription;
 
 public class TestLabelPartition {
 	
@@ -23,7 +23,7 @@ public class TestLabelPartition {
 		
 		LabelPartition l = LabelPartition.fromDescriptionPaths(List.of(dp1, dp2));
 		System.out.println(l);
-		assertEquals("2 parts", 2, l.numberOfParts());
+		assertEquals(2, l.numberOfParts(), "2 parts");
 		assertEquals(new LabelPartition(List.of(l(0, "O"), l(2, "C"))), l);
 	}
 	
@@ -35,7 +35,7 @@ public class TestLabelPartition {
 		
 		LabelPartition l = LabelPartition.fromDescriptionPaths(List.of(dp1, dp2, dp3));
 		System.out.println(l);
-		assertEquals("3 parts", 3, l.numberOfParts());
+		assertEquals(3, l.numberOfParts(), "3 parts");
 		assertEquals(new LabelPartition(List.of(l(0, "N"), l(2, "C"), l(5, "O"))), l);
 	}
 	
@@ -46,7 +46,7 @@ public class TestLabelPartition {
 		
 		LabelPartition l = LabelPartition.fromDescriptionPaths(List.of(dp1, dp2));
 		System.out.println(l);
-		assertEquals("2 parts", 2, l.numberOfParts());
+		assertEquals(2, l.numberOfParts(), "2 parts");
 		assertEquals(new LabelPartition(List.of(l(1, "N"), l(2, "C"))), l);
 	}
 	
@@ -61,7 +61,7 @@ public class TestLabelPartition {
 		
 		LabelPartition l = LabelPartition.fromDescriptionPaths(List.of(dp1, dp2, dp3, dp4));
 		System.out.println(l);
-		assertEquals("2 parts", 2, l.numberOfParts());
+		assertEquals(2, l.numberOfParts(), "2 parts");
 		assertEquals(new LabelPartition(List.of(l(4, "C", "O"), l(2, "H", "N"))), l);
 	}
 	
