@@ -10,7 +10,7 @@ import static tailor.engine.execute.StructureBuilder.makeStructure;
 
 import java.util.List;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import tailor.structure.Group;
 

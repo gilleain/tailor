@@ -2,7 +2,7 @@ package tailor.results;
 
 import java.util.function.Function;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import tailor.structure.Atom;
 import tailor.structure.Chain;

@@ -8,7 +8,7 @@ import static tailor.structure.Segment.Type.STRAND;
 
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import tailor.api.Operator;
 import tailor.description.ChainDescription;

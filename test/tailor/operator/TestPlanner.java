@@ -1,11 +1,11 @@
 package tailor.operator;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static tailor.operator.Helper.pathTo;
 
 import java.util.List;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import tailor.api.AtomListDescription;
 import tailor.api.AtomListMeasure;

@@ -1,6 +1,6 @@
 package tailor.source;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -10,7 +10,7 @@ import java.io.StringWriter;
 
 import javax.vecmath.Point3d;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import tailor.datasource.PDBWriter;
 import tailor.structure.Atom;

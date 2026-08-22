@@ -6,7 +6,7 @@ import static tailor.operator.Helper.pathTo;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import tailor.api.AtomListDescription;
 import tailor.description.GroupDescription;

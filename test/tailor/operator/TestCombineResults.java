@@ -1,13 +1,13 @@
 package tailor.operator;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static tailor.operator.ResultBuilder.result;
 import static tailor.operator.ResultBuilder.resultList;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import tailor.engine.operator.CombineResults;
 import tailor.engine.operator.PrintAdapter;

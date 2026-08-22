@@ -5,7 +5,7 @@ import static tailor.operator.Helper.pathTo;
 import java.io.File;
 import java.io.IOException;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import tailor.api.AtomListDescription;
 import tailor.api.AtomListMeasure;

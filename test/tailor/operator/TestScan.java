@@ -2,7 +2,7 @@ package tailor.operator;
 
 import java.util.List;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import tailor.engine.operator.GroupSource;
 import tailor.engine.operator.Pipe;

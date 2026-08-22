@@ -6,7 +6,7 @@ import static tailor.structure.Segment.Type.STRAND;
 import java.io.File;
 import java.io.IOException;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import tailor.api.Operator;
 import tailor.datasource.PDBReader;

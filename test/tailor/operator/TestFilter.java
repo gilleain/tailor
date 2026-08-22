@@ -4,7 +4,7 @@ import static tailor.operator.Helper.pathTo;
 
 import java.util.List;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import tailor.description.GroupDescription;
 import tailor.description.atom.AtomAngleDescription;

@@ -1,12 +1,12 @@
 package tailor.operator;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static tailor.description.DescriptionFactory.group;
 
 import java.util.Arrays;
 import java.util.List;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import tailor.description.AtomDescription;
 import tailor.description.GroupDescriptionPath;

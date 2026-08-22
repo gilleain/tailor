@@ -1,12 +1,12 @@
 package tailor.operator;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import tailor.partition.AtomMatcher;
 import tailor.partition.AtomPartition;
