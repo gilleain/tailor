@@ -33,17 +33,19 @@ public class Rewriter {
 		for (Rule rule : rules) {
 			// apply rule to graph
 			Match match = matchRule(rule, graph);
-			if (bestMatch == null || 
+			if (match == null) {
+				continue;
+			}
+			if (bestMatch == null ||
 					bestMatch.match().size() < match.size()) {
 				bestMatch = new RuleMatch(rule, match);
 			}
 		}
-		
+
 		return bestMatch;
 	}
 
 	private Match matchRule(Rule rule, Graph graph) {
-		// TODO Auto-generated method stub
-		return null;
+		return new VF2Matcher(rule.pattern(), graph).matchFirst().orElse(null);
 	}
 }
