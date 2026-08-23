@@ -1,0 +1,236 @@
+@startuml tailor-engine
+
+title tailor.engine — Class Diagram
+
+skinparam classAttributeIconSize 0
+skinparam packageStyle rectangle
+skinparam shadowing false
+skinparam linetype ortho
+skinparam wrapWidth 200
+hide circle
+hide empty members
+
+package "tailor.api  «external»" {
+  interface "Operator" as Operator {}
+  interface "ResultsPrinter" as ResultsPrinter {}
+  interface "AtomListDescription" as AtomListDescription
+  interface "AtomListMeasure" as AtomListMeasure
+  interface "SegmentListDescription" as SegmentListDescription
+  interface "SegmentPropertyDescription" as SegmentPropertyDescription
+  interface "GroupPropertyDescription" as GroupPropertyDescription
+}
+
+package "tailor.engine" {
+  interface "Engine" {}
+  class "EngineFactory" {}
+  class "EngineType" {}
+  class "PlanEngine"  {}
+  class "Run" as Run {}
+  class "SysoutResultsPrinter"  {}
+  class "Script" {}
+  class "ParsedScript" as ParsedScript {}
+  class "LevelText" {}
+  class "PropertyText"{}
+  class "Selection" {}
+  abstract class "MeasureText" {}
+  class "GeometricMeasureText" {}
+  class "PropertyMeasureText" {}
+}
+
+package "tailor.engine.logical" {
+  interface "LogicalOperator" {}
+  class "LogicalPlan"  {}
+  class "Edge" {}
+  class "LogicalPlanner" {}
+  class "SelectAllChains" {}
+  class "SelectAllResidues" {}
+  class "SelectAtomByName" {}
+  class "SelectChainByType" {}
+  class "SelectGroupByType" {}
+}
+
+' ===================================================================
+' tailor.engine.operator — the pipeline operators (physical, structure-bound)
+' ===================================================================
+package "tailor.engine.operator" {
+  abstract class "AbstractOperator" {}
+  class "Pipe"{ }
+  class "GroupPipe" {}
+  class "GroupSource" {}
+  class "ResultsPrinterAdapter" {}
+  class "CombineResults" {}
+  class "PipeSeqConstraint" {}
+  class "FilterAtomResultByCondition" {}
+  class "FilterGroupByDescription" {}
+  class "FilterSegmentByListDescription" {}
+  class "FilterSegmentByPropertyDescription" {}
+  class "Measurer" {}
+  class "ScanAtomResultByLabel"{}
+  class "SegmentSource" {}
+  class "SegmentCombiner" {}
+  class "SegmentTypeFilter" {}
+  class "PrintAdapter" {}
+}
+
+package "tailor.engine.physical" {
+  interface "PhysicalOperator" {}
+  class "ChainFilter" {}
+  class "ChainPipe" {}
+  class "GroupFilter" {}
+  class "GroupPipe" { }
+  class "PhysicalPlan" {}
+  class "PhysicalPlanner" {}
+}
+
+package "tailor.engine.plan" {
+  class "Plan" {}
+  class "Planner" {}
+  class "SegmentPlanner" {}
+  class "GroupUnionFind" {}
+  class "Component" << record >> {}
+  class "Result" {}
+  class "CRef" {}
+  class "SRef" {}
+  class "GRef" {}
+  class "ARef" {}
+}
+
+package "tailor.engine.rewrite" {
+  class "Graph" {}
+  class "Match" {}
+  interface "Rule"  {}
+  class "Rewriter"  {}
+  class "RuleMatch" << record >> {}
+}
+
+' ===================================================================
+' Relationships
+' ===================================================================
+
+' -- tailor.engine --------------------------------------------------
+PlanEngine ..|> Engine
+SysoutResultsPrinter ..|> ResultsPrinter
+EngineFactory +-- EngineType
+EngineFactory ..> Engine : creates
+EngineFactory ..> PlanEngine : creates
+MeasureText <|-- GeometricMeasureText
+MeasureText <|-- PropertyMeasureText
+ParsedScript "1" o-- "*" LevelText
+ParsedScript "1" o-- "*" MeasureText
+LevelText "1" o-- "*" PropertyText
+PropertyText "1" o-- "*" Selection
+Script ..> ParsedScript : parses into
+Script ..> Run : translates into
+Script ..> EngineFactory : uses
+Script ..> SysoutResultsPrinter : uses
+
+PlanEngine --> Run
+PlanEngine --> Plan
+PlanEngine --> Planner : uses
+PlanEngine --> ResultsPrinter
+PlanEngine ..> GroupSource : creates
+PlanEngine ..> ResultsPrinterAdapter : creates
+PlanEngine --> Pipe
+
+' -- tailor.engine.logical -------------------------------------------
+SelectAllChains ..|> LogicalOperator
+SelectAllResidues ..|> LogicalOperator
+SelectAtomByName ..|> LogicalOperator
+SelectChainByType ..|> LogicalOperator
+SelectGroupByType ..|> LogicalOperator
+LogicalPlan +-- Edge
+LogicalPlan "1" o-- "*" LogicalOperator
+Edge --> "2" LogicalOperator
+LogicalPlanner ..> LogicalPlan : builds
+LogicalPlanner ..> SelectAllChains
+LogicalPlanner ..> SelectChainByType
+LogicalPlanner ..> SelectAllResidues
+LogicalPlanner ..> SelectGroupByType
+LogicalPlanner ..> SelectAtomByName
+
+' -- tailor.engine.operator ------------------------------------------
+AbstractOperator ..|> Operator
+GroupSource ..|> Operator
+ResultsPrinterAdapter ..|> Operator
+CombineResults --|> AbstractOperator
+FilterAtomResultByCondition --|> AbstractOperator
+FilterGroupByDescription --|> AbstractOperator
+FilterSegmentByListDescription --|> AbstractOperator
+FilterSegmentByPropertyDescription --|> AbstractOperator
+Measurer --|> AbstractOperator
+PrintAdapter --|> AbstractOperator
+ScanAtomResultByLabel --|> AbstractOperator
+SegmentCombiner --|> AbstractOperator
+SegmentSource --|> AbstractOperator
+SegmentTypeFilter --|> AbstractOperator
+CombineResults +-- PipeSeqConstraint
+PipeSeqConstraint --> "2" Pipe
+
+AbstractOperator "1" o-- "0..2" Pipe : source / sink
+CombineResults "1" o-- "*" Pipe : sources
+SegmentCombiner "1" o-- "*" Pipe : inputs
+GroupSource "1" o-- "*" Pipe : outputs
+SegmentSource "1" o-- "*" Pipe : outputs
+ResultsPrinterAdapter --> Pipe : source
+ResultsPrinterAdapter --> ResultsPrinter
+FilterAtomResultByCondition --> "*" AtomListDescription
+FilterGroupByDescription --> GroupPropertyDescription
+FilterSegmentByListDescription --> "*" SegmentListDescription
+FilterSegmentByPropertyDescription --> "*" SegmentPropertyDescription
+Measurer --> "*" AtomListMeasure
+Pipe "1" o-- "*" Result : buffers
+
+' -- tailor.engine.physical --------------------------------------------
+ChainFilter ..|> PhysicalOperator
+GroupFilter ..|> PhysicalOperator
+ChainFilter --> ChainPipe : output
+GroupFilter --> ChainPipe : input
+GroupFilter --> GroupPipe : output
+PhysicalPlanner ..> LogicalPlan : reads
+PhysicalPlanner ..> LogicalOperator
+PhysicalPlanner ..> SelectChainByType
+PhysicalPlanner ..> SelectGroupByType
+PhysicalPlanner ..> ChainFilter : creates
+PhysicalPlanner ..> GroupFilter : creates
+PhysicalPlanner ..> PhysicalPlan : builds
+
+' -- tailor.engine.plan -------------------------------------------------
+Plan "1" o-- "*" Operator : operators
+Plan "1" o-- "*" Pipe : startPoints / output
+GroupUnionFind +-- Component
+Result +-- CRef
+Result +-- SRef
+Result +-- GRef
+Result +-- ARef
+CRef "1" o-- "*" GRef
+CRef "1" o-- "*" SRef
+SRef "1" o-- "*" GRef
+GRef "1" o-- "*" ARef
+
+Planner ..> Plan : builds
+Planner ..> GroupUnionFind : uses
+Planner ..> CombineResults : creates
+Planner ..> FilterAtomResultByCondition : creates
+Planner ..> FilterGroupByDescription : creates
+Planner ..> Measurer : creates
+Planner ..> PrintAdapter : creates
+Planner ..> ScanAtomResultByLabel : creates
+Planner ..> Pipe
+
+SegmentPlanner ..> Plan : builds
+SegmentPlanner ..> FilterSegmentByListDescription : creates
+SegmentPlanner ..> FilterSegmentByPropertyDescription : creates
+SegmentPlanner ..> SegmentCombiner : creates
+SegmentPlanner ..> SegmentTypeFilter : creates
+
+' -- tailor.engine.rewrite ----------------------------------------------
+Rewriter "1" o-- "*" Rule
+Rewriter +-- RuleMatch
+RuleMatch --> Rule
+RuleMatch --> Match
+Rewriter ..> Graph
+Rewriter ..> Match
+Rule ..> Graph
+Rule ..> Match
+
+@enduml
