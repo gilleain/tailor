@@ -24,6 +24,10 @@ public class Graph {
 	private final List<Set<Integer>> adjacency = new ArrayList<>();
 	private final Map<String, String> edgeLabels = new HashMap<>();
 
+	public int size() {
+		return vertexLabels.size();
+	}
+	
 	public int addVertex(String label) {
 		int index = vertexLabels.size();
 		vertexLabels.add(label);

@@ -14,8 +14,8 @@ public interface Rule {
 	 * Apply the rule to the graph at this match.
 	 * 
 	 * @param match the context to apply the rule
-	 * @param graph to apply the rule to
+	 * @param targetGraph the graph to apply the rule to
 	 * @return the input graph transformed
 	 */
-	public Graph apply(Match match, Graph graph);
+	public Graph apply(Match match, Graph targetGraph);
 }
