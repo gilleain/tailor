@@ -9,7 +9,7 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * A simple labeled, undirected graph - used both as the pattern held by a
+ * A simple labelled, undirected graph - used both as the pattern held by a
  * {@link Rule} and as the target graph that a {@link Rewriter} transforms.
  *
  * Vertices are identified by their index (0-based, in the order they were
@@ -23,6 +23,14 @@ public class Graph {
 	private final List<String> vertexLabels = new ArrayList<>();
 	private final List<Set<Integer>> adjacency = new ArrayList<>();
 	private final Map<String, String> edgeLabels = new HashMap<>();
+
+	public Graph() {
+		
+	}
+	
+	public Graph(Graph targetGraph) {
+		// TODO Auto-generated constructor stub
+	}
 
 	public int size() {
 		return vertexLabels.size();
